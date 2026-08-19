@@ -1,0 +1,16 @@
+/root/logrite/scans/r3/p4861/tests/abi/build_logrite/CMakeFiles/abi_compat_main.dir
+/root/logrite/scans/r3/p4861/tests/abi/build_logrite/CMakeFiles/edit_cache.dir
+/root/logrite/scans/r3/p4861/tests/abi/build_logrite/CMakeFiles/rebuild_cache.dir
+/root/logrite/scans/r3/p4861/tests/abi/build_logrite/config/CMakeFiles/abi_config_default.dir
+/root/logrite/scans/r3/p4861/tests/abi/build_logrite/config/CMakeFiles/abi_config_noversion.dir
+/root/logrite/scans/r3/p4861/tests/abi/build_logrite/config/CMakeFiles/abi_config_custom.dir
+/root/logrite/scans/r3/p4861/tests/abi/build_logrite/config/CMakeFiles/edit_cache.dir
+/root/logrite/scans/r3/p4861/tests/abi/build_logrite/config/CMakeFiles/rebuild_cache.dir
+/root/logrite/scans/r3/p4861/tests/abi/build_logrite/diag/CMakeFiles/abi_compat_diag_on.dir
+/root/logrite/scans/r3/p4861/tests/abi/build_logrite/diag/CMakeFiles/abi_compat_diag_off.dir
+/root/logrite/scans/r3/p4861/tests/abi/build_logrite/diag/CMakeFiles/abi_compat_diag.dir
+/root/logrite/scans/r3/p4861/tests/abi/build_logrite/diag/CMakeFiles/edit_cache.dir
+/root/logrite/scans/r3/p4861/tests/abi/build_logrite/diag/CMakeFiles/rebuild_cache.dir
+/root/logrite/scans/r3/p4861/tests/abi/build_logrite/inline_ns/CMakeFiles/abi_compat_inline_ns.dir
+/root/logrite/scans/r3/p4861/tests/abi/build_logrite/inline_ns/CMakeFiles/edit_cache.dir
+/root/logrite/scans/r3/p4861/tests/abi/build_logrite/inline_ns/CMakeFiles/rebuild_cache.dir

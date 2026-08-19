@@ -6,6 +6,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // create a JSON object
     json j =
     {
@@ -32,8 +33,10 @@ int main()
 
     // count elements
     auto s = j.size();
+	std::cerr << "main(): s → " << s << std::endl;
     j["size"] = s;
 
     // pretty print with indent of 4 spaces
     std::cout << std::setw(4) << j << '\n';
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

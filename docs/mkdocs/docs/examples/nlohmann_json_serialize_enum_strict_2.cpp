@@ -20,14 +20,19 @@ NLOHMANN_JSON_SERIALIZE_ENUM_STRICT(Color,
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // serialization
     json j_red = ns::Color::red;
     std::cout << static_cast<int>(ns::Color::red) << " -> " << j_red << std::endl;
 
     // deserialization
     json j_rot = "rot";
+	std::cerr << "main(): j_rot → " << j_rot << std::endl;
+	std::cerr << "main(): rot → " << rot << std::endl;
+	std::cerr << "main(): red → " << red << std::endl;
     auto rot = j_rot.get<ns::Color>();
     auto red = j_red.get<ns::Color>();
     std::cout << j_rot << " -> " << static_cast<int>(rot) << std::endl;
     std::cout << j_red << " -> " << static_cast<int>(red) << std::endl;
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

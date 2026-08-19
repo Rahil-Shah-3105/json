@@ -7,11 +7,13 @@ using namespace nlohmann::literals;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // create a JSON value
     json j = R"({"compact": true, "schema": 0})"_json;
 
     // serialize it to MessagePack
     std::vector<std::uint8_t> v = json::to_msgpack(j);
+	std::cerr << "main(): v → " << v << std::endl;
 
     // print the vector content
     for (auto& byte : v)
@@ -19,4 +21,5 @@ int main()
         std::cout << "0x" << std::hex << std::setw(2) << std::setfill('0') << (int)byte << " ";
     }
     std::cout << std::endl;
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

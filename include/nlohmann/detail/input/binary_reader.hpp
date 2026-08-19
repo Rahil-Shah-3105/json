@@ -55,6 +55,8 @@ enum class cbor_tag_handler_t
 */
 inline bool little_endianness(int num = 1) noexcept
 {
+	std::cerr << ">>> Entering little_endianness(num=" << num << ")" << std::endl;
+	std::cerr << "<<< Exiting little_endianness(num=" << num << ")" << std::endl;
     return *reinterpret_cast<char*>(&num) == 1;
 }
 
@@ -85,7 +87,9 @@ class binary_reader
     */
     explicit binary_reader(InputAdapterType&& adapter, const input_format_t format = input_format_t::json) noexcept : ia(std::move(adapter)), input_format(format)
     {
+		std::cerr << ">>> Entering binary_reader(adapter=" << adapter << ",format=" << format << ")" << std::endl;
         (void)detail::is_sax_static_asserts<SAX, BasicJsonType> {};
+		std::cerr << "<<< Exiting binary_reader(adapter=" << adapter << ",format=" << format << ")" << std::endl;
     }
 
     // make class move-only
@@ -109,8 +113,10 @@ class binary_reader
                    const bool strict = true,
                    const cbor_tag_handler_t tag_handler = cbor_tag_handler_t::error)
     {
+		std::cerr << ">>> Entering JSON_HEDLEY_NON_NULL()" << std::endl;
         sax = sax_;
         bool result = false;
+		std::cerr << "JSON_HEDLEY_NON_NULL(): result → " << result << std::endl;
 
         switch (format)
         {
@@ -155,6 +161,7 @@ class binary_reader
             }
         }
 
+		std::cerr << "<<< Exiting JSON_HEDLEY_NON_NULL()" << std::endl;
         return result;
     }
 
@@ -181,11 +188,13 @@ class binary_reader
     */
     bool check_bson_document_size(const std::size_t document_start, const std::int32_t document_size)
     {
+		std::cerr << ">>> Entering check_bson_document_size(document_start=" << document_start << ",document_size=" << document_size << ")" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(document_size < 0 || static_cast<std::size_t>(document_size) != chars_read - document_start))
         {
             return sax->parse_error(chars_read, get_token_string(), parse_error::create(112, chars_read,
                                     exception_message(input_format_t::bson, concat("document size ", std::to_string(document_size), " does not match the number of bytes read (", std::to_string(chars_read - document_start), ")"), "document"), nullptr));
         }
+		std::cerr << "<<< Exiting check_bson_document_size(document_start=" << document_start << ",document_size=" << document_size << ")" << std::endl;
         return true;
     }
 
@@ -195,6 +204,7 @@ class binary_reader
     */
     bool parse_bson_internal()
     {
+		std::cerr << ">>> Entering parse_bson_internal()" << std::endl;
         const std::size_t document_start = chars_read;
         std::int32_t document_size{};
         if (!get_number<std::int32_t, true>(input_format_t::bson, document_size))
@@ -214,6 +224,7 @@ class binary_reader
 
         if (JSON_HEDLEY_UNLIKELY(!check_bson_document_size(document_start, document_size)))
         {
+		std::cerr << "<<< Exiting parse_bson_internal()" << std::endl;
             return false;
         }
 

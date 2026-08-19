@@ -47,10 +47,12 @@ namespace dtoa_impl
 template<typename Target, typename Source>
 Target reinterpret_bits(const Source source)
 {
+	std::cerr << ">>> Entering reinterpret_bits(source=" << source << ")" << std::endl;
     static_assert(sizeof(Target) == sizeof(Source), "size mismatch");
 
     Target target;
     std::memcpy(&target, &source, sizeof(Source));
+	std::cerr << "<<< Exiting reinterpret_bits(source=" << source << ")" << std::endl;
     return target;
 }
 
@@ -69,9 +71,11 @@ struct diyfp // f * 2^e
     */
     static diyfp sub(const diyfp& x, const diyfp& y) noexcept
     {
+		std::cerr << ">>> Entering sub(x=" << x << ",y=" << y << ")" << std::endl;
         JSON_ASSERT(x.e == y.e);
         JSON_ASSERT(x.f >= y.f);
 
+		std::cerr << "<<< Exiting sub(x=" << x << ",y=" << y << ")" << std::endl;
         return {x.f - y.f, x.e};
     }
 
@@ -81,6 +85,7 @@ struct diyfp // f * 2^e
     */
     static diyfp mul(const diyfp& x, const diyfp& y) noexcept
     {
+		std::cerr << ">>> Entering mul(x=" << x << ",y=" << y << ")" << std::endl;
         static_assert(kPrecision == 64, "internal error");
 
         // Computes:
@@ -136,7 +141,9 @@ struct diyfp // f * 2^e
         Q += std::uint64_t{1} << (64u - 32u - 1u); // round, ties up
 
         const std::uint64_t h = p3 + p2_hi + p1_hi + (Q >> 32u);
+		std::cerr << "mul(x=" << x << ",y=" << y << "): h → " << h << std::endl;
 
+		std::cerr << "<<< Exiting mul(x=" << x << ",y=" << y << ")" << std::endl;
         return {h, x.e + y.e + 64};
     }
 
@@ -146,6 +153,7 @@ struct diyfp // f * 2^e
     */
     static diyfp normalize(diyfp x) noexcept
     {
+		std::cerr << ">>> Entering normalize(x=" << x << ")" << std::endl;
         JSON_ASSERT(x.f != 0);
 
         while ((x.f >> 63u) == 0)
@@ -154,6 +162,7 @@ struct diyfp // f * 2^e
             x.e--;
         }
 
+		std::cerr << "<<< Exiting normalize(x=" << x << ")" << std::endl;
         return x;
     }
 
@@ -163,11 +172,13 @@ struct diyfp // f * 2^e
     */
     static diyfp normalize_to(const diyfp& x, const int target_exponent) noexcept
     {
+		std::cerr << ">>> Entering normalize_to(x=" << x << ",target_exponent=" << target_exponent << ")" << std::endl;
         const int delta = x.e - target_exponent;
 
         JSON_ASSERT(delta >= 0);
         JSON_ASSERT(((x.f << delta) >> delta) == x.f);
 
+		std::cerr << "<<< Exiting normalize_to(x=" << x << ",target_exponent=" << target_exponent << ")" << std::endl;
         return {x.f << delta, target_exponent};
     }
 };
@@ -188,6 +199,7 @@ boundaries.
 template<typename FloatType>
 boundaries compute_boundaries(FloatType value)
 {
+	std::cerr << ">>> Entering compute_boundaries(value=" << value << ")" << std::endl;
     JSON_ASSERT(std::isfinite(value));
     JSON_ASSERT(value > 0);
 
@@ -203,12 +215,17 @@ boundaries compute_boundaries(FloatType value)
 
     constexpr int      kPrecision = std::numeric_limits<FloatType>::digits; // = p (includes the hidden bit)
     constexpr int      kBias      = std::numeric_limits<FloatType>::max_exponent - 1 + (kPrecision - 1);
+	std::cerr << "compute_boundaries(value=" << value << "): kBias → " << kBias << std::endl;
     constexpr int      kMinExp    = 1 - kBias;
     constexpr std::uint64_t kHiddenBit = std::uint64_t{1} << (kPrecision - 1); // = 2^(p-1)
 
+	std::cerr << "compute_boundaries(value=" << value << "): kHiddenBit → " << kHiddenBit << std::endl;
     using bits_type = typename std::conditional<kPrecision == 24, std::uint32_t, std::uint64_t >::type;
 
     const auto bits = static_cast<std::uint64_t>(reinterpret_bits<bits_type>(value));
+	std::cerr << "compute_boundaries(value=" << value << "): bits → " << bits << std::endl;
+	std::cerr << "compute_boundaries(value=" << value << "): E → " << E << std::endl;
+	std::cerr << "compute_boundaries(value=" << value << "): F → " << F << std::endl;
     const std::uint64_t E = bits >> (kPrecision - 1);
     const std::uint64_t F = bits & (kHiddenBit - 1);
 
@@ -240,16 +257,20 @@ boundaries compute_boundaries(FloatType value)
 
     const bool lower_boundary_is_closer = F == 0 && E > 1;
     const diyfp m_plus = diyfp((2 * v.f) + 1, v.e - 1);
+	std::cerr << "compute_boundaries(value=" << value << "): m_plus → " << m_plus << std::endl;
     const diyfp m_minus = lower_boundary_is_closer
                           ? diyfp((4 * v.f) - 1, v.e - 2)  // (B)
                           : diyfp((2 * v.f) - 1, v.e - 1); // (A)
 
     // Determine the normalized w+ = m+.
     const diyfp w_plus = diyfp::normalize(m_plus);
+	std::cerr << "compute_boundaries(value=" << value << "): w_plus → " << w_plus << std::endl;
 
     // Determine w- = m- such that e_(w-) = e_(w+).
     const diyfp w_minus = diyfp::normalize_to(m_minus, w_plus.e);
+	std::cerr << "compute_boundaries(value=" << value << "): w_minus → " << w_minus << std::endl;
 
+	std::cerr << "<<< Exiting compute_boundaries(value=" << value << ")" << std::endl;
     return {diyfp::normalize(v), w_minus, w_plus};
 }
 
@@ -327,6 +348,7 @@ satisfies (Definition 3.2 from [1])
 */
 inline cached_power get_cached_power_for_binary_exponent(int e)
 {
+	std::cerr << ">>> Entering get_cached_power_for_binary_exponent(e=" << e << ")" << std::endl;
     // Now
     //
     //      alpha <= e_c + e + q <= gamma                                    (1)
@@ -479,9 +501,11 @@ inline cached_power get_cached_power_for_binary_exponent(int e)
     JSON_ASSERT(static_cast<std::size_t>(index) < kCachedPowers.size());
 
     const cached_power cached = kCachedPowers[static_cast<std::size_t>(index)];
+	std::cerr << "get_cached_power_for_binary_exponent(e=" << e << "): cached → " << cached << std::endl;
     JSON_ASSERT(kAlpha <= cached.e + e + 64);
     JSON_ASSERT(kGamma >= cached.e + e + 64);
 
+	std::cerr << "<<< Exiting get_cached_power_for_binary_exponent(e=" << e << ")" << std::endl;
     return cached;
 }
 
@@ -491,10 +515,12 @@ For n == 0, returns 1 and sets pow10 := 1.
 */
 inline int find_largest_pow10(const std::uint32_t n, std::uint32_t& pow10)
 {
+	std::cerr << ">>> Entering find_largest_pow10(n=" << n << ",pow10=" << pow10 << ")" << std::endl;
     // LCOV_EXCL_START
     if (n >= 1000000000)
     {
         pow10 = 1000000000;
+		std::cerr << "find_largest_pow10(n=" << n << ",pow10=" << pow10 << "): pow10 → " << pow10 << std::endl;
         return 10;
     }
     // LCOV_EXCL_STOP
@@ -540,6 +566,7 @@ inline int find_largest_pow10(const std::uint32_t n, std::uint32_t& pow10)
     }
 
     pow10 = 1;
+	std::cerr << "<<< Exiting find_largest_pow10(n=" << n << ",pow10=" << pow10 << ")" << std::endl;
     return 1;
 }
 
@@ -828,6 +855,7 @@ JSON_HEDLEY_NON_NULL(1)
 inline void grisu2(char* buf, int& len, int& decimal_exponent,
                    diyfp m_minus, diyfp v, diyfp m_plus)
 {
+	std::cerr << ">>> Entering JSON_HEDLEY_NON_NULL()" << std::endl;
     JSON_ASSERT(m_plus.e == m_minus.e);
     JSON_ASSERT(m_plus.e == v.e);
 
@@ -841,11 +869,15 @@ inline void grisu2(char* buf, int& len, int& decimal_exponent,
     // [alpha, gamma].
 
     const cached_power cached = get_cached_power_for_binary_exponent(m_plus.e);
+	std::cerr << "JSON_HEDLEY_NON_NULL(): cached → " << cached << std::endl;
 
     const diyfp c_minus_k(cached.f, cached.e); // = c ~= 10^-k
 
     // The exponent of the products is = v.e + c_minus_k.e + q and is in the range [alpha,gamma]
     const diyfp w       = diyfp::mul(v,       c_minus_k);
+	std::cerr << "JSON_HEDLEY_NON_NULL(): w → " << w << std::endl;
+	std::cerr << "JSON_HEDLEY_NON_NULL(): w_minus → " << w_minus << std::endl;
+	std::cerr << "JSON_HEDLEY_NON_NULL(): w_plus → " << w_plus << std::endl;
     const diyfp w_minus = diyfp::mul(m_minus, c_minus_k);
     const diyfp w_plus  = diyfp::mul(m_plus,  c_minus_k);
 
@@ -876,6 +908,10 @@ inline void grisu2(char* buf, int& len, int& decimal_exponent,
     decimal_exponent = -cached.k; // = -(-k) = k
 
     grisu2_digit_gen(buf, len, decimal_exponent, M_minus, w, M_plus);
+	std::cerr << "<<< Exiting JSON_HEDLEY_NON_NULL()" << std::endl;
+	std::cerr << ">>> Entering grisu2(buf=" << buf << ",len=" << len << ",decimal_exponent=" << decimal_exponent << ",value=" << value << ")" << std::endl;
+	std::cerr << "grisu2(buf=" << buf << ",len=" << len << ",decimal_exponent=" << decimal_exponent << ",value=" << value << "): w → " << w << std::endl;
+	std::cerr << "<<< Exiting grisu2(buf=" << buf << ",len=" << len << ",decimal_exponent=" << decimal_exponent << ",value=" << value << ")" << std::endl;
 }
 
 /*!
@@ -925,6 +961,9 @@ void grisu2(char* buf, int& len, int& decimal_exponent, FloatType value)
 */
 JSON_HEDLEY_NON_NULL(1)
 JSON_HEDLEY_RETURNS_NON_NULL
+std::cerr << ">>> Entering append_exponent(buf=" << buf << ",e=" << e << ")" << std::endl;
+std::cerr << "Exception in append_exponent(buf=" << buf << ",e=" << e << "): " << e.what() << std::endl;
+std::cerr << "<<< Exiting append_exponent(buf=" << buf << ",e=" << e << ")" << std::endl;
 inline char* append_exponent(char* buf, int e)
 {
     JSON_ASSERT(e > -1000);
@@ -932,6 +971,7 @@ inline char* append_exponent(char* buf, int e)
 
     if (e < 0)
     {
+		std::cerr << "Exception in append_exponent(buf=" << buf << ",e=" << e << "): " << e.what() << std::endl;
         e = -e;
         *buf++ = '-';
     }
@@ -1062,6 +1102,8 @@ format. Returns an iterator pointing past-the-end of the decimal representation.
 template<typename FloatType>
 JSON_HEDLEY_NON_NULL(1, 2)
 JSON_HEDLEY_RETURNS_NON_NULL
+std::cerr << ">>> Entering to_chars(first=" << first << ",last=" << last << ",value=" << value << ")" << std::endl;
+std::cerr << "<<< Exiting to_chars(first=" << first << ",last=" << last << ",value=" << value << ")" << std::endl;
 char* to_chars(char* first, const char* last, FloatType value)
 {
     static_cast<void>(last); // maybe unused - fix warning

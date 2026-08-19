@@ -5,10 +5,13 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // create JSON values
     json j_array = {"alpha", "bravo", "charly", "delta", "easy"};
+	std::cerr << "main(): j_array → " << j_array << std::endl;
     json j_number = 42;
     json j_object = {{"one", "eins"}, {"two", "zwei"}};
+	std::cerr << "main(): j_object → " << j_object << std::endl;
 
     // create copies using iterators
     json j_array_range(j_array.begin() + 1, j_array.end() - 2);
@@ -27,6 +30,8 @@ int main()
     }
     catch (const json::invalid_iterator& e)
     {
+		std::cerr << "Exception in main(): " << e.what() << std::endl;
         std::cout << e.what() << '\n';
     }
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

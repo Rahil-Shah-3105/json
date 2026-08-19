@@ -5,6 +5,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // different JSON Pointers
     json::json_pointer ptr1("");
     json::json_pointer ptr2("/foo");
@@ -15,4 +16,5 @@ int main()
               << "parent of \"" << ptr1 << "\" is \"" << ptr1.parent_pointer() << "\"\n"
               << "parent of \"" << ptr2 << "\" is \"" << ptr2.parent_pointer() << "\"\n"
               << "parent of \"" << ptr3 << "\" is \"" << ptr3.parent_pointer() << "\"" << std::endl;
+			std::cerr << "<<< Exiting main()" << std::endl;
 }

@@ -106,6 +106,7 @@ template<typename IteratorType> class iteration_proxy_value
     /// return key of the iterator
     const string_type& key() const
     {
+		std::cerr << ">>> Entering key()" << std::endl;
         JSON_ASSERT(anchor.m_object != nullptr);
 
         switch (anchor.m_object->type())
@@ -117,6 +118,7 @@ template<typename IteratorType> class iteration_proxy_value
                 {
                     int_to_string( array_index_str, array_index );
                     array_index_last = array_index;
+					std::cerr << "key(): array_index_last → " << array_index_last << std::endl;
                 }
                 return array_index_str;
             }
@@ -135,6 +137,7 @@ template<typename IteratorType> class iteration_proxy_value
             case value_t::binary:
             case value_t::discarded:
             default:
+				std::cerr << "<<< Exiting key()" << std::endl;
                 return empty_str;
         }
     }
@@ -169,12 +172,16 @@ template<typename IteratorType> class iteration_proxy
     /// return iterator begin (needed for range-based for)
     iteration_proxy_value<IteratorType> begin() const noexcept
     {
+		std::cerr << ">>> Entering begin()" << std::endl;
+		std::cerr << "<<< Exiting begin()" << std::endl;
         return iteration_proxy_value<IteratorType>(container->begin());
     }
 
     /// return iterator end (needed for range-based for)
     iteration_proxy_value<IteratorType> end() const noexcept
     {
+		std::cerr << ">>> Entering end()" << std::endl;
+		std::cerr << "<<< Exiting end()" << std::endl;
         return iteration_proxy_value<IteratorType>(container->end());
     }
 };
@@ -185,6 +192,7 @@ template<typename IteratorType> class iteration_proxy
 template<std::size_t N, typename IteratorType, enable_if_t<N == 0, int> = 0>
 auto get(const nlohmann::detail::iteration_proxy_value<IteratorType>& i) -> decltype(i.key())
 {
+	std::cerr << "<<< Exiting get(i=" << i << ")" << std::endl;
     return i.key();
 }
 // Structured Bindings Support

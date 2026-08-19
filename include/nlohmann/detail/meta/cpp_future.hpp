@@ -67,6 +67,8 @@ struct integer_sequence
     using value_type = T;
     static constexpr std::size_t size() noexcept
     {
+		std::cerr << ">>> Entering size()" << std::endl;
+		std::cerr << "<<< Exiting size()" << std::endl;
         return sizeof...(Ints);
     }
 };

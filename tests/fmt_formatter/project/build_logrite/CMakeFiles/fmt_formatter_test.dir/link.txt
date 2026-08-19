@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/fmt_formatter_test.dir/main.cpp.o -o fmt_formatter_test  _deps/fmt-build/libfmt.a 

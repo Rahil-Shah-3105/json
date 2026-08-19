@@ -6,6 +6,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // create byte vector
     std::vector<std::uint8_t> v = {0x1b, 0x00, 0x00, 0x00, 0x08, 0x63, 0x6f, 0x6d,
                                    0x70, 0x61, 0x63, 0x74, 0x00, 0x01, 0x10, 0x73,
@@ -18,4 +19,5 @@ int main()
 
     // print the deserialized JSON value
     std::cout << std::setw(2) << j << std::endl;
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

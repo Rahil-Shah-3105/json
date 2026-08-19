@@ -8,6 +8,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     std::vector<std::uint8_t> bytes = {{0xca, 0xfe, 0xba, 0xbe}};
 
     // create container without subtype
@@ -17,6 +18,8 @@ int main()
 
     // set the subtype
     c.set_subtype(42);
+	std::cerr << "main(): c → " << c << std::endl;
 
     std::cout << "after calling set_subtype(42): " << json(c) << '\n';
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

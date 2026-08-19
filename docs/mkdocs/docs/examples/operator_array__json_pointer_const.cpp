@@ -6,6 +6,7 @@ using namespace nlohmann::literals;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // create a JSON value
     const json j =
     {
@@ -22,4 +23,5 @@ int main()
     std::cout << j["/array"_json_pointer] << '\n';
     // output element with JSON pointer "/array/1"
     std::cout << j["/array/1"_json_pointer] << '\n';
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

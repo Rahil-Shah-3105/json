@@ -15,6 +15,7 @@
 
 int main()
 {
+std::cerr << ">>> Entering main()" << std::endl;
 #if defined(_LIBCPP_VERSION)
     std::printf("LLVM C++ Standard Library (libc++), _LIBCPP_VERSION=%d", _LIBCPP_VERSION);
 #elif defined(__GLIBCXX__)
@@ -28,4 +29,5 @@ int main()
 #else
     std::printf("unknown");
 #endif
+std::cerr << "<<< Exiting main()" << std::endl;
 }

@@ -161,6 +161,9 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
         }
 
         JSON_THROW(std::out_of_range("key not found"));
+		std::cerr << ">>> Entering at(key=" << key << ")" << std::endl;
+		std::cerr << "<<< Exiting at(key=" << key << ")" << std::endl;
+		std::cerr << "at(key=" << key << "): it → " << it << std::endl;
     }
 
     template<class KeyType, detail::enable_if_t<
@@ -194,6 +197,9 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
                 return 1;
             }
         }
+		std::cerr << "<<< Exiting erase(key=" << key << ")" << std::endl;
+		std::cerr << "<<< Exiting erase(pos=" << pos << ")" << std::endl;
+		std::cerr << "<<< Exiting erase(first=" << first << ",last=" << last << ")" << std::endl;
         return 0;
     }
 
@@ -285,6 +291,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
                 return 1;
             }
         }
+		std::cerr << "<<< Exiting count(key=" << key << ")" << std::endl;
         return 0;
     }
 
@@ -311,6 +318,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
                 return it;
             }
         }
+		std::cerr << "<<< Exiting find(key=" << key << ")" << std::endl;
         return Container::end();
     }
 
@@ -369,6 +377,8 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
             }
         }
         Container::push_back(value);
+		std::cerr << ">>> Entering insert(first=" << first << ",last=" << last << ")" << std::endl;
+		std::cerr << "<<< Exiting insert(first=" << first << ",last=" << last << ")" << std::endl;
         return {--this->end(), true};
     }
 

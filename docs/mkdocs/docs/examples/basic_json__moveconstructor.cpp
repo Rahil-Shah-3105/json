@@ -5,6 +5,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // create a JSON value
     json a = 23;
 
@@ -14,4 +15,5 @@ int main()
     // serialize the JSON arrays
     std::cout << a << '\n';
     std::cout << b << '\n';
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

@@ -207,16 +207,20 @@ struct char_traits<unsigned char> : std::char_traits<char>
     // Redefine to_int_type function
     static int_type to_int_type(char_type c) noexcept
     {
+		std::cerr << "<<< Exiting to_int_type(c=" << c << ")" << std::endl;
         return static_cast<int_type>(c);
     }
 
     static char_type to_char_type(int_type i) noexcept
     {
+		std::cerr << "<<< Exiting to_char_type(i=" << i << ")" << std::endl;
         return static_cast<char_type>(i);
     }
 
     static constexpr int_type eof() noexcept
     {
+		std::cerr << ">>> Entering eof()" << std::endl;
+		std::cerr << "<<< Exiting eof()" << std::endl;
         return static_cast<int_type>(std::char_traits<char>::eof());
     }
 };
@@ -800,6 +804,8 @@ struct is_ordered_map
 template < typename T, typename U, enable_if_t < !std::is_same<T, U>::value, int > = 0 >
 T conditional_static_cast(U value)
 {
+	std::cerr << ">>> Entering conditional_static_cast(value=" << value << ")" << std::endl;
+	std::cerr << "<<< Exiting conditional_static_cast(value=" << value << ")" << std::endl;
     return static_cast<T>(value);
 }
 
@@ -839,6 +845,8 @@ struct value_in_range_of_impl2<OfType, T, false, false>
     static constexpr bool test(T val)
     {
         using CommonType = typename std::common_type<OfType, T>::type;
+		std::cerr << "<<< Exiting test(val=" << val << ")" << std::endl;
+		std::cerr << "<<< Exiting test()" << std::endl;
         return static_cast<CommonType>(val) <= static_cast<CommonType>((std::numeric_limits<OfType>::max)());
     }
 };
@@ -900,6 +908,8 @@ struct value_in_range_of_impl1<OfType, T, true>
 template<typename OfType, typename T>
 constexpr bool value_in_range_of(T val)
 {
+	std::cerr << ">>> Entering value_in_range_of(val=" << val << ")" << std::endl;
+	std::cerr << "<<< Exiting value_in_range_of(val=" << val << ")" << std::endl;
     return value_in_range_of_impl1<OfType, T>::test(val);
 }
 
@@ -916,10 +926,12 @@ namespace impl
 template<typename T>
 constexpr bool is_c_string()
 {
+	std::cerr << ">>> Entering is_c_string()" << std::endl;
     using TUnExt = typename std::remove_extent<T>::type;
     using TUnCVExt = typename std::remove_cv<TUnExt>::type;
     using TUnPtr = typename std::remove_pointer<T>::type;
     using TUnCVPtr = typename std::remove_cv<TUnPtr>::type;
+		std::cerr << "<<< Exiting is_c_string()" << std::endl;
     return
         (std::is_array<T>::value && std::is_same<TUnCVExt, char>::value)
         || (std::is_pointer<T>::value && std::is_same<TUnCVPtr, char>::value);
@@ -944,6 +956,8 @@ namespace impl
 template<typename T>
 constexpr bool is_transparent()
 {
+	std::cerr << ">>> Entering is_transparent()" << std::endl;
+	std::cerr << "<<< Exiting is_transparent()" << std::endl;
     return is_detected<detect_is_transparent, T>::value;
 }
 

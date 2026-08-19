@@ -5,6 +5,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // create JSON object
     const json object =
     {
@@ -21,10 +22,12 @@ int main()
     {
         // use at() on a non-object type
         const json str = "I am a string";
+		std::cerr << "main(): str → " << str << std::endl;
         std::cout << str.at("the good") << '\n';
     }
     catch (const json::type_error& e)
     {
+		std::cerr << "Exception in main(): " << e.what() << std::endl;
         std::cout << e.what() << '\n';
     }
 
@@ -38,4 +41,5 @@ int main()
     {
         std::cout << "out of range" << '\n';
     }
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

@@ -79,6 +79,7 @@
 #define NLOHMANN_JSON_ABI_TAGS_CONCAT(a, b, c) \
     NLOHMANN_JSON_ABI_TAGS_CONCAT_EX(a, b, c)
 
+	std::cerr << ">>> Entering NLOHMANN_JSON_ABI_TAGS_CONCAT_EX(a=" << a << ",b=" << b << ",c=" << c << ")" << std::endl;
 #define NLOHMANN_JSON_ABI_TAGS                                       \
     NLOHMANN_JSON_ABI_TAGS_CONCAT(                                   \
             NLOHMANN_JSON_ABI_TAG_DIAGNOSTICS,                       \
@@ -88,9 +89,11 @@
 // Construct the namespace version component
 #define NLOHMANN_JSON_NAMESPACE_VERSION_CONCAT_EX(major, minor, patch) \
     _v ## major ## _ ## minor ## _ ## patch
+	std::cerr << "<<< Exiting NLOHMANN_JSON_ABI_TAGS_CONCAT_EX(a=" << a << ",b=" << b << ",c=" << c << ")" << std::endl;
 #define NLOHMANN_JSON_NAMESPACE_VERSION_CONCAT(major, minor, patch) \
     NLOHMANN_JSON_NAMESPACE_VERSION_CONCAT_EX(major, minor, patch)
 
+	std::cerr << ">>> Entering NLOHMANN_JSON_NAMESPACE_VERSION_CONCAT_EX(major=" << major << ",minor=" << minor << ",patch=" << patch << ")" << std::endl;
 #if NLOHMANN_JSON_NAMESPACE_NO_VERSION
 #define NLOHMANN_JSON_NAMESPACE_VERSION
 #else
@@ -102,9 +105,11 @@
 
 // Combine namespace components
 #define NLOHMANN_JSON_NAMESPACE_CONCAT_EX(a, b) a ## b
+std::cerr << "<<< Exiting NLOHMANN_JSON_NAMESPACE_VERSION_CONCAT_EX(major=" << major << ",minor=" << minor << ",patch=" << patch << ")" << std::endl;
 #define NLOHMANN_JSON_NAMESPACE_CONCAT(a, b) \
     NLOHMANN_JSON_NAMESPACE_CONCAT_EX(a, b)
 
+	std::cerr << ">>> Entering NLOHMANN_JSON_NAMESPACE_CONCAT_EX(a=" << a << ",b=" << b << ")" << std::endl;
 #ifndef NLOHMANN_JSON_NAMESPACE
 #define NLOHMANN_JSON_NAMESPACE               \
     nlohmann::NLOHMANN_JSON_NAMESPACE_CONCAT( \
@@ -126,6 +131,7 @@
 #define NLOHMANN_JSON_NAMESPACE_END                                     \
     }  /* namespace (inline namespace) NOLINT(readability/namespace) */ \
     }  // namespace nlohmann
+	std::cerr << "<<< Exiting NLOHMANN_JSON_NAMESPACE_CONCAT_EX(a=" << a << ",b=" << b << ")" << std::endl;
 #endif
 
 

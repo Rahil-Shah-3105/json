@@ -29,6 +29,8 @@ struct position_t
     /// conversion to size_t to preserve SAX interface
     constexpr operator size_t() const
     {
+		std::cerr << ">>> Entering size_t()" << std::endl;
+		std::cerr << "<<< Exiting size_t()" << std::endl;
         return chars_read_total;
     }
 };

@@ -1,0 +1,9 @@
+/root/logrite/scans/r3/p4861/tests/fmt_formatter/project/build_logrite/CMakeFiles/fmt_formatter_test.dir
+/root/logrite/scans/r3/p4861/tests/fmt_formatter/project/build_logrite/CMakeFiles/edit_cache.dir
+/root/logrite/scans/r3/p4861/tests/fmt_formatter/project/build_logrite/CMakeFiles/rebuild_cache.dir
+/root/logrite/scans/r3/p4861/tests/fmt_formatter/project/build_logrite/_deps/json-build/CMakeFiles/edit_cache.dir
+/root/logrite/scans/r3/p4861/tests/fmt_formatter/project/build_logrite/_deps/json-build/CMakeFiles/rebuild_cache.dir
+/root/logrite/scans/r3/p4861/tests/fmt_formatter/project/build_logrite/_deps/fmt-build/CMakeFiles/fmt.dir
+/root/logrite/scans/r3/p4861/tests/fmt_formatter/project/build_logrite/_deps/fmt-build/CMakeFiles/fmt-c.dir
+/root/logrite/scans/r3/p4861/tests/fmt_formatter/project/build_logrite/_deps/fmt-build/CMakeFiles/edit_cache.dir
+/root/logrite/scans/r3/p4861/tests/fmt_formatter/project/build_logrite/_deps/fmt-build/CMakeFiles/rebuild_cache.dir

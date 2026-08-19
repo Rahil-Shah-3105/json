@@ -5,6 +5,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // create a JSON array
     json j_array = {0, 1, 2, 3, 4, 5};
 
@@ -13,4 +14,5 @@ int main()
 
     // print values
     std::cout << j_array << '\n';
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

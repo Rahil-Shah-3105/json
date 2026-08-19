@@ -1,0 +1,1 @@
+/usr/bin/c++ -rdynamic CMakeFiles/abi_config_custom.dir/custom.o -o abi_config_custom  ../libabi_compat_main.a 

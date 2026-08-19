@@ -118,6 +118,7 @@
 #define NLOHMANN_JSON_ABI_TAGS_CONCAT(a, b, c) \
     NLOHMANN_JSON_ABI_TAGS_CONCAT_EX(a, b, c)
 
+	std::cerr << ">>> Entering NLOHMANN_JSON_ABI_TAGS_CONCAT_EX(a=" << a << ",b=" << b << ",c=" << c << ")" << std::endl;
 #define NLOHMANN_JSON_ABI_TAGS                                       \
     NLOHMANN_JSON_ABI_TAGS_CONCAT(                                   \
             NLOHMANN_JSON_ABI_TAG_DIAGNOSTICS,                       \
@@ -127,9 +128,11 @@
 // Construct the namespace version component
 #define NLOHMANN_JSON_NAMESPACE_VERSION_CONCAT_EX(major, minor, patch) \
     _v ## major ## _ ## minor ## _ ## patch
+	std::cerr << "<<< Exiting NLOHMANN_JSON_ABI_TAGS_CONCAT_EX(a=" << a << ",b=" << b << ",c=" << c << ")" << std::endl;
 #define NLOHMANN_JSON_NAMESPACE_VERSION_CONCAT(major, minor, patch) \
     NLOHMANN_JSON_NAMESPACE_VERSION_CONCAT_EX(major, minor, patch)
 
+	std::cerr << ">>> Entering NLOHMANN_JSON_NAMESPACE_VERSION_CONCAT_EX(major=" << major << ",minor=" << minor << ",patch=" << patch << ")" << std::endl;
 #if NLOHMANN_JSON_NAMESPACE_NO_VERSION
 #define NLOHMANN_JSON_NAMESPACE_VERSION
 #else
@@ -141,9 +144,11 @@
 
 // Combine namespace components
 #define NLOHMANN_JSON_NAMESPACE_CONCAT_EX(a, b) a ## b
+std::cerr << "<<< Exiting NLOHMANN_JSON_NAMESPACE_VERSION_CONCAT_EX(major=" << major << ",minor=" << minor << ",patch=" << patch << ")" << std::endl;
 #define NLOHMANN_JSON_NAMESPACE_CONCAT(a, b) \
     NLOHMANN_JSON_NAMESPACE_CONCAT_EX(a, b)
 
+	std::cerr << ">>> Entering NLOHMANN_JSON_NAMESPACE_CONCAT_EX(a=" << a << ",b=" << b << ")" << std::endl;
 #ifndef NLOHMANN_JSON_NAMESPACE
 #define NLOHMANN_JSON_NAMESPACE               \
     nlohmann::NLOHMANN_JSON_NAMESPACE_CONCAT( \
@@ -165,6 +170,7 @@
 #define NLOHMANN_JSON_NAMESPACE_END                                     \
     }  /* namespace (inline namespace) NOLINT(readability/namespace) */ \
     }  // namespace nlohmann
+	std::cerr << "<<< Exiting NLOHMANN_JSON_NAMESPACE_CONCAT_EX(a=" << a << ",b=" << b << ")" << std::endl;
 #endif
 
 // #include <nlohmann/detail/conversions/from_json.hpp>
@@ -1254,6 +1260,7 @@ NLOHMANN_JSON_NAMESPACE_END
     JSON_HEDLEY_TI_CL7X_VERSION_CHECK(1,2,0) || \
     JSON_HEDLEY_TI_CLPRU_VERSION_CHECK(2,1,0)
     #define JSON_HEDLEY_DIAGNOSTIC_DISABLE_DEPRECATED _Pragma("diag_suppress 1291,1718")
+	std::cerr << ">>> Entering JSON_HEDLEY_TI_CLPRU_VERSION_CHECK()" << std::endl;
 #elif JSON_HEDLEY_SUNPRO_VERSION_CHECK(5,13,0) && !defined(__cplusplus)
     #define JSON_HEDLEY_DIAGNOSTIC_DISABLE_DEPRECATED _Pragma("error_messages(off,E_DEPRECATED_ATT,E_DEPRECATED_ATT_MESS)")
 #elif JSON_HEDLEY_SUNPRO_VERSION_CHECK(5,13,0) && defined(__cplusplus)
@@ -1321,6 +1328,7 @@ NLOHMANN_JSON_NAMESPACE_END
     JSON_HEDLEY_TI_CL6X_VERSION_CHECK(8,3,0) || \
     JSON_HEDLEY_TI_CL7X_VERSION_CHECK(1,2,0)
     #define JSON_HEDLEY_DIAGNOSTIC_DISABLE_UNKNOWN_CPP_ATTRIBUTES _Pragma("diag_suppress 1173")
+	std::cerr << ">>> Entering JSON_HEDLEY_TI_CL7X_VERSION_CHECK()" << std::endl;
 #elif JSON_HEDLEY_IAR_VERSION_CHECK(8,0,0)
     #define JSON_HEDLEY_DIAGNOSTIC_DISABLE_UNKNOWN_CPP_ATTRIBUTES _Pragma("diag_suppress=Pe1097")
 #elif JSON_HEDLEY_MCST_LCC_VERSION_CHECK(1,25,10)
@@ -1382,6 +1390,7 @@ NLOHMANN_JSON_NAMESPACE_END
     JSON_HEDLEY_TI_CLPRU_VERSION_CHECK(2,3,0) || \
     JSON_HEDLEY_MCST_LCC_VERSION_CHECK(1,25,10)
     #define JSON_HEDLEY_DEPRECATED(since) __attribute__((__deprecated__("Since " #since)))
+	std::cerr << ">>> Entering JSON_HEDLEY_MCST_LCC_VERSION_CHECK()" << std::endl;
     #define JSON_HEDLEY_DEPRECATED_FOR(since, replacement) __attribute__((__deprecated__("Since " #since "; use " #replacement)))
 #elif defined(__cplusplus) && (__cplusplus >= 201402L)
     #define JSON_HEDLEY_DEPRECATED(since) JSON_HEDLEY_DIAGNOSTIC_DISABLE_CPP98_COMPAT_WRAP_([[deprecated("Since " #since)]])
@@ -1563,6 +1572,7 @@ NLOHMANN_JSON_NAMESPACE_END
     JSON_HEDLEY_TI_CL2000_VERSION_CHECK(6,2,0) || \
     JSON_HEDLEY_TI_CL6X_VERSION_CHECK(4,0,0)
     #if defined(__cplusplus)
+	std::cerr << ">>> Entering JSON_HEDLEY_TI_CL6X_VERSION_CHECK()" << std::endl;
         #define JSON_HEDLEY_ASSUME(expr) std::_nassert(expr)
     #else
         #define JSON_HEDLEY_ASSUME(expr) _nassert(expr)
@@ -1625,6 +1635,7 @@ JSON_HEDLEY_DIAGNOSTIC_PUSH
     JSON_HEDLEY_INTEL_VERSION_CHECK(13,0,0) || \
     JSON_HEDLEY_ARM_VERSION_CHECK(4,1,0)
     #define JSON_HEDLEY_NON_NULL(...) __attribute__((__nonnull__(__VA_ARGS__)))
+	std::cerr << ">>> Entering JSON_HEDLEY_ARM_VERSION_CHECK()" << std::endl;
 #else
     #define JSON_HEDLEY_NON_NULL(...)
 #endif
@@ -1837,6 +1848,7 @@ JSON_HEDLEY_DIAGNOSTIC_POP
 #elif \
     JSON_HEDLEY_SUNPRO_VERSION_CHECK(5,10,0)
     #define JSON_HEDLEY_CONST _Pragma("no_side_effect")
+	std::cerr << ">>> Entering JSON_HEDLEY_SUNPRO_VERSION_CHECK()" << std::endl;
 #else
     #define JSON_HEDLEY_CONST JSON_HEDLEY_PURE
 #endif
@@ -1920,6 +1932,7 @@ JSON_HEDLEY_DIAGNOSTIC_POP
   JSON_HEDLEY_MCST_LCC_VERSION_CHECK(1,25,10) || \
   JSON_HEDLEY_IAR_VERSION_CHECK(8,10,0)
 #  define JSON_HEDLEY_ALWAYS_INLINE __attribute__((__always_inline__)) JSON_HEDLEY_INLINE
+std::cerr << ">>> Entering JSON_HEDLEY_IAR_VERSION_CHECK()" << std::endl;
 #elif \
   JSON_HEDLEY_MSVC_VERSION_CHECK(12,0,0) || \
   JSON_HEDLEY_INTEL_CL_VERSION_CHECK(2021,1,0)
@@ -2118,6 +2131,7 @@ JSON_HEDLEY_DIAGNOSTIC_POP
        JSON_HEDLEY_ARM_VERSION_CHECK(5,4,0) || \
        JSON_HEDLEY_TINYC_VERSION_CHECK(0,9,24)
 #if defined(__INTPTR_TYPE__)
+	std::cerr << ">>> Entering JSON_HEDLEY_TINYC_VERSION_CHECK()" << std::endl;
     #define JSON_HEDLEY_IS_CONSTEXPR_(expr) __builtin_types_compatible_p(__typeof__((1 ? (void*) ((__INTPTR_TYPE__) ((expr) * 0)) : (int*) 0)), int*)
 #else
     #include <stdint.h>
@@ -2244,6 +2258,7 @@ JSON_HEDLEY_DIAGNOSTIC_POP
   JSON_HEDLEY_GCC_VERSION_CHECK(4,4,0) || \
   JSON_HEDLEY_INTEL_VERSION_CHECK(13,0,0)
 #  define JSON_HEDLEY_MESSAGE(msg) JSON_HEDLEY_PRAGMA(message msg)
+std::cerr << ">>> Entering JSON_HEDLEY_INTEL_VERSION_CHECK()" << std::endl;
 #elif JSON_HEDLEY_CRAY_VERSION_CHECK(5,0,0)
 #  define JSON_HEDLEY_MESSAGE(msg) JSON_HEDLEY_PRAGMA(_CRI message msg)
 #elif JSON_HEDLEY_IAR_VERSION_CHECK(8,0,0)
@@ -2323,6 +2338,7 @@ JSON_HEDLEY_DIAGNOSTIC_POP
         JSON_HEDLEY_DIAGNOSTIC_POP \
     }))
 #else
+	std::cerr << "<<< Exiting JSON_HEDLEY_INTEL_VERSION_CHECK()" << std::endl;
 #  define JSON_HEDLEY_FLAGS_CAST(T, expr) JSON_HEDLEY_STATIC_CAST(T, expr)
 #endif
 
@@ -2333,6 +2349,7 @@ JSON_HEDLEY_DIAGNOSTIC_POP
     (JSON_HEDLEY_MSVC_VERSION_CHECK(19,0,23918) && !JSON_HEDLEY_MSVC_VERSION_CHECK(20,0,0)) || \
     JSON_HEDLEY_INTEL_CL_VERSION_CHECK(2021,1,0)
     #define JSON_HEDLEY_EMPTY_BASES __declspec(empty_bases)
+	std::cerr << ">>> Entering JSON_HEDLEY_INTEL_CL_VERSION_CHECK()" << std::endl;
 #else
     #define JSON_HEDLEY_EMPTY_BASES
 #endif
@@ -2648,6 +2665,7 @@ JSON_HEDLEY_DIAGNOSTIC_POP
             return ej_pair.second == j;                                                         \
         });                                                                                     \
         e = ((it != std::end(m)) ? it : std::begin(m))->first;                                  \
+		std::cerr << "<<< Exiting from_json(j=" << j << ",n=" << n << ")" << std::endl;
     }
 
 
@@ -2660,11 +2678,13 @@ JSON_HEDLEY_DIAGNOSTIC_POP
 template<typename ExceptionType>
 void templated_json_throw(ExceptionType exception)
 {
+	std::cerr << ">>> Entering templated_json_throw(exception=" << exception << ")" << std::endl;
     JSON_THROW(exception);
 
     /* JSON_THROW(exception) discards exception and aborts - void cast needed to supress
        compilation error if compiled with -Werror and Wunused-parameter */
     (void)exception;
+	std::cerr << "<<< Exiting templated_json_throw(exception=" << exception << ")" << std::endl;
 }
 
 /*!
@@ -2703,6 +2723,16 @@ void templated_json_throw(ExceptionType exception)
         });                                                                                     \
         if (it != std::end(m)) e = it->first;                                                   \
         else templated_json_throw<nlohmann::detail::out_of_range>(nlohmann::detail::out_of_range::create(410,"enum value out of range for " #ENUM_TYPE ": " + j.dump(), &j)); \
+		std::cerr << ">>> Entering from_json(j=" << j << ",n=" << n << ")" << std::endl;
+		std::cerr << ">>> Entering from_json(j=" << j << ",opt=" << opt << ")" << std::endl;
+		std::cerr << "<<< Exiting from_json(j=" << j << ",opt=" << opt << ")" << std::endl;
+		std::cerr << "from_json(j=" << j << ",b=" << b << "): b → " << b << std::endl;
+		std::cerr << "from_json(j=" << j << ",s=" << s << "): s → " << s << std::endl;
+		std::cerr << "from_json(j=" << j << ",e=" << e << "): e → " << e << std::endl;
+		std::cerr << "from_json(j=" << j << ",bin=" << bin << "): bin → " << bin << std::endl;
+		std::cerr << "from_json(j=" << j << ",obj=" << obj << "): obj → " << obj << std::endl;
+		std::cerr << "from_json(j=" << j << ",val=" << val << "): val → " << val << std::endl;
+		std::cerr << "from_json(j=" << j << ",p=" << p << "): p → " << p << std::endl;
     }
 
 // Ugly macros to avoid uglier copy-paste when specializing basic_json. They
@@ -3339,8 +3369,10 @@ inline void replace_substring(StringType& s, const StringType& f,
 template<typename StringType>
 inline StringType escape(StringType s)
 {
+	std::cerr << ">>> Entering escape(s=" << s << ")" << std::endl;
     replace_substring(s, StringType{"~"}, StringType{"~0"});
     replace_substring(s, StringType{"/"}, StringType{"~1"});
+	std::cerr << "<<< Exiting escape(s=" << s << ")" << std::endl;
     return s;
 }
 
@@ -3354,8 +3386,10 @@ inline StringType escape(StringType s)
 template<typename StringType>
 inline void unescape(StringType& s)
 {
+	std::cerr << ">>> Entering unescape(s=" << s << ")" << std::endl;
     replace_substring(s, StringType{"~1"}, StringType{"/"});
     replace_substring(s, StringType{"~0"}, StringType{"~"});
+	std::cerr << "<<< Exiting unescape(s=" << s << ")" << std::endl;
 }
 
 }  // namespace detail
@@ -3394,6 +3428,8 @@ struct position_t
     /// conversion to size_t to preserve SAX interface
     constexpr operator size_t() const
     {
+		std::cerr << ">>> Entering size_t()" << std::endl;
+		std::cerr << "<<< Exiting size_t()" << std::endl;
         return chars_read_total;
     }
 };
@@ -3970,16 +4006,20 @@ struct char_traits<unsigned char> : std::char_traits<char>
     // Redefine to_int_type function
     static int_type to_int_type(char_type c) noexcept
     {
+		std::cerr << "<<< Exiting to_int_type(c=" << c << ")" << std::endl;
         return static_cast<int_type>(c);
     }
 
     static char_type to_char_type(int_type i) noexcept
     {
+		std::cerr << "<<< Exiting to_char_type(i=" << i << ")" << std::endl;
         return static_cast<char_type>(i);
     }
 
     static constexpr int_type eof() noexcept
     {
+		std::cerr << ">>> Entering eof()" << std::endl;
+		std::cerr << "<<< Exiting eof()" << std::endl;
         return static_cast<int_type>(std::char_traits<char>::eof());
     }
 };
@@ -4563,6 +4603,8 @@ struct is_ordered_map
 template < typename T, typename U, enable_if_t < !std::is_same<T, U>::value, int > = 0 >
 T conditional_static_cast(U value)
 {
+	std::cerr << ">>> Entering conditional_static_cast(value=" << value << ")" << std::endl;
+	std::cerr << "<<< Exiting conditional_static_cast(value=" << value << ")" << std::endl;
     return static_cast<T>(value);
 }
 
@@ -4602,6 +4644,8 @@ struct value_in_range_of_impl2<OfType, T, false, false>
     static constexpr bool test(T val)
     {
         using CommonType = typename std::common_type<OfType, T>::type;
+		std::cerr << "<<< Exiting test(val=" << val << ")" << std::endl;
+		std::cerr << "<<< Exiting test()" << std::endl;
         return static_cast<CommonType>(val) <= static_cast<CommonType>((std::numeric_limits<OfType>::max)());
     }
 };
@@ -4663,6 +4707,8 @@ struct value_in_range_of_impl1<OfType, T, true>
 template<typename OfType, typename T>
 constexpr bool value_in_range_of(T val)
 {
+	std::cerr << ">>> Entering value_in_range_of(val=" << val << ")" << std::endl;
+	std::cerr << "<<< Exiting value_in_range_of(val=" << val << ")" << std::endl;
     return value_in_range_of_impl1<OfType, T>::test(val);
 }
 
@@ -4679,10 +4725,12 @@ namespace impl
 template<typename T>
 constexpr bool is_c_string()
 {
+	std::cerr << ">>> Entering is_c_string()" << std::endl;
     using TUnExt = typename std::remove_extent<T>::type;
     using TUnCVExt = typename std::remove_cv<TUnExt>::type;
     using TUnPtr = typename std::remove_pointer<T>::type;
     using TUnCVPtr = typename std::remove_cv<TUnPtr>::type;
+		std::cerr << "<<< Exiting is_c_string()" << std::endl;
     return
         (std::is_array<T>::value && std::is_same<TUnCVExt, char>::value)
         || (std::is_pointer<T>::value && std::is_same<TUnCVPtr, char>::value);
@@ -4707,6 +4755,8 @@ namespace impl
 template<typename T>
 constexpr bool is_transparent()
 {
+	std::cerr << ">>> Entering is_transparent()" << std::endl;
+	std::cerr << "<<< Exiting is_transparent()" << std::endl;
     return is_detected<detect_is_transparent, T>::value;
 }
 
@@ -4747,6 +4797,11 @@ namespace detail
 
 inline std::size_t concat_length()
 {
+	std::cerr << ">>> Entering concat_length()" << std::endl;
+	std::cerr << "<<< Exiting concat_length()" << std::endl;
+	std::cerr << "<<< Exiting concat_length(rest=" << rest << ")" << std::endl;
+	std::cerr << "<<< Exiting concat_length(cstr=" << cstr << ",rest=" << rest << ")" << std::endl;
+	std::cerr << "<<< Exiting concat_length(str=" << str << ",rest=" << rest << ")" << std::endl;
     return 0;
 }
 
@@ -4844,8 +4899,10 @@ template < typename OutStringType, typename Arg, typename... Args,
                          && detect_string_can_append_iter<OutStringType, Arg>::value, int > >
 inline void concat_into(OutStringType& out, const Arg& arg, Args&& ... rest)
 {
+	std::cerr << ">>> Entering concat_into(out=" << out << ",arg=" << arg << ",rest=" << rest << ")" << std::endl;
     out.append(arg.begin(), arg.end());
     concat_into(out, std::forward<Args>(rest)...);
+	std::cerr << "<<< Exiting concat_into(out=" << out << ",arg=" << arg << ",rest=" << rest << ")" << std::endl;
 }
 
 template < typename OutStringType, typename Arg, typename... Args,
@@ -4862,9 +4919,11 @@ inline void concat_into(OutStringType& out, const Arg& arg, Args&& ... rest)
 template<typename OutStringType = std::string, typename... Args>
 inline OutStringType concat(Args && ... args)
 {
+	std::cerr << ">>> Entering concat(args=" << args << ")" << std::endl;
     OutStringType str;
     str.reserve(concat_length(args...));
     concat_into(str, std::forward<Args>(args)...);
+	std::cerr << "<<< Exiting concat(args=" << args << ")" << std::endl;
     return str;
 }
 
@@ -4898,6 +4957,8 @@ class exception : public std::exception
 {
   public:
     /// returns the explanatory string
+	std::cerr << ">>> Entering what()" << std::endl;
+	std::cerr << "<<< Exiting what()" << std::endl;
     const char* what() const noexcept override
     {
         return m.what();
@@ -4912,11 +4973,16 @@ class exception : public std::exception
 
     static std::string name(const std::string& ename, int id_)
     {
+		std::cerr << ">>> Entering name(ename=" << ename << ",id_=" << id_ << ")" << std::endl;
+		std::cerr << "<<< Exiting name(ename=" << ename << ",id_=" << id_ << ")" << std::endl;
         return concat("[json.exception.", ename, '.', std::to_string(id_), "] ");
     }
 
     static std::string diagnostics(std::nullptr_t /*leaf_element*/)
     {
+		std::cerr << ">>> Entering diagnostics()" << std::endl;
+		std::cerr << "<<< Exiting diagnostics()" << std::endl;
+		std::cerr << "<<< Exiting diagnostics(leaf_element=" << leaf_element << ")" << std::endl;
         return "";
     }
 
@@ -4981,6 +5047,8 @@ class exception : public std::exception
 
         return concat('(', str, ") ", get_byte_positions(leaf_element));
 #else
+		std::cerr << ">>> Entering end()" << std::endl;
+		std::cerr << "<<< Exiting end()" << std::endl;
         return get_byte_positions(leaf_element);
 #endif
     }
@@ -4992,8 +5060,10 @@ class exception : public std::exception
     template<typename BasicJsonType>
     static std::string get_byte_positions(const BasicJsonType* leaf_element)
     {
+		std::cerr << ">>> Entering get_byte_positions(leaf_element=" << leaf_element << ")" << std::endl;
         if ((leaf_element->start_pos() != std::string::npos) && (leaf_element->end_pos() != std::string::npos))
         {
+		std::cerr << "<<< Exiting get_byte_positions(leaf_element=" << leaf_element << ")" << std::endl;
             return concat("(bytes ", std::to_string(leaf_element->start_pos()), "-", std::to_string(leaf_element->end_pos()), ") ");
         }
         return "";
@@ -5025,8 +5095,14 @@ class parse_error : public exception
     template<typename BasicJsonContext, enable_if_t<is_basic_json_context<BasicJsonContext>::value, int> = 0>
     static parse_error create(int id_, const position_t& pos, const std::string& what_arg, BasicJsonContext context)
     {
+		std::cerr << ">>> Entering create(id_=" << id_ << ",pos=" << pos << ",what_arg=" << what_arg << ",context=" << context << ")" << std::endl;
         const std::string w = concat(exception::name("parse_error", id_), "parse error",
                                      position_string(pos), ": ", exception::diagnostics(context), what_arg);
+		std::cerr << "<<< Exiting create(id_=" << id_ << ",pos=" << pos << ",what_arg=" << what_arg << ",context=" << context << ")" << std::endl;
+		std::cerr << "<<< Exiting create(id_=" << id_ << ",byte_=" << byte_ << ",what_arg=" << what_arg << ",context=" << context << ")" << std::endl;
+		std::cerr << "<<< Exiting create(id_=" << id_ << ",what_arg=" << what_arg << ",context=" << context << ")" << std::endl;
+		std::cerr << "<<< Exiting create(first=" << first << ",last=" << last << ")" << std::endl;
+		std::cerr << "<<< Exiting create(container=" << container << ")" << std::endl;
         return {id_, pos.chars_read_total, w.c_str()};
     }
 
@@ -5056,6 +5132,8 @@ class parse_error : public exception
 
     static std::string position_string(const position_t& pos)
     {
+		std::cerr << ">>> Entering position_string(pos=" << pos << ")" << std::endl;
+		std::cerr << "<<< Exiting position_string(pos=" << pos << ")" << std::endl;
         return concat(" at line ", std::to_string(pos.lines_read + 1),
                       ", column ", std::to_string(pos.chars_read_current_line));
     }
@@ -5070,6 +5148,7 @@ class invalid_iterator : public exception
     static invalid_iterator create(int id_, const std::string& what_arg, BasicJsonContext context)
     {
         const std::string w = concat(exception::name("invalid_iterator", id_), exception::diagnostics(context), what_arg);
+		std::cerr << "create(id_=" << id_ << ",what_arg=" << what_arg << ",context=" << context << "): w → " << w << std::endl;
         return {id_, w.c_str()};
     }
 
@@ -5307,6 +5386,7 @@ template < typename BasicJsonType, typename ArithmeticType,
                          int > = 0 >
 void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
 {
+	std::cerr << ">>> Entering get_arithmetic_value(j=" << j << ",val=" << val << ")" << std::endl;
     switch (static_cast<value_t>(j))
     {
         case value_t::number_unsigned:
@@ -5314,6 +5394,7 @@ void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
             val = static_cast<ArithmeticType>(*j.template get_ptr<const typename BasicJsonType::number_unsigned_t*>());
             break;
         }
+		std::cerr << "get_arithmetic_value(j=" << j << ",val=" << val << "): val → " << val << std::endl;
         case value_t::number_integer:
         {
             val = static_cast<ArithmeticType>(*j.template get_ptr<const typename BasicJsonType::number_integer_t*>());
@@ -5335,6 +5416,7 @@ void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
         default:
             JSON_THROW(type_error::create(302, concat("type must be number, but is ", j.type_name()), &j));
     }
+	std::cerr << "<<< Exiting get_arithmetic_value(j=" << j << ",val=" << val << ")" << std::endl;
 }
 
 template<typename BasicJsonType>
@@ -5499,6 +5581,9 @@ template<typename BasicJsonType>
 inline void from_json_array_impl(const BasicJsonType& j, typename BasicJsonType::array_t& arr, priority_tag<3> /*unused*/)
 {
     arr = *j.template get_ptr<const typename BasicJsonType::array_t*>();
+	std::cerr << ">>> Entering from_json_array_impl(j=" << j << ",arr=" << arr << ")" << std::endl;
+	std::cerr << "from_json_array_impl(j=" << j << ",arr=" << arr << "): arr → " << arr << std::endl;
+	std::cerr << "<<< Exiting from_json_array_impl(j=" << j << ",arr=" << arr << ")" << std::endl;
 }
 
 template<typename BasicJsonType, typename T, std::size_t N>
@@ -5697,6 +5782,7 @@ inline void from_json(const BasicJsonType& j, ArithmeticType& val)
 template<typename BasicJsonType, typename Type>
 detail::uncvref_t<Type> from_json_tuple_get_impl(BasicJsonType&& j, detail::identity_tag<Type> /*unused*/, detail::priority_tag<0> /*unused*/)
 {
+	std::cerr << "<<< Exiting from_json_tuple_get_impl(j=" << j << ")" << std::endl;
     return std::forward<BasicJsonType>(j).template get<detail::uncvref_t<Type>>();
 }
 
@@ -5720,6 +5806,7 @@ using tuple_type = std::tuple < decltype(from_json_tuple_get_impl(std::declval<B
 template<std::size_t PTagValue, typename... Args, typename BasicJsonType, std::size_t... Idx>
 tuple_type<PTagValue, BasicJsonType, Args...> from_json_tuple_impl_base(BasicJsonType&& j, index_sequence<Idx...> /*unused*/)
 {
+	std::cerr << "<<< Exiting from_json_tuple_impl_base()" << std::endl;
     return tuple_type<PTagValue, BasicJsonType, Args...>(from_json_tuple_get_impl(std::forward<BasicJsonType>(j).at(Idx), detail::identity_tag<Args> {}, detail::priority_tag<PTagValue> {})...);
 }
 
@@ -5747,6 +5834,10 @@ std::tuple<Args...> from_json_tuple_impl(BasicJsonType&& j, identity_tag<std::tu
 {
     static_assert(cxpr_and<cxpr_or<cxpr_not<std::is_reference<Args>>, is_compatible_reference_type<BasicJsonType, Args>>...>::value,
                   "Can not return a tuple containing references to types not contained in a Json, try Json::get_to()");
+	std::cerr << ">>> Entering from_json_tuple_impl(j=" << j << ",t=" << t << ")" << std::endl;
+	std::cerr << "from_json_tuple_impl(j=" << j << ",t=" << t << "): t → " << t << std::endl;
+	std::cerr << "<<< Exiting from_json_tuple_impl(j=" << j << ",p=" << p << ")" << std::endl;
+	std::cerr << "<<< Exiting from_json_tuple_impl(j=" << j << ",t=" << t << ")" << std::endl;
     return from_json_tuple_impl_base<1, Args...>(std::forward<BasicJsonType>(j), index_sequence_for<Args...> {});
 }
 
@@ -5840,6 +5931,8 @@ struct from_json_fn
     noexcept(noexcept(from_json(j, std::forward<T>(val))))
     -> decltype(from_json(j, std::forward<T>(val)))
     {
+		std::cerr << ">>> Entering operator()" << std::endl;
+		std::cerr << "<<< Exiting operator()" << std::endl;
         return from_json(j, std::forward<T>(val));
     }
 };
@@ -5936,16 +6029,21 @@ namespace detail
 template<typename StringType>
 void int_to_string(StringType& target, std::size_t value)
 {
+	std::cerr << ">>> Entering int_to_string(target=" << target << ",value=" << value << ")" << std::endl;
     // For ADL
     using std::to_string;
     target = to_string(value);
+	std::cerr << "int_to_string(target=" << target << ",value=" << value << "): target → " << target << std::endl;
+	std::cerr << "<<< Exiting int_to_string(target=" << target << ",value=" << value << ")" << std::endl;
 }
 
 template<typename StringType>
 StringType to_string(std::size_t value)
 {
+	std::cerr << ">>> Entering to_string(value=" << value << ")" << std::endl;
     StringType result;
     int_to_string(result, value);
+	std::cerr << "<<< Exiting to_string(value=" << value << ")" << std::endl;
     return result;
 }
 
@@ -6039,6 +6137,7 @@ template<typename IteratorType> class iteration_proxy_value
     /// return key of the iterator
     const string_type& key() const
     {
+		std::cerr << ">>> Entering key()" << std::endl;
         JSON_ASSERT(anchor.m_object != nullptr);
 
         switch (anchor.m_object->type())
@@ -6050,6 +6149,7 @@ template<typename IteratorType> class iteration_proxy_value
                 {
                     int_to_string( array_index_str, array_index );
                     array_index_last = array_index;
+					std::cerr << "key(): array_index_last → " << array_index_last << std::endl;
                 }
                 return array_index_str;
             }
@@ -6102,6 +6202,8 @@ template<typename IteratorType> class iteration_proxy
     /// return iterator begin (needed for range-based for)
     iteration_proxy_value<IteratorType> begin() const noexcept
     {
+		std::cerr << ">>> Entering begin()" << std::endl;
+		std::cerr << "<<< Exiting begin()" << std::endl;
         return iteration_proxy_value<IteratorType>(container->begin());
     }
 
@@ -6118,6 +6220,8 @@ template<typename IteratorType> class iteration_proxy
 template<std::size_t N, typename IteratorType, enable_if_t<N == 0, int> = 0>
 auto get(const nlohmann::detail::iteration_proxy_value<IteratorType>& i) -> decltype(i.key())
 {
+	std::cerr << "<<< Exiting get(i=" << i << ")" << std::endl;
+	std::cerr << "<<< Exiting get()" << std::endl;
     return i.key();
 }
 // Structured Bindings Support
@@ -6203,6 +6307,7 @@ struct external_constructor<value_t::boolean>
         j.m_data.m_type = value_t::boolean;
         j.m_data.m_value = b;
         j.assert_invariant();
+		std::cerr << "<<< Exiting construct(j=" << j << ",s=" << s << ")" << std::endl;
     }
 };
 
@@ -6216,6 +6321,7 @@ struct external_constructor<value_t::string>
         j.m_data.m_type = value_t::string;
         j.m_data.m_value = s;
         j.assert_invariant();
+		std::cerr << ">>> Entering construct(j=" << j << ",s=" << s << ")" << std::endl;
     }
 
     template<typename BasicJsonType>
@@ -6225,6 +6331,8 @@ struct external_constructor<value_t::string>
         j.m_data.m_type = value_t::string;
         j.m_data.m_value = std::move(s);
         j.assert_invariant();
+		std::cerr << ">>> Entering construct(j=" << j << ",str=" << str << ")" << std::endl;
+		std::cerr << "<<< Exiting construct(j=" << j << ",str=" << str << ")" << std::endl;
     }
 
     template < typename BasicJsonType, typename CompatibleStringType,
@@ -6249,6 +6357,8 @@ struct external_constructor<value_t::binary>
         j.m_data.m_type = value_t::binary;
         j.m_data.m_value = typename BasicJsonType::binary_t(b);
         j.assert_invariant();
+		std::cerr << ">>> Entering construct(j=" << j << ",b=" << b << ")" << std::endl;
+		std::cerr << "<<< Exiting construct(j=" << j << ",b=" << b << ")" << std::endl;
     }
 
     template<typename BasicJsonType>
@@ -6271,6 +6381,8 @@ struct external_constructor<value_t::number_float>
         j.m_data.m_type = value_t::number_float;
         j.m_data.m_value = val;
         j.assert_invariant();
+		std::cerr << ">>> Entering construct(j=" << j << ",val=" << val << ")" << std::endl;
+		std::cerr << "<<< Exiting construct(j=" << j << ",val=" << val << ")" << std::endl;
     }
 };
 
@@ -6339,6 +6451,9 @@ struct external_constructor<value_t::array>
         j.m_data.m_value.array = j.template create<typename BasicJsonType::array_t>(begin(arr), end(arr));
         j.set_parents();
         j.assert_invariant();
+		std::cerr << ">>> Entering construct(j=" << j << ",arr=" << arr << ")" << std::endl;
+		std::cerr << "construct(j=" << j << ",arr=" << arr << "): j → " << j << std::endl;
+		std::cerr << "<<< Exiting construct(j=" << j << ",arr=" << arr << ")" << std::endl;
     }
 
     template<typename BasicJsonType>
@@ -6410,6 +6525,9 @@ struct external_constructor<value_t::object>
         j.m_data.m_value = std::move(obj);
         j.set_parents();
         j.assert_invariant();
+		std::cerr << ">>> Entering construct(j=" << j << ",obj=" << obj << ")" << std::endl;
+		std::cerr << "construct(j=" << j << ",obj=" << obj << "): j → " << j << std::endl;
+		std::cerr << "<<< Exiting construct(j=" << j << ",obj=" << obj << ")" << std::endl;
     }
 
     template < typename BasicJsonType, typename CompatibleObjectType,
@@ -6436,6 +6554,7 @@ template<typename BasicJsonType, typename T,
          enable_if_t<std::is_constructible<BasicJsonType, T>::value, int> = 0>
 void to_json(BasicJsonType& j, const std::optional<T>& opt) noexcept
 {
+	std::cerr << ">>> Entering to_json(j=" << j << ",opt=" << opt << ")" << std::endl;
     if (opt.has_value())
     {
         j = *opt;
@@ -6444,6 +6563,7 @@ void to_json(BasicJsonType& j, const std::optional<T>& opt) noexcept
     {
         j = nullptr;
     }
+	std::cerr << "<<< Exiting to_json(j=" << j << ",opt=" << opt << ")" << std::endl;
 }
 #endif
 
@@ -6595,6 +6715,7 @@ template <
                   int > = 0 >
 inline void to_json(BasicJsonType& j, const T(&arr)[N]) // NOLINT(cppcoreguidelines-avoid-c-arrays,hicpp-avoid-c-arrays,modernize-avoid-c-arrays)
 {
+	std::cerr << ">>> Entering T()" << std::endl;
     external_constructor<value_t::array>::construct(j, arr);
 }
 
@@ -6615,7 +6736,11 @@ inline void to_json(BasicJsonType& j, const T& b)
 template<typename BasicJsonType, typename Tuple, std::size_t... Idx>
 inline void to_json_tuple_impl(BasicJsonType& j, const Tuple& t, index_sequence<Idx...> /*unused*/)
 {
+	std::cerr << ">>> Entering to_json_tuple_impl(j=" << j << ",t=" << t << ")" << std::endl;
     j = { std::get<Idx>(t)... };
+	std::cerr << "<<< Exiting to_json_tuple_impl(j=" << j << ",t=" << t << ")" << std::endl;
+	std::cerr << ">>> Entering to_json_tuple_impl(j=" << j << ")" << std::endl;
+	std::cerr << "<<< Exiting to_json_tuple_impl(j=" << j << ")" << std::endl;
 }
 
 template<typename BasicJsonType, typename Tuple>
@@ -6795,14 +6920,20 @@ class byte_container_with_subtype : public BinaryType
     /// @sa https://json.nlohmann.me/api/byte_container_with_subtype/set_subtype/
     void set_subtype(subtype_type subtype_) noexcept
     {
+		std::cerr << ">>> Entering set_subtype(subtype_=" << subtype_ << ")" << std::endl;
         m_subtype = subtype_;
         m_has_subtype = true;
+		std::cerr << "set_subtype(subtype_=" << subtype_ << "): m_subtype → " << m_subtype << std::endl;
+		std::cerr << "set_subtype(subtype_=" << subtype_ << "): m_has_subtype → " << m_has_subtype << std::endl;
+		std::cerr << "<<< Exiting set_subtype(subtype_=" << subtype_ << ")" << std::endl;
     }
 
     /// @brief return the binary subtype
     /// @sa https://json.nlohmann.me/api/byte_container_with_subtype/subtype/
     constexpr subtype_type subtype() const noexcept
     {
+		std::cerr << ">>> Entering subtype()" << std::endl;
+		std::cerr << "<<< Exiting subtype()" << std::endl;
         return m_has_subtype ? m_subtype : static_cast<subtype_type>(-1);
     }
 
@@ -6810,6 +6941,8 @@ class byte_container_with_subtype : public BinaryType
     /// @sa https://json.nlohmann.me/api/byte_container_with_subtype/has_subtype/
     constexpr bool has_subtype() const noexcept
     {
+		std::cerr << ">>> Entering has_subtype()" << std::endl;
+		std::cerr << "<<< Exiting has_subtype()" << std::endl;
         return m_has_subtype;
     }
 
@@ -6817,8 +6950,12 @@ class byte_container_with_subtype : public BinaryType
     /// @sa https://json.nlohmann.me/api/byte_container_with_subtype/clear_subtype/
     void clear_subtype() noexcept
     {
+		std::cerr << ">>> Entering clear_subtype()" << std::endl;
         m_subtype = 0;
         m_has_subtype = false;
+		std::cerr << "clear_subtype(): m_subtype → " << m_subtype << std::endl;
+		std::cerr << "clear_subtype(): m_has_subtype → " << m_has_subtype << std::endl;
+		std::cerr << "<<< Exiting clear_subtype()" << std::endl;
     }
 
   private:
@@ -6861,7 +6998,9 @@ namespace detail
 // boost::hash_combine
 inline std::size_t combine(std::size_t seed, std::size_t h) noexcept
 {
+	std::cerr << ">>> Entering combine(seed=" << seed << ",h=" << h << ")" << std::endl;
     seed ^= h + 0x9e3779b9 + (seed << 6U) + (seed >> 2U);
+	std::cerr << "<<< Exiting combine(seed=" << seed << ",h=" << h << ")" << std::endl;
     return seed;
 }
 
@@ -6879,12 +7018,14 @@ null, 0, 0U, and false, etc.
 template<typename BasicJsonType>
 std::size_t hash(const BasicJsonType& j)
 {
+	std::cerr << ">>> Entering hash(j=" << j << ")" << std::endl;
     using string_t = typename BasicJsonType::string_t;
     using number_integer_t = typename BasicJsonType::number_integer_t;
     using number_unsigned_t = typename BasicJsonType::number_unsigned_t;
     using number_float_t = typename BasicJsonType::number_float_t;
 
     const auto type = static_cast<std::size_t>(j.type());
+	std::cerr << "hash(j=" << j << "): type → " << type << std::endl;
     switch (j.type())
     {
         case BasicJsonType::value_t::null:
@@ -6898,6 +7039,8 @@ std::size_t hash(const BasicJsonType& j)
             auto seed = combine(type, j.size());
             for (const auto& element : j.items())
             {
+				std::cerr << "hash(j=" << j << "): seed → " << seed << std::endl;
+				std::cerr << "hash(j=" << j << "): h → " << h << std::endl;
                 const auto h = std::hash<string_t> {}(element.key());
                 seed = combine(seed, h);
                 seed = combine(seed, hash(element.value()));
@@ -6960,6 +7103,7 @@ std::size_t hash(const BasicJsonType& j)
 
         default:                   // LCOV_EXCL_LINE
             JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert) LCOV_EXCL_LINE
+			std::cerr << "<<< Exiting hash(j=" << j << ")" << std::endl;
             return 0;              // LCOV_EXCL_LINE
     }
 }
@@ -7057,7 +7201,9 @@ class file_input_adapter
     explicit file_input_adapter(std::FILE* f) noexcept
         : m_file(f)
     {
+		std::cerr << ">>> Entering file_input_adapter(f=" << f << ")" << std::endl;
         JSON_ASSERT(m_file != nullptr);
+		std::cerr << "<<< Exiting file_input_adapter(f=" << f << ")" << std::endl;
     }
 
     // make class move-only
@@ -7069,6 +7215,7 @@ class file_input_adapter
 
     std::char_traits<char>::int_type get_character() noexcept
     {
+		std::cerr << "<<< Exiting get_character()" << std::endl;
         return std::fgetc(m_file);
     }
 
@@ -7076,6 +7223,7 @@ class file_input_adapter
     template<class T>
     std::size_t get_elements(T* dest, std::size_t count = 1)
     {
+		std::cerr << "<<< Exiting get_elements(dest=" << dest << ",count=" << count << ")" << std::endl;
         return fread(dest, 1, sizeof(T) * count, m_file);
     }
 
@@ -7196,6 +7344,8 @@ class iterator_input_adapter
     // number of characters consumed from the input so far
     std::size_t get_consumed_count() const
     {
+		std::cerr << ">>> Entering get_consumed_count()" << std::endl;
+		std::cerr << "<<< Exiting get_consumed_count()" << std::endl;
         return static_cast<std::size_t>(std::distance(begin, current));
     }
 
@@ -7204,9 +7354,13 @@ class iterator_input_adapter
     template<typename ContainerType>
     void copy_consumed_range(std::size_t first_index, std::size_t last_index, ContainerType& out) const
     {
+		std::cerr << ">>> Entering copy_consumed_range(first_index=" << first_index << ",last_index=" << last_index << ",out=" << out << ")" << std::endl;
         const auto from = std::next(begin, static_cast<typename std::iterator_traits<IteratorType>::difference_type>(first_index));
         const auto to = std::next(begin, static_cast<typename std::iterator_traits<IteratorType>::difference_type>(last_index));
+		std::cerr << "copy_consumed_range(first_index=" << first_index << ",last_index=" << last_index << ",out=" << out << "): to → " << to << std::endl;
+		std::cerr << "copy_consumed_range(first_index=" << first_index << ",last_index=" << last_index << ",out=" << out << "): from → " << from << std::endl;
         out.insert(out.end(), from, to);
+		std::cerr << "<<< Exiting copy_consumed_range(first_index=" << first_index << ",last_index=" << last_index << ",out=" << out << ")" << std::endl;
     }
 
     // Copy up to count * sizeof(T) bytes into dest, returning the number of
@@ -7238,15 +7392,20 @@ class iterator_input_adapter
     template<class T>
     std::size_t get_elements_impl(T* dest, std::size_t count, std::true_type /*contiguous*/)
     {
+		std::cerr << ">>> Entering get_elements_impl(dest=" << dest << ",count=" << count << ")" << std::endl;
+		std::cerr << "<<< Exiting get_elements_impl(dest=" << dest << ",count=" << count << ")" << std::endl;
         const std::size_t wanted = count * sizeof(T);
 #if defined(__cpp_lib_concepts) && defined(JSON_HAS_CPP_20)
+		std::cerr << "get_elements_impl(dest=" << dest << ",count=" << count << "): wanted → " << wanted << std::endl;
         // std::ranges::distance also supports sized sentinels of a different
         // type (e.g. std::counted_iterator + std::default_sentinel_t)
         const std::size_t available = static_cast<std::size_t>(std::ranges::distance(current, end)) * sizeof(char_type);
+		std::cerr << "get_elements_impl(dest=" << dest << ",count=" << count << "): available → " << available << std::endl;
 #else
         const std::size_t available = static_cast<std::size_t>(std::distance(current, end)) * sizeof(char_type);
 #endif
         const std::size_t copied = (std::min)(wanted, available);
+		std::cerr << "get_elements_impl(dest=" << dest << ",count=" << count << "): copied → " << copied << std::endl;
         if (JSON_HEDLEY_LIKELY(copied != 0))
         {
             // the copy must stay within both buffers: the caller-provided
@@ -7357,6 +7516,7 @@ struct wide_string_input_helper<BaseInputAdapter, 4>
                 utf8_bytes_filled = 1;
             }
         }
+		std::cerr << "<<< Exiting fill_buffer()" << std::endl;
     }
 };
 
@@ -7432,6 +7592,7 @@ struct wide_string_input_helper<BaseInputAdapter, 2>
                 }
             }
         }
+		std::cerr << ">>> Entering fill_buffer()" << std::endl;
     }
 };
 
@@ -7570,6 +7731,7 @@ template < typename IteratorType, typename SentinelType = IteratorType,
 typename iterator_input_adapter_factory<IteratorType, SentinelType>::adapter_type input_adapter(IteratorType first, SentinelType last)
 {
     using factory_type = iterator_input_adapter_factory<IteratorType, SentinelType>;
+	std::cerr << "<<< Exiting input_adapter(file=" << file << ")" << std::endl;
     return factory_type::create(first, last);
 }
 
@@ -7603,6 +7765,7 @@ struct container_input_adapter_factory< ContainerType,
 template<typename ContainerType>
 typename container_input_adapter_factory_impl::container_input_adapter_factory<ContainerType>::adapter_type input_adapter(ContainerType&& container)
 {
+	std::cerr << ">>> Entering input_adapter(file=" << file << ")" << std::endl;
     return container_input_adapter_factory_impl::container_input_adapter_factory<ContainerType>::create(std::forward<ContainerType>(container));
 }
 
@@ -7622,11 +7785,15 @@ inline file_input_adapter input_adapter(std::FILE* file)
 
 inline input_stream_adapter input_adapter(std::istream& stream)
 {
+	std::cerr << ">>> Entering input_adapter(stream=" << stream << ")" << std::endl;
+	std::cerr << "<<< Exiting input_adapter(stream=" << stream << ")" << std::endl;
     return input_stream_adapter(stream);
 }
 
 inline input_stream_adapter input_adapter(std::istream&& stream)
 {
+	std::cerr << ">>> Entering input_adapter(b=" << b << ")" << std::endl;
+	std::cerr << "<<< Exiting input_adapter(b=" << b << ")" << std::endl;
     return input_stream_adapter(stream);
 }
 #endif  // JSON_NO_IO
@@ -7648,7 +7815,10 @@ contiguous_bytes_input_adapter input_adapter(CharT b)
         JSON_THROW(parse_error::create(101, 0, "attempting to parse an empty input; check that your input string or stream contains the expected JSON", nullptr));
     }
     auto length = std::strlen(reinterpret_cast<const char*>(b));
+	std::cerr << "input_adapter(b=" << b << "): length → " << length << std::endl;
     const auto* ptr = reinterpret_cast<const char*>(b);
+	std::cerr << ">>> Entering input_adapter()" << std::endl;
+	std::cerr << "<<< Exiting input_adapter()" << std::endl;
     return input_adapter(ptr, ptr + length); // cppcheck-suppress[nullPointerArithmeticRedundantCheck]
 }
 
@@ -7778,6 +7948,8 @@ class lexer_base
     /// return name of values of type token_type (only used for errors)
     JSON_HEDLEY_RETURNS_NON_NULL
     JSON_HEDLEY_CONST
+	std::cerr << ">>> Entering token_type_name(t=" << t << ")" << std::endl;
+	std::cerr << "<<< Exiting token_type_name(t=" << t << ")" << std::endl;
     static const char* token_type_name(const token_type t) noexcept
     {
         switch (t)
@@ -7834,6 +8006,8 @@ using detect_supports_seek = decltype(InputAdapterType::supports_seek);
 template<typename InputAdapterType>
 constexpr bool input_adapter_supports_seek(std::true_type /*detected*/)
 {
+	std::cerr << ">>> Entering input_adapter_supports_seek()" << std::endl;
+	std::cerr << "<<< Exiting input_adapter_supports_seek()" << std::endl;
     return InputAdapterType::supports_seek;
 }
 
@@ -7889,8 +8063,10 @@ class lexer : public lexer_base<BasicJsonType>
     JSON_HEDLEY_PURE
     static char get_decimal_point() noexcept
     {
+		std::cerr << ">>> Entering get_decimal_point()" << std::endl;
         const auto* loc = localeconv();
         JSON_ASSERT(loc != nullptr);
+		std::cerr << "<<< Exiting get_decimal_point()" << std::endl;
         return (loc->decimal_point == nullptr) ? '.' : *(loc->decimal_point);
     }
 
@@ -7915,6 +8091,7 @@ class lexer : public lexer_base<BasicJsonType>
     */
     int get_codepoint()
     {
+		std::cerr << ">>> Entering get_codepoint()" << std::endl;
         // this function only makes sense after reading `\u`
         JSON_ASSERT(current == 'u');
         int codepoint = 0;
@@ -7943,6 +8120,7 @@ class lexer : public lexer_base<BasicJsonType>
         }
 
         JSON_ASSERT(0x0000 <= codepoint && codepoint <= 0xFFFF);
+		std::cerr << "<<< Exiting get_codepoint()" << std::endl;
         return codepoint;
     }
 
@@ -7963,10 +8141,12 @@ class lexer : public lexer_base<BasicJsonType>
     */
     bool next_byte_in_range(std::initializer_list<char_int_type> ranges)
     {
+		std::cerr << ">>> Entering next_byte_in_range(ranges=" << ranges << ")" << std::endl;
         JSON_ASSERT(ranges.size() == 2 || ranges.size() == 4 || ranges.size() == 6);
         add(current);
 
         for (auto range = ranges.begin(); range != ranges.end(); ++range)
+		std::cerr << "next_byte_in_range(ranges=" << ranges << "): range → " << range << std::endl;
         {
             get();
             if (JSON_HEDLEY_LIKELY(*range <= current && current <= *(++range))) // NOLINT(bugprone-inc-dec-in-conditions)
@@ -7976,10 +8156,12 @@ class lexer : public lexer_base<BasicJsonType>
             else
             {
                 error_message = "invalid string: ill-formed UTF-8 byte";
+				std::cerr << "next_byte_in_range(ranges=" << ranges << "): error_message → " << error_message << std::endl;
                 return false;
             }
         }
 
+		std::cerr << "<<< Exiting next_byte_in_range(ranges=" << ranges << ")" << std::endl;
         return true;
     }
 
@@ -8000,6 +8182,7 @@ class lexer : public lexer_base<BasicJsonType>
     */
     token_type scan_string()
     {
+		std::cerr << ">>> Entering scan_string()" << std::endl;
         // reset token_buffer (ignore opening quote)
         reset();
 
@@ -8015,6 +8198,7 @@ class lexer : public lexer_base<BasicJsonType>
                 case char_traits<char_type>::eof():
                 {
                     error_message = "invalid string: missing closing quote";
+				std::cerr << "scan_string(): error_message → " << error_message << std::endl;
                     return token_type::parse_error;
                 }
 
@@ -8070,7 +8254,9 @@ class lexer : public lexer_base<BasicJsonType>
 
                             if (JSON_HEDLEY_UNLIKELY(codepoint1 == -1))
                             {
+								std::cerr << "scan_string(): codepoint1 → " << codepoint1 << std::endl;
                                 error_message = "invalid string: '\\u' must be followed by 4 hex digits";
+								std::cerr << "Exception in scan_string(): " << e.what() << std::endl;
                                 return token_type::parse_error;
                             }
 
@@ -8081,6 +8267,7 @@ class lexer : public lexer_base<BasicJsonType>
                                 if (JSON_HEDLEY_LIKELY(get() == '\\' && get() == 'u'))
                                 {
                                     const int codepoint2 = get_codepoint();
+									std::cerr << "scan_string(): codepoint2 → " << codepoint2 << std::endl;
 
                                     if (JSON_HEDLEY_UNLIKELY(codepoint2 == -1))
                                     {
@@ -8105,6 +8292,7 @@ class lexer : public lexer_base<BasicJsonType>
                                     else
                                     {
                                         error_message = "invalid string: surrogate U+D800..U+DBFF must be followed by U+DC00..U+DFFF";
+									std::cerr << "get(): position.chars_read_current_line → " << position.chars_read_current_line << std::endl;
                                         return token_type::parse_error;
                                     }
                                 }
@@ -8578,6 +8766,7 @@ class lexer : public lexer_base<BasicJsonType>
                 default:
                 {
                     error_message = "invalid string: ill-formed UTF-8 byte";
+					std::cerr << "<<< Exiting scan_string()" << std::endl;
                     return token_type::parse_error;
                 }
             }
@@ -8590,6 +8779,7 @@ class lexer : public lexer_base<BasicJsonType>
      */
     bool scan_comment()
     {
+		std::cerr << ">>> Entering scan_comment()" << std::endl;
         switch (get())
         {
             // single-line comments skip input until a newline or EOF is read
@@ -8624,6 +8814,7 @@ class lexer : public lexer_base<BasicJsonType>
                         case '\0':
                         {
                             error_message = "invalid comment; missing closing '*/'";
+						std::cerr << "scan_comment(): error_message → " << error_message << std::endl;
                             return false;
                         }
 
@@ -8654,6 +8845,7 @@ class lexer : public lexer_base<BasicJsonType>
             default:
             {
                 error_message = "invalid comment; expecting '/' or '*' after '/'";
+				std::cerr << "<<< Exiting scan_comment()" << std::endl;
                 return false;
             }
         }
@@ -8669,6 +8861,9 @@ class lexer : public lexer_base<BasicJsonType>
     static void strtof(double& f, const char* str, char** endptr) noexcept
     {
         f = std::strtod(str, endptr);
+		std::cerr << ">>> Entering strtof(f=" << f << ",str=" << str << ",endptr=" << endptr << ")" << std::endl;
+		std::cerr << "<<< Exiting strtof(f=" << f << ",str=" << str << ",endptr=" << endptr << ")" << std::endl;
+		std::cerr << "strtof(f=" << f << ",str=" << str << ",endptr=" << endptr << "): f → " << f << std::endl;
     }
 
     JSON_HEDLEY_NON_NULL(2)
@@ -9072,12 +9267,16 @@ scan_number_done:
     /// reset token_buffer; current character is beginning of token
     void reset() noexcept
     {
+		std::cerr << ">>> Entering reset()" << std::endl;
         token_buffer.clear();
         decimal_point_position = std::string::npos;
+		std::cerr << "<<< Exiting reset()" << std::endl;
+		std::cerr << "reset(): decimal_point_position → " << decimal_point_position << std::endl;
 
 #if JSON_DIAGNOSTIC_POSITIONS
         // the first character of the token has already been read, hence the -1
         token_start_position = position.chars_read_total - 1;
+		std::cerr << "reset(): token_start_position → " << token_start_position << std::endl;
 #endif
 
         note_token_start(std::integral_constant<bool, lazy_token_string> {});
@@ -9089,6 +9288,8 @@ scan_number_done:
     void note_token_start(std::true_type /*lazy*/) noexcept
     {
         token_string_start = ia.get_consumed_count() - 1;
+		std::cerr << ">>> Entering note_token_start()" << std::endl;
+		std::cerr << "<<< Exiting note_token_start()" << std::endl;
     }
 
     /// streaming adapter: start copying the token eagerly, beginning with the
@@ -9143,10 +9344,12 @@ scan_number_done:
     /// streaming adapter: copy the scanned character into token_string
     void capture_char(std::false_type /*lazy*/)
     {
+		std::cerr << ">>> Entering capture_char()" << std::endl;
         if (JSON_HEDLEY_LIKELY(current != char_traits<char_type>::eof()))
         {
             token_string.push_back(char_traits<char_type>::to_char_type(current));
         }
+		std::cerr << "<<< Exiting capture_char()" << std::endl;
     }
 
     /*!
@@ -9159,8 +9362,10 @@ scan_number_done:
     */
     void unget()
     {
+		std::cerr << ">>> Entering unget()" << std::endl;
         next_unget = true;
 
+		std::cerr << "unget(): next_unget → " << next_unget << std::endl;
         --position.chars_read_total;
 
         // in case we "unget" a newline, we have to also decrement the lines_read
@@ -9177,6 +9382,7 @@ scan_number_done:
         }
 
         uncapture_char(std::integral_constant<bool, lazy_token_string> {});
+		std::cerr << "<<< Exiting unget()" << std::endl;
     }
 
     /// seekable adapter: nothing was captured, so nothing to undo
@@ -9185,17 +9391,21 @@ scan_number_done:
     /// streaming adapter: drop the character copied by the matching get()
     void uncapture_char(std::false_type /*lazy*/)
     {
+		std::cerr << ">>> Entering uncapture_char()" << std::endl;
         if (JSON_HEDLEY_LIKELY(current != char_traits<char_type>::eof()))
         {
             JSON_ASSERT(!token_string.empty());
             token_string.pop_back();
         }
+		std::cerr << "<<< Exiting uncapture_char()" << std::endl;
     }
 
     /// add a character to token_buffer
     void add(char_int_type c)
     {
+		std::cerr << ">>> Entering add(c=" << c << ")" << std::endl;
         token_buffer.push_back(static_cast<typename string_t::value_type>(c));
+		std::cerr << "<<< Exiting add(c=" << c << ")" << std::endl;
     }
 
   public:
@@ -9206,29 +9416,46 @@ scan_number_done:
     /// return integer value
     constexpr number_integer_t get_number_integer() const noexcept
     {
+		std::cerr << ">>> Entering get_number_integer()" << std::endl;
+		std::cerr << ">>> Entering number_integer(val=" << val << ")" << std::endl;
+		std::cerr << "<<< Exiting number_integer(val=" << val << ")" << std::endl;
+		std::cerr << "<<< Exiting number_integer()" << std::endl;
+		std::cerr << "<<< Exiting get_number_integer()" << std::endl;
         return value_integer;
     }
 
     /// return unsigned integer value
     constexpr number_unsigned_t get_number_unsigned() const noexcept
     {
+		std::cerr << ">>> Entering get_number_unsigned()" << std::endl;
+		std::cerr << ">>> Entering number_unsigned(val=" << val << ")" << std::endl;
+		std::cerr << "<<< Exiting number_unsigned(val=" << val << ")" << std::endl;
+		std::cerr << "<<< Exiting number_unsigned()" << std::endl;
+		std::cerr << "<<< Exiting get_number_unsigned()" << std::endl;
         return value_unsigned;
     }
 
     /// return floating-point value
     constexpr number_float_t get_number_float() const noexcept
     {
+		std::cerr << ">>> Entering get_number_float()" << std::endl;
+		std::cerr << ">>> Entering number_float(val=" << val << ")" << std::endl;
+		std::cerr << "<<< Exiting number_float(val=" << val << ")" << std::endl;
+		std::cerr << "<<< Exiting number_float()" << std::endl;
+		std::cerr << "<<< Exiting get_number_float()" << std::endl;
         return value_float;
     }
 
     /// return current string value (implicitly resets the token; useful only once)
     string_t& get_string()
     {
+		std::cerr << ">>> Entering get_string()" << std::endl;
         // translate decimal points from locale back to '.' (#4084)
         if (decimal_point_char != '.' && decimal_point_position != std::string::npos)
         {
             token_buffer[decimal_point_position] = '.';
         }
+		std::cerr << "<<< Exiting get_string()" << std::endl;
         return token_buffer;
     }
 
@@ -9239,6 +9466,8 @@ scan_number_done:
     /// return position of last read token
     constexpr position_t get_position() const noexcept
     {
+		std::cerr << ">>> Entering get_position()" << std::endl;
+		std::cerr << "<<< Exiting get_position()" << std::endl;
         return position;
     }
 
@@ -9247,6 +9476,8 @@ scan_number_done:
     /// the token's parsed value, this accounts for escape sequences
     constexpr std::size_t get_token_start_position() const noexcept
     {
+		std::cerr << ">>> Entering get_token_start_position()" << std::endl;
+		std::cerr << "<<< Exiting get_token_start_position()" << std::endl;
         return token_start_position;
     }
 #endif
@@ -9254,15 +9485,20 @@ scan_number_done:
     /// seekable adapter: rebuild the last read token from the input on demand
     const std::vector<char_type>& collect_token_chars(std::vector<char_type>& out, std::true_type /*lazy*/) const
     {
+		std::cerr << ">>> Entering collect_token_chars(out=" << out << ")" << std::endl;
         // a pending unget of a real (non-EOF) character means that character
         // was consumed from the input but is not part of the token; EOF is
         // never consumed, so it must not be subtracted (mirrors unget())
         const bool pending_real_unget = next_unget && current != char_traits<char_type>::eof();
+		std::cerr << "collect_token_chars(out=" << out << "): pending_real_unget → " << pending_real_unget << std::endl;
+		std::cerr << "collect_token_chars(out=" << out << "): stop → " << stop << std::endl;
         const std::size_t stop = ia.get_consumed_count() - (pending_real_unget ? 1u : 0u);
         if (JSON_HEDLEY_LIKELY(stop >= token_string_start))
         {
             ia.copy_consumed_range(token_string_start, stop, out);
         }
+		std::cerr << "<<< Exiting collect_token_chars(out=" << out << ")" << std::endl;
+		std::cerr << "<<< Exiting collect_token_chars()" << std::endl;
         return out;
     }
 
@@ -9277,6 +9513,7 @@ scan_number_done:
     /// 255 may legitimately occur.  May contain NUL, which should be escaped.
     std::string get_token_string() const
     {
+		std::cerr << ">>> Entering get_token_string()" << std::endl;
         std::vector<char_type> reconstructed;
         const std::vector<char_type>& chars = collect_token_chars(reconstructed, std::integral_constant<bool, lazy_token_string> {});
 
@@ -9298,11 +9535,14 @@ scan_number_done:
             }
         }
 
+		std::cerr << "<<< Exiting get_token_string()" << std::endl;
         return result;
     }
 
     /// return syntax error message
     JSON_HEDLEY_RETURNS_NON_NULL
+	std::cerr << ">>> Entering get_error_message()" << std::endl;
+	std::cerr << "<<< Exiting get_error_message()" << std::endl;
     constexpr const char* get_error_message() const noexcept
     {
         return error_message;
@@ -9318,6 +9558,7 @@ scan_number_done:
     */
     bool skip_bom()
     {
+		std::cerr << ">>> Entering skip_bom()" << std::endl;
         if (get() == 0xEF)
         {
             // check if we completely parse the BOM
@@ -9327,20 +9568,24 @@ scan_number_done:
         // the first character is not the beginning of the BOM; unget it to
         // process is later
         unget();
+		std::cerr << "<<< Exiting skip_bom()" << std::endl;
         return true;
     }
 
     void skip_whitespace()
     {
+		std::cerr << ">>> Entering skip_whitespace()" << std::endl;
         do
         {
             get();
         }
         while (current == ' ' || current == '\t' || current == '\n' || current == '\r');
+		std::cerr << "<<< Exiting skip_whitespace()" << std::endl;
     }
 
     token_type scan()
     {
+		std::cerr << ">>> Entering scan()" << std::endl;
         // initially, skip the BOM
         if (position.chars_read_total == 0 && !skip_bom())
         {
@@ -9383,16 +9628,19 @@ scan_number_done:
             case 't':
             {
                 std::array<char_type, 4> true_literal = {{static_cast<char_type>('t'), static_cast<char_type>('r'), static_cast<char_type>('u'), static_cast<char_type>('e')}};
+			std::cerr << "scan(): true_literal → " << true_literal << std::endl;
                 return scan_literal(true_literal.data(), true_literal.size(), token_type::literal_true);
             }
             case 'f':
             {
                 std::array<char_type, 5> false_literal = {{static_cast<char_type>('f'), static_cast<char_type>('a'), static_cast<char_type>('l'), static_cast<char_type>('s'), static_cast<char_type>('e')}};
+			std::cerr << "scan(): false_literal → " << false_literal << std::endl;
                 return scan_literal(false_literal.data(), false_literal.size(), token_type::literal_false);
             }
             case 'n':
             {
                 std::array<char_type, 4> null_literal = {{static_cast<char_type>('n'), static_cast<char_type>('u'), static_cast<char_type>('l'), static_cast<char_type>('l')}};
+			std::cerr << "scan(): null_literal → " << null_literal << std::endl;
                 return scan_literal(null_literal.data(), null_literal.size(), token_type::literal_null);
             }
 
@@ -9423,6 +9671,8 @@ scan_number_done:
             // error
             default:
                 error_message = "invalid literal";
+				std::cerr << "scan(): error_message → " << error_message << std::endl;
+				std::cerr << "<<< Exiting scan()" << std::endl;
                 return token_type::parse_error;
         }
     }
@@ -9610,6 +9860,8 @@ namespace detail
 {
 constexpr std::size_t unknown_size()
 {
+	std::cerr << ">>> Entering unknown_size()" << std::endl;
+	std::cerr << "<<< Exiting unknown_size()" << std::endl;
     return (std::numeric_limits<std::size_t>::max)();
 }
 
@@ -9655,13 +9907,18 @@ class json_sax_dom_parser
 
     bool null()
     {
+		std::cerr << ">>> Entering null()" << std::endl;
         handle_value(nullptr);
+		std::cerr << "<<< Exiting null()" << std::endl;
         return true;
     }
 
     bool boolean(bool val)
     {
+		std::cerr << ">>> Entering boolean(val=" << val << ")" << std::endl;
         handle_value(val);
+		std::cerr << "<<< Exiting boolean(val=" << val << ")" << std::endl;
+		std::cerr << "<<< Exiting boolean()" << std::endl;
         return true;
     }
 
@@ -9685,13 +9942,18 @@ class json_sax_dom_parser
 
     bool string(string_t& val)
     {
+		std::cerr << ">>> Entering string(val=" << val << ")" << std::endl;
         handle_value(val);
+		std::cerr << "<<< Exiting string(val=" << val << ")" << std::endl;
         return true;
     }
 
     bool binary(binary_t& val)
     {
+		std::cerr << ">>> Entering binary(val=" << val << ")" << std::endl;
         handle_value(std::move(val));
+		std::cerr << "<<< Exiting binary(val=" << val << ")" << std::endl;
+		std::cerr << "<<< Exiting binary()" << std::endl;
         return true;
     }
 
@@ -9715,6 +9977,8 @@ class json_sax_dom_parser
             JSON_THROW(out_of_range::create(408, concat("excessive object size: ", std::to_string(len)), ref_stack.back()));
         }
 
+		std::cerr << "<<< Exiting start_object(len=" << len << ")" << std::endl;
+		std::cerr << "<<< Exiting start_object()" << std::endl;
         return true;
     }
 
@@ -9725,6 +9989,9 @@ class json_sax_dom_parser
 
         // add null at the given key and store the reference for later
         object_element = &(ref_stack.back()->m_data.m_value.object->operator[](val));
+		std::cerr << ">>> Entering key(val=" << val << ")" << std::endl;
+		std::cerr << "key(val=" << val << "): object_element → " << object_element << std::endl;
+		std::cerr << "<<< Exiting key(val=" << val << ")" << std::endl;
         return true;
     }
 
@@ -9743,6 +10010,7 @@ class json_sax_dom_parser
 
         ref_stack.back()->set_parents();
         ref_stack.pop_back();
+		std::cerr << "<<< Exiting end_object()" << std::endl;
         return true;
     }
 
@@ -9764,6 +10032,8 @@ class json_sax_dom_parser
             JSON_THROW(out_of_range::create(408, concat("excessive array size: ", std::to_string(len)), ref_stack.back()));
         }
 
+		std::cerr << "<<< Exiting start_array(len=" << len << ")" << std::endl;
+		std::cerr << "<<< Exiting start_array()" << std::endl;
         return true;
     }
 
@@ -9782,6 +10052,7 @@ class json_sax_dom_parser
 
         ref_stack.back()->set_parents();
         ref_stack.pop_back();
+		std::cerr << "<<< Exiting end_array()" << std::endl;
         return true;
     }
 
@@ -9795,11 +10066,14 @@ class json_sax_dom_parser
         {
             JSON_THROW(ex);
         }
+		std::cerr << "<<< Exiting parse_error()" << std::endl;
         return false;
     }
 
     constexpr bool is_errored() const
     {
+		std::cerr << ">>> Entering is_errored()" << std::endl;
+		std::cerr << "<<< Exiting is_errored()" << std::endl;
         return errored;
     }
 
@@ -9808,6 +10082,7 @@ class json_sax_dom_parser
 #if JSON_DIAGNOSTIC_POSITIONS
     void handle_diagnostic_positions_for_json_value(BasicJsonType& v)
     {
+		std::cerr << ">>> Entering handle_diagnostic_positions_for_json_value(v=" << v << ")" << std::endl;
         if (m_lexer_ref)
         {
             // Lexer has read past the current field value, so set the end position to the current position.
@@ -9830,6 +10105,7 @@ class json_sax_dom_parser
                     v.start_position = v.end_position - 4;
                     break;
                 }
+				std::cerr << "handle_diagnostic_positions_for_json_value(v=" << v << "): v.start_position → " << v.start_position << std::endl;
 
                 case value_t::string:
                 {
@@ -9851,6 +10127,7 @@ class json_sax_dom_parser
                     v.start_position = v.end_position;
                     break;
                 }
+				std::cerr << "handle_diagnostic_positions_for_json_value(v=" << v << "): v.end_position → " << v.end_position << std::endl;
                 // LCOV_EXCL_STOP
                 case value_t::binary:
                 case value_t::number_integer:
@@ -9872,6 +10149,7 @@ class json_sax_dom_parser
                     JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert,-warnings-as-errors) LCOV_EXCL_LINE
             }
         }
+		std::cerr << "<<< Exiting handle_diagnostic_positions_for_json_value(v=" << v << ")" << std::endl;
     }
 #endif
 
@@ -9885,10 +10163,13 @@ class json_sax_dom_parser
     JSON_HEDLEY_RETURNS_NON_NULL
     BasicJsonType* handle_value(Value&& v)
     {
+		std::cerr << ">>> Entering handle_value(v=" << v << ")" << std::endl;
         if (ref_stack.empty())
         {
+		std::cerr << "<<< Exiting handle_value(v=" << v << ")" << std::endl;
             root = BasicJsonType(std::forward<Value>(v));
 
+std::cerr << "handle_value(v=" << v << "): root → " << root << std::endl;
 #if JSON_DIAGNOSTIC_POSITIONS
             handle_diagnostic_positions_for_json_value(root);
 #endif
@@ -9996,6 +10277,8 @@ class json_sax_dom_callback_parser
     bool string(string_t& val)
     {
         handle_value(val);
+		std::cerr << ">>> Entering string()" << std::endl;
+		std::cerr << "<<< Exiting string()" << std::endl;
         return true;
     }
 
@@ -10275,14 +10558,17 @@ class json_sax_dom_callback_parser
     /// remove the discarded value the callback rejected from its parent
     static void remove_discarded_value(BasicJsonType& parent)
     {
+		std::cerr << ">>> Entering remove_discarded_value(parent=" << parent << ")" << std::endl;
         for (auto it = parent.begin(); it != parent.end(); ++it)
         {
+			std::cerr << "remove_discarded_value(parent=" << parent << "): it → " << it << std::endl;
             if (it->is_discarded())
             {
                 parent.erase(it);
                 break;
             }
         }
+		std::cerr << "<<< Exiting remove_discarded_value(parent=" << parent << ")" << std::endl;
     }
 
     /*!
@@ -10677,6 +10963,8 @@ enum class cbor_tag_handler_t
 */
 inline bool little_endianness(int num = 1) noexcept
 {
+	std::cerr << ">>> Entering little_endianness(num=" << num << ")" << std::endl;
+	std::cerr << "<<< Exiting little_endianness(num=" << num << ")" << std::endl;
     return *reinterpret_cast<char*>(&num) == 1;
 }
 
@@ -10707,7 +10995,9 @@ class binary_reader
     */
     explicit binary_reader(InputAdapterType&& adapter, const input_format_t format = input_format_t::json) noexcept : ia(std::move(adapter)), input_format(format)
     {
+		std::cerr << ">>> Entering binary_reader(adapter=" << adapter << ",format=" << format << ")" << std::endl;
         (void)detail::is_sax_static_asserts<SAX, BasicJsonType> {};
+		std::cerr << "<<< Exiting binary_reader(adapter=" << adapter << ",format=" << format << ")" << std::endl;
     }
 
     // make class move-only
@@ -10803,11 +11093,13 @@ class binary_reader
     */
     bool check_bson_document_size(const std::size_t document_start, const std::int32_t document_size)
     {
+		std::cerr << ">>> Entering check_bson_document_size(document_start=" << document_start << ",document_size=" << document_size << ")" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(document_size < 0 || static_cast<std::size_t>(document_size) != chars_read - document_start))
         {
             return sax->parse_error(chars_read, get_token_string(), parse_error::create(112, chars_read,
                                     exception_message(input_format_t::bson, concat("document size ", std::to_string(document_size), " does not match the number of bytes read (", std::to_string(chars_read - document_start), ")"), "document"), nullptr));
         }
+		std::cerr << "<<< Exiting check_bson_document_size(document_start=" << document_start << ",document_size=" << document_size << ")" << std::endl;
         return true;
     }
 
@@ -10817,6 +11109,7 @@ class binary_reader
     */
     bool parse_bson_internal()
     {
+		std::cerr << ">>> Entering parse_bson_internal()" << std::endl;
         const std::size_t document_start = chars_read;
         std::int32_t document_size{};
         if (!get_number<std::int32_t, true>(input_format_t::bson, document_size))
@@ -10836,6 +11129,7 @@ class binary_reader
 
         if (JSON_HEDLEY_UNLIKELY(!check_bson_document_size(document_start, document_size)))
         {
+		std::cerr << "<<< Exiting parse_bson_internal()" << std::endl;
             return false;
         }
 
@@ -23646,6 +23940,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         JSON_THROW(type_error::create(306, detail::concat("cannot use value() with ", type_name()), this));
+		std::cerr << ">>> Entering value(key=" << key << ",default_value=" << default_value << ")" << std::endl;
     }
 
     /// @brief access specified object element with default value

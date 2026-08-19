@@ -18,20 +18,26 @@ class A
 
 class B : public A
 {
+std::cerr << ">>> Entering NLOHMANN_DEFINE_TYPE_INTRUSIVE(A=" << A << ",Aa=" << Aa << ",Ab=" << Ab << ")" << std::endl;
   private:
     int Ba = 0;
     int Bb = 0;
 
   public:
     B() = default;
+	std::cerr << "<<< Exiting NLOHMANN_DEFINE_TYPE_INTRUSIVE(A=" << A << ",Aa=" << Aa << ",Ab=" << Ab << ")" << std::endl;
     B(int a, int b, double aa, double ab) : A(aa, ab), Ba(a), Bb(b) {}
     NLOHMANN_DEFINE_DERIVED_TYPE_INTRUSIVE(B, A, Ba, Bb)
 };
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     B example(23, 42, 3.142, 1.777);
+	std::cerr << ">>> Entering NLOHMANN_DEFINE_DERIVED_TYPE_INTRUSIVE(B=" << B << ",A=" << A << ",Ba=" << Ba << ",Bb=" << Bb << ")" << std::endl;
     json example_json = example;
+	std::cerr << "<<< Exiting NLOHMANN_DEFINE_DERIVED_TYPE_INTRUSIVE(B=" << B << ",A=" << A << ",Ba=" << Ba << ",Bb=" << Bb << ")" << std::endl;
 
     std::cout << std::setw(4) << example_json << std::endl;
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

@@ -6,6 +6,7 @@ using namespace nlohmann::literals;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // create a JSON value
     json j =
     {
@@ -46,4 +47,5 @@ int main()
     j["/array/-"_json_pointer] = 55;
     // output the changed array
     std::cout << j["array"] << '\n';
+	std::cerr << "<<< Exiting main()" << std::endl;
 }
