@@ -5,13 +5,16 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // create a JSON array
     json v = {1, 2, 3, 4};
 
     // insert number 10 before number 3
     auto new_pos = v.insert(v.begin() + 2, 10);
+	std::cerr << "main(): new_pos → " << new_pos << std::endl;
 
     // output new array and result of insert call
     std::cout << *new_pos << '\n';
     std::cout << v << '\n';
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

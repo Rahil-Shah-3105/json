@@ -7,6 +7,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // create stream with serialized JSON
     std::stringstream ss;
     ss << R"({

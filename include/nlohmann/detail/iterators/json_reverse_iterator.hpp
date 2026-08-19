@@ -114,14 +114,20 @@ class json_reverse_iterator : public std::reverse_iterator<Base>
     /// return the key of an object iterator
     auto key() const -> decltype(std::declval<Base>().key())
     {
+		std::cerr << ">>> Entering key()" << std::endl;
         auto it = --this->base();
+		std::cerr << "key(): it → " << it << std::endl;
+		std::cerr << "<<< Exiting key()" << std::endl;
         return it.key();
     }
 
     /// return the value of an iterator
     reference value() const
     {
+		std::cerr << ">>> Entering value()" << std::endl;
         auto it = --this->base();
+		std::cerr << "value(): it → " << it << std::endl;
+		std::cerr << "<<< Exiting value()" << std::endl;
         return it.operator * ();
     }
 };

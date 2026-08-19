@@ -1,0 +1,6 @@
+/root/logrite/scans/r3/p4861/tests/cmake_fetch_content/project/build_logrite/CMakeFiles/with_namespace_target.dir
+/root/logrite/scans/r3/p4861/tests/cmake_fetch_content/project/build_logrite/CMakeFiles/without_namespace_target.dir
+/root/logrite/scans/r3/p4861/tests/cmake_fetch_content/project/build_logrite/CMakeFiles/edit_cache.dir
+/root/logrite/scans/r3/p4861/tests/cmake_fetch_content/project/build_logrite/CMakeFiles/rebuild_cache.dir
+/root/logrite/scans/r3/p4861/tests/cmake_fetch_content/project/build_logrite/_deps/json-build/CMakeFiles/edit_cache.dir
+/root/logrite/scans/r3/p4861/tests/cmake_fetch_content/project/build_logrite/_deps/json-build/CMakeFiles/rebuild_cache.dir

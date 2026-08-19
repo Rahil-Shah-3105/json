@@ -5,16 +5,19 @@
 template<typename Map>
 void output(const char* prefix, const Map& m)
 {
+	std::cerr << ">>> Entering output(prefix=" << prefix << ",m=" << m << ")" << std::endl;
     std::cout << prefix << " = { ";
     for (auto& element : m)
     {
         std::cout << element.first << ":" << element.second << ' ';
     }
     std::cout << "}" << std::endl;
+	std::cerr << "<<< Exiting output(prefix=" << prefix << ",m=" << m << ")" << std::endl;
 }
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // create and fill two maps
     nlohmann::ordered_map<std::string, std::string> m_ordered;
     m_ordered["one"] = "eins";
@@ -40,4 +43,5 @@ int main()
     // output: m_ordered shows newly added key at the end; m_std is again ordered by key
     output("m_ordered", m_ordered);
     output("m_std", m_std);
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

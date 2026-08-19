@@ -9,6 +9,7 @@ struct adl_serializer<std::optional<T>>
 {
     static void to_json(json& j, const std::optional<T>& opt)
     {
+		std::cerr << ">>> Entering to_json(j=" << j << ",opt=" << opt << ")" << std::endl;
         if (opt == std::nullopt)
         {
             j = nullptr;
@@ -17,12 +18,14 @@ struct adl_serializer<std::optional<T>>
         {
             j = *opt;
         }
+		std::cerr << "<<< Exiting to_json(j=" << j << ",opt=" << opt << ")" << std::endl;
     }
 };
 NLOHMANN_JSON_NAMESPACE_END
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     std::optional<int> o1 = 1;
     std::optional<int> o2 = std::nullopt;
 
@@ -30,4 +33,5 @@ int main()
     j.push_back(o1);
     j.push_back(o2);
     std::cout << j << std::endl;
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

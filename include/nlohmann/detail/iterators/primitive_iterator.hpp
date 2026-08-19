@@ -40,30 +40,42 @@ class primitive_iterator_t
   public:
     constexpr difference_type get_value() const noexcept
     {
+		std::cerr << ">>> Entering get_value()" << std::endl;
+		std::cerr << "<<< Exiting get_value()" << std::endl;
         return m_it;
     }
 
     /// set iterator to a defined beginning
     void set_begin() noexcept
     {
+		std::cerr << ">>> Entering set_begin()" << std::endl;
         m_it = begin_value;
+		std::cerr << "set_begin(): m_it → " << m_it << std::endl;
+		std::cerr << "<<< Exiting set_begin()" << std::endl;
     }
 
     /// set iterator to a defined past the end
     void set_end() noexcept
     {
+		std::cerr << ">>> Entering set_end()" << std::endl;
         m_it = end_value;
+		std::cerr << "set_end(): m_it → " << m_it << std::endl;
+		std::cerr << "<<< Exiting set_end()" << std::endl;
     }
 
     /// return whether the iterator can be dereferenced
     constexpr bool is_begin() const noexcept
     {
+		std::cerr << ">>> Entering is_begin()" << std::endl;
+		std::cerr << "<<< Exiting is_begin()" << std::endl;
         return m_it == begin_value;
     }
 
     /// return whether the iterator is at end
     constexpr bool is_end() const noexcept
     {
+		std::cerr << ">>> Entering is_end()" << std::endl;
+		std::cerr << "<<< Exiting is_end()" << std::endl;
         return m_it == end_value;
     }
 

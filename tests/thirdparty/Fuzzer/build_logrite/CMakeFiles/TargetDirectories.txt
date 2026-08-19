@@ -1,0 +1,2 @@
+/root/logrite/scans/r3/p4861/tests/thirdparty/Fuzzer/build_logrite/CMakeFiles/edit_cache.dir
+/root/logrite/scans/r3/p4861/tests/thirdparty/Fuzzer/build_logrite/CMakeFiles/rebuild_cache.dir

@@ -5,8 +5,10 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // a JSON text with an array and a number inside an object
     auto text = R"({"IDs": [116, 943], "Width": 800})";
+	std::cerr << "main(): text → " << text << std::endl;
 
     // discard the array when the parser reads its opening bracket
     json j_array_start = json::parse(text, [](int /*depth*/, json::parse_event_t event, json & /*parsed*/)
@@ -44,4 +46,5 @@ int main()
               << j_value << '\n'
               << j_key << '\n'
               << j_root << '\n';
+			std::cerr << "<<< Exiting main()" << std::endl;
 }

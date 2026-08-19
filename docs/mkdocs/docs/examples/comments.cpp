@@ -6,13 +6,16 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     std::string s = R"(
     {
         // update in 2006: removed Pluto
         "planets": ["Mercury", "Venus", "Earth", "Mars",
                     "Jupiter", "Uranus", "Neptune" /*, "Pluto" */]
     }
+	std::cerr << "Exception in main(): " << e.what() << std::endl;
     )";
+	std::cerr << "<<< Exiting main()" << std::endl;
 
     try
     {

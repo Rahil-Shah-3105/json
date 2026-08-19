@@ -9,5 +9,7 @@
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     std::cout << QUOTE(NLOHMANN_JSON_NAMESPACE) << std::endl;
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

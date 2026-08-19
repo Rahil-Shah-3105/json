@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/without_namespace_target.dir/main.cpp.o -o without_namespace_target 

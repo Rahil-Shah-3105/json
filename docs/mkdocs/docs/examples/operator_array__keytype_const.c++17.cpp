@@ -7,6 +7,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // create a JSON object
     const json object =
     {
@@ -15,4 +16,5 @@ int main()
 
     // output element with key "two"
     std::cout << object["two"sv] << '\n';
+	std::cerr << "<<< Exiting main()" << std::endl;
 }
