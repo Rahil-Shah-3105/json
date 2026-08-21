@@ -21,13 +21,18 @@ class person
 
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(person, name, address, age)
 };
+	std::cerr << "<<< Exiting NLOHMANN_DEFINE_TYPE_INTRUSIVE(person=" << person << ",name=" << name << ",address=" << address << ",age=" << age << ")" << std::endl;
+	std::cerr << ">>> Entering NLOHMANN_DEFINE_TYPE_INTRUSIVE(person=" << person << ",name=" << name << ",address=" << address << ",age=" << age << ")" << std::endl;
 } // namespace ns
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     ns::person p = {"Ned Flanders", "744 Evergreen Terrace", 60};
 
+	std::cerr << "main(): p → " << p << std::endl;
     // serialization: person -> json
     json j = p;
     std::cout << "serialization: " << j << std::endl;
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

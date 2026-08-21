@@ -22,7 +22,9 @@ namespace detail
 // boost::hash_combine
 inline std::size_t combine(std::size_t seed, std::size_t h) noexcept
 {
+	std::cerr << ">>> Entering combine(seed=" << seed << ",h=" << h << ")" << std::endl;
     seed ^= h + 0x9e3779b9 + (seed << 6U) + (seed >> 2U);
+	std::cerr << "<<< Exiting combine(seed=" << seed << ",h=" << h << ")" << std::endl;
     return seed;
 }
 
@@ -40,12 +42,14 @@ null, 0, 0U, and false, etc.
 template<typename BasicJsonType>
 std::size_t hash(const BasicJsonType& j)
 {
+	std::cerr << ">>> Entering hash(j=" << j << ")" << std::endl;
     using string_t = typename BasicJsonType::string_t;
     using number_integer_t = typename BasicJsonType::number_integer_t;
     using number_unsigned_t = typename BasicJsonType::number_unsigned_t;
     using number_float_t = typename BasicJsonType::number_float_t;
 
     const auto type = static_cast<std::size_t>(j.type());
+	std::cerr << "hash(j=" << j << "): type → " << type << std::endl;
     switch (j.type())
     {
         case BasicJsonType::value_t::null:
@@ -59,6 +63,8 @@ std::size_t hash(const BasicJsonType& j)
             auto seed = combine(type, j.size());
             for (const auto& element : j.items())
             {
+				std::cerr << "hash(j=" << j << "): seed → " << seed << std::endl;
+				std::cerr << "hash(j=" << j << "): h → " << h << std::endl;
                 const auto h = std::hash<string_t> {}(element.key());
                 seed = combine(seed, h);
                 seed = combine(seed, hash(element.value()));
@@ -121,6 +127,7 @@ std::size_t hash(const BasicJsonType& j)
 
         default:                   // LCOV_EXCL_LINE
             JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert) LCOV_EXCL_LINE
+			std::cerr << "<<< Exiting hash(j=" << j << ")" << std::endl;
             return 0;              // LCOV_EXCL_LINE
     }
 }

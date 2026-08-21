@@ -7,14 +7,18 @@ using namespace nlohmann::literals;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // the source document
     json source = R"(
         {
             "baz": "qux",
             "foo": "bar"
         }
+		std::cerr << "main(): patch → " << patch << std::endl;
+		std::cerr << "main(): patched_source → " << patched_source << std::endl;
     )"_json;
 
+	std::cerr << "<<< Exiting main()" << std::endl;
     // the target document
     json target = R"(
         {

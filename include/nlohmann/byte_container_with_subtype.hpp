@@ -69,7 +69,9 @@ class byte_container_with_subtype : public BinaryType
     /// @sa https://json.nlohmann.me/api/byte_container_with_subtype/set_subtype/
     void set_subtype(subtype_type subtype_) noexcept
     {
+		std::cerr << ">>> Entering set_subtype(subtype_=" << subtype_ << ")" << std::endl;
         m_subtype = subtype_;
+		std::cerr << "set_subtype(subtype_=" << subtype_ << "): m_subtype → " << m_subtype << std::endl;
         m_has_subtype = true;
     }
 
@@ -77,6 +79,7 @@ class byte_container_with_subtype : public BinaryType
     /// @sa https://json.nlohmann.me/api/byte_container_with_subtype/subtype/
     constexpr subtype_type subtype() const noexcept
     {
+		std::cerr << ">>> Entering subtype()" << std::endl;
         return m_has_subtype ? m_subtype : static_cast<subtype_type>(-1);
     }
 
@@ -84,6 +87,7 @@ class byte_container_with_subtype : public BinaryType
     /// @sa https://json.nlohmann.me/api/byte_container_with_subtype/has_subtype/
     constexpr bool has_subtype() const noexcept
     {
+		std::cerr << ">>> Entering has_subtype()" << std::endl;
         return m_has_subtype;
     }
 
@@ -91,7 +95,9 @@ class byte_container_with_subtype : public BinaryType
     /// @sa https://json.nlohmann.me/api/byte_container_with_subtype/clear_subtype/
     void clear_subtype() noexcept
     {
+		std::cerr << ">>> Entering clear_subtype()" << std::endl;
         m_subtype = 0;
+		std::cerr << "clear_subtype(): m_subtype → " << m_subtype << std::endl;
         m_has_subtype = false;
     }
 

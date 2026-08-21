@@ -47,11 +47,15 @@ namespace detail
 template<typename BasicJsonType>
 inline void from_json(const BasicJsonType& j, typename std::nullptr_t& n)
 {
+	std::cerr << ">>> Entering from_json(j=" << j << ",n=" << n << ")" << std::endl;
     if (JSON_HEDLEY_UNLIKELY(!j.is_null()))
     {
         JSON_THROW(type_error::create(302, concat("type must be null, but is ", j.type_name()), &j));
     }
     n = nullptr;
+	std::cerr << ">>> Entering from_json(j=" << j << ",opt=" << opt << ")" << std::endl;
+	std::cerr << "<<< Exiting from_json(j=" << j << ",n=" << n << ")" << std::endl;
+	std::cerr << "<<< Exiting from_json(j=" << j << ",opt=" << opt << ")" << std::endl;
 }
 
 #ifdef JSON_HAS_CPP_17
@@ -67,6 +71,9 @@ void from_json(const BasicJsonType& j, std::optional<T>& opt)
     {
         opt.emplace(j.template get<T>());
     }
+	std::cerr << ">>> Entering from_json(j=" << j << ",b=" << b << ")" << std::endl;
+	std::cerr << "<<< Exiting from_json(j=" << j << ",b=" << b << ")" << std::endl;
+	std::cerr << "from_json(j=" << j << ",b=" << b << "): b → " << b << std::endl;
 }
 #endif // JSON_HAS_CPP_17
 
@@ -77,6 +84,7 @@ template < typename BasicJsonType, typename ArithmeticType,
                          int > = 0 >
 void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
 {
+	std::cerr << ">>> Entering get_arithmetic_value(j=" << j << ",val=" << val << ")" << std::endl;
     switch (static_cast<value_t>(j))
     {
         case value_t::number_unsigned:
@@ -84,6 +92,7 @@ void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
             val = static_cast<ArithmeticType>(*j.template get_ptr<const typename BasicJsonType::number_unsigned_t*>());
             break;
         }
+		std::cerr << "get_arithmetic_value(j=" << j << ",val=" << val << "): val → " << val << std::endl;
         case value_t::number_integer:
         {
             val = static_cast<ArithmeticType>(*j.template get_ptr<const typename BasicJsonType::number_integer_t*>());
@@ -105,6 +114,7 @@ void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
         default:
             JSON_THROW(type_error::create(302, concat("type must be number, but is ", j.type_name()), &j));
     }
+	std::cerr << "<<< Exiting get_arithmetic_value(j=" << j << ",val=" << val << ")" << std::endl;
 }
 
 template<typename BasicJsonType>
@@ -115,6 +125,9 @@ inline void from_json(const BasicJsonType& j, typename BasicJsonType::boolean_t&
         JSON_THROW(type_error::create(302, concat("type must be boolean, but is ", j.type_name()), &j));
     }
     b = *j.template get_ptr<const typename BasicJsonType::boolean_t*>();
+	std::cerr << ">>> Entering from_json(j=" << j << ",s=" << s << ")" << std::endl;
+	std::cerr << "<<< Exiting from_json(j=" << j << ",s=" << s << ")" << std::endl;
+	std::cerr << "from_json(j=" << j << ",s=" << s << "): s → " << s << std::endl;
 }
 
 template<typename BasicJsonType>
@@ -160,6 +173,9 @@ template<typename BasicJsonType>
 inline void from_json(const BasicJsonType& j, typename BasicJsonType::number_integer_t& val)
 {
     get_arithmetic_value(j, val);
+	std::cerr << ">>> Entering from_json(j=" << j << ",e=" << e << ")" << std::endl;
+	std::cerr << "<<< Exiting from_json(j=" << j << ",e=" << e << ")" << std::endl;
+	std::cerr << "from_json(j=" << j << ",e=" << e << "): e → " << e << std::endl;
 }
 
 #if !JSON_DISABLE_ENUM_SERIALIZATION
@@ -170,6 +186,8 @@ inline void from_json(const BasicJsonType& j, EnumType& e)
     typename std::underlying_type<EnumType>::type val;
     get_arithmetic_value(j, val);
     e = static_cast<EnumType>(val);
+	std::cerr << ">>> Entering from_json(j=" << j << ",l=" << l << ")" << std::endl;
+	std::cerr << "<<< Exiting from_json(j=" << j << ",l=" << l << ")" << std::endl;
 }
 #endif  // JSON_DISABLE_ENUM_SERIALIZATION
 
@@ -228,6 +246,8 @@ auto from_json(const BasicJsonType& j, T (&arr)[N1][N2])  // NOLINT(cppcoreguide
             arr[i1][i2] = j.at(i1).at(i2).template get<T>();
         }
     }
+	std::cerr << ">>> Entering from_json(j=" << j << ")" << std::endl;
+	std::cerr << "<<< Exiting from_json(j=" << j << ")" << std::endl;
 }
 
 template<typename BasicJsonType, typename T, std::size_t N1, std::size_t N2, std::size_t N3>
@@ -269,6 +289,9 @@ template<typename BasicJsonType>
 inline void from_json_array_impl(const BasicJsonType& j, typename BasicJsonType::array_t& arr, priority_tag<3> /*unused*/)
 {
     arr = *j.template get_ptr<const typename BasicJsonType::array_t*>();
+	std::cerr << ">>> Entering from_json_array_impl(j=" << j << ",arr=" << arr << ")" << std::endl;
+	std::cerr << "<<< Exiting from_json_array_impl(j=" << j << ",arr=" << arr << ")" << std::endl;
+	std::cerr << "from_json_array_impl(j=" << j << ",arr=" << arr << "): arr → " << arr << std::endl;
 }
 
 template<typename BasicJsonType, typename T, std::size_t N>
@@ -377,6 +400,8 @@ inline void from_json(const BasicJsonType& j, typename BasicJsonType::binary_t& 
     }
 
     bin = *j.template get_ptr<const typename BasicJsonType::binary_t*>();
+	std::cerr << ">>> Entering from_json(j=" << j << ",bin=" << bin << ")" << std::endl;
+	std::cerr << "from_json(j=" << j << ",bin=" << bin << "): bin → " << bin << std::endl;
 }
 
 template < typename BasicJsonType, typename CompatibleArrayType,
@@ -396,6 +421,10 @@ inline void from_json(const BasicJsonType& j, CompatibleArrayType& bin)
     {
         JSON_THROW(type_error::create(302, concat("type must be binary or array, but is ", j.type_name()), &j));
     }
+	std::cerr << ">>> Entering from_json(j=" << j << ",obj=" << obj << ")" << std::endl;
+	std::cerr << "<<< Exiting from_json(j=" << j << ",bin=" << bin << ")" << std::endl;
+	std::cerr << "<<< Exiting from_json(j=" << j << ",obj=" << obj << ")" << std::endl;
+	std::cerr << "from_json(j=" << j << ",obj=" << obj << "): obj → " << obj << std::endl;
 }
 
 template<typename BasicJsonType, typename ConstructibleObjectType,
@@ -414,6 +443,9 @@ inline void from_json(const BasicJsonType& j, ConstructibleObjectType& obj)
         ret.emplace(p.first, p.second.template get<typename ConstructibleObjectType::mapped_type>());
     }
     obj = std::move(ret);
+	std::cerr << ">>> Entering from_json(j=" << j << ",val=" << val << ")" << std::endl;
+	std::cerr << "from_json(j=" << j << ",val=" << val << "): val → " << val << std::endl;
+	std::cerr << "<<< Exiting from_json(j=" << j << ",val=" << val << ")" << std::endl;
 }
 
 // overload for arithmetic types, not chosen for basic_json template arguments
@@ -517,6 +549,8 @@ std::tuple<Args...> from_json_tuple_impl(BasicJsonType&& j, identity_tag<std::tu
 {
     static_assert(cxpr_and<cxpr_or<cxpr_not<std::is_reference<Args>>, is_compatible_reference_type<BasicJsonType, Args>>...>::value,
                   "Can not return a tuple containing references to types not contained in a Json, try Json::get_to()");
+	std::cerr << ">>> Entering from_json_tuple_impl(j=" << j << ",t=" << t << ")" << std::endl;
+	std::cerr << "from_json_tuple_impl(j=" << j << ",t=" << t << "): t → " << t << std::endl;
     return from_json_tuple_impl_base<1, Args...>(std::forward<BasicJsonType>(j), index_sequence_for<Args...> {});
 }
 
@@ -556,6 +590,8 @@ inline void from_json(const BasicJsonType& j, std::map<Key, Value, Compare, Allo
         }
         m.emplace(p.at(0).template get<Key>(), p.at(1).template get<Value>());
     }
+	std::cerr << ">>> Entering from_json(j=" << j << ",m=" << m << ")" << std::endl;
+	std::cerr << "<<< Exiting from_json(j=" << j << ",m=" << m << ")" << std::endl;
 }
 
 template < typename BasicJsonType, typename Key, typename Value, typename Hash, typename KeyEqual, typename Allocator,
@@ -576,6 +612,9 @@ inline void from_json(const BasicJsonType& j, std::unordered_map<Key, Value, Has
         }
         m.emplace(p.at(0).template get<Key>(), p.at(1).template get<Value>());
     }
+	std::cerr << ">>> Entering from_json(j=" << j << ",p=" << p << ")" << std::endl;
+	std::cerr << "from_json(j=" << j << ",p=" << p << "): p → " << p << std::endl;
+	std::cerr << "<<< Exiting from_json(j=" << j << ",p=" << p << ")" << std::endl;
 }
 
 #if JSON_HAS_FILESYSTEM || JSON_HAS_EXPERIMENTAL_FILESYSTEM
@@ -600,6 +639,7 @@ inline void from_json(const BasicJsonType& j, std_fs::path& p)
 #else
     p = std_fs::u8path(s); // accepts UTF-8 encoded std::string in C++17, deprecated in C++20
 #endif
+std::cerr << "<<< Exiting from_json(j=" << j << ",p=" << p << ")" << std::endl;
 }
 #endif
 
@@ -610,7 +650,9 @@ struct from_json_fn
     noexcept(noexcept(from_json(j, std::forward<T>(val))))
     -> decltype(from_json(j, std::forward<T>(val)))
     {
+	std::cerr << ">>> Entering operator()" << std::endl;
         return from_json(j, std::forward<T>(val));
+	std::cerr << "<<< Exiting operator()" << std::endl;
     }
 };
 

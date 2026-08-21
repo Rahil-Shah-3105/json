@@ -52,8 +52,10 @@ class json_ref
 
     value_type moved_or_copied() const
     {
+		std::cerr << ">>> Entering moved_or_copied()" << std::endl;
         if (value_ref == nullptr)
         {
+		std::cerr << "<<< Exiting moved_or_copied()" << std::endl;
             return std::move(owned_value);
         }
         return *value_ref;

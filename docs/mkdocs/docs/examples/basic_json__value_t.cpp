@@ -5,6 +5,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // create the different JSON values with default values
     json j_null(json::value_t::null);
     json j_boolean(json::value_t::boolean);
@@ -22,4 +23,5 @@ int main()
     std::cout << j_object << '\n';
     std::cout << j_array << '\n';
     std::cout << j_string << '\n';
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

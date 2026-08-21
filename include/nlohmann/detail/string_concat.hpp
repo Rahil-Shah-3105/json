@@ -21,6 +21,8 @@ namespace detail
 
 inline std::size_t concat_length()
 {
+	std::cerr << ">>> Entering concat_length()" << std::endl;
+	std::cerr << "<<< Exiting concat_length(cstr=" << cstr << ",rest=" << rest << ")" << std::endl;
     return 0;
 }
 
@@ -118,8 +120,10 @@ template < typename OutStringType, typename Arg, typename... Args,
                          && detect_string_can_append_iter<OutStringType, Arg>::value, int > >
 inline void concat_into(OutStringType& out, const Arg& arg, Args&& ... rest)
 {
+	std::cerr << ">>> Entering concat_into(out=" << out << ",arg=" << arg << ",rest=" << rest << ")" << std::endl;
     out.append(arg.begin(), arg.end());
     concat_into(out, std::forward<Args>(rest)...);
+	std::cerr << "<<< Exiting concat_into(out=" << out << ",arg=" << arg << ",rest=" << rest << ")" << std::endl;
 }
 
 template < typename OutStringType, typename Arg, typename... Args,
@@ -136,9 +140,11 @@ inline void concat_into(OutStringType& out, const Arg& arg, Args&& ... rest)
 template<typename OutStringType = std::string, typename... Args>
 inline OutStringType concat(Args && ... args)
 {
+	std::cerr << ">>> Entering concat(args=" << args << ")" << std::endl;
     OutStringType str;
     str.reserve(concat_length(args...));
     concat_into(str, std::forward<Args>(args)...);
+	std::cerr << "<<< Exiting concat(args=" << args << ")" << std::endl;
     return str;
 }
 

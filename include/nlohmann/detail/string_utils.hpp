@@ -20,16 +20,21 @@ namespace detail
 template<typename StringType>
 void int_to_string(StringType& target, std::size_t value)
 {
+	std::cerr << ">>> Entering int_to_string(target=" << target << ",value=" << value << ")" << std::endl;
     // For ADL
     using std::to_string;
+	std::cerr << "<<< Exiting int_to_string(target=" << target << ",value=" << value << ")" << std::endl;
+	std::cerr << "int_to_string(target=" << target << ",value=" << value << "): target → " << target << std::endl;
     target = to_string(value);
 }
 
 template<typename StringType>
 StringType to_string(std::size_t value)
 {
+	std::cerr << ">>> Entering to_string(value=" << value << ")" << std::endl;
     StringType result;
     int_to_string(result, value);
+	std::cerr << "<<< Exiting to_string(value=" << value << ")" << std::endl;
     return result;
 }
 
