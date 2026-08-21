@@ -6,6 +6,7 @@ using namespace nlohmann::literals;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // create a JSON value
     json j =
     {
@@ -40,9 +41,11 @@ int main()
     {
         // try to use an array index with leading '0'
         json::reference ref = j.at("/array/01"_json_pointer);
+		std::cerr << "main(): ref → " << ref << std::endl;
     }
     catch (const json::parse_error& e)
     {
+		std::cerr << "Exception in main(): " << e.what() << std::endl;
         std::cout << e.what() << '\n';
     }
 
@@ -100,4 +103,5 @@ int main()
     {
         std::cout << e.what() << '\n';
     }
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

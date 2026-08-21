@@ -35,6 +35,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM_STRICT(Color,
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // serialization
     json j_stopped = ns::TS_STOPPED;
     json j_red = ns::Color::red;

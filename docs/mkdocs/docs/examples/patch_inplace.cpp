@@ -7,12 +7,14 @@ using namespace nlohmann::literals;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // the original document
     json doc = R"(
         {
           "baz": "qux",
           "foo": "bar"
         }
+		std::cerr << "<<< Exiting main()" << std::endl;
     )"_json;
 
     // the patch

@@ -6,6 +6,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // create a JSON value with different types
     json json_types =
     {
@@ -23,6 +24,14 @@ int main()
 
     // use explicit conversions
     auto v1 = json_types["boolean"].get<bool>();
+	std::cerr << "main(): v1 → " << v1 << std::endl;
+	std::cerr << "main(): v2 → " << v2 << std::endl;
+	std::cerr << "main(): v3 → " << v3 << std::endl;
+	std::cerr << "main(): v4 → " << v4 << std::endl;
+	std::cerr << "main(): v5 → " << v5 << std::endl;
+	std::cerr << "main(): v6 → " << v6 << std::endl;
+	std::cerr << "main(): v7 → " << v7 << std::endl;
+	std::cerr << "main(): v8 → " << v8 << std::endl;
     auto v2 = json_types["number"]["integer"].get<int>();
     auto v3 = json_types["number"]["integer"].get<short>();
     auto v4 = json_types["number"]["floating-point"].get<float>();
@@ -47,4 +56,5 @@ int main()
     {
         std::cout << i.first << ": " << i.second << '\n';
     }
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

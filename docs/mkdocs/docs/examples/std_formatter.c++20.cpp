@@ -6,6 +6,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     json j = {{"one", 1}, {"two", 2}};
 
     // compact formatting, like dump()
@@ -19,4 +20,5 @@ int main()
 
     // fill-and-align sets the indent character, like dump(4, '.')
     std::cout << std::format("{:.>#}", j) << std::endl;
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

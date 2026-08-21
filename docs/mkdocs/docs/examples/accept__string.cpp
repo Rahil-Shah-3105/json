@@ -6,11 +6,13 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // a valid JSON text
     auto valid_text = R"(
     {
         "numbers": [1, 2, 3]
     }
+	std::cerr << "<<< Exiting main()" << std::endl;
     )";
 
     // an invalid JSON text

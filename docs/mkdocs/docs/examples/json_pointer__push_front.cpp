@@ -5,6 +5,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // create empty JSON Pointer
     json::json_pointer ptr;
     std::cout << "\"" << ptr << "\"\n";
@@ -18,4 +19,5 @@ int main()
 
     ptr.push_front("bar");
     std::cout << "\"" << ptr << "\"\n";
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

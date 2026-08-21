@@ -6,8 +6,10 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // create JSON values
     json j_object = {{"one", 1}, {"two", 2}};
+	std::cerr << "main(): j_object → " << j_object << std::endl;
     json j_array = {1, 2, 4, 8, 16};
 
     // serialize without indentation
@@ -18,4 +20,5 @@ int main()
     std::cout << std::setw(4) << j_object << "\n\n";
     std::cout << std::setw(2) << j_array << "\n\n";
     std::cout << std::setw(1) << std::setfill('\t') << j_object << "\n\n";
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

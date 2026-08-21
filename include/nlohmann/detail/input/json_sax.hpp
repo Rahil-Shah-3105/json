@@ -147,6 +147,7 @@ namespace detail
 {
 constexpr std::size_t unknown_size()
 {
+	std::cerr << ">>> Entering unknown_size()" << std::endl;
     return (std::numeric_limits<std::size_t>::max)();
 }
 
@@ -192,43 +193,63 @@ class json_sax_dom_parser
 
     bool null()
     {
+		std::cerr << ">>> Entering null()" << std::endl;
         handle_value(nullptr);
+		std::cerr << "<<< Exiting null()" << std::endl;
         return true;
     }
 
     bool boolean(bool val)
     {
+		std::cerr << ">>> Entering boolean(val=" << val << ")" << std::endl;
         handle_value(val);
+		std::cerr << "<<< Exiting boolean(val=" << val << ")" << std::endl;
+		std::cerr << "<<< Exiting boolean()" << std::endl;
         return true;
     }
 
     bool number_integer(number_integer_t val)
     {
+		std::cerr << ">>> Entering number_integer(val=" << val << ")" << std::endl;
         handle_value(val);
+		std::cerr << "<<< Exiting number_integer(val=" << val << ")" << std::endl;
+		std::cerr << "<<< Exiting number_integer()" << std::endl;
         return true;
     }
 
     bool number_unsigned(number_unsigned_t val)
     {
+		std::cerr << ">>> Entering number_unsigned(val=" << val << ")" << std::endl;
         handle_value(val);
+		std::cerr << "<<< Exiting number_unsigned(val=" << val << ")" << std::endl;
+		std::cerr << "<<< Exiting number_unsigned()" << std::endl;
         return true;
     }
 
     bool number_float(number_float_t val, const string_t& /*unused*/)
     {
+		std::cerr << ">>> Entering number_float(val=" << val << ")" << std::endl;
         handle_value(val);
+		std::cerr << "<<< Exiting number_float(val=" << val << ")" << std::endl;
+		std::cerr << "<<< Exiting number_float()" << std::endl;
         return true;
     }
 
     bool string(string_t& val)
     {
+		std::cerr << ">>> Entering string(val=" << val << ")" << std::endl;
         handle_value(val);
+		std::cerr << "<<< Exiting string(val=" << val << ")" << std::endl;
+		std::cerr << "<<< Exiting string()" << std::endl;
         return true;
     }
 
     bool binary(binary_t& val)
     {
+		std::cerr << ">>> Entering binary(val=" << val << ")" << std::endl;
         handle_value(std::move(val));
+		std::cerr << "<<< Exiting binary(val=" << val << ")" << std::endl;
+		std::cerr << "<<< Exiting binary()" << std::endl;
         return true;
     }
 
@@ -252,6 +273,8 @@ class json_sax_dom_parser
             JSON_THROW(out_of_range::create(408, concat("excessive object size: ", std::to_string(len)), ref_stack.back()));
         }
 
+		std::cerr << "<<< Exiting start_object(len=" << len << ")" << std::endl;
+		std::cerr << "<<< Exiting start_object()" << std::endl;
         return true;
     }
 
@@ -262,6 +285,8 @@ class json_sax_dom_parser
 
         // add null at the given key and store the reference for later
         object_element = &(ref_stack.back()->m_data.m_value.object->operator[](val));
+		std::cerr << "<<< Exiting key(val=" << val << ")" << std::endl;
+		std::cerr << "<<< Exiting key()" << std::endl;
         return true;
     }
 
@@ -280,6 +305,7 @@ class json_sax_dom_parser
 
         ref_stack.back()->set_parents();
         ref_stack.pop_back();
+		std::cerr << "<<< Exiting end_object()" << std::endl;
         return true;
     }
 
@@ -301,6 +327,8 @@ class json_sax_dom_parser
             JSON_THROW(out_of_range::create(408, concat("excessive array size: ", std::to_string(len)), ref_stack.back()));
         }
 
+		std::cerr << "<<< Exiting start_array(len=" << len << ")" << std::endl;
+		std::cerr << "<<< Exiting start_array()" << std::endl;
         return true;
     }
 
@@ -319,6 +347,7 @@ class json_sax_dom_parser
 
         ref_stack.back()->set_parents();
         ref_stack.pop_back();
+		std::cerr << "<<< Exiting end_array()" << std::endl;
         return true;
     }
 
@@ -332,11 +361,13 @@ class json_sax_dom_parser
         {
             JSON_THROW(ex);
         }
+		std::cerr << "<<< Exiting parse_error()" << std::endl;
         return false;
     }
 
     constexpr bool is_errored() const
     {
+		std::cerr << ">>> Entering is_errored()" << std::endl;
         return errored;
     }
 
@@ -345,6 +376,7 @@ class json_sax_dom_parser
 #if JSON_DIAGNOSTIC_POSITIONS
     void handle_diagnostic_positions_for_json_value(BasicJsonType& v)
     {
+		std::cerr << ">>> Entering handle_diagnostic_positions_for_json_value(v=" << v << ")" << std::endl;
         if (m_lexer_ref)
         {
             // Lexer has read past the current field value, so set the end position to the current position.
@@ -367,6 +399,7 @@ class json_sax_dom_parser
                     v.start_position = v.end_position - 4;
                     break;
                 }
+				std::cerr << "handle_diagnostic_positions_for_json_value(v=" << v << "): v.start_position → " << v.start_position << std::endl;
 
                 case value_t::string:
                 {
@@ -388,6 +421,7 @@ class json_sax_dom_parser
                     v.start_position = v.end_position;
                     break;
                 }
+				std::cerr << "handle_diagnostic_positions_for_json_value(v=" << v << "): v.end_position → " << v.end_position << std::endl;
                 // LCOV_EXCL_STOP
                 case value_t::binary:
                 case value_t::number_integer:
@@ -409,6 +443,7 @@ class json_sax_dom_parser
                     JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert,-warnings-as-errors) LCOV_EXCL_LINE
             }
         }
+		std::cerr << "<<< Exiting handle_diagnostic_positions_for_json_value(v=" << v << ")" << std::endl;
     }
 #endif
 
@@ -422,10 +457,13 @@ class json_sax_dom_parser
     JSON_HEDLEY_RETURNS_NON_NULL
     BasicJsonType* handle_value(Value&& v)
     {
+		std::cerr << ">>> Entering handle_value(v=" << v << ")" << std::endl;
         if (ref_stack.empty())
         {
+		std::cerr << "<<< Exiting handle_value(v=" << v << ")" << std::endl;
             root = BasicJsonType(std::forward<Value>(v));
 
+std::cerr << "handle_value(v=" << v << "): root → " << root << std::endl;
 #if JSON_DIAGNOSTIC_POSITIONS
             handle_diagnostic_positions_for_json_value(root);
 #endif
@@ -812,14 +850,17 @@ class json_sax_dom_callback_parser
     /// remove the discarded value the callback rejected from its parent
     static void remove_discarded_value(BasicJsonType& parent)
     {
+		std::cerr << ">>> Entering remove_discarded_value(parent=" << parent << ")" << std::endl;
         for (auto it = parent.begin(); it != parent.end(); ++it)
         {
+			std::cerr << "remove_discarded_value(parent=" << parent << "): it → " << it << std::endl;
             if (it->is_discarded())
             {
                 parent.erase(it);
                 break;
             }
         }
+		std::cerr << "<<< Exiting remove_discarded_value(parent=" << parent << ")" << std::endl;
     }
 
     /*!

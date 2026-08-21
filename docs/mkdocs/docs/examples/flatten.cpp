@@ -6,6 +6,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // create JSON value
     json j =
     {
@@ -29,4 +30,5 @@ int main()
 
     // call flatten()
     std::cout << std::setw(4) << j.flatten() << '\n';
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

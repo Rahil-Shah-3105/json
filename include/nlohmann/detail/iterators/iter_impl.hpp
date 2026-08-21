@@ -99,6 +99,7 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
     */
     explicit iter_impl(pointer object) noexcept : m_object(object)
     {
+		std::cerr << ">>> Entering iter_impl(object=" << object << ")" << std::endl;
         JSON_ASSERT(m_object != nullptr);
 
         switch (m_object->m_data.m_type)
@@ -129,6 +130,7 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
                 break;
             }
         }
+		std::cerr << "<<< Exiting iter_impl(object=" << object << ")" << std::endl;
     }
 
     /*!
@@ -196,6 +198,7 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
     */
     void set_begin() noexcept
     {
+		std::cerr << ">>> Entering set_begin()" << std::endl;
         JSON_ASSERT(m_object != nullptr);
 
         switch (m_object->m_data.m_type)
@@ -218,6 +221,7 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
                 m_it.primitive_iterator.set_end();
                 break;
             }
+			std::cerr << "set_begin(): primitive_iterator → " << primitive_iterator << std::endl;
 
             case value_t::string:
             case value_t::boolean:
@@ -232,6 +236,7 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
                 break;
             }
         }
+		std::cerr << "<<< Exiting set_begin()" << std::endl;
     }
 
     /*!
@@ -240,6 +245,7 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
     */
     void set_end() noexcept
     {
+		std::cerr << ">>> Entering set_end()" << std::endl;
         JSON_ASSERT(m_object != nullptr);
 
         switch (m_object->m_data.m_type)
@@ -269,7 +275,9 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
                 m_it.primitive_iterator.set_end();
                 break;
             }
+			std::cerr << "set_end(): primitive_iterator → " << primitive_iterator << std::endl;
         }
+		std::cerr << "<<< Exiting set_end()" << std::endl;
     }
 
   public:
@@ -746,6 +754,7 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
     */
     reference value() const
     {
+		std::cerr << ">>> Entering value()" << std::endl;
         return operator*();
     }
 

@@ -6,5 +6,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     std::cout << std::boolalpha << std::is_same<std::string, json::string_t>::value << std::endl;
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

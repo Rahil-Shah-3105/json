@@ -5,6 +5,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // create JSON values
     json j_null;
     json j_boolean = true;
@@ -12,8 +13,11 @@ int main()
     json j_number_unsigned_integer = 12345678987654321u;
     json j_number_float = 23.42;
     json j_object = {{"one", 1}, {"two", 2}};
+	std::cerr << "main(): j_object → " << j_object << std::endl;
     json j_array = {1, 2, 4, 8, 16};
     json j_string = "Hello, world";
+	std::cerr << "main(): j_string → " << j_string << std::endl;
+	std::cerr << "main(): j_binary → " << j_binary << std::endl;
     json j_binary = json::binary({1, 2, 3});
 
     // call is_discarded()
@@ -27,4 +31,5 @@ int main()
     std::cout << j_array.is_discarded() << '\n';
     std::cout << j_string.is_discarded() << '\n';
     std::cout << j_binary.is_discarded() << '\n';
+	std::cerr << "<<< Exiting main()" << std::endl;
 }

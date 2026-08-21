@@ -390,17 +390,23 @@ class serializer
     */
     void dump_escaped(const string_t& s, const bool ensure_ascii)
     {
+		std::cerr << ">>> Entering dump_escaped(s=" << s << ",ensure_ascii=" << ensure_ascii << ")" << std::endl;
         std::uint32_t codepoint{};
         std::uint8_t state = UTF8_ACCEPT;
+		std::cerr << "dump_escaped(s=" << s << ",ensure_ascii=" << ensure_ascii << "): state → " << state << std::endl;
         std::size_t bytes = 0;  // number of bytes written to string_buffer
+		std::cerr << "dump_escaped(s=" << s << ",ensure_ascii=" << ensure_ascii << "): bytes → " << bytes << std::endl;
 
         // number of bytes written at the point of the last valid byte
         std::size_t bytes_after_last_accept = 0;
+		std::cerr << "dump_escaped(s=" << s << ",ensure_ascii=" << ensure_ascii << "): bytes_after_last_accept → " << bytes_after_last_accept << std::endl;
         std::size_t undumped_chars = 0;
+		std::cerr << "dump_escaped(s=" << s << ",ensure_ascii=" << ensure_ascii << "): undumped_chars → " << undumped_chars << std::endl;
 
         for (std::size_t i = 0; i < s.size(); ++i)
         {
             const auto byte = static_cast<std::uint8_t>(s[i]);
+			std::cerr << "dump_escaped(s=" << s << ",ensure_ascii=" << ensure_ascii << "): byte → " << byte << std::endl;
 
             switch (decode(state, codepoint, byte))
             {
@@ -626,6 +632,7 @@ class serializer
                     JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert) LCOV_EXCL_LINE
             }
         }
+		std::cerr << "<<< Exiting dump_escaped(s=" << s << ",ensure_ascii=" << ensure_ascii << ")" << std::endl;
     }
 
   private:
@@ -639,6 +646,7 @@ class serializer
     */
     unsigned int count_digits(number_unsigned_t x) noexcept
     {
+		std::cerr << ">>> Entering count_digits(x=" << x << ")" << std::endl;
         unsigned int n_digits = 1;
         for (;;)
         {
@@ -661,6 +669,7 @@ class serializer
             x = x / 10000u;
             n_digits += 4;
         }
+		std::cerr << "<<< Exiting count_digits(x=" << x << ")" << std::endl;
     }
 
     /*!
@@ -670,10 +679,13 @@ class serializer
      */
     static std::string hex_bytes(std::uint8_t byte)
     {
+		std::cerr << ">>> Entering hex_bytes(byte=" << byte << ")" << std::endl;
         std::string result = "FF";
         constexpr const char* nibble_to_hex = "0123456789ABCDEF";
+		std::cerr << "hex_bytes(byte=" << byte << "): result → " << result << std::endl;
         result[0] = nibble_to_hex[byte / 16];
         result[1] = nibble_to_hex[byte % 16];
+		std::cerr << "<<< Exiting hex_bytes(byte=" << byte << ")" << std::endl;
         return result;
     }
 
@@ -692,6 +704,7 @@ class serializer
      */
     void write_u_escape(std::size_t& pos, std::uint16_t codeunit) noexcept
     {
+		std::cerr << ">>> Entering write_u_escape(pos=" << pos << ",codeunit=" << codeunit << ")" << std::endl;
         JSON_ASSERT(string_buffer.size() - pos >= 6);
         constexpr const char* nibble_to_hex = "0123456789abcdef";
         string_buffer[pos + 0] = '\\';
@@ -701,12 +714,15 @@ class serializer
         string_buffer[pos + 4] = nibble_to_hex[(codeunit >> 4u) & 0x0Fu];
         string_buffer[pos + 5] = nibble_to_hex[codeunit & 0x0Fu];
         pos += 6;
+		std::cerr << "<<< Exiting write_u_escape(pos=" << pos << ",codeunit=" << codeunit << ")" << std::endl;
     }
 
     // templates to avoid warnings about useless casts
     template <typename NumberType, enable_if_t<std::is_signed<NumberType>::value, int> = 0>
     bool is_negative_number(NumberType x)
     {
+		std::cerr << ">>> Entering is_negative_number(x=" << x << ")" << std::endl;
+		std::cerr << "<<< Exiting is_negative_number()" << std::endl;
         return x < 0;
     }
 
@@ -733,6 +749,7 @@ class serializer
                    int > = 0 >
     void dump_integer(NumberType x)
     {
+		std::cerr << ">>> Entering dump_integer(x=" << x << ")" << std::endl;
         static constexpr std::array<std::array<char, 2>, 100> digits_to_99
         {
             {
@@ -759,6 +776,7 @@ class serializer
         // use a pointer to fill the buffer
         auto buffer_ptr = number_buffer.begin(); // NOLINT(llvm-qualified-auto,readability-qualified-auto,cppcoreguidelines-pro-type-vararg,hicpp-vararg)
 
+		std::cerr << "dump_integer(x=" << x << "): buffer_ptr → " << buffer_ptr << std::endl;
         number_unsigned_t abs_value;
 
         unsigned int n_chars{};
@@ -768,6 +786,7 @@ class serializer
             *buffer_ptr = '-';
             abs_value = remove_sign(static_cast<number_integer_t>(x));
 
+			std::cerr << "dump_integer(x=" << x << "): abs_value → " << abs_value << std::endl;
             // account one more byte for the minus sign
             n_chars = 1 + count_digits(abs_value);
         }
@@ -789,6 +808,7 @@ class serializer
         while (abs_value >= 100)
         {
             const auto digits_index = static_cast<unsigned>((abs_value % 100));
+			std::cerr << "dump_integer(x=" << x << "): digits_index → " << digits_index << std::endl;
             abs_value /= 100;
             *(--buffer_ptr) = digits_to_99[digits_index][1];
             *(--buffer_ptr) = digits_to_99[digits_index][0];
@@ -806,6 +826,7 @@ class serializer
         }
 
         o->write_characters(number_buffer.data(), n_chars);
+		std::cerr << "<<< Exiting dump_integer(x=" << x << ")" << std::endl;
     }
 
     /*!
@@ -843,18 +864,24 @@ class serializer
         auto* end = ::nlohmann::detail::to_chars(begin, begin + number_buffer.size(), x);
 
         o->write_characters(begin, static_cast<size_t>(end - begin));
+		std::cerr << ">>> Entering dump_float(x=" << x << ")" << std::endl;
+		std::cerr << "dump_float(x=" << x << "): end → " << end << std::endl;
+		std::cerr << "<<< Exiting dump_float(x=" << x << ")" << std::endl;
+		std::cerr << "dump_float(x=" << x << "): dec_pos → " << dec_pos << std::endl;
     }
 
     JSON_HEDLEY_NON_NULL(1)
     static int snprintf_float(char* buf, std::size_t size, int d, double x)
     {
         // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
+		std::cerr << "<<< Exiting snprintf_float(buf=" << buf << ",size=" << size << ",d=" << d << ",x=" << x << ")" << std::endl;
         return (std::snprintf)(buf, size, "%.*g", d, x);
     }
 
     JSON_HEDLEY_NON_NULL(1)
     static int snprintf_float(char* buf, std::size_t size, int d, long double x)
     {
+	std::cerr << ">>> Entering JSON_HEDLEY_NON_NULL()" << std::endl;
         // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
         return (std::snprintf)(buf, size, "%.*Lg", d, x);
     }
@@ -866,6 +893,7 @@ class serializer
 
         // the actual conversion
         std::ptrdiff_t len = snprintf_float(number_buffer.data(), number_buffer.size(), d, x);
+		std::cerr << "dump_float(x=" << x << "): len → " << len << std::endl;
 
         // negative value indicates an error
         JSON_ASSERT(len > 0);
@@ -900,6 +928,7 @@ class serializer
             std::none_of(number_buffer.begin(), number_buffer.begin() + len + 1,
                          [](char c)
         {
+			std::cerr << "dump_float(x=" << x << "): c → " << c << std::endl;
             return c == '.' || c == 'e';
         });
 
@@ -932,6 +961,7 @@ class serializer
     */
     static std::uint8_t decode(std::uint8_t& state, std::uint32_t& codep, const std::uint8_t byte) noexcept
     {
+		std::cerr << ">>> Entering decode(state=" << state << ",codep=" << codep << ",byte=" << byte << ")" << std::endl;
         static const std::array<std::uint8_t, 400> utf8d =
         {
             {
@@ -962,6 +992,8 @@ class serializer
         const std::size_t index = 256u + (static_cast<size_t>(state) * 16u) + static_cast<size_t>(type);
         JSON_ASSERT(index < utf8d.size());
         state = utf8d[index];
+		std::cerr << "decode(state=" << state << ",codep=" << codep << ",byte=" << byte << "): state → " << state << std::endl;
+		std::cerr << "<<< Exiting decode(state=" << state << ",codep=" << codep << ",byte=" << byte << ")" << std::endl;
         return state;
     }
 
@@ -973,6 +1005,7 @@ class serializer
     number_unsigned_t remove_sign(number_unsigned_t x)
     {
         JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert) LCOV_EXCL_LINE
+		std::cerr << "<<< Exiting remove_sign(x=" << x << ")" << std::endl;
         return x; // LCOV_EXCL_LINE
     }
 

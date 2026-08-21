@@ -5,6 +5,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // create a JSON object with different entry types
     json j =
     {
@@ -18,10 +19,14 @@ int main()
 
     // access existing values
     int v_integer = j.value("integer", 0);
+	std::cerr << "main(): v_integer → " << v_integer << std::endl;
     double v_floating = j.value("floating", 47.11);
+	std::cerr << "main(): v_floating → " << v_floating << std::endl;
 
     // access nonexisting values and rely on default value
     std::string v_string = j.value("nonexisting", "oops");
+	std::cerr << "main(): v_string → " << v_string << std::endl;
+	std::cerr << "main(): v_boolean → " << v_boolean << std::endl;
     bool v_boolean = j.value("nonexisting", false);
 
     // output values

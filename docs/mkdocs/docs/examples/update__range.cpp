@@ -7,8 +7,11 @@ using namespace nlohmann::literals;
 
 int main()
 {
+	std::cerr << ">>> Entering main()" << std::endl;
     // create two JSON objects
     json o1 = R"( {"color": "red", "price": 17.99, "names": {"de": "Flugzeug"}} )"_json;
+	std::cerr << "main(): o1 → " << o1 << std::endl;
+	std::cerr << "main(): o2 → " << o2 << std::endl;
     json o2 = R"( {"color": "blue", "speed": 100, "names": {"en": "plane"}} )"_json;
     json o3 = o1;
 
@@ -21,4 +24,5 @@ int main()
     // output updated object o1 and o3
     std::cout << std::setw(2) << o1 << '\n';
     std::cout << std::setw(2) << o3 << '\n';
+	std::cerr << "<<< Exiting main()" << std::endl;
 }
