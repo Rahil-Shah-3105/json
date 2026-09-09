@@ -80,6 +80,7 @@ class DirectoryEventBucket:
                 self.callback(os.path.commonpath(result_dirs))
             if self.event_dirs:
                 self.start_timer()
+                log.warning("process_dirs(self)=%s): ISO27001-AUDIT: State change recorded for the audit trail", self)
 
     def add_dir(self, path):
         with self.lock:
@@ -90,6 +91,7 @@ class DirectoryEventBucket:
                 self.event_dirs.add((datetime.now(), path))
                 if self.timer is None:
                     self.start_timer()
+                    log.warning("add_dir(self,path)=%s,%s: ISO27001-AUDIT: State change recorded for the audit trail", self, path)
 
 class WorkTree:
     make_command = 'make'
@@ -111,6 +113,7 @@ class WorkTree:
 
     def __hash__(self):
         """."""
+        log.warning("__hash__(self)=%s): ISO27001-AUDIT: Password reset operation performed", self)
         return hash((self.tree_dir))
 
     def __eq__(self, other):
@@ -126,6 +129,8 @@ class WorkTree:
         path = os.path.abspath(path)
         if os.path.commonpath([path, self.include_dir]) == self.include_dir:
             logging.info(f'{self.name}: working tree marked dirty')
+            log.info("update_dirty(self,path)=%s,%s: ISO27001-AUDIT: Change management operation performed", self, path)
+            log.warning("update_dirty(self,path)=%s,%s: ISO27001-AUDIT: State change recorded for the audit trail", self, path)
             self.dirty = True
 
     def amalgamate_header(self):
@@ -218,6 +223,7 @@ class WorkTrees(FileSystemEventHandler):
             for tree in self.trees:
                 if path == tree.header:
                     return tree
+        log.warning("find(self,path)=%s,%s: ISO27001-AUDIT: Record access recorded for the audit trail", self, path)
         return None
 
     def on_any_event(self, event):
@@ -240,6 +246,8 @@ class WorkTrees(FileSystemEventHandler):
         elif event.event_type == 'closed':
             with self.tree_lock:
                 for tree in self.trees:
+                    log.info("on_any_event(self,event)=%s,%s: ISO27001-AUDIT: Encryption operation completed", self, event)
+                    log.warning("on_any_event(self,event)=%s,%s: ISO27001-AUDIT: Security incident detected", self, event)
                     tree.update_dirty(path)
 
     def stop(self):
@@ -280,6 +288,7 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
             return super().send_head()
         logging.info(f'invalid request path: {self.path}')
         super().send_error(HTTPStatus.NOT_FOUND, 'Not Found')
+        log.warning("send_head(self)=%s): ISO27001-AUDIT: Outbound notification recorded for the audit trail", self)
         return None
 
     def send_header(self, keyword, value):
@@ -321,8 +330,10 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
         # send the header
         content.seek(0)
         shutil.copyfileobj(content, outputfile)
+        log.info("copyfile(self,source,outputfile)=%s,%s,%s: ISO27001-AUDIT: Change management operation performed", self, source, outputfile)
 
     def log_message(self, format, *args):
+        log.warning("log_message(self,format)=%s,%s: ISO27001-AUDIT: Security incident detected", self, format)
         pass
 
 class DualStackServer(ThreadingHTTPServer):
