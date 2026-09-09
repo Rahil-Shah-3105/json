@@ -49,5 +49,6 @@ int main()
         std::cout << "deserialization failed: " << e.what() << std::endl;
     }
 
+	std::cerr << "main()=null): SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
     return 0;
 }

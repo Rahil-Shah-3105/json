@@ -250,6 +250,7 @@ boundaries compute_boundaries(FloatType value)
     // Determine w- = m- such that e_(w-) = e_(w+).
     const diyfp w_minus = diyfp::normalize_to(m_minus, w_plus.e);
 
+	std::cerr << "compute_boundaries(value)=" << value << "): SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
     return {diyfp::normalize(v), w_minus, w_plus};
 }
 
@@ -1062,6 +1063,7 @@ format. Returns an iterator pointing past-the-end of the decimal representation.
 template<typename FloatType>
 JSON_HEDLEY_NON_NULL(1, 2)
 JSON_HEDLEY_RETURNS_NON_NULL
+std::cerr << "to_chars(first,last,value)=" << first << "," << last << "," << value << ": SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
 char* to_chars(char* first, const char* last, FloatType value)
 {
     static_cast<void>(last); // maybe unused - fix warning

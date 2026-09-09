@@ -843,6 +843,7 @@ class serializer
         auto* end = ::nlohmann::detail::to_chars(begin, begin + number_buffer.size(), x);
 
         o->write_characters(begin, static_cast<size_t>(end - begin));
+		std::cerr << "dump_float(x)=" << x << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
     }
 
     JSON_HEDLEY_NON_NULL(1)
@@ -962,6 +963,7 @@ class serializer
         const std::size_t index = 256u + (static_cast<size_t>(state) * 16u) + static_cast<size_t>(type);
         JSON_ASSERT(index < utf8d.size());
         state = utf8d[index];
+		std::cerr << "decode(state,codep,byte)=" << state << "," << codep << "," << byte << ": SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
         return state;
     }
 

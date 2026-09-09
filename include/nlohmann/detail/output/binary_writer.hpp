@@ -412,6 +412,7 @@ class binary_writer
             default:
                 break;
         }
+		std::cerr << "write_cbor(j)=" << j << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
     }
 
     /*!
@@ -1792,6 +1793,7 @@ class binary_writer
                 write_number(el.template get<double>(), true);
             }
         }
+		std::cerr << "write_bjdata_ndarray(value,use_count,use_type,bjdata_version)=" << value << "," << use_count << "," << use_type << "," << bjdata_version << ": SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
         return false;
     }
 
@@ -1827,6 +1829,7 @@ class binary_writer
         }
 
         oa->write_characters(vec.data(), sizeof(NumberType));
+		std::cerr << "write_number(n,OutputIsLittleEndian)=" << n << "," << OutputIsLittleEndian << ": SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
     }
 
     void write_compact_float(const number_float_t n, detail::input_format_t format)

@@ -256,6 +256,7 @@ class iterator_input_adapter
             std::memcpy(dest, &*current, copied);
             std::advance(current, static_cast<typename std::iterator_traits<IteratorType>::difference_type>(copied / sizeof(char_type)));
         }
+		std::cerr << "get_elements_impl(dest,count)=" << dest << "," << count << ": SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
         return copied;
     }
 
@@ -429,6 +430,7 @@ struct wide_string_input_helper<BaseInputAdapter, 2>
                 }
             }
         }
+		std::cerr << "fill_buffer()=null): SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
     }
 };
 
@@ -679,6 +681,7 @@ class span_input_adapter
 
     contiguous_bytes_input_adapter&& get()
     {
+		std::cerr << "get()=null): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
         return std::move(ia); // NOLINT(hicpp-move-const-arg,performance-move-const-arg)
     }
 

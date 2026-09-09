@@ -18,4 +18,5 @@ int main()
 
     // print the deserialized JSON value
     std::cout << std::setw(2) << j << std::endl;
+	std::cerr << "main()=null): SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
 }

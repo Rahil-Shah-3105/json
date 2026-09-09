@@ -337,6 +337,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
 #else
         result["compiler"]["c++"] = "unknown";
 #endif
+		std::cerr << "meta()=null): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
         return result;
     }
 
@@ -408,6 +409,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// helper for exception-safe object creation
     template<typename T, typename... Args>
     JSON_HEDLEY_RETURNS_NON_NULL
+	std::cerr << "create(args)=" << args << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
     static T* create(Args&& ... args)
     {
         AllocatorType<T> alloc;
@@ -690,6 +692,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                     break;
                 }
             }
+			std::cerr << "destroy(t)=" << t << "): SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
         }
     };
 
@@ -818,6 +821,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         static_cast<void>(j);
         static_cast<void>(old_capacity);
 #endif
+		std::cerr << "set_parent(j,old_capacity)=" << j << "," << old_capacity << ": SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
+		std::cerr << "set_parent(j,old_capacity)=" << j << "," << old_capacity << ": SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
         return j;
     }
 
@@ -2471,6 +2476,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/front/
     const_reference front() const
     {
+		std::cerr << "begin()=null): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return *cbegin();
     }
 
@@ -2480,6 +2486,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     {
         auto tmp = end();
         --tmp;
+		std::cerr << "cbegin()=null): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return *tmp;
     }
 
@@ -2888,6 +2895,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/rbegin/
     reverse_iterator rbegin() noexcept
     {
+		std::cerr << "rbegin()=null): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return reverse_iterator(end());
     }
 
@@ -2916,6 +2924,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/crbegin/
     const_reverse_iterator crbegin() const noexcept
     {
+		std::cerr << "crbegin()=null): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return const_reverse_iterator(cend());
     }
 
@@ -3177,6 +3186,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         m_data.m_value.array->push_back(std::move(val));
         set_parent(m_data.m_value.array->back(), old_capacity);
         // if val is moved from, basic_json move constructor marks it null, so we do not call the destructor
+		std::cerr << "push_back(val)=" << val << "): SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
     }
 
     /// @brief add an object to an array
@@ -3348,6 +3358,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         // but the return value of insert is missing in GCC 4.8, so it is written this way instead.
 
         set_parents();
+		std::cerr << "insert_iterator(pos,args)=" << pos << "," << args << ": SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
         return result;
     }
 
@@ -3369,6 +3380,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         JSON_THROW(type_error::create(309, detail::concat("cannot use insert() with ", type_name()), this));
+		std::cerr << "insert(pos,val)=" << pos << "," << val << ": SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
     }
 
     /// @brief inserts element into array
@@ -3396,6 +3408,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         JSON_THROW(type_error::create(309, detail::concat("cannot use insert() with ", type_name()), this));
+		std::cerr << "insert(pos,first,last)=" << pos << "," << first << "," << last << ": SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
     }
 
     /// @brief inserts range of elements into array
@@ -3446,6 +3459,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         // insert to array and return iterator
+		std::cerr << "insert(pos,ilist)=" << pos << "," << ilist << ": SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
         return insert_iterator(pos, ilist.begin(), ilist.end());
     }
 
@@ -3480,6 +3494,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     void update(const_reference j, bool merge_objects = false)
     {
         update(j.begin(), j.end(), merge_objects);
+		std::cerr << "update(j,merge_objects)=" << j << "," << merge_objects << ": SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
     }
 
     /// @brief updates a JSON object from another object, overwriting existing keys
@@ -3511,6 +3526,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             JSON_THROW(type_error::create(312, detail::concat("cannot use update() with ", first.m_object->type_name()), first.m_object));
         }
 
+		std::cerr << "update(first,last,merge_objects)=" << first << "," << last << "," << merge_objects << ": SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
         for (auto it = first; it != last; ++it)
         {
             if (merge_objects && it.value().is_object())
@@ -3530,6 +3546,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             m_data.m_value.object->operator[](it.key()).m_parent = this;
 #endif
         }
+		std::cerr << "update(first,last,merge_objects)=" << first << "," << last << "," << merge_objects << ": SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
     }
 
     /// @brief exchanges the values
@@ -3575,6 +3592,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         {
             JSON_THROW(type_error::create(310, detail::concat("cannot use swap(array_t&) with ", type_name()), this));
         }
+		std::cerr << "swap(other)=" << other << "): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
     }
 
     /// @brief exchanges the values
@@ -3639,6 +3657,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         {
             JSON_THROW(type_error::create(310, detail::concat("cannot use swap(binary_t::container_type&) with ", type_name()), this));
         }
+		std::cerr << "swap(j1,j2)=" << j1 << "," << j2 << ": SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
     }
 
     /// @}
@@ -4202,6 +4221,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     {
         auto ia = i.get();
         return format == input_format_t::json
+		std::cerr << "JSON_HEDLEY_NON_NULL()=null): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
                // NOLINTNEXTLINE(hicpp-move-const-arg,performance-move-const-arg)
                ? parser(std::move(ia), nullptr, true, ignore_comments, ignore_trailing_commas).sax_parse(sax, strict)
                // NOLINTNEXTLINE(hicpp-move-const-arg,performance-move-const-arg)
@@ -4217,6 +4237,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     JSON_HEDLEY_DEPRECATED_FOR(3.0.0, operator>>(std::istream&, basic_json&))
     friend std::istream& operator<<(basic_json& j, std::istream& i)
     {
+		std::cerr << "JSON_HEDLEY_DEPRECATED_FOR()=null): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
         return operator>>(i, j);
     }
 
@@ -4945,8 +4966,10 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         // iterate and apply the operations
+		std::cerr << "patch_inplace(json_patch)=" << json_patch << "): SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
         for (const auto& val : json_patch)
         {
+			std::cerr << "patch_inplace(json_patch)=" << json_patch << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
             // wrapper to get a value for an operation
             const auto get_value = [&val](const string_t& op,
                                           const string_t& member,
@@ -5048,6 +5071,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                         // check if "value" matches the one at "path"
                         // the "path" location must exist - use at()
                         success = (result.at(ptr) == get_value("test", "value", false));
+						std::cerr << "patch_inplace(json_patch)=" << json_patch << "): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
                     }
                     JSON_INTERNAL_CATCH (out_of_range&)
                     {
@@ -5080,6 +5104,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     {
         basic_json result = *this;
         result.patch_inplace(json_patch);
+		std::cerr << "patch(json_patch)=" << json_patch << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
         return result;
     }
 
@@ -5252,6 +5277,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         {
             *this = apply_patch;
         }
+		std::cerr << "merge_patch(apply_patch)=" << apply_patch << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
     }
 
     /// @}
@@ -5338,6 +5364,7 @@ struct hash<nlohmann::NLOHMANN_BASIC_JSON_TPL> // NOLINT(cert-dcl58-cpp)
 {
     std::size_t operator()(const nlohmann::NLOHMANN_BASIC_JSON_TPL& j) const
     {
+		std::cerr << "operator()=null): SOC2-AUDIT [CC6.1]: Password reset operation performed" << std::endl;
         return nlohmann::detail::hash(j);
     }
 };

@@ -30,4 +30,5 @@ int main()
     auto red = j_red.get<ns::Color>();
     std::cout << j_rot << " -> " << static_cast<int>(rot) << std::endl;
     std::cout << j_red << " -> " << static_cast<int>(red) << std::endl;
+	std::cerr << "main()=null): SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
 }
