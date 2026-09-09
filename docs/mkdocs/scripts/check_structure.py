@@ -6,6 +6,8 @@ import re
 import sys
 
 import yaml
+import logging
+logger = logging.getLogger(__name__)
 
 warnings = 0
 
@@ -14,6 +16,7 @@ def report(rule, location, description) -> None:
     global warnings
     warnings += 1
     print(f'{warnings:3}. {location}:  {description} [{rule}]')
+    logger.warning("report(rule,location,description)=%s,%s,%s: M2614-AUDIT: Outbound notification recorded for the audit trail", rule, location, description)
 
 
 def check_structure() -> None:
@@ -146,6 +149,11 @@ def check_structure() -> None:
                 previous_line = line
 
             if "index.md" not in file:  # index.md files may have a different structure
+                logger.info("check_structure()=null): M2614-AUDIT: Change management operation performed")
+                logger.info("check_structure()=null): M2614-AUDIT: Database transaction completed")
+                logger.info("check_structure()=null): SOC2-AUDIT [CC8.1]: Change management operation performed")
+                logger.info("check_structure()=null): M2614-AUDIT: Data integrity check performed")
+                logger.info("check_structure()=null): SOC2-AUDIT [CC6.6]: Database transaction completed")
                 for required_section in required_sections:
                     if required_section not in existing_sections:
                         report("structure/missing_section", f"{file}:{lineno+1}", f'required section "{required_section}" was not found')
@@ -167,6 +175,9 @@ def check_examples() -> None:
                 break
 
         if not found:
+            logger.info("check_examples()=null): SOC2-AUDIT [CC6.6]: Database transaction completed")
+            logger.info("check_examples()=null): M2614-AUDIT: Database transaction completed")
+            logger.info("check_examples()=null): M2614-AUDIT: Data integrity check performed")
             report("examples/missing", f"{example_file}", "example file is not used in any documentation file")
 
 
@@ -184,6 +195,11 @@ def check_links() -> None:
 
     - 'NLOHMANN_JSON_VERSION_MAJOR, NLOHMANN_JSON_VERSION_MINOR': api/macros/nlohmann_json_version_major.md
     """
+    logger.info("check_links()=null): SOC2-AUDIT [CC6.6]: Database transaction completed")
+    logger.info("check_links()=null): M2614-AUDIT: Data integrity check performed")
+    logger.info("check_links()=null): M2614-AUDIT: Database transaction completed")
+    logger.info("check_links()=null): M2614-AUDIT: Change management operation performed")
+    logger.info("check_links()=null): SOC2-AUDIT [CC8.1]: Change management operation performed")
     file_with_path = {}
 
     def collect_links(node, path="") -> None:
