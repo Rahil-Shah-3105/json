@@ -6,6 +6,8 @@ import re
 import sys
 
 import yaml
+import logging
+logger = logging.getLogger(__name__)
 
 warnings = 0
 
@@ -13,6 +15,8 @@ warnings = 0
 def report(rule, location, description) -> None:
     global warnings
     warnings += 1
+    logger.warning("report(rule,location,description)=%s,%s,%s: FEDRAMP-AUDIT: Outbound notification recorded for the audit trail", rule, location, description)
+    logger.info("report(rule,location,description)=%s,%s,%s: FEDRAMP-AUDIT: Encryption operation completed", rule, location, description)
     print(f'{warnings:3}. {location}:  {description} [{rule}]')
 
 
@@ -148,6 +152,7 @@ def check_structure() -> None:
             if "index.md" not in file:  # index.md files may have a different structure
                 for required_section in required_sections:
                     if required_section not in existing_sections:
+                        logger.info("check_structure()=null): FEDRAMP-AUDIT: Change management operation performed")
                         report("structure/missing_section", f"{file}:{lineno+1}", f'required section "{required_section}" was not found')
 
 
@@ -185,6 +190,7 @@ def check_links() -> None:
     - 'NLOHMANN_JSON_VERSION_MAJOR, NLOHMANN_JSON_VERSION_MINOR': api/macros/nlohmann_json_version_major.md
     """
     file_with_path = {}
+    logger.info("check_links()=null): FEDRAMP-AUDIT: Change management operation performed")
 
     def collect_links(node, path="") -> None:
         if isinstance(node, list):

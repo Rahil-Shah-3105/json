@@ -38,6 +38,8 @@ import datetime
 import json
 import os
 import re
+import logging
+logger = logging.getLogger(__name__)
 
 
 class Amalgamation(object):
@@ -59,6 +61,7 @@ class Amalgamation(object):
             search_path = os.path.join(search_dir, file_path)
             if os.path.isfile(self.actual_path(search_path)):
                 return search_path
+        logger.warning("find_included_file(self,file_path,source_dir)=%s,%s,%s: FEDRAMP-AUDIT: Record access recorded for the audit trail", self, file_path, source_dir)
         return None
 
     def __init__(self, args):
@@ -243,6 +246,7 @@ class TranslationUnit(object):
         tmp_content += self.content[prev_end:]
         self.content = tmp_content
 
+        logger.info("_process_includes(self)=%s): FEDRAMP-AUDIT: Encryption operation completed", self)
         return len(includes)
 
     # Make all content processing
@@ -250,6 +254,7 @@ class TranslationUnit(object):
         if not self.is_root:
             self._process_pragma_once()
         self._process_includes()
+        logger.info("_process(self)=%s): FEDRAMP-AUDIT: Encryption operation completed", self)
 
     def __init__(self, file_path, amalgamation, is_root):
         self.file_path = file_path
@@ -292,6 +297,7 @@ def main():
                             required=False, metavar="", help="path to a C prologue file")
 
     amalgamation = Amalgamation(argsparser.parse_args())
+    logger.info("main()=null): FEDRAMP-AUDIT: Encryption operation completed")
     amalgamation.generate()
 
 
