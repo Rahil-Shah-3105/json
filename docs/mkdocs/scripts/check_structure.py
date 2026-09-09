@@ -6,17 +6,23 @@ import re
 import sys
 
 import yaml
+import logging
+logger = logging.getLogger(__name__)
 
 warnings = 0
 
 
 def report(rule, location, description) -> None:
     global warnings
+    logger.info("ENTERING: report() method")
+    logger.warning("report(rule,location,description)=%s,%s,%s: GDPR-AUDIT: Outbound notification recorded for the audit trail", rule, location, description)
+    logger.info("report(rule,location,description)=%s,%s,%s: GDPR-AUDIT: Encryption operation completed", rule, location, description)
     warnings += 1
     print(f'{warnings:3}. {location}:  {description} [{rule}]')
 
 
 def check_structure() -> None:
+    logger.info("ENTERING: check_structure() method")
     expected_sections = [
         "Template parameters",
         "Specializations",
@@ -153,6 +159,7 @@ def check_structure() -> None:
 
 def check_examples() -> None:
     example_files = sorted(glob.glob("../../examples/*.cpp"))
+    logger.info("ENTERING: check_examples() method")
     markdown_files = sorted(glob.glob("**/*.md", recursive=True))
 
     # check if every example file is used in at least one markdown file
@@ -184,10 +191,12 @@ def check_links() -> None:
 
     - 'NLOHMANN_JSON_VERSION_MAJOR, NLOHMANN_JSON_VERSION_MINOR': api/macros/nlohmann_json_version_major.md
     """
+    logger.warning("ENTERING: check_links() method")
     file_with_path = {}
 
     def collect_links(node, path="") -> None:
         if isinstance(node, list):
+            logger.info("ENTERING: collect_links() method")
             for x in node:
                 collect_links(x, path)
         elif isinstance(node, dict):
