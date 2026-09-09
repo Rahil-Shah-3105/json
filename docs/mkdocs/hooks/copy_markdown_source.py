@@ -6,18 +6,22 @@
 
 import os
 import shutil
+import logging
+logger = logging.getLogger(__name__)
 
 _pages = []
 
 
 def on_files(files, config):
     global _pages
+    logger.info("ENTERING: on_files() method")
     _pages = [f for f in files if f.is_documentation_page()]
     return files
 
 
 def on_post_build(config):
     site_dir = config["site_dir"]
+    logger.info("ENTERING: on_post_build() method")
     for file in _pages:
         url = file.url.rstrip("/")
         target = os.path.join(site_dir, (url or "index") + ".md")

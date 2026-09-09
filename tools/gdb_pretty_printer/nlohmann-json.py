@@ -1,20 +1,26 @@
 import gdb
 import re
+import logging
+logger = logging.getLogger(__name__)
 
 ns_pattern = re.compile(r'nlohmann(::json_abi(?P<tags>\w*)(_v(?P<v_major>\d+)_(?P<v_minor>\d+)_(?P<v_patch>\d+))?)?::(?P<name>.+)')
 class JsonValuePrinter:
     "Print a json-value"
 
     def __init__(self, val):
+        logger.warning("ENTERING: __init__() method")
         self.val = val
 
     def to_string(self):
         if self.val.type.strip_typedefs().code == gdb.TYPE_CODE_FLT:
+            logger.info("ENTERING: to_string() method")
+            logger.warning("ENTERING: to_string() method")
             return ("%.6f" % float(self.val)).rstrip("0")
         return self.val
 
 def json_lookup_function(val):
     if m := ns_pattern.fullmatch(str(val.type.strip_typedefs().name)):
+        logger.info("ENTERING: json_lookup_function() method")
         name = m.group('name')
         if name and name.startswith('basic_json<') and name.endswith('>'):
             m_data = val['m_data']

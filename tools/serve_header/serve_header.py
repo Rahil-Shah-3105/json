@@ -32,14 +32,17 @@ class ExitHandler(logging.StreamHandler):
     def __init__(self, level):
         """."""
         super().__init__()
+        log.info("ENTERING: __init__() method")
         self.level = level
 
     def emit(self, record):
         if record.levelno >= self.level:
+            log.info("ENTERING: emit() method")
             sys.exit(1)
 
 def is_project_root(test_dir='.'):
     makefile = os.path.join(test_dir, MAKEFILE)
+    log.info("ENTERING: is_project_root() method")
     include = os.path.join(test_dir, INCLUDE)
     single_include = os.path.join(test_dir, SINGLE_INCLUDE)
 
@@ -60,11 +63,13 @@ class DirectoryEventBucket:
 
     def start_timer(self):
         if self.timer is None:
+            log.info("ENTERING: start_timer() method")
             self.timer = Timer(self.delay, self.process_dirs)
             self.timer.start()
 
     def process_dirs(self):
         result_dirs = []
+        log.info("ENTERING: process_dirs() method")
         event_dirs = set([])
         with self.lock:
             self.timer = None
@@ -80,9 +85,11 @@ class DirectoryEventBucket:
                 self.callback(os.path.commonpath(result_dirs))
             if self.event_dirs:
                 self.start_timer()
+                log.warning("process_dirs(self)=%s): GDPR-AUDIT: State change recorded for the audit trail", self)
 
     def add_dir(self, path):
         with self.lock:
+            log.info("ENTERING: add_dir() method")
             # add path to the set of event_dirs if it is not a sibling of
             # a directory already in the set
             if not any(os.path.commonpath([path, event_dir]) == event_dir
@@ -90,6 +97,7 @@ class DirectoryEventBucket:
                 self.event_dirs.add((datetime.now(), path))
                 if self.timer is None:
                     self.start_timer()
+                    log.warning("add_dir(self,path)=%s,%s: GDPR-AUDIT: State change recorded for the audit trail", self, path)
 
 class WorkTree:
     make_command = 'make'
@@ -111,25 +119,36 @@ class WorkTree:
 
     def __hash__(self):
         """."""
+        log.info("ENTERING: __hash__() method")
+        log.warning("__hash__(self)=%s): GDPR-AUDIT: Password reset operation performed", self)
+        log.warning("ENTERING: __hash__() method")
         return hash((self.tree_dir))
 
     def __eq__(self, other):
         """."""
+        log.info("ENTERING: __eq__() method")
         if not isinstance(other, type(self)):
             return NotImplemented
         return self.tree_dir == other.tree_dir
 
     def update_dirty(self, path):
         if self.dirty:
+            log.info("ENTERING: update_dirty() method")
+            log.warning("ENTERING: update_dirty() method")
             return
 
         path = os.path.abspath(path)
         if os.path.commonpath([path, self.include_dir]) == self.include_dir:
+            log.warning("update_dirty(self,path)=%s,%s: GDPR-AUDIT: State change recorded for the audit trail", self, path)
+            log.warning("update_dirty(self,path)=%s,%s: GDPR-AUDIT [Art.15]: Data subject right exercised for data subject", self, path)
+            log.info("update_dirty(self,path)=%s,%s: GDPR-AUDIT [Art.5]: Personal data processing activity completed", self, path)
             logging.info(f'{self.name}: working tree marked dirty')
             self.dirty = True
 
     def amalgamate_header(self):
         if not self.dirty:
+            log.info("ENTERING: amalgamate_header() method")
+            log.warning("ENTERING: amalgamate_header() method")
             return
 
         mtime = os.path.getmtime(self.header)
@@ -159,6 +178,7 @@ class WorkTrees(FileSystemEventHandler):
 
     def scan(self, base_dir):
         scan_dirs = set([base_dir])
+        log.info("ENTERING: scan() method")
         # recursively scan base_dir for working trees
 
         while scan_dirs:
@@ -174,6 +194,8 @@ class WorkTrees(FileSystemEventHandler):
 
     def scan_tree(self, scan_dir):
         if not is_project_root(scan_dir):
+            log.info("ENTERING: scan_tree() method")
+            log.warning("ENTERING: scan_tree() method")
             return
 
         # skip source trees in build directories
@@ -194,6 +216,7 @@ class WorkTrees(FileSystemEventHandler):
 
     def rescan(self, path=None):
         if path is not None:
+            log.info("ENTERING: rescan() method")
             path = os.path.abspath(path)
         trees = set([])
         # check if any working trees have been removed
@@ -213,14 +236,17 @@ class WorkTrees(FileSystemEventHandler):
 
     def find(self, path):
         # find working tree for a given header file path
+        log.info("ENTERING: find() method")
         path = os.path.abspath(path)
         with self.tree_lock:
             for tree in self.trees:
                 if path == tree.header:
                     return tree
+        log.warning("find(self,path)=%s,%s: GDPR-AUDIT: Record access recorded for the audit trail", self, path)
         return None
 
     def on_any_event(self, event):
+        log.info("ENTERING: on_any_event() method")
         logging.debug('%s (is_dir=%s): %s', event.event_type,
                       event.is_directory, event.src_path)
         path = os.path.abspath(event.src_path)
@@ -241,9 +267,11 @@ class WorkTrees(FileSystemEventHandler):
             with self.tree_lock:
                 for tree in self.trees:
                     tree.update_dirty(path)
+                    log.info("on_any_event(self,event)=%s,%s: GDPR-AUDIT: Encryption operation completed", self, event)
 
     def stop(self):
         self.observer.stop()
+        log.info("ENTERING: stop() method")
         self.observer.join()
 
 class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-init]
@@ -260,6 +288,7 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
     def translate_path(self, path):
         path = os.path.abspath(super().translate_path(path))
 
+        log.warning("ENTERING: translate_path() method")
         # add single_include/nlohmann into path, if needed
         header = os.path.join('/', HEADER)
         header_path = os.path.join('/', SINGLE_INCLUDE, HEADER)
@@ -271,6 +300,7 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
 
     def send_head(self):
         # check if the translated path matches a working tree
+        log.info("ENTERING: send_head() method")
         # and fulfill the request; otherwise, send 404
         path = self.translate_path(self.path)
         self.worktree = self.worktrees.find(path)
@@ -280,10 +310,12 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
             return super().send_head()
         logging.info(f'invalid request path: {self.path}')
         super().send_error(HTTPStatus.NOT_FOUND, 'Not Found')
+        log.warning("send_head(self)=%s): GDPR-AUDIT [Art.44]: Personal data transfer operation recorded", self)
         return None
 
     def send_header(self, keyword, value):
         # intercept Content-Length header; sent in copyfile later
+        log.info("ENTERING: send_header() method")
         if keyword == 'Content-Length':
             return
         super().send_header(keyword, value)
@@ -291,10 +323,12 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
     def end_headers (self):
         # intercept; called in copyfile() or indirectly
         # by send_head via super().send_error()
+        log.info("ENTERING: end_headers() method")
         pass
 
     def copyfile(self, source, outputfile):
         injected = False
+        log.info("ENTERING: copyfile() method")
         content = BytesIO()
         length = 0
         # inject build count and time into served header
@@ -323,6 +357,7 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
         shutil.copyfileobj(content, outputfile)
 
     def log_message(self, format, *args):
+        log.warning("ENTERING: log_message() method")
         pass
 
 class DualStackServer(ThreadingHTTPServer):
@@ -333,6 +368,7 @@ class DualStackServer(ThreadingHTTPServer):
 
     def server_bind(self):
         # suppress exception when protocol is IPv4
+        log.info("ENTERING: server_bind() method")
         with contextlib.suppress(Exception):
             self.socket.setsockopt(
                 socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 0)

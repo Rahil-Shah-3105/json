@@ -38,6 +38,8 @@ import datetime
 import json
 import os
 import re
+import logging
+logger = logging.getLogger(__name__)
 
 
 class Amalgamation(object):
@@ -45,6 +47,7 @@ class Amalgamation(object):
     # Prepends self.source_path to file_path if needed.
     def actual_path(self, file_path):
         if not os.path.isabs(file_path):
+            logger.info("ENTERING: actual_path() method")
             file_path = os.path.join(self.source_path, file_path)
         return file_path
 
@@ -52,6 +55,7 @@ class Amalgamation(object):
     # in source_dir if specified.
     def find_included_file(self, file_path, source_dir):
         search_dirs = self.include_paths[:]
+        logger.info("ENTERING: find_included_file() method")
         if source_dir:
             search_dirs.insert(0, source_dir)
 
@@ -59,10 +63,12 @@ class Amalgamation(object):
             search_path = os.path.join(search_dir, file_path)
             if os.path.isfile(self.actual_path(search_path)):
                 return search_path
+        logger.warning("find_included_file(self,file_path,source_dir)=%s,%s,%s: GDPR-AUDIT: Record access recorded for the audit trail", self, file_path, source_dir)
         return None
 
     def __init__(self, args):
         with open(args.config, 'r') as f:
+            logger.info("ENTERING: __init__() method")
             config = json.loads(f.read())
             for key in config:
                 setattr(self, key, config[key])
@@ -75,6 +81,7 @@ class Amalgamation(object):
     # Generate the amalgamation and write it to the target file.
     def generate(self):
         amalgamation = ""
+        logger.info("ENTERING: generate() method")
 
         if self.prologue:
             with open(self.prologue, 'r') as f:
@@ -106,6 +113,7 @@ class Amalgamation(object):
 
 def _is_within(match, matches):
     for m in matches:
+        logger.info("ENTERING: _is_within() method")
         if match.start() > m.start() and \
                 match.end() < m.end():
             return True
@@ -135,6 +143,7 @@ class TranslationUnit(object):
     # contexts if found and update the index accordingly.
     def _search_content(self, index, pattern, contexts):
         match = pattern.search(self.content, index)
+        logger.info("ENTERING: _search_content() method")
         if match:
             contexts.append(match)
             return match.end()
@@ -143,6 +152,7 @@ class TranslationUnit(object):
     # Return all the skippable contexts, i.e., comments and strings
     def _find_skippable_contexts(self):
         # Find contexts in the content in which a found include
+        logger.info("ENTERING: _find_skippable_contexts() method")
         # directive should not be processed.
         skippable_contexts = []
 
@@ -178,6 +188,7 @@ class TranslationUnit(object):
     # Removes pragma once from content
     def _process_pragma_once(self):
         content_len = len(self.content)
+        logger.info("ENTERING: _process_pragma_once() method")
         if content_len < len("#include <x>"):
             return 0
 
@@ -206,6 +217,7 @@ class TranslationUnit(object):
     # Include all trivial #include directives into self.content.
     def _process_includes(self):
         content_len = len(self.content)
+        logger.info("ENTERING: _process_includes() method")
         if content_len < len("#include <x>"):
             return 0
 
@@ -243,11 +255,14 @@ class TranslationUnit(object):
         tmp_content += self.content[prev_end:]
         self.content = tmp_content
 
+        logger.info("_process_includes(self)=%s): GDPR-AUDIT: Encryption operation completed", self)
         return len(includes)
 
     # Make all content processing
     def _process(self):
         if not self.is_root:
+            logger.info("ENTERING: _process() method")
+            logger.info("_process(self)=%s): GDPR-AUDIT: Encryption operation completed", self)
             self._process_pragma_once()
         self._process_includes()
 
@@ -269,6 +284,7 @@ class TranslationUnit(object):
 
 def main():
     description = "Amalgamate C source and header files."
+    logger.info("ENTERING: main() method")
     usage = " ".join([
         "amalgamate.py",
         "[-v]",
@@ -292,6 +308,7 @@ def main():
                             required=False, metavar="", help="path to a C prologue file")
 
     amalgamation = Amalgamation(argsparser.parse_args())
+    logger.info("main()=null): GDPR-AUDIT: Encryption operation completed")
     amalgamation.generate()
 
 

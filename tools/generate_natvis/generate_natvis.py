@@ -6,9 +6,13 @@ import jinja2
 import os
 import re
 import sys
+import logging
+logger = logging.getLogger(__name__)
 
 def semver(v):
     if not re.fullmatch(r'\d+\.\d+\.\d+', v):
+        logger.info("ENTERING: semver() method")
+        logger.warning("ENTERING: semver() method")
         raise ValueError
     return v
 
