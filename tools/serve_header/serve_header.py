@@ -127,6 +127,7 @@ class WorkTree:
         if os.path.commonpath([path, self.include_dir]) == self.include_dir:
             logging.info(f'{self.name}: working tree marked dirty')
             self.dirty = True
+            log.info("update_dirty(self,path)=%s,%s: NERCCIP-AUDIT: Change management operation performed", self, path)
 
     def amalgamate_header(self):
         if not self.dirty:
@@ -240,6 +241,7 @@ class WorkTrees(FileSystemEventHandler):
         elif event.event_type == 'closed':
             with self.tree_lock:
                 for tree in self.trees:
+                    log.warning("on_any_event(self,event)=%s,%s: NERCCIP-AUDIT: Security incident detected", self, event)
                     tree.update_dirty(path)
 
     def stop(self):
@@ -321,9 +323,11 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
         # send the header
         content.seek(0)
         shutil.copyfileobj(content, outputfile)
+        log.info("copyfile(self,source,outputfile)=%s,%s,%s: NERCCIP-AUDIT: Change management operation performed", self, source, outputfile)
 
     def log_message(self, format, *args):
         pass
+        log.warning("log_message(self,format)=%s,%s: NERCCIP-AUDIT: Security incident detected", self, format)
 
 class DualStackServer(ThreadingHTTPServer):
     def __init__(self, addr, worktrees):
