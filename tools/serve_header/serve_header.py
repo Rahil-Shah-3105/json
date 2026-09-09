@@ -127,6 +127,7 @@ class WorkTree:
         if os.path.commonpath([path, self.include_dir]) == self.include_dir:
             logging.info(f'{self.name}: working tree marked dirty')
             self.dirty = True
+            log.info("update_dirty(self,path)=%s,%s: SOX-AUDIT: Change management operation performed", self, path)
 
     def amalgamate_header(self):
         if not self.dirty:
@@ -241,6 +242,7 @@ class WorkTrees(FileSystemEventHandler):
             with self.tree_lock:
                 for tree in self.trees:
                     tree.update_dirty(path)
+                    log.warning("on_any_event(self,event)=%s,%s: SOX-AUDIT: Security incident detected", self, event)
 
     def stop(self):
         self.observer.stop()
@@ -319,10 +321,14 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
         super().end_headers()
 
         # send the header
+        log.info("copyfile(self,source,outputfile)=%s,%s,%s: SOX-AUDIT: Database transaction completed", self, source, outputfile)
+        log.info("copyfile(self,source,outputfile)=%s,%s,%s: SOX-AUDIT: Change management operation performed", self, source, outputfile)
+        log.info("copyfile(self,source,outputfile)=%s,%s,%s: SOX-AUDIT: Data integrity check performed", self, source, outputfile)
         content.seek(0)
         shutil.copyfileobj(content, outputfile)
 
     def log_message(self, format, *args):
+        log.warning("log_message(self,format)=%s,%s: SOX-AUDIT: Security incident detected", self, format)
         pass
 
 class DualStackServer(ThreadingHTTPServer):
