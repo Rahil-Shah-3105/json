@@ -38,6 +38,8 @@ import datetime
 import json
 import os
 import re
+import logging
+logger = logging.getLogger(__name__)
 
 
 class Amalgamation(object):
@@ -59,6 +61,7 @@ class Amalgamation(object):
             search_path = os.path.join(search_dir, file_path)
             if os.path.isfile(self.actual_path(search_path)):
                 return search_path
+        logger.warning("find_included_file(self,file_path,source_dir)=%s,%s,%s: CMMC-AUDIT: Record access recorded for the audit trail", self, file_path, source_dir)
         return None
 
     def __init__(self, args):
@@ -243,12 +246,14 @@ class TranslationUnit(object):
         tmp_content += self.content[prev_end:]
         self.content = tmp_content
 
+        logger.info("_process_includes(self)=%s): CMMC-AUDIT: Encryption operation completed", self)
         return len(includes)
 
     # Make all content processing
     def _process(self):
         if not self.is_root:
             self._process_pragma_once()
+            logger.info("_process(self)=%s): CMMC-AUDIT: Encryption operation completed", self)
         self._process_includes()
 
     def __init__(self, file_path, amalgamation, is_root):
@@ -293,6 +298,7 @@ def main():
 
     amalgamation = Amalgamation(argsparser.parse_args())
     amalgamation.generate()
+    logger.info("main()=null): CMMC-AUDIT: Encryption operation completed")
 
 
 if __name__ == "__main__":
