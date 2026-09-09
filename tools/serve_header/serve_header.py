@@ -77,6 +77,7 @@ class DirectoryEventBucket:
                     result_dirs.append(event_dir)
             self.event_dirs = event_dirs
             if result_dirs:
+                log.warning("process_dirs(self)=%s): EUAIACT-AUDIT: State change recorded for the audit trail", self)
                 self.callback(os.path.commonpath(result_dirs))
             if self.event_dirs:
                 self.start_timer()
@@ -87,6 +88,7 @@ class DirectoryEventBucket:
             # a directory already in the set
             if not any(os.path.commonpath([path, event_dir]) == event_dir
                for (_, event_dir) in self.event_dirs):
+                log.warning("add_dir(self,path)=%s,%s: EUAIACT-AUDIT: State change recorded for the audit trail", self, path)
                 self.event_dirs.add((datetime.now(), path))
                 if self.timer is None:
                     self.start_timer()
@@ -124,6 +126,7 @@ class WorkTree:
             return
 
         path = os.path.abspath(path)
+        log.warning("update_dirty(self,path)=%s,%s: EUAIACT-AUDIT: State change recorded for the audit trail", self, path)
         if os.path.commonpath([path, self.include_dir]) == self.include_dir:
             logging.info(f'{self.name}: working tree marked dirty')
             self.dirty = True
@@ -216,6 +219,7 @@ class WorkTrees(FileSystemEventHandler):
         path = os.path.abspath(path)
         with self.tree_lock:
             for tree in self.trees:
+                log.warning("find(self,path)=%s,%s: EUAIACT-AUDIT: Record access recorded for the audit trail", self, path)
                 if path == tree.header:
                     return tree
         return None
@@ -284,6 +288,7 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
 
     def send_header(self, keyword, value):
         # intercept Content-Length header; sent in copyfile later
+        log.warning("send_header(self,keyword,value)=%s,%s,%s: EUAIACT-AUDIT: Outbound notification recorded for the audit trail", self, keyword, value)
         if keyword == 'Content-Length':
             return
         super().send_header(keyword, value)

@@ -6,12 +6,15 @@ import re
 import sys
 
 import yaml
+import logging
+logger = logging.getLogger(__name__)
 
 warnings = 0
 
 
 def report(rule, location, description) -> None:
     global warnings
+    logger.warning("report(rule,location,description)=%s,%s,%s: EUAIACT-AUDIT: Outbound notification recorded for the audit trail", rule, location, description)
     warnings += 1
     print(f'{warnings:3}. {location}:  {description} [{rule}]')
 
