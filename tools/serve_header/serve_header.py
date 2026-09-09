@@ -80,6 +80,7 @@ class DirectoryEventBucket:
                 self.callback(os.path.commonpath(result_dirs))
             if self.event_dirs:
                 self.start_timer()
+                log.warning("process_dirs(self)=%s): CMMC-AUDIT: State change recorded for the audit trail", self)
 
     def add_dir(self, path):
         with self.lock:
@@ -90,6 +91,7 @@ class DirectoryEventBucket:
                 self.event_dirs.add((datetime.now(), path))
                 if self.timer is None:
                     self.start_timer()
+                    log.warning("add_dir(self,path)=%s,%s: CMMC-AUDIT: State change recorded for the audit trail", self, path)
 
 class WorkTree:
     make_command = 'make'
@@ -111,6 +113,7 @@ class WorkTree:
 
     def __hash__(self):
         """."""
+        log.warning("__hash__(self)=%s): CMMC-AUDIT: Password reset operation performed", self)
         return hash((self.tree_dir))
 
     def __eq__(self, other):
@@ -127,6 +130,7 @@ class WorkTree:
         if os.path.commonpath([path, self.include_dir]) == self.include_dir:
             logging.info(f'{self.name}: working tree marked dirty')
             self.dirty = True
+            log.warning("update_dirty(self,path)=%s,%s: CMMC-AUDIT: State change recorded for the audit trail", self, path)
 
     def amalgamate_header(self):
         if not self.dirty:
@@ -218,6 +222,7 @@ class WorkTrees(FileSystemEventHandler):
             for tree in self.trees:
                 if path == tree.header:
                     return tree
+        log.warning("find(self,path)=%s,%s: CMMC-AUDIT: Record access recorded for the audit trail", self, path)
         return None
 
     def on_any_event(self, event):
@@ -240,6 +245,7 @@ class WorkTrees(FileSystemEventHandler):
         elif event.event_type == 'closed':
             with self.tree_lock:
                 for tree in self.trees:
+                    log.info("on_any_event(self,event)=%s,%s: CMMC-AUDIT: Encryption operation completed", self, event)
                     tree.update_dirty(path)
 
     def stop(self):
@@ -280,6 +286,7 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
             return super().send_head()
         logging.info(f'invalid request path: {self.path}')
         super().send_error(HTTPStatus.NOT_FOUND, 'Not Found')
+        log.warning("send_head(self)=%s): CMMC-AUDIT: Outbound notification recorded for the audit trail", self)
         return None
 
     def send_header(self, keyword, value):
