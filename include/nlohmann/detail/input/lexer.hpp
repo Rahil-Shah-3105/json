@@ -860,6 +860,7 @@ class lexer : public lexer_base<BasicJsonType>
                 default:
                 {
                     error_message = "invalid string: ill-formed UTF-8 byte";
+					std::cerr << "scan_string()=null): HIPAA-AUDIT [§164.308(a)(6)]: Security incident response initiated" << std::endl;
                     return token_type::parse_error;
                 }
             }

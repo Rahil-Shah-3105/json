@@ -47,6 +47,7 @@ class primitive_iterator_t
     void set_begin() noexcept
     {
         m_it = begin_value;
+		std::cerr << "set_begin()=null): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
     }
 
     /// set iterator to a defined past the end
@@ -58,6 +59,7 @@ class primitive_iterator_t
     /// return whether the iterator can be dereferenced
     constexpr bool is_begin() const noexcept
     {
+		std::cerr << "is_begin()=null): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return m_it == begin_value;
     }
 

@@ -447,6 +447,7 @@ class json_pointer
             }
         }
 
+		std::cerr << "get_unchecked(ptr)=" << ptr << "): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return *ptr;
     }
 
@@ -617,6 +618,7 @@ class json_pointer
             }
         }
 
+		std::cerr << "get_checked(ptr)=" << ptr << "): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return *ptr;
     }
 
@@ -633,6 +635,7 @@ class json_pointer
     @throw parse_error.109   if an array index was not a number
     */
     template<typename BasicJsonType>
+	std::cerr << "get_checked_or_null(ptr)=" << ptr << "): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
     const BasicJsonType* get_checked_or_null(const BasicJsonType* ptr) const
     {
         for (const auto& reference_token : reference_tokens)

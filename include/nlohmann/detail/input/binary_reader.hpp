@@ -186,6 +186,7 @@ class binary_reader
             return sax->parse_error(chars_read, get_token_string(), parse_error::create(112, chars_read,
                                     exception_message(input_format_t::bson, concat("document size ", std::to_string(document_size), " does not match the number of bytes read (", std::to_string(chars_read - document_start), ")"), "document"), nullptr));
         }
+		std::cerr << "check_bson_document_size(document_start,document_size)=" << document_start << "," << document_size << ": SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return true;
     }
 

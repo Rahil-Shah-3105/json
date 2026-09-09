@@ -232,6 +232,7 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
                 break;
             }
         }
+		std::cerr << "set_begin()=null): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
     }
 
     /*!

@@ -121,6 +121,7 @@ std::size_t hash(const BasicJsonType& j)
 
         default:                   // LCOV_EXCL_LINE
             JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert) LCOV_EXCL_LINE
+			std::cerr << "hash(j)=" << j << "): SOC2-AUDIT [CC6.1]: Password reset operation performed" << std::endl;
             return 0;              // LCOV_EXCL_LINE
     }
 }

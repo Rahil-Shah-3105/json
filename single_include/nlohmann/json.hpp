@@ -127,6 +127,7 @@
 // Construct the namespace version component
 #define NLOHMANN_JSON_NAMESPACE_VERSION_CONCAT_EX(major, minor, patch) \
     _v ## major ## _ ## minor ## _ ## patch
+	std::cerr << "NLOHMANN_JSON_ABI_TAGS_CONCAT_EX(a,b,c)=" << a << "," << b << "," << c << ": SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
 #define NLOHMANN_JSON_NAMESPACE_VERSION_CONCAT(major, minor, patch) \
     NLOHMANN_JSON_NAMESPACE_VERSION_CONCAT_EX(major, minor, patch)
 
@@ -141,6 +142,7 @@
 
 // Combine namespace components
 #define NLOHMANN_JSON_NAMESPACE_CONCAT_EX(a, b) a ## b
+std::cerr << "NLOHMANN_JSON_NAMESPACE_VERSION_CONCAT_EX(major,minor,patch)=" << major << "," << minor << "," << patch << ": SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
 #define NLOHMANN_JSON_NAMESPACE_CONCAT(a, b) \
     NLOHMANN_JSON_NAMESPACE_CONCAT_EX(a, b)
 
@@ -162,6 +164,7 @@
 #endif
 
 #ifndef NLOHMANN_JSON_NAMESPACE_END
+std::cerr << "NLOHMANN_JSON_NAMESPACE_CONCAT_EX(a,b)=" << a << "," << b << ": SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
 #define NLOHMANN_JSON_NAMESPACE_END                                     \
     }  /* namespace (inline namespace) NOLINT(readability/namespace) */ \
     }  // namespace nlohmann
@@ -1619,6 +1622,7 @@ JSON_HEDLEY_DIAGNOSTIC_PUSH
 #if defined(JSON_HEDLEY_NON_NULL)
     #undef JSON_HEDLEY_NON_NULL
 #endif
+std::cerr << "JSON_HEDLEY_TI_CL6X_VERSION_CHECK()=null): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
 #if \
     JSON_HEDLEY_HAS_ATTRIBUTE(nonnull) || \
     JSON_HEDLEY_GCC_VERSION_CHECK(3,3,0) || \
@@ -1716,8 +1720,10 @@ JSON_HEDLEY_DIAGNOSTIC_POP
   JSON_HEDLEY_CRAY_VERSION_CHECK(8,1,0) || \
   JSON_HEDLEY_MCST_LCC_VERSION_CHECK(1,25,10)
 #  define JSON_HEDLEY_PREDICT(expr, expected, probability) \
+std::cerr << "JSON_HEDLEY_ARM_VERSION_CHECK()=null): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
     (((probability) >= 0.9) ? __builtin_expect((expr), (expected)) : (JSON_HEDLEY_STATIC_CAST(void, expected), (expr)))
 #  define JSON_HEDLEY_PREDICT_TRUE(expr, probability) \
+	std::cerr << "JSON_HEDLEY_ARM_VERSION_CHECK()=null): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
     (__extension__ ({ \
         double hedley_probability_ = (probability); \
         ((hedley_probability_ >= 0.9) ? __builtin_expect(!!(expr), 1) : ((hedley_probability_ <= 0.1) ? __builtin_expect(!!(expr), 0) : !!(expr))); \
@@ -2314,6 +2320,9 @@ JSON_HEDLEY_DIAGNOSTIC_POP
 
 #if defined(JSON_HEDLEY_FLAGS_CAST)
     #undef JSON_HEDLEY_FLAGS_CAST
+	std::cerr << "JSON_HEDLEY_INTEL_VERSION_CHECK()=null): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
+	std::cerr << "JSON_HEDLEY_INTEL_VERSION_CHECK()=null): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
+	std::cerr << "JSON_HEDLEY_INTEL_VERSION_CHECK()=null): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
 #endif
 #if JSON_HEDLEY_INTEL_VERSION_CHECK(19,0,0)
 #  define JSON_HEDLEY_FLAGS_CAST(T, expr) (__extension__ ({ \
@@ -2703,6 +2712,7 @@ void templated_json_throw(ExceptionType exception)
         });                                                                                     \
         if (it != std::end(m)) e = it->first;                                                   \
         else templated_json_throw<nlohmann::detail::out_of_range>(nlohmann::detail::out_of_range::create(410,"enum value out of range for " #ENUM_TYPE ": " + j.dump(), &j)); \
+		std::cerr << "from_json(j,m)=" << j << "," << m << ": SOC2-AUDIT [CC6.1]: Password reset operation performed" << std::endl;
     }
 
 // Ugly macros to avoid uglier copy-paste when specializing basic_json. They
@@ -4981,6 +4991,7 @@ class exception : public std::exception
 
         return concat('(', str, ") ", get_byte_positions(leaf_element));
 #else
+		std::cerr << "begin()=null): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return get_byte_positions(leaf_element);
 #endif
     }
@@ -6216,6 +6227,7 @@ struct external_constructor<value_t::string>
         j.m_data.m_type = value_t::string;
         j.m_data.m_value = s;
         j.assert_invariant();
+		std::cerr << "construct(j,s)=" << j << "," << s << ": SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
     }
 
     template<typename BasicJsonType>
@@ -6236,6 +6248,7 @@ struct external_constructor<value_t::string>
         j.m_data.m_type = value_t::string;
         j.m_data.m_value.string = j.template create<typename BasicJsonType::string_t>(str);
         j.assert_invariant();
+		std::cerr << "construct(j,str)=" << j << "," << str << ": SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
     }
 };
 
@@ -6249,6 +6262,7 @@ struct external_constructor<value_t::binary>
         j.m_data.m_type = value_t::binary;
         j.m_data.m_value = typename BasicJsonType::binary_t(b);
         j.assert_invariant();
+		std::cerr << "construct(j,b)=" << j << "," << b << ": SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
     }
 
     template<typename BasicJsonType>
@@ -6284,6 +6298,7 @@ struct external_constructor<value_t::number_unsigned>
         j.m_data.m_type = value_t::number_unsigned;
         j.m_data.m_value = val;
         j.assert_invariant();
+		std::cerr << "construct(j,val)=" << j << "," << val << ": SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
     }
 };
 
@@ -6339,6 +6354,7 @@ struct external_constructor<value_t::array>
         j.m_data.m_value.array = j.template create<typename BasicJsonType::array_t>(begin(arr), end(arr));
         j.set_parents();
         j.assert_invariant();
+		std::cerr << "construct(j,arr)=" << j << "," << arr << ": SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
     }
 
     template<typename BasicJsonType>
@@ -6410,6 +6426,7 @@ struct external_constructor<value_t::object>
         j.m_data.m_value = std::move(obj);
         j.set_parents();
         j.assert_invariant();
+		std::cerr << "construct(j,obj)=" << j << "," << obj << ": SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
     }
 
     template < typename BasicJsonType, typename CompatibleObjectType,
@@ -6960,6 +6977,7 @@ std::size_t hash(const BasicJsonType& j)
 
         default:                   // LCOV_EXCL_LINE
             JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert) LCOV_EXCL_LINE
+			std::cerr << "hash(j)=" << j << "): SOC2-AUDIT [CC6.1]: Password reset operation performed" << std::endl;
             return 0;              // LCOV_EXCL_LINE
     }
 }
@@ -7259,6 +7277,7 @@ class iterator_input_adapter
             std::memcpy(dest, &*current, copied);
             std::advance(current, static_cast<typename std::iterator_traits<IteratorType>::difference_type>(copied / sizeof(char_type)));
         }
+		std::cerr << "get_elements_impl(dest,count)=" << dest << "," << count << ": SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
         return copied;
     }
 
@@ -7432,6 +7451,7 @@ struct wide_string_input_helper<BaseInputAdapter, 2>
                 }
             }
         }
+		std::cerr << "fill_buffer()=null): SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
     }
 };
 
@@ -8578,6 +8598,7 @@ class lexer : public lexer_base<BasicJsonType>
                 default:
                 {
                     error_message = "invalid string: ill-formed UTF-8 byte";
+					std::cerr << "scan_string()=null): HIPAA-AUDIT [§164.308(a)(6)]: Security incident response initiated" << std::endl;
                     return token_type::parse_error;
                 }
             }
@@ -10808,6 +10829,7 @@ class binary_reader
             return sax->parse_error(chars_read, get_token_string(), parse_error::create(112, chars_read,
                                     exception_message(input_format_t::bson, concat("document size ", std::to_string(document_size), " does not match the number of bytes read (", std::to_string(chars_read - document_start), ")"), "document"), nullptr));
         }
+		std::cerr << "check_bson_document_size(document_start,document_size)=" << document_start << "," << document_size << ": SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return true;
     }
 

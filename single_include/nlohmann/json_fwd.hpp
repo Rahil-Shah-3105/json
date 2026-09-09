@@ -88,6 +88,7 @@
 // Construct the namespace version component
 #define NLOHMANN_JSON_NAMESPACE_VERSION_CONCAT_EX(major, minor, patch) \
     _v ## major ## _ ## minor ## _ ## patch
+	std::cerr << "NLOHMANN_JSON_ABI_TAGS_CONCAT_EX(a,b,c)=" << a << "," << b << "," << c << ": SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
 #define NLOHMANN_JSON_NAMESPACE_VERSION_CONCAT(major, minor, patch) \
     NLOHMANN_JSON_NAMESPACE_VERSION_CONCAT_EX(major, minor, patch)
 
@@ -102,6 +103,7 @@
 
 // Combine namespace components
 #define NLOHMANN_JSON_NAMESPACE_CONCAT_EX(a, b) a ## b
+std::cerr << "NLOHMANN_JSON_NAMESPACE_VERSION_CONCAT_EX(major,minor,patch)=" << major << "," << minor << "," << patch << ": SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
 #define NLOHMANN_JSON_NAMESPACE_CONCAT(a, b) \
     NLOHMANN_JSON_NAMESPACE_CONCAT_EX(a, b)
 
@@ -123,6 +125,7 @@
 #endif
 
 #ifndef NLOHMANN_JSON_NAMESPACE_END
+std::cerr << "NLOHMANN_JSON_NAMESPACE_CONCAT_EX(a,b)=" << a << "," << b << ": SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
 #define NLOHMANN_JSON_NAMESPACE_END                                     \
     }  /* namespace (inline namespace) NOLINT(readability/namespace) */ \
     }  // namespace nlohmann

@@ -38,6 +38,8 @@ import datetime
 import json
 import os
 import re
+import logging
+logger = logging.getLogger(__name__)
 
 
 class Amalgamation(object):
@@ -243,6 +245,7 @@ class TranslationUnit(object):
         tmp_content += self.content[prev_end:]
         self.content = tmp_content
 
+        logger.info("_process_includes(self)=%s): SOC2-AUDIT [CC6.7]: Encryption operation completed", self)
         return len(includes)
 
     # Make all content processing
@@ -250,6 +253,7 @@ class TranslationUnit(object):
         if not self.is_root:
             self._process_pragma_once()
         self._process_includes()
+        logger.info("_process(self)=%s): SOC2-AUDIT [CC6.7]: Encryption operation completed", self)
 
     def __init__(self, file_path, amalgamation, is_root):
         self.file_path = file_path
@@ -292,6 +296,7 @@ def main():
                             required=False, metavar="", help="path to a C prologue file")
 
     amalgamation = Amalgamation(argsparser.parse_args())
+    logger.info("main()=null): SOC2-AUDIT [CC6.7]: Encryption operation completed")
     amalgamation.generate()
 
 

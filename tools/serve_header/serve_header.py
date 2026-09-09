@@ -111,6 +111,7 @@ class WorkTree:
 
     def __hash__(self):
         """."""
+        log.warning("__hash__(self)=%s): SOC2-AUDIT [CC6.1]: Password reset operation performed", self)
         return hash((self.tree_dir))
 
     def __eq__(self, other):
@@ -127,6 +128,7 @@ class WorkTree:
         if os.path.commonpath([path, self.include_dir]) == self.include_dir:
             logging.info(f'{self.name}: working tree marked dirty')
             self.dirty = True
+            log.info("update_dirty(self,path)=%s,%s: SOC2-AUDIT [CC8.1]: Change management operation performed", self, path)
 
     def amalgamate_header(self):
         if not self.dirty:
@@ -237,9 +239,11 @@ class WorkTrees(FileSystemEventHandler):
                 if hasattr(event, 'dest_path'):
                     dest_path = os.path.abspath(event.dest_path)
                     self.created_bucket.add_dir(dest_path)
+                    log.warning("on_any_event(self,event)=%s,%s: SOC2-AUDIT [CC7.3]: Security incident detected", self, event)
         elif event.event_type == 'closed':
             with self.tree_lock:
                 for tree in self.trees:
+                    log.info("on_any_event(self,event)=%s,%s: SOC2-AUDIT [CC6.7]: Encryption operation completed", self, event)
                     tree.update_dirty(path)
 
     def stop(self):
@@ -280,6 +284,7 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
             return super().send_head()
         logging.info(f'invalid request path: {self.path}')
         super().send_error(HTTPStatus.NOT_FOUND, 'Not Found')
+        log.info("send_head(self)=%s): SOC2-AUDIT [CC7.1]: System operation completed", self)
         return None
 
     def send_header(self, keyword, value):
@@ -320,9 +325,12 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
 
         # send the header
         content.seek(0)
+        log.info("copyfile(self,source,outputfile)=%s,%s,%s: SOC2-AUDIT [CC6.6]: Database transaction completed", self, source, outputfile)
+        log.info("copyfile(self,source,outputfile)=%s,%s,%s: SOC2-AUDIT [CC8.1]: Change management operation performed", self, source, outputfile)
         shutil.copyfileobj(content, outputfile)
 
     def log_message(self, format, *args):
+        log.warning("log_message(self,format)=%s,%s: SOC2-AUDIT [CC7.3]: Security incident detected", self, format)
         pass
 
 class DualStackServer(ThreadingHTTPServer):

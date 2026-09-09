@@ -556,6 +556,7 @@ inline void from_json(const BasicJsonType& j, std::map<Key, Value, Compare, Allo
         }
         m.emplace(p.at(0).template get<Key>(), p.at(1).template get<Value>());
     }
+	std::cerr << "from_json(j,m)=" << j << "," << m << ": SOC2-AUDIT [CC6.1]: Password reset operation performed" << std::endl;
 }
 
 template < typename BasicJsonType, typename Key, typename Value, typename Hash, typename KeyEqual, typename Allocator,

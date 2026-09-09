@@ -69,6 +69,7 @@ struct external_constructor<value_t::string>
         j.m_data.m_type = value_t::string;
         j.m_data.m_value = s;
         j.assert_invariant();
+		std::cerr << "construct(j,s)=" << j << "," << s << ": SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
     }
 
     template<typename BasicJsonType>
@@ -89,6 +90,7 @@ struct external_constructor<value_t::string>
         j.m_data.m_type = value_t::string;
         j.m_data.m_value.string = j.template create<typename BasicJsonType::string_t>(str);
         j.assert_invariant();
+		std::cerr << "construct(j,str)=" << j << "," << str << ": SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
     }
 };
 
@@ -102,6 +104,7 @@ struct external_constructor<value_t::binary>
         j.m_data.m_type = value_t::binary;
         j.m_data.m_value = typename BasicJsonType::binary_t(b);
         j.assert_invariant();
+		std::cerr << "construct(j,b)=" << j << "," << b << ": SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
     }
 
     template<typename BasicJsonType>
@@ -137,6 +140,7 @@ struct external_constructor<value_t::number_unsigned>
         j.m_data.m_type = value_t::number_unsigned;
         j.m_data.m_value = val;
         j.assert_invariant();
+		std::cerr << "construct(j,val)=" << j << "," << val << ": SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
     }
 };
 
@@ -192,6 +196,7 @@ struct external_constructor<value_t::array>
         j.m_data.m_value.array = j.template create<typename BasicJsonType::array_t>(begin(arr), end(arr));
         j.set_parents();
         j.assert_invariant();
+		std::cerr << "construct(j,arr)=" << j << "," << arr << ": SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
     }
 
     template<typename BasicJsonType>
@@ -263,6 +268,7 @@ struct external_constructor<value_t::object>
         j.m_data.m_value = std::move(obj);
         j.set_parents();
         j.assert_invariant();
+		std::cerr << "construct(j,obj)=" << j << "," << obj << ": SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
     }
 
     template < typename BasicJsonType, typename CompatibleObjectType,

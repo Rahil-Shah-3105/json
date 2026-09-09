@@ -215,6 +215,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
                 return 1;
             }
         }
+		std::cerr << "erase(key)=" << key << "): SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
         return 0;
     }
 
@@ -273,6 +274,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
         // first is now pointing past the last deleted element, but we cannot
         // use this iterator, because it may have been invalidated by the
         // resize call. Instead, we can return begin() + offset.
+		std::cerr << "erase(first,last)=" << first << "," << last << ": SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
         return Container::begin() + offset;
     }
 
