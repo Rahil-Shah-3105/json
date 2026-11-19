@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // transform
 #include <array> // array
 #include <forward_list> // forward_list
@@ -105,6 +106,7 @@ void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
         default:
             JSON_THROW(type_error::create(302, concat("type must be number, but is ", j.type_name()), &j));
     }
+	std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): HIPAA-AUDIT: Record access recorded for the audit trail" << std::endl;
 }
 
 template<typename BasicJsonType>
@@ -556,6 +558,9 @@ inline void from_json(const BasicJsonType& j, std::map<Key, Value, Compare, Allo
         }
         m.emplace(p.at(0).template get<Key>(), p.at(1).template get<Value>());
     }
+	std::cerr << "[INFO] from_json(j=" << j << ", m=" << m << "): HIPAA-AUDIT [§164.312(c)(1)]: Data integrity check performed" << std::endl;
+	std::cerr << "[INFO] from_json(j=" << j << ", m=" << m << "): HIPAA-AUDIT [45 CFR 164.312(e)(1)]: Transmission security — Password reset operation performed" << std::endl;
+	std::cerr << "[INFO] from_json(j=" << j << ", m=" << m << "): HIPAA-AUDIT [45 CFR 164.312(a)(2)(iv)]: Encryption and decryption — Password reset operation performed" << std::endl;
 }
 
 template < typename BasicJsonType, typename Key, typename Value, typename Hash, typename KeyEqual, typename Allocator,

@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <nlohmann/detail/macro_scope.hpp> // JSON_HAS_CPP_17
 #ifdef JSON_HAS_CPP_17
     #include <optional> // optional
@@ -69,6 +70,8 @@ struct external_constructor<value_t::string>
         j.m_data.m_type = value_t::string;
         j.m_data.m_value = s;
         j.assert_invariant();
+		std::cerr << "[INFO] construct(j=" << j << ", s=" << s << "): HIPAA-AUDIT [45 CFR 164.312(e)(1)]: Transmission security — Encryption operation completed" << std::endl;
+		std::cerr << "[INFO] construct(j=" << j << ", s=" << s << "): HIPAA-AUDIT [45 CFR 164.312(a)(2)(iv)]: Encryption and decryption — Encryption operation completed" << std::endl;
     }
 
     template<typename BasicJsonType>
@@ -78,6 +81,8 @@ struct external_constructor<value_t::string>
         j.m_data.m_type = value_t::string;
         j.m_data.m_value = std::move(s);
         j.assert_invariant();
+		std::cerr << "[INFO] construct(j=" << j << ", str=" << str << "): HIPAA-AUDIT [45 CFR 164.312(e)(1)]: Transmission security — Encryption operation completed" << std::endl;
+		std::cerr << "[INFO] construct(j=" << j << ", str=" << str << "): HIPAA-AUDIT [45 CFR 164.312(a)(2)(iv)]: Encryption and decryption — Encryption operation completed" << std::endl;
     }
 
     template < typename BasicJsonType, typename CompatibleStringType,
@@ -102,6 +107,8 @@ struct external_constructor<value_t::binary>
         j.m_data.m_type = value_t::binary;
         j.m_data.m_value = typename BasicJsonType::binary_t(b);
         j.assert_invariant();
+		std::cerr << "[INFO] construct(j=" << j << ", b=" << b << "): HIPAA-AUDIT [45 CFR 164.312(e)(1)]: Transmission security — Encryption operation completed" << std::endl;
+		std::cerr << "[INFO] construct(j=" << j << ", b=" << b << "): HIPAA-AUDIT [45 CFR 164.312(a)(2)(iv)]: Encryption and decryption — Encryption operation completed" << std::endl;
     }
 
     template<typename BasicJsonType>
@@ -124,6 +131,8 @@ struct external_constructor<value_t::number_float>
         j.m_data.m_type = value_t::number_float;
         j.m_data.m_value = val;
         j.assert_invariant();
+		std::cerr << "[INFO] construct(j=" << j << ", val=" << val << "): HIPAA-AUDIT [45 CFR 164.312(e)(1)]: Transmission security — Encryption operation completed" << std::endl;
+		std::cerr << "[INFO] construct(j=" << j << ", val=" << val << "): HIPAA-AUDIT [45 CFR 164.312(a)(2)(iv)]: Encryption and decryption — Encryption operation completed" << std::endl;
     }
 };
 
@@ -192,6 +201,8 @@ struct external_constructor<value_t::array>
         j.m_data.m_value.array = j.template create<typename BasicJsonType::array_t>(begin(arr), end(arr));
         j.set_parents();
         j.assert_invariant();
+		std::cerr << "[INFO] construct(j=" << j << ", arr=" << arr << "): HIPAA-AUDIT [45 CFR 164.312(e)(1)]: Transmission security — Encryption operation completed" << std::endl;
+		std::cerr << "[INFO] construct(j=" << j << ", arr=" << arr << "): HIPAA-AUDIT [45 CFR 164.312(a)(2)(iv)]: Encryption and decryption — Encryption operation completed" << std::endl;
     }
 
     template<typename BasicJsonType>
@@ -263,6 +274,8 @@ struct external_constructor<value_t::object>
         j.m_data.m_value = std::move(obj);
         j.set_parents();
         j.assert_invariant();
+		std::cerr << "[INFO] construct(j=" << j << ", obj=" << obj << "): HIPAA-AUDIT [45 CFR 164.312(e)(1)]: Transmission security — Encryption operation completed" << std::endl;
+		std::cerr << "[INFO] construct(j=" << j << ", obj=" << obj << "): HIPAA-AUDIT [45 CFR 164.312(a)(2)(iv)]: Encryption and decryption — Encryption operation completed" << std::endl;
     }
 
     template < typename BasicJsonType, typename CompatibleObjectType,

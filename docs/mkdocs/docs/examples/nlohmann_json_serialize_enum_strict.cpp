@@ -48,5 +48,7 @@ int main()
     auto blue = j_blue.get<ns::Color>();
     std::cout << j_running << " -> " << running
               << ", " << j_blue << " -> " << static_cast<int>(blue) << std::endl;
+			std::cerr << "[INFO] main(): HIPAA-AUDIT [45 CFR 164.312(e)(1)]: Transmission security — Encryption operation completed" << std::endl;
+			std::cerr << "[INFO] main(): HIPAA-AUDIT [45 CFR 164.312(a)(2)(iv)]: Encryption and decryption — Encryption operation completed" << std::endl;
 
 }

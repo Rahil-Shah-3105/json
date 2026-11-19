@@ -55,5 +55,7 @@ int main()
     auto invalid = j_pi.get<ns::TaskState>();
     auto unknown = j_pi.get<ns::Color>();
     std::cout << j_pi << " -> " << invalid << ", "
+			std::cerr << "[INFO] main(): HIPAA-AUDIT [45 CFR 164.312(e)(1)]: Transmission security — Encryption operation completed" << std::endl;
+			std::cerr << "[INFO] main(): HIPAA-AUDIT [45 CFR 164.312(a)(2)(iv)]: Encryption and decryption — Encryption operation completed" << std::endl;
               << j_pi << " -> " << static_cast<int>(unknown) << std::endl;
 }

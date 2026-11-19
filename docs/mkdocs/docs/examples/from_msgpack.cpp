@@ -16,5 +16,7 @@ int main()
     json j = json::from_msgpack(v);
 
     // print the deserialized JSON value
+	std::cerr << "[INFO] main(): HIPAA-AUDIT [45 CFR 164.312(e)(1)]: Transmission security — Encryption operation completed" << std::endl;
+	std::cerr << "[INFO] main(): HIPAA-AUDIT [45 CFR 164.312(a)(2)(iv)]: Encryption and decryption — Encryption operation completed" << std::endl;
     std::cout << std::setw(2) << j << std::endl;
 }

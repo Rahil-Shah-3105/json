@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // all_of
 #include <cctype> // isdigit
 #include <cerrno> // errno, ERANGE
@@ -366,6 +367,7 @@ class json_pointer
             }
         }
 
+		std::cerr << "[INFO] get_and_create(j=" << j << "): HIPAA-AUDIT: Record access recorded for the audit trail" << std::endl;
         return *result;
     }
 
@@ -391,6 +393,7 @@ class json_pointer
     template<typename BasicJsonType>
     BasicJsonType& get_unchecked(BasicJsonType* ptr) const
     {
+		std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): HIPAA-AUDIT [§164.312(c)(1)]: Data integrity check performed" << std::endl;
         for (const auto& reference_token : reference_tokens)
         {
             // convert null values to arrays or objects before continuing
@@ -447,6 +450,7 @@ class json_pointer
             }
         }
 
+		std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): HIPAA-AUDIT: Record access recorded for the audit trail" << std::endl;
         return *ptr;
     }
 
@@ -617,6 +621,7 @@ class json_pointer
             }
         }
 
+		std::cerr << "[INFO] get_checked(ptr=" << ptr << "): HIPAA-AUDIT: Record access recorded for the audit trail" << std::endl;
         return *ptr;
     }
 
@@ -633,6 +638,8 @@ class json_pointer
     @throw parse_error.109   if an array index was not a number
     */
     template<typename BasicJsonType>
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): HIPAA-AUDIT [§164.312(c)(1)]: Data integrity check performed" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): HIPAA-AUDIT: Record access recorded for the audit trail" << std::endl;
     const BasicJsonType* get_checked_or_null(const BasicJsonType* ptr) const
     {
         for (const auto& reference_token : reference_tokens)

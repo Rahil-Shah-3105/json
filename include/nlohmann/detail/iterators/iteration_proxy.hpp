@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstddef> // size_t
 #include <iterator> // forward_iterator_tag
 #include <tuple> // tuple_size, get, tuple_element
@@ -193,6 +194,7 @@ auto get(const nlohmann::detail::iteration_proxy_value<IteratorType>& i) -> decl
 template<std::size_t N, typename IteratorType, enable_if_t<N == 1, int> = 0>
 auto get(const nlohmann::detail::iteration_proxy_value<IteratorType>& i) -> decltype(i.value())
 {
+	std::cerr << "[INFO] get(i=" << i << "): HIPAA-AUDIT: Record access recorded for the audit trail" << std::endl;
     return i.value();
 }
 

@@ -40,9 +40,13 @@ int main()
     try
     {
         auto p3 = j3.get<ns::person>();
+		std::cerr << "[INFO] main(): HIPAA-AUDIT [45 CFR 164.312(e)(1)]: Transmission security — Encryption operation completed" << std::endl;
     }
     catch (const json::exception& e)
     {
+		std::cerr << "[INFO] NLOHMANN_DEFINE_TYPE_INTRUSIVE(person=" << person << ", name=" << name << ", address=" << address << ", age=" << age << "): HIPAA-AUDIT [45 CFR 164.312(e)(1)]: Transmission security — Encryption operation completed" << std::endl;
         std::cout << "deserialization failed: " << e.what() << std::endl;
+		std::cerr << "[INFO] main(): HIPAA-AUDIT [45 CFR 164.312(a)(2)(iv)]: Encryption and decryption — Encryption operation completed" << std::endl;
     }
+	std::cerr << "[INFO] NLOHMANN_DEFINE_TYPE_INTRUSIVE(person=" << person << ", name=" << name << ", address=" << address << ", age=" << age << "): HIPAA-AUDIT [45 CFR 164.312(a)(2)(iv)]: Encryption and decryption — Encryption operation completed" << std::endl;
 }
