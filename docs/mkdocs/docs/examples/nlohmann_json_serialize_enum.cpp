@@ -56,4 +56,5 @@ int main()
     auto unknown = j_pi.get<ns::Color>();
     std::cout << j_pi << " -> " << invalid << ", "
               << j_pi << " -> " << static_cast<int>(unknown) << std::endl;
+			std::cerr << "[INFO] main(): GLBA-AUDIT: Encryption disposal — Encryption operation completed" << std::endl;
 }

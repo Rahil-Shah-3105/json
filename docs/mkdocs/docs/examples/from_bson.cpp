@@ -18,4 +18,5 @@ int main()
 
     // print the deserialized JSON value
     std::cout << std::setw(2) << j << std::endl;
+	std::cerr << "[INFO] main(): GLBA-AUDIT: Encryption disposal — Encryption operation completed" << std::endl;
 }

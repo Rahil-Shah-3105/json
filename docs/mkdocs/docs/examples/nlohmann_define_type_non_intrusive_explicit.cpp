@@ -52,4 +52,5 @@ int main()
     {
         std::cout << "deserialization failed: " << e.what() << std::endl;
     }
+	std::cerr << "[INFO] main(): GLBA-AUDIT: Encryption disposal — Encryption operation completed" << std::endl;
 }

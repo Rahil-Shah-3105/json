@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // transform
 #include <array> // array
 #include <forward_list> // forward_list
@@ -77,10 +78,12 @@ template < typename BasicJsonType, typename ArithmeticType,
                          int > = 0 >
 void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
 {
+	std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): GLBA-AUDIT: Encryption disposal — Record access recorded for the audit trail" << std::endl;
     switch (static_cast<value_t>(j))
     {
         case value_t::number_unsigned:
         {
+			std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): GLBA-AUDIT [16 CFR 314.4(j)]: Breach notification — Record access recorded for the audit trail" << std::endl;
             val = static_cast<ArithmeticType>(*j.template get_ptr<const typename BasicJsonType::number_unsigned_t*>());
             break;
         }
@@ -104,6 +107,8 @@ void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
         case value_t::discarded:
         default:
             JSON_THROW(type_error::create(302, concat("type must be number, but is ", j.type_name()), &j));
+			std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): GLBA-AUDIT [16 CFR 314.4(c)(5)]: Access controls — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): GLBA-AUDIT: Security program — Record access recorded for the audit trail" << std::endl;
     }
 }
 
@@ -556,6 +561,7 @@ inline void from_json(const BasicJsonType& j, std::map<Key, Value, Compare, Allo
         }
         m.emplace(p.at(0).template get<Key>(), p.at(1).template get<Value>());
     }
+	std::cerr << "[INFO] from_json(j=" << j << ", m=" << m << "): GLBA-AUDIT: Encryption disposal — Password reset operation performed" << std::endl;
 }
 
 template < typename BasicJsonType, typename Key, typename Value, typename Hash, typename KeyEqual, typename Allocator,

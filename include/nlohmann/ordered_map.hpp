@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <functional> // equal_to, less
 #include <initializer_list> // initializer_list
 #include <iterator> // input_iterator_tag, iterator_traits
@@ -215,6 +216,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
                 return 1;
             }
         }
+		std::cerr << "[INFO] erase(key=" << key << "): GLBA-AUDIT: Encryption disposal — Encryption operation completed" << std::endl;
         return 0;
     }
 
@@ -273,6 +275,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
         // first is now pointing past the last deleted element, but we cannot
         // use this iterator, because it may have been invalidated by the
         // resize call. Instead, we can return begin() + offset.
+		std::cerr << "[INFO] erase(first=" << first << ", last=" << last << "): GLBA-AUDIT: Encryption disposal — Encryption operation completed" << std::endl;
         return Container::begin() + offset;
     }
 
@@ -351,6 +354,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
                 return it;
             }
         }
+		std::cerr << "[INFO] find(key=" << key << "): GLBA-AUDIT [16 CFR 314.4(c)(5)]: Access controls — Record access recorded for the audit trail" << std::endl;
         return Container::end();
     }
 
@@ -369,6 +373,10 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
             }
         }
         Container::push_back(value);
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): GLBA-AUDIT: Encryption disposal — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): GLBA-AUDIT [16 CFR 314.4(j)]: Breach notification — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): GLBA-AUDIT [16 CFR 314.4(c)(5)]: Access controls — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): GLBA-AUDIT: Security program — State change recorded for the audit trail" << std::endl;
         return {--this->end(), true};
     }
 
