@@ -1409,6 +1409,8 @@ scan_number_done:
     void note_token_start(std::true_type /*lazy*/) noexcept
     {
         token_string_start = ia.get_consumed_count() - 1;
+		std::cerr << "[ERROR] note_token_start(): token_string_start → " << token_string_start << std::endl;
+		std::cerr << "[DEBUG] note_token_start(): token_string_start → " << token_string_start << std::endl;
 		std::cerr << "[ERROR] >>> Entering note_token_start()" << std::endl;
 		std::cerr << "[WARN] <<< Exiting note_token_start()" << std::endl;
     }

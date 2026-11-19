@@ -429,6 +429,7 @@ class DualStackServer(ThreadingHTTPServer):
         self.worktrees = worktrees
         super().__init__(addr, HeaderRequestHandler)
         logger.debug("__init__(self=%s,addr=%s,worktrees=%s): self.worktrees → %s", self, addr, worktrees, self.worktrees, extra={"event.action": "__init__", "logrite.addr": addr, "logrite.worktrees": worktrees})
+        logger.warning("<<< Exiting __init__(addr=%s,worktrees=%s)", addr, worktrees, extra={"event.action": "__init__", "logrite.addr": addr, "logrite.worktrees": worktrees})
 
     def server_bind(self):
         logger.error(">>> Entering server_bind()", extra={"event.action": "server_bind"})
