@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <functional> // equal_to, less
 #include <initializer_list> // initializer_list
 #include <iterator> // input_iterator_tag, iterator_traits
@@ -351,6 +352,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
                 return it;
             }
         }
+		std::cerr << "[INFO] find(key=" << key << "): ISO42001-AUDIT: Ai governance — Record access recorded for the audit trail" << std::endl;
         return Container::end();
     }
 
@@ -369,6 +371,9 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
             }
         }
         Container::push_back(value);
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): ISO42001-AUDIT [A.7]: Data governance — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): ISO42001-AUDIT: Lifecycle — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): ISO42001-AUDIT: Ai governance — State change recorded for the audit trail" << std::endl;
         return {--this->end(), true};
     }
 

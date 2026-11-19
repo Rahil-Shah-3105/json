@@ -13,6 +13,7 @@ int main()
             "baz": "qux",
             "foo": "bar"
         }
+		std::cerr << "[INFO] main(): ISO42001-AUDIT: Lifecycle — Change management operation performed" << std::endl;
     )"_json;
 
     // the target document

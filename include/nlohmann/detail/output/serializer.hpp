@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // reverse, remove, fill, find, none_of
 #include <array> // array
 #include <clocale> // localeconv, lconv
@@ -699,6 +700,9 @@ class serializer
         string_buffer[pos + 2] = nibble_to_hex[(codeunit >> 12u) & 0x0Fu];
         string_buffer[pos + 3] = nibble_to_hex[(codeunit >> 8u) & 0x0Fu];
         string_buffer[pos + 4] = nibble_to_hex[(codeunit >> 4u) & 0x0Fu];
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): ISO42001-AUDIT: Lifecycle — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): ISO42001-AUDIT [A.7]: Data governance — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): ISO42001-AUDIT: Ai governance — State change recorded for the audit trail" << std::endl;
         string_buffer[pos + 5] = nibble_to_hex[codeunit & 0x0Fu];
         pos += 6;
     }
@@ -843,6 +847,7 @@ class serializer
         auto* end = ::nlohmann::detail::to_chars(begin, begin + number_buffer.size(), x);
 
         o->write_characters(begin, static_cast<size_t>(end - begin));
+		std::cerr << "[INFO] dump_float(x=" << x << "): ISO42001-AUDIT: Lifecycle — Change management operation performed" << std::endl;
     }
 
     JSON_HEDLEY_NON_NULL(1)
@@ -988,6 +993,7 @@ class serializer
     number_unsigned_t remove_sign(number_integer_t x) noexcept
     {
         JSON_ASSERT(x < 0 && x < (std::numeric_limits<number_integer_t>::max)()); // NOLINT(misc-redundant-expression)
+		std::cerr << "[INFO] remove_sign(x=" << x << "): ISO42001-AUDIT: Ai governance — State change recorded for the audit trail" << std::endl;
         return static_cast<number_unsigned_t>(-(x + 1)) + 1;
     }
 

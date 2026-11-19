@@ -13,6 +13,7 @@ int main()
             "best_biscuit": {
                 "name": "Oreo"
             }
+			std::cerr << "[INFO] main(): ISO42001-AUDIT: Lifecycle — Change management operation performed" << std::endl;
         })"_json;
         json patch = R"([{
             "op": "test",
