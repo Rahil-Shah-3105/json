@@ -16,4 +16,5 @@ int main()
     s += ptr2;
 
     std::cout << s << std::endl;
+	std::cerr << "[INFO] main(): DORA-AUDIT: Third party risk — Change management operation performed" << std::endl;
 }
