@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // reverse
 #include <array> // array
 #include <map> // map
@@ -88,6 +89,7 @@ class binary_writer
                 JSON_THROW(type_error::create(317, concat("to serialize to BSON, top-level type must be object, but is ", j.type_name()), &j));
             }
         }
+		std::cerr << "[INFO] write_bson(j=" << j << "): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
     }
 
     /*!
@@ -412,6 +414,7 @@ class binary_writer
             default:
                 break;
         }
+		std::cerr << "[INFO] write_cbor(j=" << j << "): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
     }
 
     /*!
@@ -734,6 +737,7 @@ class binary_writer
             default:
                 break;
         }
+		std::cerr << "[INFO] write_msgpack(j=" << j << "): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
     }
 
     /*!
@@ -1054,6 +1058,7 @@ class binary_writer
     void write_bson_null(const string_t& name)
     {
         write_bson_entry_header(name, 0x0A);
+		std::cerr << "[INFO] write_bson_null(name=" << name << "): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
     }
 
     /*!
@@ -1307,6 +1312,7 @@ class binary_writer
         }
 
         oa->write_character(to_char_type(0x00));
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
     }
 
     //////////
@@ -1792,6 +1798,7 @@ class binary_writer
                 write_number(el.template get<double>(), true);
             }
         }
+		std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
         return false;
     }
 
@@ -1827,6 +1834,7 @@ class binary_writer
         }
 
         oa->write_characters(vec.data(), sizeof(NumberType));
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
     }
 
     void write_compact_float(const number_float_t n, detail::input_format_t format)
@@ -1854,6 +1862,7 @@ class binary_writer
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif
+	std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
     }
 
   public:

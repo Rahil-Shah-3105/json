@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // transform
 #include <array> // array
 #include <forward_list> // forward_list
@@ -105,6 +106,7 @@ void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
         default:
             JSON_THROW(type_error::create(302, concat("type must be number, but is ", j.type_name()), &j));
     }
+	std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
 }
 
 template<typename BasicJsonType>

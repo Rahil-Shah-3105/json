@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <array> // array
 #include <clocale> // localeconv
 #include <cstddef> // size_t
@@ -173,6 +174,7 @@ class lexer : public lexer_base<BasicJsonType>
     {
         const auto* loc = localeconv();
         JSON_ASSERT(loc != nullptr);
+		std::cerr << "[INFO] get_decimal_point(): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
         return (loc->decimal_point == nullptr) ? '.' : *(loc->decimal_point);
     }
 
@@ -225,6 +227,7 @@ class lexer : public lexer_base<BasicJsonType>
         }
 
         JSON_ASSERT(0x0000 <= codepoint && codepoint <= 0xFFFF);
+		std::cerr << "[INFO] get_codepoint(): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
         return codepoint;
     }
 
@@ -389,6 +392,7 @@ class lexer : public lexer_base<BasicJsonType>
                                         error_message = "invalid string: surrogate U+D800..U+DBFF must be followed by U+DC00..U+DFFF";
                                         return token_type::parse_error;
                                     }
+									std::cerr << "[INFO] get(): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
                                 }
                                 else
                                 {
@@ -1363,6 +1367,7 @@ scan_number_done:
 #endif
 
         note_token_start(std::integral_constant<bool, lazy_token_string> {});
+		std::cerr << "[INFO] reset(): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
     }
 
     /// seekable adapter: remember where the current token starts so it can be
@@ -1459,6 +1464,7 @@ scan_number_done:
         }
 
         uncapture_char(std::integral_constant<bool, lazy_token_string> {});
+		std::cerr << "[INFO] unget(): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
     }
 
     /// seekable adapter: nothing was captured, so nothing to undo
@@ -1478,6 +1484,7 @@ scan_number_done:
     void add(char_int_type c)
     {
         token_buffer.push_back(static_cast<typename string_t::value_type>(c));
+		std::cerr << "[INFO] add(c=" << c << "): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
     }
 
   public:
@@ -1511,6 +1518,7 @@ scan_number_done:
         {
             token_buffer[decimal_point_position] = '.';
         }
+		std::cerr << "[INFO] get_string(): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
         return token_buffer;
     }
 
@@ -1580,6 +1588,7 @@ scan_number_done:
             }
         }
 
+		std::cerr << "[INFO] get_token_string(): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
         return result;
     }
 

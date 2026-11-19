@@ -28,6 +28,7 @@
     #pragma GCC diagnostic ignored "-Wignored-attributes"
 #endif
 
+#include "iostream"
 #include <algorithm> // all_of, find, for_each
 #include <cstddef> // nullptr_t, ptrdiff_t, size_t
 #include <functional> // hash, less
@@ -408,6 +409,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// helper for exception-safe object creation
     template<typename T, typename... Args>
     JSON_HEDLEY_RETURNS_NON_NULL
+	std::cerr << "[INFO] create(args=" << args << "): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
     static T* create(Args&& ... args)
     {
         AllocatorType<T> alloc;
@@ -768,6 +770,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                 break;
         }
 #endif
+	std::cerr << "[INFO] set_parents(): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
     }
 
     iterator set_parents(iterator it, std::ptrdiff_t count_set_parents)
@@ -818,6 +822,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         static_cast<void>(j);
         static_cast<void>(old_capacity);
 #endif
+		std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
         return j;
     }
 
@@ -1476,6 +1481,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         JSON_THROW(type_error::create(302, detail::concat("type must be boolean, but is ", type_name()), this));
+		std::cerr << "[INFO] get_impl(): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
     }
 
     /// get a pointer to the value (object)
@@ -1597,6 +1603,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         JSON_THROW(type_error::create(303, detail::concat("incompatible ReferenceType for get_ref, actual type is ", obj.type_name()), &obj));
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
     }
 
   public:
@@ -1622,6 +1629,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     constexpr auto get_ptr() const noexcept -> decltype(std::declval<const basic_json_t&>().get_impl_ptr(std::declval<PointerType>()))
     {
         // delegate the call to get_impl_ptr<>() const
+		std::cerr << "[INFO] get_ptr(): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
         return get_impl_ptr(static_cast<PointerType>(nullptr));
     }
 
@@ -1851,6 +1859,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     auto get() noexcept -> decltype(std::declval<basic_json_t&>().template get_ptr<PointerType>())
     {
         // delegate the call to get_ptr
+		std::cerr << "[INFO] get(): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
         return get_ptr<PointerType>();
     }
 
@@ -1877,6 +1886,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     ValueType & get_to(ValueType& v) const
     {
         v = *this;
+		std::cerr << "[INFO] get_to(v=" << v << "): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
         return v;
     }
 
@@ -1911,6 +1921,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     ReferenceType get_ref() const
     {
         // delegate call to get_ref_impl
+		std::cerr << "[INFO] get_ref(): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
         return get_ref_impl<ReferenceType>(*this);
     }
 
@@ -1991,6 +2002,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             JSON_THROW(type_error::create(302, detail::concat("type must be binary, but is ", type_name()), this));
         }
 
+		std::cerr << "[INFO] get_binary(): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
         return *get_ptr<const binary_t*>();
     }
 
@@ -2742,6 +2754,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             result.m_it.object_iterator = m_data.m_value.object->find(key);
         }
 
+		std::cerr << "[INFO] find(key=" << key << "): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
         return result;
     }
 
@@ -3348,6 +3361,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         // but the return value of insert is missing in GCC 4.8, so it is written this way instead.
 
         set_parents();
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
         return result;
     }
 
@@ -3369,6 +3383,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         JSON_THROW(type_error::create(309, detail::concat("cannot use insert() with ", type_name()), this));
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
     }
 
     /// @brief inserts element into array
@@ -3396,6 +3411,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         JSON_THROW(type_error::create(309, detail::concat("cannot use insert() with ", type_name()), this));
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
     }
 
     /// @brief inserts range of elements into array
@@ -3446,6 +3462,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         // insert to array and return iterator
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
         return insert_iterator(pos, ilist.begin(), ilist.end());
     }
 
@@ -3480,6 +3497,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     void update(const_reference j, bool merge_objects = false)
     {
         update(j.begin(), j.end(), merge_objects);
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
     }
 
     /// @brief updates a JSON object from another object, overwriting existing keys

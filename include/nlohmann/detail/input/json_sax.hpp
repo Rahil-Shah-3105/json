@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstddef>
 #include <string> // string
 #include <type_traits> // enable_if_t
@@ -820,6 +821,7 @@ class json_sax_dom_callback_parser
                 break;
             }
         }
+		std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
     }
 
     /*!

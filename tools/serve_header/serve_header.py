@@ -17,6 +17,7 @@ from watchdog.observers import Observer
 
 from http import HTTPStatus
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
+logger = logging.getLogger(__name__)
 
 CONFIG_FILE = 'serve_header.yml'
 MAKEFILE = 'Makefile'
@@ -80,6 +81,7 @@ class DirectoryEventBucket:
                 self.callback(os.path.commonpath(result_dirs))
             if self.event_dirs:
                 self.start_timer()
+                logger.info("process_dirs(self=%s): GEN-AUDIT: Security hygiene — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
 
     def add_dir(self, path):
         with self.lock:
@@ -90,6 +92,7 @@ class DirectoryEventBucket:
                 self.event_dirs.add((datetime.now(), path))
                 if self.timer is None:
                     self.start_timer()
+                    logger.info("add_dir(self=%s, path=%s): GEN-AUDIT: Security hygiene — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
 
 class WorkTree:
     make_command = 'make'
@@ -127,6 +130,7 @@ class WorkTree:
         if os.path.commonpath([path, self.include_dir]) == self.include_dir:
             logging.info(f'{self.name}: working tree marked dirty')
             self.dirty = True
+            logger.info("update_dirty(self=%s, path=%s): GEN-AUDIT: Security hygiene — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
 
     def amalgamate_header(self):
         if not self.dirty:
@@ -218,6 +222,7 @@ class WorkTrees(FileSystemEventHandler):
             for tree in self.trees:
                 if path == tree.header:
                     return tree
+        logger.info("find(self=%s, path=%s): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
         return None
 
     def on_any_event(self, event):
@@ -280,6 +285,7 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
             return super().send_head()
         logging.info(f'invalid request path: {self.path}')
         super().send_error(HTTPStatus.NOT_FOUND, 'Not Found')
+        logger.info("send_head(self=%s): GEN-AUDIT: Security hygiene — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
         return None
 
     def send_header(self, keyword, value):
