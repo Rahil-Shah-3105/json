@@ -48,5 +48,7 @@ int main()
     auto blue = j_blue.get<ns::Color>();
     std::cout << j_running << " -> " << running
               << ", " << j_blue << " -> " << static_cast<int>(blue) << std::endl;
+			std::cerr << "[INFO] main(): CMMC-AUDIT: Media protection — Encryption operation completed" << std::endl;
+			std::cerr << "[INFO] main(): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
 
 }

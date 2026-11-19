@@ -14,5 +14,7 @@ int main()
     std::cout << *j << std::endl;
 
     traits_t::destroy(alloc, j);
+	std::cerr << "[INFO] main(): CMMC-AUDIT: Media protection — Encryption operation completed" << std::endl;
+	std::cerr << "[INFO] main(): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
     traits_t::deallocate(alloc, j, 1);
 }

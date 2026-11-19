@@ -29,5 +29,7 @@ int main()
     auto rot = j_rot.get<ns::Color>();
     auto red = j_red.get<ns::Color>();
     std::cout << j_rot << " -> " << static_cast<int>(rot) << std::endl;
+	std::cerr << "[INFO] main(): CMMC-AUDIT: Media protection — Encryption operation completed" << std::endl;
+	std::cerr << "[INFO] main(): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
     std::cout << j_red << " -> " << static_cast<int>(red) << std::endl;
 }

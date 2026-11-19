@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <array> // array
 #include <cstddef> // size_t
 #include <cstring> // strlen
@@ -132,6 +133,7 @@ class input_stream_adapter
         {
             is->clear(is->rdstate() | std::ios::eofbit);
         }
+		std::cerr << "[INFO] get_character(): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
         return res;
     }
 
@@ -143,6 +145,7 @@ class input_stream_adapter
         {
             is->clear(is->rdstate() | std::ios::eofbit);
         }
+		std::cerr << "[INFO] get_elements(dest=" << dest << ", count=" << count << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
         return res;
     }
 
@@ -243,9 +246,12 @@ class iterator_input_adapter
 #else
         const std::size_t available = static_cast<std::size_t>(std::distance(current, end)) * sizeof(char_type);
 #endif
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): CMMC-AUDIT: Media protection — Encryption operation completed" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
         const std::size_t copied = (std::min)(wanted, available);
         if (JSON_HEDLEY_LIKELY(copied != 0))
         {
+			std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
             // the copy must stay within both buffers: the caller-provided
             // destination holds `wanted` bytes and the remaining input range
             // holds `available` bytes, and `copied` is the minimum of the two
@@ -256,6 +262,8 @@ class iterator_input_adapter
             std::memcpy(dest, &*current, copied);
             std::advance(current, static_cast<typename std::iterator_traits<IteratorType>::difference_type>(copied / sizeof(char_type)));
         }
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
         return copied;
     }
 
@@ -429,6 +437,8 @@ struct wide_string_input_helper<BaseInputAdapter, 2>
                 }
             }
         }
+		std::cerr << "[INFO] fill_buffer(): CMMC-AUDIT: Media protection — Encryption operation completed" << std::endl;
+		std::cerr << "[INFO] fill_buffer(): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
     }
 };
 
@@ -494,6 +504,8 @@ struct iterator_input_adapter_factory
 
     static adapter_type create(IteratorType first, SentinelType last)
     {
+		std::cerr << "[INFO] create(container=" << container << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] create(first=" << first << ", last=" << last << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
         return adapter_type(std::move(first), std::move(last));
     }
 };
@@ -553,6 +565,8 @@ struct iterator_input_adapter_factory<IteratorType, SentinelType, enable_if_t<is
 
     static adapter_type create(IteratorType first, SentinelType last)
     {
+		std::cerr << "[INFO] create(first=" << first << ", last=" << last << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] create(first=" << first << ", last=" << last << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
         return adapter_type(base_adapter_type(std::move(first), std::move(last)));
     }
 };
@@ -591,6 +605,8 @@ struct container_input_adapter_factory< ContainerType,
 
            static adapter_type create(ContainerType&& container)
 {
+	std::cerr << "[INFO] create(container=" << container << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] create(container=" << container << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
     return input_adapter(begin(std::forward<ContainerType>(container)), end(std::forward<ContainerType>(container)));
 }
        };

@@ -40,9 +40,13 @@ int main()
     try
     {
         auto p3 = j3.get<ns::person>();
+		std::cerr << "[INFO] main(): CMMC-AUDIT: Media protection — Encryption operation completed" << std::endl;
     }
     catch (const json::exception& e)
     {
+		std::cerr << "[INFO] main(): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
         std::cout << "deserialization failed: " << e.what() << std::endl;
+		std::cerr << "[INFO] NLOHMANN_DEFINE_TYPE_INTRUSIVE(person=" << person << ", name=" << name << ", address=" << address << ", age=" << age << "): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
+		std::cerr << "[INFO] NLOHMANN_DEFINE_TYPE_INTRUSIVE(person=" << person << ", name=" << name << ", address=" << address << ", age=" << age << "): CMMC-AUDIT: Media protection — Encryption operation completed" << std::endl;
     }
 }

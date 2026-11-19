@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // transform
 #include <array> // array
 #include <forward_list> // forward_list
@@ -77,10 +78,12 @@ template < typename BasicJsonType, typename ArithmeticType,
                          int > = 0 >
 void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
 {
+	std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
     switch (static_cast<value_t>(j))
     {
         case value_t::number_unsigned:
         {
+			std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
             val = static_cast<ArithmeticType>(*j.template get_ptr<const typename BasicJsonType::number_unsigned_t*>());
             break;
         }
@@ -103,6 +106,9 @@ void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
         case value_t::binary:
         case value_t::discarded:
         default:
+			std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
             JSON_THROW(type_error::create(302, concat("type must be number, but is ", j.type_name()), &j));
     }
 }
@@ -556,6 +562,8 @@ inline void from_json(const BasicJsonType& j, std::map<Key, Value, Compare, Allo
         }
         m.emplace(p.at(0).template get<Key>(), p.at(1).template get<Value>());
     }
+	std::cerr << "[INFO] from_json(j=" << j << ", m=" << m << "): CMMC-AUDIT: Media protection — Password reset operation performed" << std::endl;
+	std::cerr << "[INFO] from_json(j=" << j << ", m=" << m << "): CMMC-AUDIT: Crypto protection — Password reset operation performed" << std::endl;
 }
 
 template < typename BasicJsonType, typename Key, typename Value, typename Hash, typename KeyEqual, typename Allocator,

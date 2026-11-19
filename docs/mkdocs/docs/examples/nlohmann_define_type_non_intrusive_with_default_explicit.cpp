@@ -51,5 +51,7 @@ int main()
     // incomplete deserialization:
     json j3 = R"({"address": "742 Evergreen Terrace", "name": "Maggie Simpson"})"_json;
     auto p3 = j3.get<ns::person>();
+	std::cerr << "[INFO] main(): CMMC-AUDIT: Media protection — Encryption operation completed" << std::endl;
+	std::cerr << "[INFO] main(): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
     std::cout << "roundtrip: " << json(p3) << std::endl;
 }

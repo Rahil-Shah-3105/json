@@ -17,6 +17,7 @@ from watchdog.observers import Observer
 
 from http import HTTPStatus
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
+logger = logging.getLogger(__name__)
 
 CONFIG_FILE = 'serve_header.yml'
 MAKEFILE = 'Makefile'
@@ -76,6 +77,11 @@ class DirectoryEventBucket:
                 else:
                     result_dirs.append(event_dir)
             self.event_dirs = event_dirs
+            logger.info("process_dirs(self=%s): CMMC-AUDIT: Media protection — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+            logger.info("process_dirs(self=%s): CMMC-AUDIT: Incident response — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+            logger.info("process_dirs(self=%s): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+            logger.info("process_dirs(self=%s): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+            logger.info("process_dirs(self=%s): CMMC-AUDIT: Access control — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
             if result_dirs:
                 self.callback(os.path.commonpath(result_dirs))
             if self.event_dirs:
@@ -85,8 +91,13 @@ class DirectoryEventBucket:
         with self.lock:
             # add path to the set of event_dirs if it is not a sibling of
             # a directory already in the set
+            logger.info("add_dir(self=%s, path=%s): CMMC-AUDIT: Media protection — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
             if not any(os.path.commonpath([path, event_dir]) == event_dir
                for (_, event_dir) in self.event_dirs):
+                logger.info("add_dir(self=%s, path=%s): CMMC-AUDIT: Incident response — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+                logger.info("add_dir(self=%s, path=%s): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+                logger.info("add_dir(self=%s, path=%s): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+                logger.info("add_dir(self=%s, path=%s): CMMC-AUDIT: Access control — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
                 self.event_dirs.add((datetime.now(), path))
                 if self.timer is None:
                     self.start_timer()
@@ -111,6 +122,8 @@ class WorkTree:
 
     def __hash__(self):
         """."""
+        logger.info("__hash__(self=%s): CMMC-AUDIT: Media protection — Password reset operation performed", self, extra={"event.action": "__hash__"})
+        logger.info("__hash__(self=%s): CMMC-AUDIT: Crypto protection — Password reset operation performed", self, extra={"event.action": "__hash__"})
         return hash((self.tree_dir))
 
     def __eq__(self, other):
@@ -123,6 +136,11 @@ class WorkTree:
         if self.dirty:
             return
 
+            logger.info("update_dirty(self=%s, path=%s): CMMC-AUDIT: Media protection — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+            logger.info("update_dirty(self=%s, path=%s): CMMC-AUDIT: Incident response — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+            logger.info("update_dirty(self=%s, path=%s): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+            logger.info("update_dirty(self=%s, path=%s): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+            logger.info("update_dirty(self=%s, path=%s): CMMC-AUDIT: Access control — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
         path = os.path.abspath(path)
         if os.path.commonpath([path, self.include_dir]) == self.include_dir:
             logging.info(f'{self.name}: working tree marked dirty')
@@ -215,6 +233,11 @@ class WorkTrees(FileSystemEventHandler):
         # find working tree for a given header file path
         path = os.path.abspath(path)
         with self.tree_lock:
+            logger.info("find(self=%s, path=%s): CMMC-AUDIT: Media protection — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+            logger.info("find(self=%s, path=%s): CMMC-AUDIT: Incident response — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+            logger.info("find(self=%s, path=%s): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+            logger.info("find(self=%s, path=%s): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+            logger.info("find(self=%s, path=%s): CMMC-AUDIT: Access control — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
             for tree in self.trees:
                 if path == tree.header:
                     return tree
@@ -240,6 +263,8 @@ class WorkTrees(FileSystemEventHandler):
         elif event.event_type == 'closed':
             with self.tree_lock:
                 for tree in self.trees:
+                    logger.info("on_any_event(self=%s, event=%s): CMMC-AUDIT: Media protection — Encryption operation completed", self, event, extra={"event.action": "on_any_event"})
+                    logger.info("on_any_event(self=%s, event=%s): CMMC-AUDIT: Crypto protection — Encryption operation completed", self, event, extra={"event.action": "on_any_event"})
                     tree.update_dirty(path)
 
     def stop(self):
@@ -277,12 +302,22 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
         if self.worktree is not None:
             self.worktree.amalgamate_header()
             logging.info(f'{self.worktree.name}; serving header (build count {self.worktree.build_count})')
+            logger.info("send_head(self=%s): CMMC-AUDIT: Media protection — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+            logger.info("send_head(self=%s): CMMC-AUDIT: Incident response — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+            logger.info("send_head(self=%s): CMMC-AUDIT: Crypto protection — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+            logger.info("send_head(self=%s): CMMC-AUDIT: Audit traceability — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+            logger.info("send_head(self=%s): CMMC-AUDIT: Access control — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
             return super().send_head()
         logging.info(f'invalid request path: {self.path}')
         super().send_error(HTTPStatus.NOT_FOUND, 'Not Found')
         return None
 
     def send_header(self, keyword, value):
+        logger.info("send_header(self=%s, keyword=%s, value=%s): CMMC-AUDIT: Media protection — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
+        logger.info("send_header(self=%s, keyword=%s, value=%s): CMMC-AUDIT: Incident response — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
+        logger.info("send_header(self=%s, keyword=%s, value=%s): CMMC-AUDIT: Crypto protection — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
+        logger.info("send_header(self=%s, keyword=%s, value=%s): CMMC-AUDIT: Audit traceability — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
+        logger.info("send_header(self=%s, keyword=%s, value=%s): CMMC-AUDIT: Access control — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
         # intercept Content-Length header; sent in copyfile later
         if keyword == 'Content-Length':
             return

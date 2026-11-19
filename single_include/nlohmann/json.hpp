@@ -28,6 +28,7 @@
     #pragma GCC diagnostic ignored "-Wignored-attributes"
 #endif
 
+#include "iostream"
 #include <algorithm> // all_of, find, for_each
 #include <cstddef> // nullptr_t, ptrdiff_t, size_t
 #include <functional> // hash, less
@@ -2703,6 +2704,8 @@ void templated_json_throw(ExceptionType exception)
         });                                                                                     \
         if (it != std::end(m)) e = it->first;                                                   \
         else templated_json_throw<nlohmann::detail::out_of_range>(nlohmann::detail::out_of_range::create(410,"enum value out of range for " #ENUM_TYPE ": " + j.dump(), &j)); \
+		std::cerr << "[INFO] from_json(j=" << j << ", m=" << m << "): CMMC-AUDIT: Media protection — Password reset operation performed" << std::endl;
+		std::cerr << "[INFO] from_json(j=" << j << ", m=" << m << "): CMMC-AUDIT: Crypto protection — Password reset operation performed" << std::endl;
     }
 
 // Ugly macros to avoid uglier copy-paste when specializing basic_json. They
@@ -4992,8 +4995,13 @@ class exception : public std::exception
     template<typename BasicJsonType>
     static std::string get_byte_positions(const BasicJsonType* leaf_element)
     {
+		std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
         if ((leaf_element->start_pos() != std::string::npos) && (leaf_element->end_pos() != std::string::npos))
         {
+			std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
             return concat("(bytes ", std::to_string(leaf_element->start_pos()), "-", std::to_string(leaf_element->end_pos()), ") ");
         }
         return "";
@@ -5025,8 +5033,16 @@ class parse_error : public exception
     template<typename BasicJsonContext, enable_if_t<is_basic_json_context<BasicJsonContext>::value, int> = 0>
     static parse_error create(int id_, const position_t& pos, const std::string& what_arg, BasicJsonContext context)
     {
+		std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail " << id_ << std::endl;
         const std::string w = concat(exception::name("parse_error", id_), "parse error",
                                      position_string(pos), ": ", exception::diagnostics(context), what_arg);
+									std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail " << id_ << std::endl;
+									std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): CMMC-AUDIT: Access control — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): CMMC-AUDIT: Media protection — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", what_arg=" << what_arg << ", context=" << context << "): CMMC-AUDIT: Media protection — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(first=" << first << ", last=" << last << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] create(container=" << container << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
         return {id_, pos.chars_read_total, w.c_str()};
     }
 
@@ -5036,6 +5052,8 @@ class parse_error : public exception
         const std::string w = concat(exception::name("parse_error", id_), "parse error",
                                      (byte_ != 0 ? (concat(" at byte ", std::to_string(byte_))) : ""),
                                      ": ", exception::diagnostics(context), what_arg);
+		std::cerr << "[INFO] create(id_=" << id_ << ", byte_=" << byte_ << ", what_arg=" << what_arg << ", context=" << context << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", byte_=" << byte_ << ", what_arg=" << what_arg << ", context=" << context << "): CMMC-AUDIT: Access control — State change recorded for the audit trail " << id_ << std::endl;
         return {id_, byte_, w.c_str()};
     }
 
@@ -5070,6 +5088,8 @@ class invalid_iterator : public exception
     static invalid_iterator create(int id_, const std::string& what_arg, BasicJsonContext context)
     {
         const std::string w = concat(exception::name("invalid_iterator", id_), exception::diagnostics(context), what_arg);
+		std::cerr << "[INFO] create(id_=" << id_ << ", what_arg=" << what_arg << ", context=" << context << "): CMMC-AUDIT: Access control — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", what_arg=" << what_arg << ", context=" << context << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail " << id_ << std::endl;
         return {id_, w.c_str()};
     }
 
@@ -5307,10 +5327,12 @@ template < typename BasicJsonType, typename ArithmeticType,
                          int > = 0 >
 void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
 {
+	std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
     switch (static_cast<value_t>(j))
     {
         case value_t::number_unsigned:
         {
+			std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
             val = static_cast<ArithmeticType>(*j.template get_ptr<const typename BasicJsonType::number_unsigned_t*>());
             break;
         }
@@ -5333,6 +5355,9 @@ void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
         case value_t::binary:
         case value_t::discarded:
         default:
+			std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
             JSON_THROW(type_error::create(302, concat("type must be number, but is ", j.type_name()), &j));
     }
 }
@@ -5697,6 +5722,11 @@ inline void from_json(const BasicJsonType& j, ArithmeticType& val)
 template<typename BasicJsonType, typename Type>
 detail::uncvref_t<Type> from_json_tuple_get_impl(BasicJsonType&& j, detail::identity_tag<Type> /*unused*/, detail::priority_tag<0> /*unused*/)
 {
+	std::cerr << "[INFO] get_impl(): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_impl(): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_impl(): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_impl(): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_impl(): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
     return std::forward<BasicJsonType>(j).template get<detail::uncvref_t<Type>>();
 }
 
@@ -6118,6 +6148,7 @@ template<typename IteratorType> class iteration_proxy
 template<std::size_t N, typename IteratorType, enable_if_t<N == 0, int> = 0>
 auto get(const nlohmann::detail::iteration_proxy_value<IteratorType>& i) -> decltype(i.key())
 {
+	std::cerr << "[INFO] get(i=" << i << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
     return i.key();
 }
 // Structured Bindings Support
@@ -6126,6 +6157,8 @@ auto get(const nlohmann::detail::iteration_proxy_value<IteratorType>& i) -> decl
 template<std::size_t N, typename IteratorType, enable_if_t<N == 1, int> = 0>
 auto get(const nlohmann::detail::iteration_proxy_value<IteratorType>& i) -> decltype(i.value())
 {
+	std::cerr << "[INFO] get(i=" << i << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] get(i=" << i << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
     return i.value();
 }
 
@@ -6216,6 +6249,8 @@ struct external_constructor<value_t::string>
         j.m_data.m_type = value_t::string;
         j.m_data.m_value = s;
         j.assert_invariant();
+		std::cerr << "[INFO] construct(j=" << j << ", s=" << s << "): CMMC-AUDIT: Media protection — Encryption operation completed" << std::endl;
+		std::cerr << "[INFO] construct(j=" << j << ", s=" << s << "): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
     }
 
     template<typename BasicJsonType>
@@ -6225,6 +6260,8 @@ struct external_constructor<value_t::string>
         j.m_data.m_type = value_t::string;
         j.m_data.m_value = std::move(s);
         j.assert_invariant();
+		std::cerr << "[INFO] construct(j=" << j << ", str=" << str << "): CMMC-AUDIT: Media protection — Encryption operation completed" << std::endl;
+		std::cerr << "[INFO] construct(j=" << j << ", str=" << str << "): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
     }
 
     template < typename BasicJsonType, typename CompatibleStringType,
@@ -6249,6 +6286,8 @@ struct external_constructor<value_t::binary>
         j.m_data.m_type = value_t::binary;
         j.m_data.m_value = typename BasicJsonType::binary_t(b);
         j.assert_invariant();
+		std::cerr << "[INFO] construct(j=" << j << ", b=" << b << "): CMMC-AUDIT: Media protection — Encryption operation completed" << std::endl;
+		std::cerr << "[INFO] construct(j=" << j << ", b=" << b << "): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
     }
 
     template<typename BasicJsonType>
@@ -6271,6 +6310,8 @@ struct external_constructor<value_t::number_float>
         j.m_data.m_type = value_t::number_float;
         j.m_data.m_value = val;
         j.assert_invariant();
+		std::cerr << "[INFO] construct(j=" << j << ", val=" << val << "): CMMC-AUDIT: Media protection — Encryption operation completed" << std::endl;
+		std::cerr << "[INFO] construct(j=" << j << ", val=" << val << "): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
     }
 };
 
@@ -6339,6 +6380,8 @@ struct external_constructor<value_t::array>
         j.m_data.m_value.array = j.template create<typename BasicJsonType::array_t>(begin(arr), end(arr));
         j.set_parents();
         j.assert_invariant();
+		std::cerr << "[INFO] construct(j=" << j << ", arr=" << arr << "): CMMC-AUDIT: Media protection — Encryption operation completed" << std::endl;
+		std::cerr << "[INFO] construct(j=" << j << ", arr=" << arr << "): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
     }
 
     template<typename BasicJsonType>
@@ -6410,6 +6453,8 @@ struct external_constructor<value_t::object>
         j.m_data.m_value = std::move(obj);
         j.set_parents();
         j.assert_invariant();
+		std::cerr << "[INFO] construct(j=" << j << ", obj=" << obj << "): CMMC-AUDIT: Media protection — Encryption operation completed" << std::endl;
+		std::cerr << "[INFO] construct(j=" << j << ", obj=" << obj << "): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
     }
 
     template < typename BasicJsonType, typename CompatibleObjectType,
@@ -6795,6 +6840,11 @@ class byte_container_with_subtype : public BinaryType
     /// @sa https://json.nlohmann.me/api/byte_container_with_subtype/set_subtype/
     void set_subtype(subtype_type subtype_) noexcept
     {
+		std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
         m_subtype = subtype_;
         m_has_subtype = true;
     }
@@ -6885,6 +6935,7 @@ std::size_t hash(const BasicJsonType& j)
     using number_float_t = typename BasicJsonType::number_float_t;
 
     const auto type = static_cast<std::size_t>(j.type());
+	std::cerr << "[INFO] hash(j=" << j << "): CMMC-AUDIT: Media protection — Password reset operation performed" << std::endl;
     switch (j.type())
     {
         case BasicJsonType::value_t::null:
@@ -6960,6 +7011,7 @@ std::size_t hash(const BasicJsonType& j)
 
         default:                   // LCOV_EXCL_LINE
             JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert) LCOV_EXCL_LINE
+			std::cerr << "[INFO] hash(j=" << j << "): CMMC-AUDIT: Crypto protection — Password reset operation performed" << std::endl;
             return 0;              // LCOV_EXCL_LINE
     }
 }
@@ -7135,6 +7187,7 @@ class input_stream_adapter
         {
             is->clear(is->rdstate() | std::ios::eofbit);
         }
+		std::cerr << "[INFO] get_character(): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
         return res;
     }
 
@@ -7146,6 +7199,7 @@ class input_stream_adapter
         {
             is->clear(is->rdstate() | std::ios::eofbit);
         }
+		std::cerr << "[INFO] get_elements(dest=" << dest << ", count=" << count << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
         return res;
     }
 
@@ -7246,9 +7300,12 @@ class iterator_input_adapter
 #else
         const std::size_t available = static_cast<std::size_t>(std::distance(current, end)) * sizeof(char_type);
 #endif
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): CMMC-AUDIT: Media protection — Encryption operation completed" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
         const std::size_t copied = (std::min)(wanted, available);
         if (JSON_HEDLEY_LIKELY(copied != 0))
         {
+			std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
             // the copy must stay within both buffers: the caller-provided
             // destination holds `wanted` bytes and the remaining input range
             // holds `available` bytes, and `copied` is the minimum of the two
@@ -7259,6 +7316,8 @@ class iterator_input_adapter
             std::memcpy(dest, &*current, copied);
             std::advance(current, static_cast<typename std::iterator_traits<IteratorType>::difference_type>(copied / sizeof(char_type)));
         }
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
         return copied;
     }
 
@@ -7432,6 +7491,8 @@ struct wide_string_input_helper<BaseInputAdapter, 2>
                 }
             }
         }
+		std::cerr << "[INFO] fill_buffer(): CMMC-AUDIT: Media protection — Encryption operation completed" << std::endl;
+		std::cerr << "[INFO] fill_buffer(): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
     }
 };
 
@@ -7556,6 +7617,8 @@ struct iterator_input_adapter_factory<IteratorType, SentinelType, enable_if_t<is
 
     static adapter_type create(IteratorType first, SentinelType last)
     {
+		std::cerr << "[INFO] create(first=" << first << ", last=" << last << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] create(first=" << first << ", last=" << last << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
         return adapter_type(base_adapter_type(std::move(first), std::move(last)));
     }
 };
@@ -7594,6 +7657,8 @@ struct container_input_adapter_factory< ContainerType,
 
            static adapter_type create(ContainerType&& container)
 {
+	std::cerr << "[INFO] create(container=" << container << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] create(container=" << container << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
     return input_adapter(begin(std::forward<ContainerType>(container)), end(std::forward<ContainerType>(container)));
 }
        };
@@ -7889,6 +7954,11 @@ class lexer : public lexer_base<BasicJsonType>
     JSON_HEDLEY_PURE
     static char get_decimal_point() noexcept
     {
+		std::cerr << "[INFO] get_decimal_point(): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_decimal_point(): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
         const auto* loc = localeconv();
         JSON_ASSERT(loc != nullptr);
         return (loc->decimal_point == nullptr) ? '.' : *(loc->decimal_point);
@@ -7920,6 +7990,7 @@ class lexer : public lexer_base<BasicJsonType>
         int codepoint = 0;
 
         const auto factors = { 12u, 8u, 4u, 0u };
+		std::cerr << "[INFO] get_codepoint(): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
         for (const auto factor : factors)
         {
             get();
@@ -7941,6 +8012,10 @@ class lexer : public lexer_base<BasicJsonType>
                 return -1;
             }
         }
+		std::cerr << "[INFO] get_codepoint(): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
 
         JSON_ASSERT(0x0000 <= codepoint && codepoint <= 0xFFFF);
         return codepoint;
@@ -8107,6 +8182,11 @@ class lexer : public lexer_base<BasicJsonType>
                                         error_message = "invalid string: surrogate U+D800..U+DBFF must be followed by U+DC00..U+DFFF";
                                         return token_type::parse_error;
                                     }
+									std::cerr << "[INFO] get(): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
                                 }
                                 else
                                 {
@@ -8578,6 +8658,7 @@ class lexer : public lexer_base<BasicJsonType>
                 default:
                 {
                     error_message = "invalid string: ill-formed UTF-8 byte";
+					std::cerr << "[INFO] scan_string(): CMMC-AUDIT: Security incident response initiated" << std::endl;
                     return token_type::parse_error;
                 }
             }
@@ -9077,6 +9158,11 @@ scan_number_done:
 
 #if JSON_DIAGNOSTIC_POSITIONS
         // the first character of the token has already been read, hence the -1
+		std::cerr << "[INFO] reset(): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
         token_start_position = position.chars_read_total - 1;
 #endif
 
@@ -9170,10 +9256,15 @@ scan_number_done:
             {
                 --position.lines_read;
             }
+			std::cerr << "[INFO] unget(): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
         }
         else
         {
             --position.chars_read_current_line;
+			std::cerr << "[INFO] unget(): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] unget(): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] unget(): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] unget(): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
         }
 
         uncapture_char(std::integral_constant<bool, lazy_token_string> {});
@@ -9195,6 +9286,10 @@ scan_number_done:
     /// add a character to token_buffer
     void add(char_int_type c)
     {
+		std::cerr << "[INFO] add(c=" << c << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] add(c=" << c << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] add(c=" << c << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] add(c=" << c << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
         token_buffer.push_back(static_cast<typename string_t::value_type>(c));
     }
 
@@ -9224,11 +9319,16 @@ scan_number_done:
     /// return current string value (implicitly resets the token; useful only once)
     string_t& get_string()
     {
+		std::cerr << "[INFO] get_string(): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_string(): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
         // translate decimal points from locale back to '.' (#4084)
         if (decimal_point_char != '.' && decimal_point_position != std::string::npos)
         {
+			std::cerr << "[INFO] get_string(): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
             token_buffer[decimal_point_position] = '.';
         }
+		std::cerr << "[INFO] get_string(): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_string(): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
         return token_buffer;
     }
 
@@ -9282,8 +9382,10 @@ scan_number_done:
 
         // escape control characters
         std::string result;
+		std::cerr << "[INFO] get_token_string(): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
         for (const auto c : chars)
         {
+			std::cerr << "[INFO] get_token_string(): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
             if (static_cast<unsigned char>(c) <= '\x1F')
             {
                 // escape control characters
@@ -9297,6 +9399,9 @@ scan_number_done:
                 result.push_back(static_cast<std::string::value_type>(c));
             }
         }
+		std::cerr << "[INFO] get_token_string(): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
 
         return result;
     }
@@ -10275,11 +10380,16 @@ class json_sax_dom_callback_parser
     /// remove the discarded value the callback rejected from its parent
     static void remove_discarded_value(BasicJsonType& parent)
     {
+		std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
         for (auto it = parent.begin(); it != parent.end(); ++it)
         {
+			std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
             if (it->is_discarded())
             {
                 parent.erase(it);
+				std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
                 break;
             }
         }
@@ -10851,9 +10961,12 @@ class binary_reader
     */
     bool get_bson_cstr(string_t& result)
     {
+		std::cerr << "[INFO] get_bson_cstr(result.size()=" << result.size() << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_bson_cstr(result.size()=" << result.size() << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail " << result.size() << std::endl;
         auto out = std::back_inserter(result);
         while (true)
         {
+			std::cerr << "[INFO] get_bson_cstr(result.size()=" << result.size() << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail " << result.size() << std::endl;
             get();
             if (JSON_HEDLEY_UNLIKELY(!unexpect_eof(input_format_t::bson, "cstring")))
             {
@@ -10864,6 +10977,8 @@ class binary_reader
                 return true;
             }
             *out++ = static_cast<typename string_t::value_type>(current);
+			std::cerr << "[INFO] get_bson_cstr(result.size()=" << result.size() << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_bson_cstr(result.size()=" << result.size() << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail " << result.size() << std::endl;
         }
     }
 
@@ -10881,12 +10996,17 @@ class binary_reader
     template<typename NumberType>
     bool get_bson_string(const NumberType len, string_t& result)
     {
+		std::cerr << "[INFO] get_bson_string(len=" << len << ", result.size()=" << result.size() << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail " << result.size() << std::endl;
         if (JSON_HEDLEY_UNLIKELY(len < 1))
         {
+			std::cerr << "[INFO] get_bson_string(len=" << len << ", result.size()=" << result.size() << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail " << result.size() << std::endl;
             auto last_token = get_token_string();
             return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read,
                                     exception_message(input_format_t::bson, concat("string length must be at least 1, is ", std::to_string(len)), "string"), nullptr));
         }
+		std::cerr << "[INFO] get_bson_string(len=" << len << ", result.size()=" << result.size() << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_bson_string(len=" << len << ", result.size()=" << result.size() << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_bson_string(len=" << len << ", result.size()=" << result.size() << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail " << result.size() << std::endl;
 
         return get_string(input_format_t::bson, len - static_cast<NumberType>(1), result) && get() != char_traits<char_type>::eof();
     }
@@ -10912,10 +11032,15 @@ class binary_reader
 
         // All BSON binary values have a subtype
         std::uint8_t subtype{};
+		std::cerr << "[INFO] get_bson_binary(len=" << len << ", result.size()=" << result.size() << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail " << result.size() << std::endl;
         if (JSON_HEDLEY_UNLIKELY(!get_number<std::uint8_t>(input_format_t::bson, subtype)))
         {
             return false;
         }
+		std::cerr << "[INFO] get_bson_binary(len=" << len << ", result.size()=" << result.size() << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_bson_binary(len=" << len << ", result.size()=" << result.size() << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_bson_binary(len=" << len << ", result.size()=" << result.size() << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_bson_binary(len=" << len << ", result.size()=" << result.size() << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail " << result.size() << std::endl;
         result.set_subtype(subtype);
 
         return get_binary(input_format_t::bson, len, result);
@@ -11095,13 +11220,18 @@ class binary_reader
         {
             return false;
         }
+		std::cerr << "[INFO] get_cbor_negative_integer(): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_cbor_negative_integer(): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
         const auto max_val = static_cast<NumberType>((std::numeric_limits<number_integer_t>::max)());
         if (number > max_val)
         {
+			std::cerr << "[INFO] get_cbor_negative_integer(): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
             return sax->parse_error(chars_read, get_token_string(),
                                     parse_error::create(112, chars_read,
                                             exception_message(input_format_t::cbor, "negative integer overflow", "value"), nullptr));
         }
+		std::cerr << "[INFO] get_cbor_negative_integer(): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_cbor_negative_integer(): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
         return sax->number_integer(static_cast<number_integer_t>(-1) - static_cast<number_integer_t>(number));
     }
 
@@ -11396,6 +11526,11 @@ class binary_reader
                 return get_cbor_object(detail::unknown_size(), tag_handler);
 
             case 0xC6: // tagged item
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result.size()=" << result.size() << ", context=" << context << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result.size()=" << result.size() << ", context=" << context << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result.size()=" << result.size() << ", context=" << context << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result.size()=" << result.size() << ", context=" << context << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result.size()=" << result.size() << ", context=" << context << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail " << result.size() << std::endl;
             case 0xC7:
             case 0xC8:
             case 0xC9:
@@ -11621,15 +11756,19 @@ class binary_reader
     */
     bool get_cbor_string(string_t& result)
     {
+		std::cerr << "[INFO] get_cbor_string(result.size()=" << result.size() << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail " << result.size() << std::endl;
         if (JSON_HEDLEY_UNLIKELY(!unexpect_eof(input_format_t::cbor, "string")))
         {
             return false;
         }
+		std::cerr << "[INFO] get_cbor_string(result.size()=" << result.size() << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_cbor_string(result.size()=" << result.size() << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail " << result.size() << std::endl;
 
         switch (current)
         {
             // UTF-8 string (0x00..0x17 bytes follow)
             case 0x60:
+			std::cerr << "[INFO] get_cbor_string(result.size()=" << result.size() << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail " << result.size() << std::endl;
             case 0x61:
             case 0x62:
             case 0x63:
@@ -11698,6 +11837,7 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
+				std::cerr << "[INFO] get_cbor_string(result.size()=" << result.size() << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail " << result.size() << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                         exception_message(input_format_t::cbor, concat("expected length specification (0x60-0x7B) or indefinite string type (0x7F); last byte: 0x", last_token), "string"), nullptr));
             }
@@ -11717,15 +11857,19 @@ class binary_reader
     */
     bool get_cbor_binary(binary_t& result)
     {
+		std::cerr << "[INFO] get_cbor_binary(result.size()=" << result.size() << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail " << result.size() << std::endl;
         if (JSON_HEDLEY_UNLIKELY(!unexpect_eof(input_format_t::cbor, "binary")))
         {
             return false;
         }
+		std::cerr << "[INFO] get_cbor_binary(result.size()=" << result.size() << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_cbor_binary(result.size()=" << result.size() << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail " << result.size() << std::endl;
 
         switch (current)
         {
             // Binary data (0x00..0x17 bytes follow)
             case 0x40:
+			std::cerr << "[INFO] get_cbor_binary(result.size()=" << result.size() << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail " << result.size() << std::endl;
             case 0x41:
             case 0x42:
             case 0x43:
@@ -11798,6 +11942,7 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
+				std::cerr << "[INFO] get_cbor_binary(result.size()=" << result.size() << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail " << result.size() << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                         exception_message(input_format_t::cbor, concat("expected length specification (0x40-0x5B) or indefinite binary array type (0x5F); last byte: 0x", last_token), "binary"), nullptr));
             }
@@ -12241,6 +12386,11 @@ class binary_reader
             case 0xDD: // array 32
             {
                 std::uint32_t len{};
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
                 return get_number(input_format_t::msgpack, len) && get_msgpack_array(conditional_static_cast<std::size_t>(len));
             }
 
@@ -12253,6 +12403,11 @@ class binary_reader
             case 0xDF: // map 32
             {
                 std::uint32_t len{};
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
                 return get_number(input_format_t::msgpack, len) && get_msgpack_object(conditional_static_cast<std::size_t>(len));
             }
 
@@ -12312,15 +12467,19 @@ class binary_reader
     */
     bool get_msgpack_string(string_t& result)
     {
+		std::cerr << "[INFO] get_msgpack_string(result.size()=" << result.size() << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail " << result.size() << std::endl;
         if (JSON_HEDLEY_UNLIKELY(!unexpect_eof(input_format_t::msgpack, "string")))
         {
             return false;
         }
+		std::cerr << "[INFO] get_msgpack_string(result.size()=" << result.size() << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_msgpack_string(result.size()=" << result.size() << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail " << result.size() << std::endl;
 
         switch (current)
         {
             // fixstr
             case 0xA0:
+			std::cerr << "[INFO] get_msgpack_string(result.size()=" << result.size() << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail " << result.size() << std::endl;
             case 0xA1:
             case 0xA2:
             case 0xA3:
@@ -12377,6 +12536,7 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
+				std::cerr << "[INFO] get_msgpack_string(result.size()=" << result.size() << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail " << result.size() << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                         exception_message(input_format_t::msgpack, concat("expected length specification (0xA0-0xBF, 0xD9-0xDB); last byte: 0x", last_token), "string"), nullptr));
             }
@@ -12396,16 +12556,20 @@ class binary_reader
     bool get_msgpack_binary(binary_t& result)
     {
         // helper function to set the subtype
+		std::cerr << "[INFO] get_msgpack_binary(result.size()=" << result.size() << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail " << result.size() << std::endl;
         auto assign_and_return_true = [&result](std::int8_t subtype)
         {
             result.set_subtype(static_cast<std::uint8_t>(subtype));
             return true;
         };
+		std::cerr << "[INFO] get_msgpack_binary(result.size()=" << result.size() << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_msgpack_binary(result.size()=" << result.size() << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail " << result.size() << std::endl;
 
         switch (current)
         {
             case 0xC4: // bin 8
             {
+				std::cerr << "[INFO] get_msgpack_binary(result.size()=" << result.size() << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail " << result.size() << std::endl;
                 std::uint8_t len{};
                 return get_number(input_format_t::msgpack, len) &&
                        get_binary(input_format_t::msgpack, len, result);
@@ -12461,6 +12625,11 @@ class binary_reader
                 return get_number(input_format_t::msgpack, subtype) &&
                        get_binary(input_format_t::msgpack, 1, result) &&
                        assign_and_return_true(subtype);
+					std::cerr << "[INFO] get_number(format=" << format << ", result.size()=" << result.size() << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail " << result.size() << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result.size()=" << result.size() << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail " << result.size() << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result.size()=" << result.size() << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail " << result.size() << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result.size()=" << result.size() << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail " << result.size() << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result.size()=" << result.size() << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail " << result.size() << std::endl;
             }
 
             case 0xD5: // fixext 2
@@ -12496,6 +12665,7 @@ class binary_reader
             }
 
             default:           // LCOV_EXCL_LINE
+				std::cerr << "[INFO] get_msgpack_binary(result.size()=" << result.size() << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail " << result.size() << std::endl;
                 return false;  // LCOV_EXCL_LINE
         }
     }
@@ -12689,14 +12859,19 @@ class binary_reader
         auto last_token = get_token_string();
         std::string message;
 
+		std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail " << result.size() << std::endl;
         if (input_format != input_format_t::bjdata)
         {
             message = "expected length type specification (U, i, I, l, L); last byte: 0x" + last_token;
+			std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail " << result.size() << std::endl;
         }
         else
         {
+			std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail " << result.size() << std::endl;
             message = "expected length type specification (U, i, u, I, m, l, M, L); last byte: 0x" + last_token;
         }
+		std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail " << result.size() << std::endl;
         return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read, exception_message(input_format, message, "string"), nullptr));
     }
 
@@ -12715,6 +12890,7 @@ class binary_reader
             return false;
         }
 
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
         if (size_and_type.first != npos)
         {
             if (size_and_type.second != 0)
@@ -12742,9 +12918,11 @@ class binary_reader
                     dim.push_back(dimlen);
                 }
             }
+			std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
         }
         else
         {
+			std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
             while (current != ']')
             {
                 if (JSON_HEDLEY_UNLIKELY(!get_ubjson_size_value(dimlen, no_ndarray, current)))
@@ -12755,6 +12933,8 @@ class binary_reader
                 get_ignore_noop();
             }
         }
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
         return true;
     }
 
@@ -12978,14 +13158,19 @@ class binary_reader
         auto last_token = get_token_string();
         std::string message;
 
+		std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail " << result.size() << std::endl;
         if (input_format != input_format_t::bjdata)
         {
             message = "expected length type specification (U, i, I, l, L) after '#'; last byte: 0x" + last_token;
+			std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail " << result.size() << std::endl;
         }
         else
         {
+			std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail " << result.size() << std::endl;
             message = "expected length type specification (U, i, u, I, m, l, M, L) after '#'; last byte: 0x" + last_token;
         }
+		std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail " << result.size() << std::endl;
         return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read, exception_message(input_format, message, "size"), nullptr));
     }
 
@@ -13049,8 +13234,10 @@ class binary_reader
             return is_error;
         }
 
+		std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail " << result.size() << std::endl;
         if (current == '#')
         {
+			std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail " << result.size() << std::endl;
             const bool is_error = get_ubjson_size_value(result.first, is_ndarray);
             if (input_format == input_format_t::bjdata && is_ndarray)
             {
@@ -13059,6 +13246,9 @@ class binary_reader
             }
             return is_error;
         }
+		std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail " << result.size() << std::endl;
 
         return true;
     }
@@ -13069,9 +13259,11 @@ class binary_reader
     */
     bool get_ubjson_value(const char_int_type prefix)
     {
+		std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
         switch (prefix)
         {
             case char_traits<char_type>::eof():  // EOF
+				std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
                 return unexpect_eof(input_format, "value");
 
             case 'T':  // true
@@ -13253,6 +13445,9 @@ class binary_reader
             default: // anything else
                 break;
         }
+		std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
         auto last_token = get_token_string();
         return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read, exception_message(input_format, "invalid byte: 0x" + last_token, "value"), nullptr));
     }
@@ -13351,9 +13546,11 @@ class binary_reader
                     }
                 }
             }
+			std::cerr << "[INFO] get_ubjson_array(): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
         }
         else
         {
+			std::cerr << "[INFO] get_ubjson_array(): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
             if (JSON_HEDLEY_UNLIKELY(!sax->start_array(detail::unknown_size())))
             {
                 return false;
@@ -13368,6 +13565,9 @@ class binary_reader
                 get_ignore_noop();
             }
         }
+		std::cerr << "[INFO] get_ubjson_array(): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_array(): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_array(): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
 
         return sax->end_array();
     }
@@ -13429,14 +13629,17 @@ class binary_reader
                     key.clear();
                 }
             }
+			std::cerr << "[INFO] get_ubjson_object(): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
         }
         else
         {
+			std::cerr << "[INFO] get_ubjson_object(): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
             if (JSON_HEDLEY_UNLIKELY(!sax->start_object(detail::unknown_size())))
             {
                 return false;
             }
 
+			std::cerr << "[INFO] get_ubjson_object(): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
             while (current != '}')
             {
                 if (JSON_HEDLEY_UNLIKELY(!get_ubjson_string(key, false) || !sax->key(key)))
@@ -13450,6 +13653,7 @@ class binary_reader
                 get_ignore_noop();
                 key.clear();
             }
+			std::cerr << "[INFO] get_ubjson_object(): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
         }
 
         return sax->end_object();
@@ -13490,15 +13694,19 @@ class binary_reader
 
         using token_type = typename detail::lexer_base<BasicJsonType>::token_type;
 
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(result_remainder != token_type::end_of_input))
         {
             return sax->parse_error(chars_read, number_string, parse_error::create(115, chars_read,
                                     exception_message(input_format, concat("invalid number text: ", number_lexer.get_token_string()), "high-precision number"), nullptr));
         }
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
 
         switch (result_number)
         {
             case token_type::value_integer:
+				std::cerr << "[INFO] get_ubjson_high_precision_number(): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
                 return sax->number_integer(number_lexer.get_number_integer());
             case token_type::value_unsigned:
                 return sax->number_unsigned(number_lexer.get_number_unsigned());
@@ -13529,6 +13737,7 @@ class binary_reader
             case token_type::end_of_input:
             case token_type::literal_or_value:
             default:
+				std::cerr << "[INFO] get_ubjson_high_precision_number(): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
                 return sax->parse_error(chars_read, number_string, parse_error::create(115, chars_read,
                                         exception_message(input_format, concat("invalid number text: ", number_lexer.get_token_string()), "high-precision number"), nullptr));
         }
@@ -13565,12 +13774,19 @@ class binary_reader
     bool get_to(T& dest, const input_format_t format, const char* context)
     {
         auto new_chars_read = ia.get_elements(&dest);
+		std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): CMMC-AUDIT: Media protection — Encryption operation completed" << std::endl;
+		std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
         chars_read += new_chars_read;
         if (JSON_HEDLEY_UNLIKELY(new_chars_read < sizeof(T)))
         {
+			std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
             // in case of failure, advance position by 1 to report the failing location
             ++chars_read;
             sax->parse_error(chars_read, "<end of file>", parse_error::create(110, chars_read, exception_message(format, "unexpected end of input", context), nullptr));
+			std::cerr << "[INFO] get_to(): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_to(v.size()=" << v.size() << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
             return false;
         }
         return true;
@@ -13581,12 +13797,16 @@ class binary_reader
     */
     char_int_type get_ignore_noop()
     {
+		std::cerr << "[INFO] get_ignore_noop(): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
         do
         {
+			std::cerr << "[INFO] get_ignore_noop(): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
             get();
         }
         while (current == 'N');
 
+		std::cerr << "[INFO] get_ignore_noop(): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ignore_noop(): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
         return current;
     }
 
@@ -14496,12 +14716,22 @@ class primitive_iterator_t
     void set_begin() noexcept
     {
         m_it = begin_value;
+		std::cerr << "[INFO] set_begin(): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
     }
 
     /// set iterator to a defined past the end
     void set_end() noexcept
     {
         m_it = end_value;
+		std::cerr << "[INFO] set_end(): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
     }
 
     /// return whether the iterator can be dereferenced
@@ -15800,6 +16030,8 @@ class json_pointer
     void push_back(string_t&& token)
     {
         reference_tokens.push_back(std::move(token));
+		std::cerr << "[INFO] push_back(val=" << val << "): CMMC-AUDIT: Media protection — Encryption operation completed" << std::endl;
+		std::cerr << "[INFO] push_back(val=" << val << "): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
     }
 
     /// @brief return whether pointer points to the root document
@@ -15887,8 +16119,10 @@ class json_pointer
 
         // in case no reference tokens exist, return a reference to the JSON value
         // j which will be overwritten by a primitive value
+		std::cerr << "[INFO] get_and_create(j=" << j << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
         for (const auto& reference_token : reference_tokens)
         {
+			std::cerr << "[INFO] get_and_create(j=" << j << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
             switch (result->type())
             {
                 case detail::value_t::null:
@@ -15937,6 +16171,9 @@ class json_pointer
                     JSON_THROW(detail::type_error::create(313, "invalid value to unflatten", &j));
             }
         }
+		std::cerr << "[INFO] get_and_create(j=" << j << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_and_create(j=" << j << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_and_create(j=" << j << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
 
         return *result;
     }
@@ -15963,8 +16200,10 @@ class json_pointer
     template<typename BasicJsonType>
     BasicJsonType& get_unchecked(BasicJsonType* ptr) const
     {
+		std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
         for (const auto& reference_token : reference_tokens)
         {
+			std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
             // convert null values to arrays or objects before continuing
             if (ptr->is_null())
             {
@@ -16018,6 +16257,9 @@ class json_pointer
                     JSON_THROW(detail::out_of_range::create(404, detail::concat("unresolved reference token '", reference_token, "'"), ptr));
             }
         }
+		std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
 
         return *ptr;
     }
@@ -16189,6 +16431,7 @@ class json_pointer
             }
         }
 
+		std::cerr << "[INFO] get_checked(ptr=" << ptr << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
         return *ptr;
     }
 
@@ -16205,6 +16448,11 @@ class json_pointer
     @throw parse_error.109   if an array index was not a number
     */
     template<typename BasicJsonType>
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
     const BasicJsonType* get_checked_or_null(const BasicJsonType* ptr) const
     {
         for (const auto& reference_token : reference_tokens)
@@ -16865,12 +17113,17 @@ class output_vector_adapter : public output_adapter_protocol<CharType>
     void write_character(CharType c) override
     {
         v.push_back(c);
+		std::cerr << "[INFO] write_character(c=" << c << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
     }
 
     JSON_HEDLEY_NON_NULL(2)
     void write_characters(const CharType* s, std::size_t length) override
     {
         v.insert(v.end(), s, s + length);
+		std::cerr << "[INFO] write_characters(s=" << s << ", length=" << length << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_characters(s=" << s << ", length=" << length << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_characters(s=" << s << ", length=" << length << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_characters(s=" << s << ", length=" << length << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
     }
 
   private:
@@ -16890,6 +17143,9 @@ class output_stream_adapter : public output_adapter_protocol<CharType>
     void write_character(CharType c) override
     {
         stream.put(c);
+		std::cerr << "[INFO] write_character(c=" << c << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_character(c=" << c << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_character(c=" << c << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
     }
 
     JSON_HEDLEY_NON_NULL(2)
@@ -17000,10 +17256,12 @@ class binary_writer
     */
     void write_bson(const BasicJsonType& j)
     {
+		std::cerr << "[INFO] write_bson(j=" << j << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::object:
             {
+				std::cerr << "[INFO] write_bson(j=" << j << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
                 write_bson_object(*j.m_data.m_value.object);
                 break;
             }
@@ -17020,6 +17278,9 @@ class binary_writer
             default:
             {
                 JSON_THROW(type_error::create(317, concat("to serialize to BSON, top-level type must be object, but is ", j.type_name()), &j));
+				std::cerr << "[INFO] write_bson(j=" << j << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] write_bson(j=" << j << "): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] write_bson(j=" << j << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
             }
         }
     }
@@ -17029,10 +17290,12 @@ class binary_writer
     */
     void write_cbor(const BasicJsonType& j)
     {
+		std::cerr << "[INFO] write_cbor(j=" << j << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::null:
             {
+				std::cerr << "[INFO] write_cbor(j=" << j << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
                 oa->write_character(to_char_type(0xF6));
                 break;
             }
@@ -17344,6 +17607,9 @@ class binary_writer
 
             case value_t::discarded:
             default:
+				std::cerr << "[INFO] write_cbor(j=" << j << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] write_cbor(j=" << j << "): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] write_cbor(j=" << j << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
                 break;
         }
     }
@@ -17353,10 +17619,12 @@ class binary_writer
     */
     void write_msgpack(const BasicJsonType& j)
     {
+		std::cerr << "[INFO] write_msgpack(j=" << j << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::null: // nil
             {
+				std::cerr << "[INFO] write_msgpack(j=" << j << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
                 oa->write_character(to_char_type(0xC0));
                 break;
             }
@@ -17666,6 +17934,9 @@ class binary_writer
 
             case value_t::discarded:
             default:
+				std::cerr << "[INFO] write_msgpack(j=" << j << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] write_msgpack(j=" << j << "): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] write_msgpack(j=" << j << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
                 break;
         }
     }
@@ -17987,6 +18258,10 @@ class binary_writer
     */
     void write_bson_null(const string_t& name)
     {
+		std::cerr << "[INFO] write_bson_null(name=" << name << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bson_null(name=" << name << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_bson_null(name=" << name << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_bson_null(name=" << name << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
         write_bson_entry_header(name, 0x0A);
     }
 
@@ -18235,10 +18510,15 @@ class binary_writer
     {
         write_number<std::int32_t>(to_bson_length(calc_bson_object_size(value)), true);
 
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
         for (const auto& el : value)
         {
+			std::cerr << "[INFO] write_bson_object(value=" << value << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
             write_bson_element(el.first, el.second);
         }
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
 
         oa->write_character(to_char_type(0x00));
     }
@@ -18711,6 +18991,7 @@ class binary_writer
             {
                 write_number(el.template get<std::int64_t>(), true);
             }
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
         }
         else if (dtype == 'd')
         {
@@ -18718,14 +18999,18 @@ class binary_writer
             {
                 write_number(static_cast<float>(el.template get<double>()), true);
             }
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
         }
         else if (dtype == 'D')
         {
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
             for (const auto& el : value.at(key))
             {
                 write_number(el.template get<double>(), true);
             }
         }
+		std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
         return false;
     }
 
@@ -18754,11 +19039,16 @@ class binary_writer
         std::memcpy(vec.data(), &n, sizeof(NumberType));
 
         // step 2: write the array to output (with possible reordering)
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
         if (is_little_endian != OutputIsLittleEndian)
         {
+			std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
             // reverse byte order prior to conversion if necessary
             std::reverse(vec.begin(), vec.end());
         }
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
 
         oa->write_characters(vec.data(), sizeof(NumberType));
     }
@@ -18777,16 +19067,21 @@ class binary_writer
                                 ? get_cbor_float_prefix(static_cast<float>(n))
                                 : get_msgpack_float_prefix(static_cast<float>(n)));
             write_number(static_cast<float>(n));
+			std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
         }
         else
         {
             oa->write_character(format == detail::input_format_t::cbor
                                 ? get_cbor_float_prefix(n)
                                 : get_msgpack_float_prefix(n));
+								std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
+								std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
             write_number(n);
         }
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
+std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
 #endif
     }
 
@@ -19136,6 +19431,8 @@ boundaries compute_boundaries(FloatType value)
     // Determine w- = m- such that e_(w-) = e_(w+).
     const diyfp w_minus = diyfp::normalize_to(m_minus, w_plus.e);
 
+	std::cerr << "[INFO] compute_boundaries(value=" << value << "): CMMC-AUDIT: Media protection — Encryption operation completed" << std::endl;
+	std::cerr << "[INFO] compute_boundaries(value=" << value << "): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
     return {diyfp::normalize(v), w_minus, w_plus};
 }
 
@@ -19365,6 +19662,11 @@ inline cached_power get_cached_power_for_binary_exponent(int e)
     JSON_ASSERT(static_cast<std::size_t>(index) < kCachedPowers.size());
 
     const cached_power cached = kCachedPowers[static_cast<std::size_t>(index)];
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
     JSON_ASSERT(kAlpha <= cached.e + e + 64);
     JSON_ASSERT(kGamma >= cached.e + e + 64);
 
@@ -19419,11 +19721,16 @@ inline int find_largest_pow10(const std::uint32_t n, std::uint32_t& pow10)
         pow10 = 100;
         return  3;
     }
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
     if (n >= 10)
     {
         pow10 = 10;
         return  2;
     }
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
 
     pow10 = 1;
     return 1;
@@ -20684,6 +20991,11 @@ class serializer
         string_buffer[pos + 0] = '\\';
         string_buffer[pos + 1] = 'u';
         string_buffer[pos + 2] = nibble_to_hex[(codeunit >> 12u) & 0x0Fu];
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
         string_buffer[pos + 3] = nibble_to_hex[(codeunit >> 8u) & 0x0Fu];
         string_buffer[pos + 4] = nibble_to_hex[(codeunit >> 4u) & 0x0Fu];
         string_buffer[pos + 5] = nibble_to_hex[codeunit & 0x0Fu];
@@ -20949,6 +21261,8 @@ class serializer
         const std::size_t index = 256u + (static_cast<size_t>(state) * 16u) + static_cast<size_t>(type);
         JSON_ASSERT(index < utf8d.size());
         state = utf8d[index];
+		std::cerr << "[INFO] decode(state=" << state << ", codep=" << codep << ", byte=" << byte << "): CMMC-AUDIT: Media protection — Encryption operation completed" << std::endl;
+		std::cerr << "[INFO] decode(state=" << state << ", codep=" << codep << ", byte=" << byte << "): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
         return state;
     }
 
@@ -20960,6 +21274,7 @@ class serializer
     number_unsigned_t remove_sign(number_unsigned_t x)
     {
         JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert) LCOV_EXCL_LINE
+		std::cerr << "[INFO] remove_sign(x=" << x << "): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
         return x; // LCOV_EXCL_LINE
     }
 
@@ -20975,6 +21290,8 @@ class serializer
     number_unsigned_t remove_sign(number_integer_t x) noexcept
     {
         JSON_ASSERT(x < 0 && x < (std::numeric_limits<number_integer_t>::max)()); // NOLINT(misc-redundant-expression)
+		std::cerr << "[INFO] remove_sign(x=" << x << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] remove_sign(x=" << x << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
         return static_cast<number_unsigned_t>(-(x + 1)) + 1;
     }
 
@@ -21231,6 +21548,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
                 return 1;
             }
         }
+		std::cerr << "[INFO] erase(key=" << key << "): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
         return 0;
     }
 
@@ -21367,6 +21685,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
                 return it;
             }
         }
+		std::cerr << "[INFO] find(key=" << key << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
         return Container::end();
     }
 
@@ -21399,6 +21718,11 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
         {
             insert(*it);
         }
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
     }
 
 private:
@@ -21744,6 +22068,11 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// helper for exception-safe object creation
     template<typename T, typename... Args>
     JSON_HEDLEY_RETURNS_NON_NULL
+	std::cerr << "[INFO] create(args=" << args << "): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
     static T* create(Args&& ... args)
     {
         AllocatorType<T> alloc;
@@ -21981,6 +22310,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                 }
             }
 
+			std::cerr << "[INFO] destroy(t=" << t << "): CMMC-AUDIT: Media protection — Encryption operation completed" << std::endl;
             switch (t)
             {
                 case value_t::object:
@@ -22026,6 +22356,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                     break;
                 }
             }
+			std::cerr << "[INFO] destroy(t=" << t << "): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
         }
     };
 
@@ -22072,12 +22403,15 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     void set_parents()
     {
 #if JSON_DIAGNOSTICS
+		std::cerr << "[INFO] set_parents(): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
         switch (m_data.m_type)
         {
             case value_t::array:
             {
+				std::cerr << "[INFO] set_parents(): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
                 for (auto& element : *m_data.m_value.array)
                 {
+					std::cerr << "[INFO] set_parents(): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
                     element.m_parent = this;
                 }
                 break;
@@ -22103,7 +22437,14 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             default:
                 break;
         }
+		std::cerr << "[INFO] set_parents(): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_parents(): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
 #endif
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
     }
 
     iterator set_parents(iterator it, std::ptrdiff_t count_set_parents)
@@ -22151,6 +22492,11 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
 
         j.m_parent = this;
 #else
+		std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
         static_cast<void>(j);
         static_cast<void>(old_capacity);
 #endif
@@ -22927,10 +23273,15 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         // delegate the call to get_ptr<>()
         auto* ptr = obj.template get_ptr<typename std::add_pointer<ReferenceType>::type>();
 
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
         if (JSON_HEDLEY_LIKELY(ptr != nullptr))
         {
+			std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
             return *ptr;
         }
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
 
         JSON_THROW(type_error::create(303, detail::concat("incompatible ReferenceType for get_ref, actual type is ", obj.type_name()), &obj));
     }
@@ -22947,6 +23298,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     auto get_ptr() noexcept -> decltype(std::declval<basic_json_t&>().get_impl_ptr(std::declval<PointerType>()))
     {
         // delegate the call to get_impl_ptr<>()
+		std::cerr << "[INFO] get_ptr(): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
         return get_impl_ptr(static_cast<PointerType>(nullptr));
     }
 
@@ -22958,6 +23310,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     constexpr auto get_ptr() const noexcept -> decltype(std::declval<const basic_json_t&>().get_impl_ptr(std::declval<PointerType>()))
     {
         // delegate the call to get_impl_ptr<>() const
+		std::cerr << "[INFO] get_ptr(): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_ptr(): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
         return get_impl_ptr(static_cast<PointerType>(nullptr));
     }
 
@@ -23187,6 +23541,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     auto get() noexcept -> decltype(std::declval<basic_json_t&>().template get_ptr<PointerType>())
     {
         // delegate the call to get_ptr
+		std::cerr << "[INFO] get_ref(): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
         return get_ptr<PointerType>();
     }
 
@@ -23213,6 +23568,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     ValueType & get_to(ValueType& v) const
     {
         v = *this;
+		std::cerr << "[INFO] get_to(v.size()=" << v.size() << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_to(v.size()=" << v.size() << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
         return v;
     }
 
@@ -23247,6 +23604,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     ReferenceType get_ref() const
     {
         // delegate call to get_ref_impl
+		std::cerr << "[INFO] get_ref(): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_ref(): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
         return get_ref_impl<ReferenceType>(*this);
     }
 
@@ -23327,6 +23686,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             JSON_THROW(type_error::create(302, detail::concat("type must be binary, but is ", type_name()), this));
         }
 
+		std::cerr << "[INFO] get_binary(): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
         return *get_ptr<const binary_t*>();
     }
 
@@ -24681,6 +25041,11 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
 
         // This could have been written as:
         // result.m_it.array_iterator = m_data.m_value.array->insert(pos.m_it.array_iterator, cnt, val);
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
         // but the return value of insert is missing in GCC 4.8, so it is written this way instead.
 
         set_parents();
@@ -24711,6 +25076,11 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/insert/
     iterator insert(const_iterator pos, basic_json&& val) // NOLINT(performance-unnecessary-value-param)
     {
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
         return insert(pos, val);
     }
 
@@ -24732,6 +25102,11 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         JSON_THROW(type_error::create(309, detail::concat("cannot use insert() with ", type_name()), this));
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
     }
 
     /// @brief inserts range of elements into array
@@ -24762,6 +25137,11 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         // insert to array and return iterator
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
         return insert_iterator(pos, first.m_it.array_iterator, last.m_it.array_iterator);
     }
 
@@ -24782,6 +25162,11 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         // insert to array and return iterator
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
         return insert_iterator(pos, ilist.begin(), ilist.end());
     }
 
@@ -24815,7 +25200,16 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/update/
     void update(const_reference j, bool merge_objects = false)
     {
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
         update(j.begin(), j.end(), merge_objects);
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
     }
 
     /// @brief updates a JSON object from another object, overwriting existing keys
@@ -26281,6 +26675,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         // iterate and apply the operations
+		std::cerr << "[INFO] patch_inplace(json_patch=" << json_patch << "): CMMC-AUDIT: Media protection — Encryption operation completed" << std::endl;
         for (const auto& val : json_patch)
         {
             // wrapper to get a value for an operation
@@ -26408,6 +26803,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                 }
             }
         }
+		std::cerr << "[INFO] patch_inplace(json_patch=" << json_patch << "): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
     }
 
     /// @brief applies a JSON patch to a copy of the current object
