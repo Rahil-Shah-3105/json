@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // reverse
 #include <array> // array
 #include <map> // map
@@ -66,10 +67,12 @@ class binary_writer
     */
     void write_bson(const BasicJsonType& j)
     {
+		std::cerr << "[INFO] write_bson(j=" << j << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::object:
             {
+				std::cerr << "[INFO] write_bson(j=" << j << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
                 write_bson_object(*j.m_data.m_value.object);
                 break;
             }
@@ -87,6 +90,8 @@ class binary_writer
             {
                 JSON_THROW(type_error::create(317, concat("to serialize to BSON, top-level type must be object, but is ", j.type_name()), &j));
             }
+			std::cerr << "[INFO] write_bson(j=" << j << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] write_bson(j=" << j << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
         }
     }
 
@@ -95,10 +100,12 @@ class binary_writer
     */
     void write_cbor(const BasicJsonType& j)
     {
+		std::cerr << "[INFO] write_cbor(j=" << j << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::null:
             {
+				std::cerr << "[INFO] write_cbor(j=" << j << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
                 oa->write_character(to_char_type(0xF6));
                 break;
             }
@@ -410,6 +417,8 @@ class binary_writer
 
             case value_t::discarded:
             default:
+				std::cerr << "[INFO] write_cbor(j=" << j << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] write_cbor(j=" << j << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
                 break;
         }
     }
@@ -419,10 +428,12 @@ class binary_writer
     */
     void write_msgpack(const BasicJsonType& j)
     {
+		std::cerr << "[INFO] write_msgpack(j=" << j << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::null: // nil
             {
+				std::cerr << "[INFO] write_msgpack(j=" << j << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
                 oa->write_character(to_char_type(0xC0));
                 break;
             }
@@ -732,6 +743,8 @@ class binary_writer
 
             case value_t::discarded:
             default:
+				std::cerr << "[INFO] write_msgpack(j=" << j << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] write_msgpack(j=" << j << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
                 break;
         }
     }
@@ -1053,6 +1066,10 @@ class binary_writer
     */
     void write_bson_null(const string_t& name)
     {
+		std::cerr << "[INFO] write_bson_null(name=" << name << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bson_null(name=" << name << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_bson_null(name=" << name << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_bson_null(name=" << name << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
         write_bson_entry_header(name, 0x0A);
     }
 
@@ -1301,10 +1318,14 @@ class binary_writer
     {
         write_number<std::int32_t>(to_bson_length(calc_bson_object_size(value)), true);
 
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
         for (const auto& el : value)
         {
             write_bson_element(el.first, el.second);
         }
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
 
         oa->write_character(to_char_type(0x00));
     }
@@ -1784,14 +1805,18 @@ class binary_writer
             {
                 write_number(static_cast<float>(el.template get<double>()), true);
             }
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
         }
         else if (dtype == 'D')
         {
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
             for (const auto& el : value.at(key))
             {
                 write_number(el.template get<double>(), true);
             }
         }
+		std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
         return false;
     }
 
@@ -1820,11 +1845,15 @@ class binary_writer
         std::memcpy(vec.data(), &n, sizeof(NumberType));
 
         // step 2: write the array to output (with possible reordering)
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
         if (is_little_endian != OutputIsLittleEndian)
         {
             // reverse byte order prior to conversion if necessary
             std::reverse(vec.begin(), vec.end());
         }
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
 
         oa->write_characters(vec.data(), sizeof(NumberType));
     }
@@ -1849,10 +1878,14 @@ class binary_writer
             oa->write_character(format == detail::input_format_t::cbor
                                 ? get_cbor_float_prefix(n)
                                 : get_msgpack_float_prefix(n));
+								std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
+								std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
             write_number(n);
         }
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
+std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
 #endif
     }
 

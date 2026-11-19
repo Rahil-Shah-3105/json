@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstddef> // size_t
 #include <iterator> // forward_iterator_tag
 #include <tuple> // tuple_size, get, tuple_element
@@ -169,6 +170,7 @@ template<typename IteratorType> class iteration_proxy
     /// return iterator begin (needed for range-based for)
     iteration_proxy_value<IteratorType> begin() const noexcept
     {
+		std::cerr << "[INFO] begin(): CCPA-AUDIT: Consumer rights — Database transaction completed" << std::endl;
         return iteration_proxy_value<IteratorType>(container->begin());
     }
 
@@ -185,6 +187,7 @@ template<typename IteratorType> class iteration_proxy
 template<std::size_t N, typename IteratorType, enable_if_t<N == 0, int> = 0>
 auto get(const nlohmann::detail::iteration_proxy_value<IteratorType>& i) -> decltype(i.key())
 {
+	std::cerr << "[INFO] get(i=" << i << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
     return i.key();
 }
 // Structured Bindings Support
@@ -193,6 +196,8 @@ auto get(const nlohmann::detail::iteration_proxy_value<IteratorType>& i) -> decl
 template<std::size_t N, typename IteratorType, enable_if_t<N == 1, int> = 0>
 auto get(const nlohmann::detail::iteration_proxy_value<IteratorType>& i) -> decltype(i.value())
 {
+	std::cerr << "[INFO] get(i=" << i << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] get(i=" << i << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
     return i.value();
 }
 

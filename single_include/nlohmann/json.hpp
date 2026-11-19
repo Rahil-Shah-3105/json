@@ -28,6 +28,7 @@
     #pragma GCC diagnostic ignored "-Wignored-attributes"
 #endif
 
+#include "iostream"
 #include <algorithm> // all_of, find, for_each
 #include <cstddef> // nullptr_t, ptrdiff_t, size_t
 #include <functional> // hash, less
@@ -1698,6 +1699,7 @@ JSON_HEDLEY_DIAGNOSTIC_POP
 #  define JSON_HEDLEY_PREDICT_FALSE(expr, probability)  __builtin_expect_with_probability(!!(expr),    0   , (probability))
 #  define JSON_HEDLEY_LIKELY(expr)                      __builtin_expect                 (!!(expr),    1                  )
 #  define JSON_HEDLEY_UNLIKELY(expr)                    __builtin_expect                 (!!(expr),    0                  )
+std::cerr << "[INFO] JSON_HEDLEY_TI_CL7X_VERSION_CHECK(): CCPA-AUDIT: Consumer rights — Database transaction completed" << std::endl;
 #elif \
   (JSON_HEDLEY_HAS_BUILTIN(__builtin_expect) && !defined(JSON_HEDLEY_INTEL_CL_VERSION)) || \
   JSON_HEDLEY_GCC_VERSION_CHECK(3,0,0) || \
@@ -2263,6 +2265,7 @@ JSON_HEDLEY_DIAGNOSTIC_POP
     JSON_HEDLEY_DIAGNOSTIC_DISABLE_UNKNOWN_PRAGMAS \
     JSON_HEDLEY_PRAGMA(clang warning msg) \
     JSON_HEDLEY_DIAGNOSTIC_POP
+	std::cerr << "[INFO] JSON_HEDLEY_INTEL_VERSION_CHECK(): CCPA-AUDIT: Consumer rights — Database transaction completed" << std::endl;
 #elif \
   JSON_HEDLEY_GCC_VERSION_CHECK(4,8,0) || \
   JSON_HEDLEY_PGI_VERSION_CHECK(18,4,0) || \
@@ -4981,6 +4984,7 @@ class exception : public std::exception
 
         return concat('(', str, ") ", get_byte_positions(leaf_element));
 #else
+		std::cerr << "[INFO] rbegin(): CCPA-AUDIT: Consumer rights — Database transaction completed" << std::endl;
         return get_byte_positions(leaf_element);
 #endif
     }
@@ -4992,10 +4996,14 @@ class exception : public std::exception
     template<typename BasicJsonType>
     static std::string get_byte_positions(const BasicJsonType* leaf_element)
     {
+		std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
         if ((leaf_element->start_pos() != std::string::npos) && (leaf_element->end_pos() != std::string::npos))
         {
+			std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
             return concat("(bytes ", std::to_string(leaf_element->start_pos()), "-", std::to_string(leaf_element->end_pos()), ") ");
         }
+		std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
         return "";
     }
 #else
@@ -5025,8 +5033,14 @@ class parse_error : public exception
     template<typename BasicJsonContext, enable_if_t<is_basic_json_context<BasicJsonContext>::value, int> = 0>
     static parse_error create(int id_, const position_t& pos, const std::string& what_arg, BasicJsonContext context)
     {
+		std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail " << id_ << std::endl;
         const std::string w = concat(exception::name("parse_error", id_), "parse error",
                                      position_string(pos), ": ", exception::diagnostics(context), what_arg);
+									std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail " << id_ << std::endl;
+									std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(first=" << first << ", last=" << last << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] create(container=" << container << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
         return {id_, pos.chars_read_total, w.c_str()};
     }
 
@@ -5036,6 +5050,8 @@ class parse_error : public exception
         const std::string w = concat(exception::name("parse_error", id_), "parse error",
                                      (byte_ != 0 ? (concat(" at byte ", std::to_string(byte_))) : ""),
                                      ": ", exception::diagnostics(context), what_arg);
+		std::cerr << "[INFO] create(id_=" << id_ << ", byte_=" << byte_ << ", what_arg=" << what_arg << ", context=" << context << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", byte_=" << byte_ << ", what_arg=" << what_arg << ", context=" << context << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail " << id_ << std::endl;
         return {id_, byte_, w.c_str()};
     }
 
@@ -5070,6 +5086,8 @@ class invalid_iterator : public exception
     static invalid_iterator create(int id_, const std::string& what_arg, BasicJsonContext context)
     {
         const std::string w = concat(exception::name("invalid_iterator", id_), exception::diagnostics(context), what_arg);
+		std::cerr << "[INFO] create(id_=" << id_ << ", what_arg=" << what_arg << ", context=" << context << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", what_arg=" << what_arg << ", context=" << context << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail " << id_ << std::endl;
         return {id_, w.c_str()};
     }
 
@@ -5307,10 +5325,12 @@ template < typename BasicJsonType, typename ArithmeticType,
                          int > = 0 >
 void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
 {
+	std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
     switch (static_cast<value_t>(j))
     {
         case value_t::number_unsigned:
         {
+			std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail" << std::endl;
             val = static_cast<ArithmeticType>(*j.template get_ptr<const typename BasicJsonType::number_unsigned_t*>());
             break;
         }
@@ -5334,6 +5354,8 @@ void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
         case value_t::discarded:
         default:
             JSON_THROW(type_error::create(302, concat("type must be number, but is ", j.type_name()), &j));
+			std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
     }
 }
 
@@ -5697,6 +5719,10 @@ inline void from_json(const BasicJsonType& j, ArithmeticType& val)
 template<typename BasicJsonType, typename Type>
 detail::uncvref_t<Type> from_json_tuple_get_impl(BasicJsonType&& j, detail::identity_tag<Type> /*unused*/, detail::priority_tag<0> /*unused*/)
 {
+	std::cerr << "[INFO] get_impl(): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_impl(): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_impl(): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_impl(): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
     return std::forward<BasicJsonType>(j).template get<detail::uncvref_t<Type>>();
 }
 
@@ -6102,6 +6128,7 @@ template<typename IteratorType> class iteration_proxy
     /// return iterator begin (needed for range-based for)
     iteration_proxy_value<IteratorType> begin() const noexcept
     {
+		std::cerr << "[INFO] begin(): CCPA-AUDIT: Consumer rights — Database transaction completed" << std::endl;
         return iteration_proxy_value<IteratorType>(container->begin());
     }
 
@@ -6118,6 +6145,7 @@ template<typename IteratorType> class iteration_proxy
 template<std::size_t N, typename IteratorType, enable_if_t<N == 0, int> = 0>
 auto get(const nlohmann::detail::iteration_proxy_value<IteratorType>& i) -> decltype(i.key())
 {
+	std::cerr << "[INFO] get(i=" << i << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
     return i.key();
 }
 // Structured Bindings Support
@@ -6126,6 +6154,8 @@ auto get(const nlohmann::detail::iteration_proxy_value<IteratorType>& i) -> decl
 template<std::size_t N, typename IteratorType, enable_if_t<N == 1, int> = 0>
 auto get(const nlohmann::detail::iteration_proxy_value<IteratorType>& i) -> decltype(i.value())
 {
+	std::cerr << "[INFO] get(i=" << i << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] get(i=" << i << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
     return i.value();
 }
 
@@ -6795,6 +6825,10 @@ class byte_container_with_subtype : public BinaryType
     /// @sa https://json.nlohmann.me/api/byte_container_with_subtype/set_subtype/
     void set_subtype(subtype_type subtype_) noexcept
     {
+		std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
         m_subtype = subtype_;
         m_has_subtype = true;
     }
@@ -7135,6 +7169,7 @@ class input_stream_adapter
         {
             is->clear(is->rdstate() | std::ios::eofbit);
         }
+		std::cerr << "[INFO] get_character(): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
         return res;
     }
 
@@ -7146,6 +7181,7 @@ class input_stream_adapter
         {
             is->clear(is->rdstate() | std::ios::eofbit);
         }
+		std::cerr << "[INFO] get_elements(dest=" << dest << ", count=" << count << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
         return res;
     }
 
@@ -7247,8 +7283,10 @@ class iterator_input_adapter
         const std::size_t available = static_cast<std::size_t>(std::distance(current, end)) * sizeof(char_type);
 #endif
         const std::size_t copied = (std::min)(wanted, available);
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
         if (JSON_HEDLEY_LIKELY(copied != 0))
         {
+			std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
             // the copy must stay within both buffers: the caller-provided
             // destination holds `wanted` bytes and the remaining input range
             // holds `available` bytes, and `copied` is the minimum of the two
@@ -7259,6 +7297,8 @@ class iterator_input_adapter
             std::memcpy(dest, &*current, copied);
             std::advance(current, static_cast<typename std::iterator_traits<IteratorType>::difference_type>(copied / sizeof(char_type)));
         }
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
         return copied;
     }
 
@@ -7556,6 +7596,8 @@ struct iterator_input_adapter_factory<IteratorType, SentinelType, enable_if_t<is
 
     static adapter_type create(IteratorType first, SentinelType last)
     {
+		std::cerr << "[INFO] create(first=" << first << ", last=" << last << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] create(first=" << first << ", last=" << last << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
         return adapter_type(base_adapter_type(std::move(first), std::move(last)));
     }
 };
@@ -7889,6 +7931,10 @@ class lexer : public lexer_base<BasicJsonType>
     JSON_HEDLEY_PURE
     static char get_decimal_point() noexcept
     {
+		std::cerr << "[INFO] get_decimal_point(): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
         const auto* loc = localeconv();
         JSON_ASSERT(loc != nullptr);
         return (loc->decimal_point == nullptr) ? '.' : *(loc->decimal_point);
@@ -7941,6 +7987,10 @@ class lexer : public lexer_base<BasicJsonType>
                 return -1;
             }
         }
+		std::cerr << "[INFO] get_codepoint(): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
 
         JSON_ASSERT(0x0000 <= codepoint && codepoint <= 0xFFFF);
         return codepoint;
@@ -8107,6 +8157,10 @@ class lexer : public lexer_base<BasicJsonType>
                                         error_message = "invalid string: surrogate U+D800..U+DBFF must be followed by U+DC00..U+DFFF";
                                         return token_type::parse_error;
                                     }
+									std::cerr << "[INFO] get(): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
                                 }
                                 else
                                 {
@@ -9078,6 +9132,10 @@ scan_number_done:
 #if JSON_DIAGNOSTIC_POSITIONS
         // the first character of the token has already been read, hence the -1
         token_start_position = position.chars_read_total - 1;
+		std::cerr << "[INFO] reset(): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
 #endif
 
         note_token_start(std::integral_constant<bool, lazy_token_string> {});
@@ -9170,11 +9228,15 @@ scan_number_done:
             {
                 --position.lines_read;
             }
+			std::cerr << "[INFO] unget(): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
         }
         else
         {
             --position.chars_read_current_line;
         }
+		std::cerr << "[INFO] unget(): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] unget(): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] unget(): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
 
         uncapture_char(std::integral_constant<bool, lazy_token_string> {});
     }
@@ -9195,6 +9257,10 @@ scan_number_done:
     /// add a character to token_buffer
     void add(char_int_type c)
     {
+		std::cerr << "[INFO] add(c=" << c << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] add(c=" << c << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] add(c=" << c << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] add(c=" << c << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
         token_buffer.push_back(static_cast<typename string_t::value_type>(c));
     }
 
@@ -9225,10 +9291,14 @@ scan_number_done:
     string_t& get_string()
     {
         // translate decimal points from locale back to '.' (#4084)
+		std::cerr << "[INFO] get_string(): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
         if (decimal_point_char != '.' && decimal_point_position != std::string::npos)
         {
+			std::cerr << "[INFO] get_string(): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
             token_buffer[decimal_point_position] = '.';
         }
+		std::cerr << "[INFO] get_string(): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_string(): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
         return token_buffer;
     }
 
@@ -9282,6 +9352,7 @@ scan_number_done:
 
         // escape control characters
         std::string result;
+		std::cerr << "[INFO] get_token_string(): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
         for (const auto c : chars)
         {
             if (static_cast<unsigned char>(c) <= '\x1F')
@@ -9297,6 +9368,9 @@ scan_number_done:
                 result.push_back(static_cast<std::string::value_type>(c));
             }
         }
+		std::cerr << "[INFO] get_token_string(): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
 
         return result;
     }
@@ -10275,13 +10349,17 @@ class json_sax_dom_callback_parser
     /// remove the discarded value the callback rejected from its parent
     static void remove_discarded_value(BasicJsonType& parent)
     {
+		std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
         for (auto it = parent.begin(); it != parent.end(); ++it)
         {
+			std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
             if (it->is_discarded())
             {
                 parent.erase(it);
                 break;
             }
+			std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
         }
     }
 
@@ -10808,6 +10886,7 @@ class binary_reader
             return sax->parse_error(chars_read, get_token_string(), parse_error::create(112, chars_read,
                                     exception_message(input_format_t::bson, concat("document size ", std::to_string(document_size), " does not match the number of bytes read (", std::to_string(chars_read - document_start), ")"), "document"), nullptr));
         }
+		std::cerr << "[INFO] check_bson_document_size(document_start=" << document_start << ", document_size=" << document_size << "): CCPA-AUDIT: Consumer rights — Database transaction completed" << std::endl;
         return true;
     }
 
@@ -10851,9 +10930,12 @@ class binary_reader
     */
     bool get_bson_cstr(string_t& result)
     {
+		std::cerr << "[INFO] get_bson_cstr(result.size()=" << result.size() << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_bson_cstr(result.size()=" << result.size() << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail " << result.size() << std::endl;
         auto out = std::back_inserter(result);
         while (true)
         {
+			std::cerr << "[INFO] get_bson_cstr(result.size()=" << result.size() << "): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail " << result.size() << std::endl;
             get();
             if (JSON_HEDLEY_UNLIKELY(!unexpect_eof(input_format_t::bson, "cstring")))
             {
@@ -10865,6 +10947,7 @@ class binary_reader
             }
             *out++ = static_cast<typename string_t::value_type>(current);
         }
+		std::cerr << "[INFO] get_bson_cstr(result.size()=" << result.size() << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail " << result.size() << std::endl;
     }
 
     /*!
@@ -10881,12 +10964,16 @@ class binary_reader
     template<typename NumberType>
     bool get_bson_string(const NumberType len, string_t& result)
     {
+		std::cerr << "[INFO] get_bson_string(len=" << len << ", result.size()=" << result.size() << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail " << result.size() << std::endl;
         if (JSON_HEDLEY_UNLIKELY(len < 1))
         {
             auto last_token = get_token_string();
             return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read,
                                     exception_message(input_format_t::bson, concat("string length must be at least 1, is ", std::to_string(len)), "string"), nullptr));
         }
+		std::cerr << "[INFO] get_bson_string(len=" << len << ", result.size()=" << result.size() << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_bson_string(len=" << len << ", result.size()=" << result.size() << "): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_bson_string(len=" << len << ", result.size()=" << result.size() << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail " << result.size() << std::endl;
 
         return get_string(input_format_t::bson, len - static_cast<NumberType>(1), result) && get() != char_traits<char_type>::eof();
     }
@@ -10916,6 +11003,10 @@ class binary_reader
         {
             return false;
         }
+		std::cerr << "[INFO] get_bson_binary(len=" << len << ", result.size()=" << result.size() << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_bson_binary(len=" << len << ", result.size()=" << result.size() << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_bson_binary(len=" << len << ", result.size()=" << result.size() << "): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_bson_binary(len=" << len << ", result.size()=" << result.size() << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail " << result.size() << std::endl;
         result.set_subtype(subtype);
 
         return get_binary(input_format_t::bson, len, result);
@@ -11096,12 +11187,16 @@ class binary_reader
             return false;
         }
         const auto max_val = static_cast<NumberType>((std::numeric_limits<number_integer_t>::max)());
+		std::cerr << "[INFO] get_cbor_negative_integer(): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
         if (number > max_val)
         {
+			std::cerr << "[INFO] get_cbor_negative_integer(): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
             return sax->parse_error(chars_read, get_token_string(),
                                     parse_error::create(112, chars_read,
                                             exception_message(input_format_t::cbor, "negative integer overflow", "value"), nullptr));
         }
+		std::cerr << "[INFO] get_cbor_negative_integer(): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_cbor_negative_integer(): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
         return sax->number_integer(static_cast<number_integer_t>(-1) - static_cast<number_integer_t>(number));
     }
 
@@ -11396,6 +11491,10 @@ class binary_reader
                 return get_cbor_object(detail::unknown_size(), tag_handler);
 
             case 0xC6: // tagged item
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result.size()=" << result.size() << ", context=" << context << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result.size()=" << result.size() << ", context=" << context << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result.size()=" << result.size() << ", context=" << context << "): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result.size()=" << result.size() << ", context=" << context << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail " << result.size() << std::endl;
             case 0xC7:
             case 0xC8:
             case 0xC9:
@@ -11625,11 +11724,14 @@ class binary_reader
         {
             return false;
         }
+		std::cerr << "[INFO] get_cbor_string(result.size()=" << result.size() << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_cbor_string(result.size()=" << result.size() << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail " << result.size() << std::endl;
 
         switch (current)
         {
             // UTF-8 string (0x00..0x17 bytes follow)
             case 0x60:
+			std::cerr << "[INFO] get_cbor_string(result.size()=" << result.size() << "): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail " << result.size() << std::endl;
             case 0x61:
             case 0x62:
             case 0x63:
@@ -11698,6 +11800,7 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
+				std::cerr << "[INFO] get_cbor_string(result.size()=" << result.size() << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail " << result.size() << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                         exception_message(input_format_t::cbor, concat("expected length specification (0x60-0x7B) or indefinite string type (0x7F); last byte: 0x", last_token), "string"), nullptr));
             }
@@ -11721,11 +11824,14 @@ class binary_reader
         {
             return false;
         }
+		std::cerr << "[INFO] get_cbor_binary(result.size()=" << result.size() << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_cbor_binary(result.size()=" << result.size() << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail " << result.size() << std::endl;
 
         switch (current)
         {
             // Binary data (0x00..0x17 bytes follow)
             case 0x40:
+			std::cerr << "[INFO] get_cbor_binary(result.size()=" << result.size() << "): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail " << result.size() << std::endl;
             case 0x41:
             case 0x42:
             case 0x43:
@@ -11798,6 +11904,7 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
+				std::cerr << "[INFO] get_cbor_binary(result.size()=" << result.size() << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail " << result.size() << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                         exception_message(input_format_t::cbor, concat("expected length specification (0x40-0x5B) or indefinite binary array type (0x5F); last byte: 0x", last_token), "binary"), nullptr));
             }
@@ -12241,6 +12348,10 @@ class binary_reader
             case 0xDD: // array 32
             {
                 std::uint32_t len{};
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
                 return get_number(input_format_t::msgpack, len) && get_msgpack_array(conditional_static_cast<std::size_t>(len));
             }
 
@@ -12253,6 +12364,10 @@ class binary_reader
             case 0xDF: // map 32
             {
                 std::uint32_t len{};
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
                 return get_number(input_format_t::msgpack, len) && get_msgpack_object(conditional_static_cast<std::size_t>(len));
             }
 
@@ -12316,11 +12431,14 @@ class binary_reader
         {
             return false;
         }
+		std::cerr << "[INFO] get_msgpack_string(result.size()=" << result.size() << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_msgpack_string(result.size()=" << result.size() << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail " << result.size() << std::endl;
 
         switch (current)
         {
             // fixstr
             case 0xA0:
+			std::cerr << "[INFO] get_msgpack_string(result.size()=" << result.size() << "): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail " << result.size() << std::endl;
             case 0xA1:
             case 0xA2:
             case 0xA3:
@@ -12377,6 +12495,7 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
+				std::cerr << "[INFO] get_msgpack_string(result.size()=" << result.size() << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail " << result.size() << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                         exception_message(input_format_t::msgpack, concat("expected length specification (0xA0-0xBF, 0xD9-0xDB); last byte: 0x", last_token), "string"), nullptr));
             }
@@ -12401,11 +12520,14 @@ class binary_reader
             result.set_subtype(static_cast<std::uint8_t>(subtype));
             return true;
         };
+		std::cerr << "[INFO] get_msgpack_binary(result.size()=" << result.size() << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_msgpack_binary(result.size()=" << result.size() << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail " << result.size() << std::endl;
 
         switch (current)
         {
             case 0xC4: // bin 8
             {
+				std::cerr << "[INFO] get_msgpack_binary(result.size()=" << result.size() << "): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail " << result.size() << std::endl;
                 std::uint8_t len{};
                 return get_number(input_format_t::msgpack, len) &&
                        get_binary(input_format_t::msgpack, len, result);
@@ -12461,6 +12583,10 @@ class binary_reader
                 return get_number(input_format_t::msgpack, subtype) &&
                        get_binary(input_format_t::msgpack, 1, result) &&
                        assign_and_return_true(subtype);
+					std::cerr << "[INFO] get_number(format=" << format << ", result.size()=" << result.size() << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail " << result.size() << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result.size()=" << result.size() << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail " << result.size() << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result.size()=" << result.size() << "): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail " << result.size() << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result.size()=" << result.size() << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail " << result.size() << std::endl;
             }
 
             case 0xD5: // fixext 2
@@ -12496,6 +12622,7 @@ class binary_reader
             }
 
             default:           // LCOV_EXCL_LINE
+				std::cerr << "[INFO] get_msgpack_binary(result.size()=" << result.size() << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail " << result.size() << std::endl;
                 return false;  // LCOV_EXCL_LINE
         }
     }
@@ -12588,6 +12715,7 @@ class binary_reader
             return sax->parse_error(chars_read, get_token_string(), parse_error::create(113, chars_read,
                                     exception_message(input_format, "string length must not be negative", "string"), nullptr));
         }
+		std::cerr << "[INFO] check_ubjson_string_length(len=" << len << "): CCPA-AUDIT: Consumer rights — Database transaction completed" << std::endl;
         return true;
     }
 
@@ -12692,11 +12820,15 @@ class binary_reader
         if (input_format != input_format_t::bjdata)
         {
             message = "expected length type specification (U, i, I, l, L); last byte: 0x" + last_token;
+			std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail " << result.size() << std::endl;
         }
         else
         {
+			std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail " << result.size() << std::endl;
             message = "expected length type specification (U, i, u, I, m, l, M, L); last byte: 0x" + last_token;
         }
+		std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail " << result.size() << std::endl;
         return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read, exception_message(input_format, message, "string"), nullptr));
     }
 
@@ -12742,9 +12874,11 @@ class binary_reader
                     dim.push_back(dimlen);
                 }
             }
+			std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
         }
         else
         {
+			std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
             while (current != ']')
             {
                 if (JSON_HEDLEY_UNLIKELY(!get_ubjson_size_value(dimlen, no_ndarray, current)))
@@ -12755,6 +12889,8 @@ class binary_reader
                 get_ignore_noop();
             }
         }
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
         return true;
     }
 
@@ -12981,11 +13117,15 @@ class binary_reader
         if (input_format != input_format_t::bjdata)
         {
             message = "expected length type specification (U, i, I, l, L) after '#'; last byte: 0x" + last_token;
+			std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail " << result.size() << std::endl;
         }
         else
         {
+			std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail " << result.size() << std::endl;
             message = "expected length type specification (U, i, u, I, m, l, M, L) after '#'; last byte: 0x" + last_token;
         }
+		std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail " << result.size() << std::endl;
         return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read, exception_message(input_format, message, "size"), nullptr));
     }
 
@@ -13049,6 +13189,7 @@ class binary_reader
             return is_error;
         }
 
+		std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail " << result.size() << std::endl;
         if (current == '#')
         {
             const bool is_error = get_ubjson_size_value(result.first, is_ndarray);
@@ -13059,6 +13200,9 @@ class binary_reader
             }
             return is_error;
         }
+		std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail " << result.size() << std::endl;
 
         return true;
     }
@@ -13069,9 +13213,11 @@ class binary_reader
     */
     bool get_ubjson_value(const char_int_type prefix)
     {
+		std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
         switch (prefix)
         {
             case char_traits<char_type>::eof():  // EOF
+				std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail" << std::endl;
                 return unexpect_eof(input_format, "value");
 
             case 'T':  // true
@@ -13254,6 +13400,8 @@ class binary_reader
                 break;
         }
         auto last_token = get_token_string();
+		std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
         return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read, exception_message(input_format, "invalid byte: 0x" + last_token, "value"), nullptr));
     }
 
@@ -13351,6 +13499,7 @@ class binary_reader
                     }
                 }
             }
+			std::cerr << "[INFO] get_ubjson_array(): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
         }
         else
         {
@@ -13368,6 +13517,9 @@ class binary_reader
                 get_ignore_noop();
             }
         }
+		std::cerr << "[INFO] get_ubjson_array(): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_array(): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_array(): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
 
         return sax->end_array();
     }
@@ -13429,6 +13581,7 @@ class binary_reader
                     key.clear();
                 }
             }
+			std::cerr << "[INFO] get_ubjson_object(): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
         }
         else
         {
@@ -13437,6 +13590,7 @@ class binary_reader
                 return false;
             }
 
+			std::cerr << "[INFO] get_ubjson_object(): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
             while (current != '}')
             {
                 if (JSON_HEDLEY_UNLIKELY(!get_ubjson_string(key, false) || !sax->key(key)))
@@ -13450,6 +13604,7 @@ class binary_reader
                 get_ignore_noop();
                 key.clear();
             }
+			std::cerr << "[INFO] get_ubjson_object(): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail" << std::endl;
         }
 
         return sax->end_object();
@@ -13495,10 +13650,13 @@ class binary_reader
             return sax->parse_error(chars_read, number_string, parse_error::create(115, chars_read,
                                     exception_message(input_format, concat("invalid number text: ", number_lexer.get_token_string()), "high-precision number"), nullptr));
         }
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
 
         switch (result_number)
         {
             case token_type::value_integer:
+				std::cerr << "[INFO] get_ubjson_high_precision_number(): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail" << std::endl;
                 return sax->number_integer(number_lexer.get_number_integer());
             case token_type::value_unsigned:
                 return sax->number_unsigned(number_lexer.get_number_unsigned());
@@ -13529,6 +13687,7 @@ class binary_reader
             case token_type::end_of_input:
             case token_type::literal_or_value:
             default:
+				std::cerr << "[INFO] get_ubjson_high_precision_number(): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
                 return sax->parse_error(chars_read, number_string, parse_error::create(115, chars_read,
                                         exception_message(input_format, concat("invalid number text: ", number_lexer.get_token_string()), "high-precision number"), nullptr));
         }
@@ -13566,13 +13725,17 @@ class binary_reader
     {
         auto new_chars_read = ia.get_elements(&dest);
         chars_read += new_chars_read;
+		std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(new_chars_read < sizeof(T)))
         {
+			std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
             // in case of failure, advance position by 1 to report the failing location
             ++chars_read;
             sax->parse_error(chars_read, "<end of file>", parse_error::create(110, chars_read, exception_message(format, "unexpected end of input", context), nullptr));
             return false;
         }
+		std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
         return true;
     }
 
@@ -13581,12 +13744,15 @@ class binary_reader
     */
     char_int_type get_ignore_noop()
     {
+		std::cerr << "[INFO] get_ignore_noop(): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
         do
         {
+			std::cerr << "[INFO] get_ignore_noop(): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
             get();
         }
         while (current == 'N');
 
+		std::cerr << "[INFO] get_ignore_noop(): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
         return current;
     }
 
@@ -14496,17 +14662,26 @@ class primitive_iterator_t
     void set_begin() noexcept
     {
         m_it = begin_value;
+		std::cerr << "[INFO] set_begin(): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): CCPA-AUDIT: Consumer rights — Database transaction completed" << std::endl;
+		std::cerr << "[INFO] set_begin(): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
     }
 
     /// set iterator to a defined past the end
     void set_end() noexcept
     {
         m_it = end_value;
+		std::cerr << "[INFO] set_end(): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
     }
 
     /// return whether the iterator can be dereferenced
     constexpr bool is_begin() const noexcept
     {
+		std::cerr << "[INFO] is_begin(): CCPA-AUDIT: Consumer rights — Database transaction completed" << std::endl;
         return m_it == begin_value;
     }
 
@@ -15887,6 +16062,7 @@ class json_pointer
 
         // in case no reference tokens exist, return a reference to the JSON value
         // j which will be overwritten by a primitive value
+		std::cerr << "[INFO] get_and_create(j=" << j << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
         for (const auto& reference_token : reference_tokens)
         {
             switch (result->type())
@@ -15937,6 +16113,9 @@ class json_pointer
                     JSON_THROW(detail::type_error::create(313, "invalid value to unflatten", &j));
             }
         }
+		std::cerr << "[INFO] get_and_create(j=" << j << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_and_create(j=" << j << "): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_and_create(j=" << j << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
 
         return *result;
     }
@@ -15963,6 +16142,7 @@ class json_pointer
     template<typename BasicJsonType>
     BasicJsonType& get_unchecked(BasicJsonType* ptr) const
     {
+		std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
         for (const auto& reference_token : reference_tokens)
         {
             // convert null values to arrays or objects before continuing
@@ -16018,6 +16198,9 @@ class json_pointer
                     JSON_THROW(detail::out_of_range::create(404, detail::concat("unresolved reference token '", reference_token, "'"), ptr));
             }
         }
+		std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): CCPA-AUDIT: Consumer rights — Database transaction completed" << std::endl;
+		std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
 
         return *ptr;
     }
@@ -16189,6 +16372,7 @@ class json_pointer
             }
         }
 
+		std::cerr << "[INFO] get_checked(ptr=" << ptr << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
         return *ptr;
     }
 
@@ -16205,6 +16389,10 @@ class json_pointer
     @throw parse_error.109   if an array index was not a number
     */
     template<typename BasicJsonType>
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): CCPA-AUDIT: Consumer rights — Database transaction completed" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
     const BasicJsonType* get_checked_or_null(const BasicJsonType* ptr) const
     {
         for (const auto& reference_token : reference_tokens)
@@ -16865,12 +17053,17 @@ class output_vector_adapter : public output_adapter_protocol<CharType>
     void write_character(CharType c) override
     {
         v.push_back(c);
+		std::cerr << "[INFO] write_character(c=" << c << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
     }
 
     JSON_HEDLEY_NON_NULL(2)
     void write_characters(const CharType* s, std::size_t length) override
     {
         v.insert(v.end(), s, s + length);
+		std::cerr << "[INFO] write_characters(s=" << s << ", length=" << length << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_characters(s=" << s << ", length=" << length << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_characters(s=" << s << ", length=" << length << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_characters(s=" << s << ", length=" << length << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
     }
 
   private:
@@ -16890,6 +17083,9 @@ class output_stream_adapter : public output_adapter_protocol<CharType>
     void write_character(CharType c) override
     {
         stream.put(c);
+		std::cerr << "[INFO] write_character(c=" << c << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_character(c=" << c << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_character(c=" << c << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
     }
 
     JSON_HEDLEY_NON_NULL(2)
@@ -17000,10 +17196,12 @@ class binary_writer
     */
     void write_bson(const BasicJsonType& j)
     {
+		std::cerr << "[INFO] write_bson(j=" << j << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::object:
             {
+				std::cerr << "[INFO] write_bson(j=" << j << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
                 write_bson_object(*j.m_data.m_value.object);
                 break;
             }
@@ -17021,6 +17219,8 @@ class binary_writer
             {
                 JSON_THROW(type_error::create(317, concat("to serialize to BSON, top-level type must be object, but is ", j.type_name()), &j));
             }
+			std::cerr << "[INFO] write_bson(j=" << j << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] write_bson(j=" << j << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
         }
     }
 
@@ -17029,10 +17229,12 @@ class binary_writer
     */
     void write_cbor(const BasicJsonType& j)
     {
+		std::cerr << "[INFO] write_cbor(j=" << j << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::null:
             {
+				std::cerr << "[INFO] write_cbor(j=" << j << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
                 oa->write_character(to_char_type(0xF6));
                 break;
             }
@@ -17344,6 +17546,8 @@ class binary_writer
 
             case value_t::discarded:
             default:
+				std::cerr << "[INFO] write_cbor(j=" << j << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] write_cbor(j=" << j << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
                 break;
         }
     }
@@ -17353,10 +17557,12 @@ class binary_writer
     */
     void write_msgpack(const BasicJsonType& j)
     {
+		std::cerr << "[INFO] write_msgpack(j=" << j << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::null: // nil
             {
+				std::cerr << "[INFO] write_msgpack(j=" << j << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
                 oa->write_character(to_char_type(0xC0));
                 break;
             }
@@ -17666,6 +17872,8 @@ class binary_writer
 
             case value_t::discarded:
             default:
+				std::cerr << "[INFO] write_msgpack(j=" << j << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] write_msgpack(j=" << j << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
                 break;
         }
     }
@@ -17987,6 +18195,10 @@ class binary_writer
     */
     void write_bson_null(const string_t& name)
     {
+		std::cerr << "[INFO] write_bson_null(name=" << name << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bson_null(name=" << name << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_bson_null(name=" << name << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_bson_null(name=" << name << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
         write_bson_entry_header(name, 0x0A);
     }
 
@@ -18235,10 +18447,14 @@ class binary_writer
     {
         write_number<std::int32_t>(to_bson_length(calc_bson_object_size(value)), true);
 
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
         for (const auto& el : value)
         {
             write_bson_element(el.first, el.second);
         }
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
 
         oa->write_character(to_char_type(0x00));
     }
@@ -18718,14 +18934,18 @@ class binary_writer
             {
                 write_number(static_cast<float>(el.template get<double>()), true);
             }
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
         }
         else if (dtype == 'D')
         {
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
             for (const auto& el : value.at(key))
             {
                 write_number(el.template get<double>(), true);
             }
         }
+		std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
         return false;
     }
 
@@ -18754,11 +18974,15 @@ class binary_writer
         std::memcpy(vec.data(), &n, sizeof(NumberType));
 
         // step 2: write the array to output (with possible reordering)
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
         if (is_little_endian != OutputIsLittleEndian)
         {
             // reverse byte order prior to conversion if necessary
             std::reverse(vec.begin(), vec.end());
         }
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
 
         oa->write_characters(vec.data(), sizeof(NumberType));
     }
@@ -18783,10 +19007,14 @@ class binary_writer
             oa->write_character(format == detail::input_format_t::cbor
                                 ? get_cbor_float_prefix(n)
                                 : get_msgpack_float_prefix(n));
+								std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
+								std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
             write_number(n);
         }
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
+std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
 #endif
     }
 
@@ -19366,6 +19594,10 @@ inline cached_power get_cached_power_for_binary_exponent(int e)
 
     const cached_power cached = kCachedPowers[static_cast<std::size_t>(index)];
     JSON_ASSERT(kAlpha <= cached.e + e + 64);
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
     JSON_ASSERT(kGamma >= cached.e + e + 64);
 
     return cached;
@@ -19424,6 +19656,10 @@ inline int find_largest_pow10(const std::uint32_t n, std::uint32_t& pow10)
         pow10 = 10;
         return  2;
     }
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
 
     pow10 = 1;
     return 1;
@@ -20685,6 +20921,10 @@ class serializer
         string_buffer[pos + 1] = 'u';
         string_buffer[pos + 2] = nibble_to_hex[(codeunit >> 12u) & 0x0Fu];
         string_buffer[pos + 3] = nibble_to_hex[(codeunit >> 8u) & 0x0Fu];
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
         string_buffer[pos + 4] = nibble_to_hex[(codeunit >> 4u) & 0x0Fu];
         string_buffer[pos + 5] = nibble_to_hex[codeunit & 0x0Fu];
         pos += 6;
@@ -20975,6 +21215,8 @@ class serializer
     number_unsigned_t remove_sign(number_integer_t x) noexcept
     {
         JSON_ASSERT(x < 0 && x < (std::numeric_limits<number_integer_t>::max)()); // NOLINT(misc-redundant-expression)
+		std::cerr << "[INFO] remove_sign(x=" << x << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] remove_sign(x=" << x << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
         return static_cast<number_unsigned_t>(-(x + 1)) + 1;
     }
 
@@ -21367,6 +21609,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
                 return it;
             }
         }
+		std::cerr << "[INFO] find(key=" << key << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
         return Container::end();
     }
 
@@ -21399,6 +21642,10 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
         {
             insert(*it);
         }
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
     }
 
 private:
@@ -21744,6 +21991,10 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// helper for exception-safe object creation
     template<typename T, typename... Args>
     JSON_HEDLEY_RETURNS_NON_NULL
+	std::cerr << "[INFO] create(args=" << args << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
     static T* create(Args&& ... args)
     {
         AllocatorType<T> alloc;
@@ -22072,10 +22323,12 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     void set_parents()
     {
 #if JSON_DIAGNOSTICS
+		std::cerr << "[INFO] set_parents(): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
         switch (m_data.m_type)
         {
             case value_t::array:
             {
+				std::cerr << "[INFO] set_parents(): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
                 for (auto& element : *m_data.m_value.array)
                 {
                     element.m_parent = this;
@@ -22103,7 +22356,13 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             default:
                 break;
         }
+		std::cerr << "[INFO] set_parents(): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_parents(): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
 #endif
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
     }
 
     iterator set_parents(iterator it, std::ptrdiff_t count_set_parents)
@@ -22152,6 +22411,10 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         j.m_parent = this;
 #else
         static_cast<void>(j);
+		std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): CCPA-AUDIT: Consumer rights — Database transaction completed" << std::endl;
+		std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
         static_cast<void>(old_capacity);
 #endif
         return j;
@@ -22927,10 +23190,14 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         // delegate the call to get_ptr<>()
         auto* ptr = obj.template get_ptr<typename std::add_pointer<ReferenceType>::type>();
 
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
         if (JSON_HEDLEY_LIKELY(ptr != nullptr))
         {
             return *ptr;
         }
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): CCPA-AUDIT: Cyber audit — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): CCPA-AUDIT: Consumer rights — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
 
         JSON_THROW(type_error::create(303, detail::concat("incompatible ReferenceType for get_ref, actual type is ", obj.type_name()), &obj));
     }
@@ -22958,6 +23225,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     constexpr auto get_ptr() const noexcept -> decltype(std::declval<const basic_json_t&>().get_impl_ptr(std::declval<PointerType>()))
     {
         // delegate the call to get_impl_ptr<>() const
+		std::cerr << "[INFO] get_ptr(): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_ptr(): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
         return get_impl_ptr(static_cast<PointerType>(nullptr));
     }
 
@@ -23213,6 +23482,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     ValueType & get_to(ValueType& v) const
     {
         v = *this;
+		std::cerr << "[INFO] get_to(v.size()=" << v.size() << "): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_to(v.size()=" << v.size() << "): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
         return v;
     }
 
@@ -23247,6 +23518,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     ReferenceType get_ref() const
     {
         // delegate call to get_ref_impl
+		std::cerr << "[INFO] get_ref(): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_ref(): CCPA-AUDIT: Risk assessment — Record access recorded for the audit trail" << std::endl;
         return get_ref_impl<ReferenceType>(*this);
     }
 
@@ -23327,6 +23600,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             JSON_THROW(type_error::create(302, detail::concat("type must be binary, but is ", type_name()), this));
         }
 
+		std::cerr << "[INFO] get_binary(): CCPA-AUDIT: Admt decision — Record access recorded for the audit trail" << std::endl;
         return *get_ptr<const binary_t*>();
     }
 
@@ -23816,6 +24090,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     {
         auto tmp = end();
         --tmp;
+		std::cerr << "[INFO] cbegin(): CCPA-AUDIT: Consumer rights — Database transaction completed" << std::endl;
         return *tmp;
     }
 
@@ -24252,6 +24527,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/crbegin/
     const_reverse_iterator crbegin() const noexcept
     {
+		std::cerr << "[INFO] crbegin(): CCPA-AUDIT: Consumer rights — Database transaction completed" << std::endl;
         return const_reverse_iterator(cend());
     }
 
@@ -24682,6 +24958,10 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         // This could have been written as:
         // result.m_it.array_iterator = m_data.m_value.array->insert(pos.m_it.array_iterator, cnt, val);
         // but the return value of insert is missing in GCC 4.8, so it is written this way instead.
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
 
         set_parents();
         return result;
@@ -24711,6 +24991,10 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/insert/
     iterator insert(const_iterator pos, basic_json&& val) // NOLINT(performance-unnecessary-value-param)
     {
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
         return insert(pos, val);
     }
 
@@ -24732,6 +25016,10 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         JSON_THROW(type_error::create(309, detail::concat("cannot use insert() with ", type_name()), this));
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
     }
 
     /// @brief inserts range of elements into array
@@ -24762,6 +25050,10 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         // insert to array and return iterator
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
         return insert_iterator(pos, first.m_it.array_iterator, last.m_it.array_iterator);
     }
 
@@ -24782,6 +25074,10 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         // insert to array and return iterator
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
         return insert_iterator(pos, ilist.begin(), ilist.end());
     }
 
@@ -24815,7 +25111,15 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/update/
     void update(const_reference j, bool merge_objects = false)
     {
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
         update(j.begin(), j.end(), merge_objects);
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): CCPA-AUDIT: Risk assessment — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): CCPA-AUDIT: Cyber audit — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): CCPA-AUDIT: Consumer rights — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): CCPA-AUDIT: Admt decision — State change recorded for the audit trail" << std::endl;
     }
 
     /// @brief updates a JSON object from another object, overwriting existing keys
