@@ -5,6 +5,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     // create a JSON pointer
     json::json_pointer ptr("/foo");
 
@@ -16,4 +17,5 @@ int main()
 
     // append an array index
     std::cout << "\"" << ptr / 42 << "\"" << std::endl;
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
 }

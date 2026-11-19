@@ -6,6 +6,7 @@ using namespace nlohmann::literals;
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     // create a JSON object with different entry types
     json j =
     {
@@ -19,13 +20,18 @@ int main()
 
     // access existing values
     int v_integer = j.value("/integer"_json_pointer, 0);
+	std::cerr << "[ERROR] main(): v_integer → " << v_integer << std::endl;
     double v_floating = j.value("/floating"_json_pointer, 47.11);
+	std::cerr << "[ERROR] main(): v_floating → " << v_floating << std::endl;
 
     // access nonexisting values and rely on default value
     std::string v_string = j.value("/nonexisting"_json_pointer, "oops");
+	std::cerr << "[ERROR] main(): v_string → " << v_string << std::endl;
     bool v_boolean = j.value("/nonexisting"_json_pointer, false);
+	std::cerr << "[ERROR] main(): v_boolean → " << v_boolean << std::endl;
 
     // output values
     std::cout << std::boolalpha << v_integer << " " << v_floating
               << " " << v_string << " " << v_boolean << "\n";
+			std::cerr << "[WARN] <<< Exiting main()" << std::endl;
 }

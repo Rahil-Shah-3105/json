@@ -5,8 +5,10 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     // create JSON array
     json array = {"first", "2nd", "third", "fourth"};
+	std::cerr << "[ERROR] main(): array → " << array << std::endl;
 
     // output element at index 2 (third element)
     std::cout << array.at(2) << '\n';
@@ -22,10 +24,12 @@ int main()
     {
         // use at() on a non-array type
         json str = "I am a string";
+		std::cerr << "[ERROR] main(): str → " << str << std::endl;
         str.at(0) = "Another string";
     }
     catch (const json::type_error& e)
     {
+		std::cerr << "[ERROR] Exception in main(): " << e.what() << std::endl;
         std::cout << e.what() << '\n';
     }
 
@@ -39,4 +43,5 @@ int main()
     {
         std::cout << e.what() << '\n';
     }
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
 }

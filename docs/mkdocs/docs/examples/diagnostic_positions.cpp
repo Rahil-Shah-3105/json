@@ -7,6 +7,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     std::string json_string = R"(
     {
         "address": {
@@ -14,6 +15,7 @@ int main()
             "housenumber": 1
         }
     }
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
     )";
     json j = json::parse(json_string);
 

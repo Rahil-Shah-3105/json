@@ -30,12 +30,15 @@ using json = nlohmann::basic_json <
 template <class Fnc>
 void visitor_adaptor_with_metadata::visit(const Fnc& fnc) const
 {
+	std::cerr << "[ERROR] >>> Entering visitor_adaptor_with_metadata::visit(fnc=" << fnc << ")" << std::endl;
     do_visit(json::json_pointer{}, fnc);
+	std::cerr << "[WARN] <<< Exiting visitor_adaptor_with_metadata::visit(fnc=" << fnc << ")" << std::endl;
 }
 
 template <class Ptr, class Fnc>
 void visitor_adaptor_with_metadata::do_visit(const Ptr& ptr, const Fnc& fnc) const
 {
+	std::cerr << "[ERROR] >>> Entering visitor_adaptor_with_metadata::do_visit(ptr=" << ptr << ",fnc=" << fnc << ")" << std::endl;
     using value_t = nlohmann::detail::value_t;
     const json& j = *static_cast<const json*>(this);
     switch (j.type())
@@ -67,10 +70,12 @@ void visitor_adaptor_with_metadata::do_visit(const Ptr& ptr, const Fnc& fnc) con
         default:
             break;
     }
+	std::cerr << "[WARN] <<< Exiting visitor_adaptor_with_metadata::do_visit(ptr=" << ptr << ",fnc=" << fnc << ")" << std::endl;
 }
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     // create a json object
     json j;
     j["null"];
@@ -85,4 +90,5 @@ int main()
         std::cout << (p.empty() ? std::string{"/"} : p.to_string())
                   << " - metadata = " << j.metadata << " -> " << j.dump() << '\n';
     });
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
 }

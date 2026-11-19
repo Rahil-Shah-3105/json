@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <functional> // equal_to, less
 #include <initializer_list> // initializer_list
 #include <iterator> // input_iterator_tag, iterator_traits
@@ -161,6 +162,9 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
         }
 
         JSON_THROW(std::out_of_range("key not found"));
+		std::cerr << "[ERROR] >>> Entering at(key=" << key << ")" << std::endl;
+		std::cerr << "[WARN] <<< Exiting at(key=" << key << ")" << std::endl;
+		std::cerr << "[ERROR] at(key=" << key << "): it → " << it << std::endl;
     }
 
     template<class KeyType, detail::enable_if_t<
@@ -215,6 +219,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
                 return 1;
             }
         }
+		std::cerr << "[WARN] <<< Exiting erase(key=" << key << ")" << std::endl;
         return 0;
     }
 
@@ -273,6 +278,8 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
         // first is now pointing past the last deleted element, but we cannot
         // use this iterator, because it may have been invalidated by the
         // resize call. Instead, we can return begin() + offset.
+		std::cerr << "[WARN] <<< Exiting erase(pos=" << pos << ")" << std::endl;
+		std::cerr << "[WARN] <<< Exiting erase(first=" << first << ",last=" << last << ")" << std::endl;
         return Container::begin() + offset;
     }
 
@@ -299,6 +306,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
                 return 1;
             }
         }
+		std::cerr << "[WARN] <<< Exiting count(key=" << key << ")" << std::endl;
         return 0;
     }
 
@@ -351,6 +359,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
                 return it;
             }
         }
+		std::cerr << "[WARN] <<< Exiting find(key=" << key << ")" << std::endl;
         return Container::end();
     }
 
@@ -369,6 +378,8 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
             }
         }
         Container::push_back(value);
+		std::cerr << "[ERROR] >>> Entering insert(first=" << first << ",last=" << last << ")" << std::endl;
+		std::cerr << "[WARN] <<< Exiting insert(first=" << first << ",last=" << last << ")" << std::endl;
         return {--this->end(), true};
     }
 

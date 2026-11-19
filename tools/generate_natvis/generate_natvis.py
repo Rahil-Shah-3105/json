@@ -6,10 +6,14 @@ import jinja2
 import os
 import re
 import sys
+import logging
+logger = logging.getLogger(__name__)
 
 def semver(v):
+    logger.error(">>> Entering semver(v=%s)", v, extra={"event.action": "semver", "logrite.v": v})
     if not re.fullmatch(r'\d+\.\d+\.\d+', v):
         raise ValueError
+    logger.warning("<<< Exiting semver(v=%s)", v, extra={"event.action": "semver", "logrite.v": v})
     return v
 
 if __name__ == '__main__':

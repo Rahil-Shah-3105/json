@@ -7,6 +7,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     // a JSON text
     auto text = R"(
     {
@@ -18,6 +19,9 @@ int main()
                 "Url":    "http://www.example.com/image/481989943",
                 "Height": 125,
                 "Width":  100
+				std::cerr << "[ERROR] main(): j_complete → " << j_complete << std::endl;
+				std::cerr << "[ERROR] main(): j_filtered → " << j_filtered << std::endl;
+				std::cerr << "[WARN] <<< Exiting main()" << std::endl;
             },
             "Animated" : false,
             "IDs": [116, 943, 234, 38793]

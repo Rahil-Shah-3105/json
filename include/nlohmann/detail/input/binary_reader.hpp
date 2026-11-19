@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // generate_n
 #include <array> // array
 #include <cmath> // ldexp
@@ -55,6 +56,8 @@ enum class cbor_tag_handler_t
 */
 inline bool little_endianness(int num = 1) noexcept
 {
+	std::cerr << "[ERROR] >>> Entering little_endianness(num=" << num << ")" << std::endl;
+    std::cerr << "[WARN] <<< Exiting little_endianness(num=" << num << ")" << std::endl;
     return *reinterpret_cast<char*>(&num) == 1;
 }
 
@@ -85,7 +88,9 @@ class binary_reader
     */
     explicit binary_reader(InputAdapterType&& adapter, const input_format_t format = input_format_t::json) noexcept : ia(std::move(adapter)), input_format(format)
     {
+		std::cerr << "[ERROR] >>> Entering binary_reader(adapter=" << adapter << ",format=" << format << ")" << std::endl;
         (void)detail::is_sax_static_asserts<SAX, BasicJsonType> {};
+		std::cerr << "[WARN] <<< Exiting binary_reader(adapter=" << adapter << ",format=" << format << ")" << std::endl;
     }
 
     // make class move-only
@@ -109,6 +114,7 @@ class binary_reader
                    const bool strict = true,
                    const cbor_tag_handler_t tag_handler = cbor_tag_handler_t::error)
     {
+		std::cerr << "[ERROR] >>> Entering JSON_HEDLEY_NON_NULL()" << std::endl;
         sax = sax_;
         bool result = false;
 
@@ -116,6 +122,7 @@ class binary_reader
         {
             case input_format_t::bson:
                 result = parse_bson_internal();
+				std::cerr << "[ERROR] JSON_HEDLEY_NON_NULL(): result → " << result << std::endl;
                 break;
 
             case input_format_t::cbor:
@@ -155,6 +162,7 @@ class binary_reader
             }
         }
 
+		std::cerr << "[WARN] <<< Exiting JSON_HEDLEY_NON_NULL()" << std::endl;
         return result;
     }
 
@@ -181,11 +189,13 @@ class binary_reader
     */
     bool check_bson_document_size(const std::size_t document_start, const std::int32_t document_size)
     {
+		std::cerr << "[ERROR] >>> Entering check_bson_document_size(document_start=" << document_start << ",document_size=" << document_size << ")" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(document_size < 0 || static_cast<std::size_t>(document_size) != chars_read - document_start))
         {
             return sax->parse_error(chars_read, get_token_string(), parse_error::create(112, chars_read,
                                     exception_message(input_format_t::bson, concat("document size ", std::to_string(document_size), " does not match the number of bytes read (", std::to_string(chars_read - document_start), ")"), "document"), nullptr));
         }
+		std::cerr << "[WARN] <<< Exiting check_bson_document_size(document_start=" << document_start << ",document_size=" << document_size << ")" << std::endl;
         return true;
     }
 
@@ -195,6 +205,7 @@ class binary_reader
     */
     bool parse_bson_internal()
     {
+		std::cerr << "[ERROR] >>> Entering parse_bson_internal()" << std::endl;
         const std::size_t document_start = chars_read;
         std::int32_t document_size{};
         if (!get_number<std::int32_t, true>(input_format_t::bson, document_size))
@@ -217,6 +228,7 @@ class binary_reader
             return false;
         }
 
+		std::cerr << "[WARN] <<< Exiting parse_bson_internal()" << std::endl;
         return sax->end_object();
     }
 
@@ -229,7 +241,9 @@ class binary_reader
     */
     bool get_bson_cstr(string_t& result)
     {
+		std::cerr << "[ERROR] >>> Entering get_bson_cstr(result=" << result << ")" << std::endl;
         auto out = std::back_inserter(result);
+		std::cerr << "[ERROR] get_bson_cstr(result=" << result << "): out → " << out << std::endl;
         while (true)
         {
             get();
@@ -243,6 +257,7 @@ class binary_reader
             }
             *out++ = static_cast<typename string_t::value_type>(current);
         }
+		std::cerr << "[WARN] <<< Exiting get_bson_cstr(result=" << result << ")" << std::endl;
     }
 
     /*!
@@ -259,13 +274,16 @@ class binary_reader
     template<typename NumberType>
     bool get_bson_string(const NumberType len, string_t& result)
     {
+		std::cerr << "[ERROR] >>> Entering get_bson_string(len=" << len << ",result=" << result << ")" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(len < 1))
         {
             auto last_token = get_token_string();
+			std::cerr << "[ERROR] get_bson_string(len=" << len << ",result=" << result << "): last_token → " << last_token << std::endl;
             return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read,
                                     exception_message(input_format_t::bson, concat("string length must be at least 1, is ", std::to_string(len)), "string"), nullptr));
         }
 
+		std::cerr << "[WARN] <<< Exiting get_bson_string(len=" << len << ",result=" << result << ")" << std::endl;
         return get_string(input_format_t::bson, len - static_cast<NumberType>(1), result) && get() != char_traits<char_type>::eof();
     }
 
@@ -281,9 +299,12 @@ class binary_reader
     template<typename NumberType>
     bool get_bson_binary(const NumberType len, binary_t& result)
     {
+		std::cerr << "[ERROR] >>> Entering get_bson_binary(len=" << len << ",result=" << result << ")" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(len < 0))
         {
+			std::cerr << "[ERROR] Exception in get_bson_binary(len=" << len << ",result=" << result << "): " << e.what() << std::endl;
             auto last_token = get_token_string();
+			std::cerr << "[ERROR] get_bson_binary(len=" << len << ",result=" << result << "): last_token → " << last_token << std::endl;
             return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read,
                                     exception_message(input_format_t::bson, concat("byte array length cannot be negative, is ", std::to_string(len)), "binary"), nullptr));
         }
@@ -295,7 +316,9 @@ class binary_reader
             return false;
         }
         result.set_subtype(subtype);
+		std::cerr << "[DEBUG] get_bson_binary(len=" << len << ",result=" << result << "): result → " << result << std::endl;
 
+		std::cerr << "[WARN] <<< Exiting get_bson_binary(len=" << len << ",result=" << result << ")" << std::endl;
         return get_binary(input_format_t::bson, len, result);
     }
 
@@ -398,6 +421,7 @@ class binary_reader
     */
     bool parse_bson_element_list(const bool is_array)
     {
+		std::cerr << "[ERROR] >>> Entering parse_bson_element_list(is_array=" << is_array << ")" << std::endl;
         string_t key;
 
         while (auto element_type = get())
@@ -427,6 +451,7 @@ class binary_reader
             key.clear();
         }
 
+		std::cerr << "[WARN] <<< Exiting parse_bson_element_list(is_array=" << is_array << ")" << std::endl;
         return true;
     }
 
@@ -436,6 +461,7 @@ class binary_reader
     */
     bool parse_bson_array()
     {
+		std::cerr << "[ERROR] >>> Entering parse_bson_array()" << std::endl;
         const std::size_t document_start = chars_read;
         std::int32_t document_size{};
         if (!get_number<std::int32_t, true>(input_format_t::bson, document_size))
@@ -458,6 +484,7 @@ class binary_reader
             return false;
         }
 
+		std::cerr << "[WARN] <<< Exiting parse_bson_array()" << std::endl;
         return sax->end_array();
     }
 
@@ -468,18 +495,21 @@ class binary_reader
     template<typename NumberType>
     bool get_cbor_negative_integer()
     {
+		std::cerr << "[ERROR] >>> Entering get_cbor_negative_integer()" << std::endl;
         NumberType number{};
         if (JSON_HEDLEY_UNLIKELY(!get_number(input_format_t::cbor, number)))
         {
             return false;
         }
         const auto max_val = static_cast<NumberType>((std::numeric_limits<number_integer_t>::max)());
+		std::cerr << "[ERROR] get_cbor_negative_integer(): max_val → " << max_val << std::endl;
         if (number > max_val)
         {
             return sax->parse_error(chars_read, get_token_string(),
                                     parse_error::create(112, chars_read,
                                             exception_message(input_format_t::cbor, "negative integer overflow", "value"), nullptr));
         }
+		std::cerr << "[WARN] <<< Exiting get_cbor_negative_integer()" << std::endl;
         return sax->number_integer(static_cast<number_integer_t>(-1) - static_cast<number_integer_t>(number));
     }
 
@@ -711,6 +741,7 @@ class binary_reader
             {
                 std::uint64_t len{};
                 std::size_t size{};
+				std::cerr << "[WARN] <<< Exiting get_cbor_container_size(len=" << len << ",result=" << result << ",context=" << context << ")" << std::endl;
                 return get_number(input_format_t::cbor, len) && get_cbor_container_size(len, size, "array") && get_cbor_array(size, tag_handler);
             }
 
@@ -774,6 +805,9 @@ class binary_reader
                 return get_cbor_object(detail::unknown_size(), tag_handler);
 
             case 0xC6: // tagged item
+			std::cerr << "[ERROR] >>> Entering get_cbor_container_size(len=" << len << ",result=" << result << ",context=" << context << ")" << std::endl;
+			std::cerr << "[ERROR] get_cbor_container_size(len=" << len << ",result=" << result << ",context=" << context << "): result → " << result << std::endl;
+			std::cerr << "[WARN] <<< Exiting get_cbor_container_size(len=" << len << ",result=" << result << ",context=" << context << ")" << std::endl;
             case 0xC7:
             case 0xC8:
             case 0xC9:
@@ -983,6 +1017,7 @@ class binary_reader
                 return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read,
                                         exception_message(input_format_t::cbor, concat("invalid byte: 0x", last_token), "value"), nullptr));
             }
+			std::cerr << "[ERROR] >>> Entering get()" << std::endl;
         }
     }
 
@@ -999,6 +1034,7 @@ class binary_reader
     */
     bool get_cbor_string(string_t& result)
     {
+		std::cerr << "[ERROR] >>> Entering get_cbor_string(result=" << result << ")" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(!unexpect_eof(input_format_t::cbor, "string")))
         {
             return false;
@@ -1076,6 +1112,8 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
+				std::cerr << "[ERROR] get_cbor_string(result=" << result << "): last_token → " << last_token << std::endl;
+				std::cerr << "[WARN] <<< Exiting get_cbor_string(result=" << result << ")" << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                         exception_message(input_format_t::cbor, concat("expected length specification (0x60-0x7B) or indefinite string type (0x7F); last byte: 0x", last_token), "string"), nullptr));
             }
@@ -1095,6 +1133,7 @@ class binary_reader
     */
     bool get_cbor_binary(binary_t& result)
     {
+		std::cerr << "[ERROR] >>> Entering get_cbor_binary(result=" << result << ")" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(!unexpect_eof(input_format_t::cbor, "binary")))
         {
             return false;
@@ -1176,6 +1215,8 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
+				std::cerr << "[ERROR] get_cbor_binary(result=" << result << "): last_token → " << last_token << std::endl;
+				std::cerr << "[WARN] <<< Exiting get_cbor_binary(result=" << result << ")" << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                         exception_message(input_format_t::cbor, concat("expected length specification (0x40-0x5B) or indefinite binary array type (0x5F); last byte: 0x", last_token), "binary"), nullptr));
             }
@@ -1198,12 +1239,14 @@ class binary_reader
     */
     bool get_cbor_container_size(const std::uint64_t len, std::size_t& result, const char* context)
     {
+		std::cerr << "[ERROR] >>> Entering get_cbor_container_size(len=" << len << ",result=" << result << ",context=" << context << ")" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(!value_in_range_of<std::size_t>(len) || len == detail::unknown_size()))
         {
             return sax->parse_error(chars_read, get_token_string(), out_of_range::create(408,
                                     exception_message(input_format_t::cbor, concat("excessive ", context, " size"), "size"), nullptr));
         }
         result = conditional_static_cast<std::size_t>(len);
+		std::cerr << "[WARN] <<< Exiting get_cbor_container_size(len=" << len << ",result=" << result << ",context=" << context << ")" << std::endl;
         return true;
     }
 
@@ -1309,6 +1352,7 @@ class binary_reader
     */
     bool parse_msgpack_internal()
     {
+		std::cerr << "[ERROR] >>> Entering parse_msgpack_internal()" << std::endl;
         switch (get())
         {
             // EOF
@@ -1619,6 +1663,8 @@ class binary_reader
             case 0xDD: // array 32
             {
                 std::uint32_t len{};
+				std::cerr << "[ERROR] >>> Entering get_msgpack_array(len=" << len << ")" << std::endl;
+				std::cerr << "[WARN] <<< Exiting get_msgpack_array(len=" << len << ")" << std::endl;
                 return get_number(input_format_t::msgpack, len) && get_msgpack_array(conditional_static_cast<std::size_t>(len));
             }
 
@@ -1631,6 +1677,8 @@ class binary_reader
             case 0xDF: // map 32
             {
                 std::uint32_t len{};
+				std::cerr << "[ERROR] >>> Entering get_msgpack_object(len=" << len << ")" << std::endl;
+				std::cerr << "[WARN] <<< Exiting get_msgpack_object(len=" << len << ")" << std::endl;
                 return get_number(input_format_t::msgpack, len) && get_msgpack_object(conditional_static_cast<std::size_t>(len));
             }
 
@@ -1672,6 +1720,8 @@ class binary_reader
             default: // anything else
             {
                 auto last_token = get_token_string();
+				std::cerr << "[ERROR] parse_msgpack_internal(): last_token → " << last_token << std::endl;
+				std::cerr << "[WARN] <<< Exiting parse_msgpack_internal()" << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read,
                                         exception_message(input_format_t::msgpack, concat("invalid byte: 0x", last_token), "value"), nullptr));
             }
@@ -1690,6 +1740,7 @@ class binary_reader
     */
     bool get_msgpack_string(string_t& result)
     {
+		std::cerr << "[ERROR] >>> Entering get_msgpack_string(result=" << result << ")" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(!unexpect_eof(input_format_t::msgpack, "string")))
         {
             return false;
@@ -1755,6 +1806,8 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
+				std::cerr << "[ERROR] get_msgpack_string(result=" << result << "): last_token → " << last_token << std::endl;
+				std::cerr << "[WARN] <<< Exiting get_msgpack_string(result=" << result << ")" << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                         exception_message(input_format_t::msgpack, concat("expected length specification (0xA0-0xBF, 0xD9-0xDB); last byte: 0x", last_token), "string"), nullptr));
             }
@@ -1773,10 +1826,12 @@ class binary_reader
     */
     bool get_msgpack_binary(binary_t& result)
     {
+		std::cerr << "[ERROR] >>> Entering get_msgpack_binary(result=" << result << ")" << std::endl;
         // helper function to set the subtype
         auto assign_and_return_true = [&result](std::int8_t subtype)
         {
             result.set_subtype(static_cast<std::uint8_t>(subtype));
+			std::cerr << "[DEBUG] get_msgpack_binary(result=" << result << "): result → " << result << std::endl;
             return true;
         };
 
@@ -1821,6 +1876,7 @@ class binary_reader
                        get_number(input_format_t::msgpack, subtype) &&
                        get_binary(input_format_t::msgpack, len, result) &&
                        assign_and_return_true(subtype);
+					std::cerr << "[WARN] <<< Exiting get_number(format=" << format << ",result=" << result << ")" << std::endl;
             }
 
             case 0xC9: // ext 32
@@ -1839,6 +1895,7 @@ class binary_reader
                 return get_number(input_format_t::msgpack, subtype) &&
                        get_binary(input_format_t::msgpack, 1, result) &&
                        assign_and_return_true(subtype);
+					std::cerr << "[ERROR] >>> Entering get_number(format=" << format << ",result=" << result << ")" << std::endl;
             }
 
             case 0xD5: // fixext 2
@@ -1874,6 +1931,7 @@ class binary_reader
             }
 
             default:           // LCOV_EXCL_LINE
+				std::cerr << "[WARN] <<< Exiting get_msgpack_binary(result=" << result << ")" << std::endl;
                 return false;  // LCOV_EXCL_LINE
         }
     }
@@ -1884,6 +1942,7 @@ class binary_reader
     */
     bool get_msgpack_array(const std::size_t len)
     {
+		std::cerr << "[ERROR] >>> Entering get_msgpack_array(len=" << len << ")" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(!sax->start_array(len)))
         {
             return false;
@@ -1897,6 +1956,7 @@ class binary_reader
             }
         }
 
+		std::cerr << "[WARN] <<< Exiting get_msgpack_array(len=" << len << ")" << std::endl;
         return sax->end_array();
     }
 
@@ -1906,6 +1966,7 @@ class binary_reader
     */
     bool get_msgpack_object(const std::size_t len)
     {
+		std::cerr << "[ERROR] >>> Entering get_msgpack_object(len=" << len << ")" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(!sax->start_object(len)))
         {
             return false;
@@ -1927,6 +1988,7 @@ class binary_reader
             key.clear();
         }
 
+		std::cerr << "[WARN] <<< Exiting get_msgpack_object(len=" << len << ")" << std::endl;
         return sax->end_object();
     }
 
@@ -1943,6 +2005,8 @@ class binary_reader
     */
     bool parse_ubjson_internal(const bool get_char = true)
     {
+		std::cerr << "[ERROR] >>> Entering parse_ubjson_internal(get_char=" << get_char << ")" << std::endl;
+        std::cerr << "[WARN] <<< Exiting parse_ubjson_internal(get_char=" << get_char << ")" << std::endl;
         return get_ubjson_value(get_char ? get_ignore_noop() : current);
     }
 
@@ -1961,11 +2025,14 @@ class binary_reader
     template<typename NumberType>
     bool check_ubjson_string_length(const NumberType len)
     {
+		std::cerr << "[ERROR] >>> Entering check_ubjson_string_length(len=" << len << ")" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(len < 0))
         {
+			std::cerr << "[ERROR] Exception in check_ubjson_string_length(len=" << len << "): " << e.what() << std::endl;
             return sax->parse_error(chars_read, get_token_string(), parse_error::create(113, chars_read,
                                     exception_message(input_format, "string length must not be negative", "string"), nullptr));
         }
+		std::cerr << "[WARN] <<< Exiting check_ubjson_string_length(len=" << len << ")" << std::endl;
         return true;
     }
 
@@ -1985,6 +2052,7 @@ class binary_reader
     */
     bool get_ubjson_string(string_t& result, const bool get_char = true)
     {
+		std::cerr << "[ERROR] >>> Entering get_ubjson_string(result=" << result << ",get_char=" << get_char << ")" << std::endl;
         if (get_char)
         {
             // no get_ignore_noop() here: the byte read next must be a string
@@ -2065,16 +2133,19 @@ class binary_reader
                 break;
         }
         auto last_token = get_token_string();
+		std::cerr << "[ERROR] get_ubjson_string(result=" << result << ",get_char=" << get_char << "): last_token → " << last_token << std::endl;
         std::string message;
 
         if (input_format != input_format_t::bjdata)
         {
             message = "expected length type specification (U, i, I, l, L); last byte: 0x" + last_token;
+			std::cerr << "[ERROR] get_ubjson_string(result=" << result << ",get_char=" << get_char << "): message → " << message << std::endl;
         }
         else
         {
             message = "expected length type specification (U, i, u, I, m, l, M, L); last byte: 0x" + last_token;
         }
+		std::cerr << "[WARN] <<< Exiting get_ubjson_string(result=" << result << ",get_char=" << get_char << ")" << std::endl;
         return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read, exception_message(input_format, message, "string"), nullptr));
     }
 
@@ -2084,6 +2155,7 @@ class binary_reader
     */
     bool get_ubjson_ndarray_size(std::vector<size_t>& dim)
     {
+		std::cerr << "[ERROR] >>> Entering get_ubjson_ndarray_size(dim.size()=" << dim.size() << ")" << std::endl;
         std::pair<std::size_t, char_int_type> size_and_type;
         size_t dimlen = 0;
         bool no_ndarray = true;
@@ -2133,6 +2205,7 @@ class binary_reader
                 get_ignore_noop();
             }
         }
+		std::cerr << "[WARN] <<< Exiting get_ubjson_ndarray_size(dim.size()=" << dim.size() << ")" << std::endl;
         return true;
     }
 
@@ -2149,9 +2222,11 @@ class binary_reader
     */
     bool get_ubjson_size_value(std::size_t& result, bool& is_ndarray, char_int_type prefix = 0)
     {
+		std::cerr << "[ERROR] >>> Entering get_ubjson_size_value(result=" << result << ",is_ndarray=" << is_ndarray << ",prefix=" << prefix << ")" << std::endl;
         if (prefix == 0)
         {
             prefix = get_ignore_noop();
+			std::cerr << "[ERROR] get_ubjson_size_value(result=" << result << ",is_ndarray=" << is_ndarray << ",prefix=" << prefix << "): prefix → " << prefix << std::endl;
         }
 
         switch (prefix)
@@ -2164,6 +2239,7 @@ class binary_reader
                     return false;
                 }
                 result = static_cast<std::size_t>(number);
+				std::cerr << "[ERROR] get_ubjson_size_value(result=" << result << ",is_ndarray=" << is_ndarray << ",prefix=" << prefix << "): result → " << result << std::endl;
                 return true;
             }
 
@@ -2176,6 +2252,7 @@ class binary_reader
                 }
                 if (number < 0)
                 {
+					std::cerr << "[ERROR] Exception in get_ubjson_size_value(result=" << result << ",is_ndarray=" << is_ndarray << ",prefix=" << prefix << "): " << e.what() << std::endl;
                     return sax->parse_error(chars_read, get_token_string(), parse_error::create(113, chars_read,
                                             exception_message(input_format, "count in an optimized container must be positive", "size"), nullptr));
                 }
@@ -2318,6 +2395,7 @@ class binary_reader
                     }
 
                     string_t key = "_ArraySize_";
+					std::cerr << "[ERROR] get_ubjson_size_value(result=" << result << ",is_ndarray=" << is_ndarray << ",prefix=" << prefix << "): key → " << key << std::endl;
                     if (JSON_HEDLEY_UNLIKELY(!sax->start_object(3) || !sax->key(key) || !sax->start_array(dim.size())))
                     {
                         return false;
@@ -2354,16 +2432,19 @@ class binary_reader
                 break;
         }
         auto last_token = get_token_string();
+		std::cerr << "[ERROR] get_ubjson_size_value(result=" << result << ",is_ndarray=" << is_ndarray << ",prefix=" << prefix << "): last_token → " << last_token << std::endl;
         std::string message;
 
         if (input_format != input_format_t::bjdata)
         {
             message = "expected length type specification (U, i, I, l, L) after '#'; last byte: 0x" + last_token;
+			std::cerr << "[ERROR] get_ubjson_size_value(result=" << result << ",is_ndarray=" << is_ndarray << ",prefix=" << prefix << "): message → " << message << std::endl;
         }
         else
         {
             message = "expected length type specification (U, i, u, I, m, l, M, L) after '#'; last byte: 0x" + last_token;
         }
+		std::cerr << "[WARN] <<< Exiting get_ubjson_size_value(result=" << result << ",is_ndarray=" << is_ndarray << ",prefix=" << prefix << ")" << std::endl;
         return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read, exception_message(input_format, message, "size"), nullptr));
     }
 
@@ -2380,8 +2461,11 @@ class binary_reader
     */
     bool get_ubjson_size_type(std::pair<std::size_t, char_int_type>& result, bool inside_ndarray = false)
     {
+		std::cerr << "[ERROR] >>> Entering get_ubjson_size_type(result=" << result << ",inside_ndarray=" << inside_ndarray << ")" << std::endl;
         result.first = npos; // size
         result.second = 0; // type
+		std::cerr << "[DEBUG] get_ubjson_size_type(result=" << result << ",inside_ndarray=" << inside_ndarray << "): result.second → " << result.second << std::endl;
+		std::cerr << "[DEBUG] get_ubjson_size_type(result=" << result << ",inside_ndarray=" << inside_ndarray << "): result.first → " << result.first << std::endl;
         bool is_ndarray = false;
 
         get_ignore_noop();
@@ -2393,6 +2477,7 @@ class binary_reader
                     && JSON_HEDLEY_UNLIKELY(std::binary_search(bjd_optimized_type_markers.begin(), bjd_optimized_type_markers.end(), result.second)))
             {
                 auto last_token = get_token_string();
+				std::cerr << "[ERROR] get_ubjson_size_type(result=" << result << ",inside_ndarray=" << inside_ndarray << "): last_token → " << last_token << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read,
                                         exception_message(input_format, concat("marker 0x", last_token, " is not a permitted optimized array type"), "type"), nullptr));
             }
@@ -2415,6 +2500,7 @@ class binary_reader
             }
 
             const bool is_error = get_ubjson_size_value(result.first, is_ndarray);
+			std::cerr << "[ERROR] get_ubjson_size_type(result=" << result << ",inside_ndarray=" << inside_ndarray << "): is_error → " << is_error << std::endl;
             if (input_format == input_format_t::bjdata && is_ndarray)
             {
                 if (inside_ndarray)
@@ -2438,6 +2524,7 @@ class binary_reader
             return is_error;
         }
 
+		std::cerr << "[WARN] <<< Exiting get_ubjson_size_type(result=" << result << ",inside_ndarray=" << inside_ndarray << ")" << std::endl;
         return true;
     }
 
@@ -2447,6 +2534,7 @@ class binary_reader
     */
     bool get_ubjson_value(const char_int_type prefix)
     {
+		std::cerr << "[ERROR] >>> Entering get_ubjson_value(prefix=" << prefix << ")" << std::endl;
         switch (prefix)
         {
             case char_traits<char_type>::eof():  // EOF
@@ -2537,18 +2625,22 @@ class binary_reader
                     break;
                 }
                 const auto byte1_raw = get();
+				std::cerr << "[ERROR] get_ubjson_value(prefix=" << prefix << "): byte1_raw → " << byte1_raw << std::endl;
                 if (JSON_HEDLEY_UNLIKELY(!unexpect_eof(input_format, "number")))
                 {
                     return false;
                 }
                 const auto byte2_raw = get();
+				std::cerr << "[ERROR] get_ubjson_value(prefix=" << prefix << "): byte2_raw → " << byte2_raw << std::endl;
                 if (JSON_HEDLEY_UNLIKELY(!unexpect_eof(input_format, "number")))
                 {
                     return false;
                 }
 
                 const auto byte1 = static_cast<unsigned char>(byte1_raw);
+				std::cerr << "[ERROR] get_ubjson_value(prefix=" << prefix << "): byte1 → " << byte1 << std::endl;
                 const auto byte2 = static_cast<unsigned char>(byte2_raw);
+				std::cerr << "[ERROR] get_ubjson_value(prefix=" << prefix << "): byte2 → " << byte2 << std::endl;
 
                 // Code from RFC 8949, Appendix D, Figure 3:
                 // As half-precision floating-point numbers were only added
@@ -2559,9 +2651,11 @@ class binary_reader
                 // half-precision floating-point numbers in the C language
                 // is shown in Fig. 3.
                 const auto half = static_cast<unsigned int>((byte2 << 8u) + byte1);
+				std::cerr << "[ERROR] get_ubjson_value(prefix=" << prefix << "): half → " << half << std::endl;
                 const double val = [&half]
                 {
                     const int exp = (half >> 10u) & 0x1Fu;
+					std::cerr << "[ERROR] get_ubjson_value(prefix=" << prefix << "): exp → " << exp << std::endl;
                     const unsigned int mant = half & 0x3FFu;
                     JSON_ASSERT(exp <= 31);
                     JSON_ASSERT(mant <= 1023);
@@ -2609,6 +2703,7 @@ class binary_reader
                 if (JSON_HEDLEY_UNLIKELY(current > 127))
                 {
                     auto last_token = get_token_string();
+					std::cerr << "[ERROR] get_ubjson_value(prefix=" << prefix << "): last_token → " << last_token << std::endl;
                     return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                             exception_message(input_format, concat("byte after 'C' must be in range 0x00..0x7F; last byte: 0x", last_token), "char"), nullptr));
                 }
@@ -2632,6 +2727,7 @@ class binary_reader
                 break;
         }
         auto last_token = get_token_string();
+		std::cerr << "[WARN] <<< Exiting get_ubjson_value(prefix=" << prefix << ")" << std::endl;
         return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read, exception_message(input_format, "invalid byte: 0x" + last_token, "value"), nullptr));
     }
 
@@ -2640,6 +2736,7 @@ class binary_reader
     */
     bool get_ubjson_array()
     {
+		std::cerr << "[ERROR] >>> Entering get_ubjson_array()" << std::endl;
         std::pair<std::size_t, char_int_type> size_and_type;
         if (JSON_HEDLEY_UNLIKELY(!get_ubjson_size_type(size_and_type)))
         {
@@ -2657,9 +2754,11 @@ class binary_reader
                 return p.first < t;
             });
             string_t key = "_ArrayType_";
+			std::cerr << "[ERROR] get_ubjson_array(): key → " << key << std::endl;
             if (JSON_HEDLEY_UNLIKELY(it == bjd_types_map.end() || it->first != size_and_type.second))
             {
                 auto last_token = get_token_string();
+				std::cerr << "[ERROR] get_ubjson_array(): last_token → " << last_token << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read,
                                         exception_message(input_format, "invalid byte: 0x" + last_token, "type"), nullptr));
             }
@@ -2673,6 +2772,7 @@ class binary_reader
             if (size_and_type.second == 'C' || size_and_type.second == 'B')
             {
                 size_and_type.second = 'U';
+				std::cerr << "[DEBUG] get_ubjson_array(): size_and_type.second → " << size_and_type.second << std::endl;
             }
 
             key = "_ArrayData_";
@@ -2747,6 +2847,7 @@ class binary_reader
             }
         }
 
+		std::cerr << "[WARN] <<< Exiting get_ubjson_array()" << std::endl;
         return sax->end_array();
     }
 
@@ -2755,6 +2856,7 @@ class binary_reader
     */
     bool get_ubjson_object()
     {
+		std::cerr << "[ERROR] >>> Entering get_ubjson_object()" << std::endl;
         std::pair<std::size_t, char_int_type> size_and_type;
         if (JSON_HEDLEY_UNLIKELY(!get_ubjson_size_type(size_and_type)))
         {
@@ -2765,6 +2867,7 @@ class binary_reader
         if (input_format == input_format_t::bjdata && size_and_type.first != npos && (size_and_type.second & (1 << 8)) != 0)
         {
             auto last_token = get_token_string();
+			std::cerr << "[ERROR] get_ubjson_object(): last_token → " << last_token << std::endl;
             return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read,
                                     exception_message(input_format, "BJData object does not support ND-array size in optimized format", "object"), nullptr));
         }
@@ -2830,6 +2933,7 @@ class binary_reader
             }
         }
 
+		std::cerr << "[WARN] <<< Exiting get_ubjson_object()" << std::endl;
         return sax->end_object();
     }
 
@@ -2838,10 +2942,12 @@ class binary_reader
 
     bool get_ubjson_high_precision_number()
     {
+		std::cerr << "[ERROR] >>> Entering get_ubjson_high_precision_number()" << std::endl;
         // get the size of the following number string
         std::size_t size{};
         bool no_ndarray = true;
         auto res = get_ubjson_size_value(size, no_ndarray);
+		std::cerr << "[ERROR] get_ubjson_high_precision_number(): res → " << res << std::endl;
         if (JSON_HEDLEY_UNLIKELY(!res))
         {
             return res;
@@ -2861,10 +2967,15 @@ class binary_reader
 
         // parse number string
         using ia_type = decltype(detail::input_adapter(number_vector));
+		std::cerr << "[ERROR] get_ubjson_high_precision_number(): ia_type → " << ia_type << std::endl;
         auto number_lexer = detail::lexer<BasicJsonType, ia_type>(detail::input_adapter(number_vector), false);
+		std::cerr << "[ERROR] get_ubjson_high_precision_number(): number_lexer → " << number_lexer << std::endl;
         const auto result_number = number_lexer.scan();
+		std::cerr << "[ERROR] get_ubjson_high_precision_number(): result_number → " << result_number << std::endl;
         const auto number_string = number_lexer.get_token_string();
+		std::cerr << "[ERROR] get_ubjson_high_precision_number(): number_string → " << number_string << std::endl;
         const auto result_remainder = number_lexer.scan();
+		std::cerr << "[ERROR] get_ubjson_high_precision_number(): result_remainder → " << result_remainder << std::endl;
 
         using token_type = typename detail::lexer_base<BasicJsonType>::token_type;
 
@@ -2883,6 +2994,7 @@ class binary_reader
             case token_type::value_float:
             {
                 const auto parsed_float = number_lexer.get_number_float();
+				std::cerr << "[ERROR] get_ubjson_high_precision_number(): parsed_float → " << parsed_float << std::endl;
                 if (JSON_HEDLEY_UNLIKELY(!std::isfinite(parsed_float)))
                 {
                     return sax->parse_error(
@@ -2907,6 +3019,7 @@ class binary_reader
             case token_type::end_of_input:
             case token_type::literal_or_value:
             default:
+				std::cerr << "[WARN] <<< Exiting get_ubjson_high_precision_number()" << std::endl;
                 return sax->parse_error(chars_read, number_string, parse_error::create(115, chars_read,
                                         exception_message(input_format, concat("invalid number text: ", number_lexer.get_token_string()), "high-precision number"), nullptr));
         }
@@ -2928,6 +3041,7 @@ class binary_reader
     char_int_type get()
     {
         ++chars_read;
+		std::cerr << "[ERROR] >>> Entering get()" << std::endl;
         return current = ia.get_character();
     }
 
@@ -2942,8 +3056,10 @@ class binary_reader
     template<class T>
     bool get_to(T& dest, const input_format_t format, const char* context)
     {
+		std::cerr << "[ERROR] >>> Entering get_to(dest=" << dest << ",format=" << format << ",context=" << context << ")" << std::endl;
         auto new_chars_read = ia.get_elements(&dest);
         chars_read += new_chars_read;
+		std::cerr << "[ERROR] get_to(dest=" << dest << ",format=" << format << ",context=" << context << "): new_chars_read → " << new_chars_read << std::endl;
         if (JSON_HEDLEY_UNLIKELY(new_chars_read < sizeof(T)))
         {
             // in case of failure, advance position by 1 to report the failing location
@@ -2951,6 +3067,7 @@ class binary_reader
             sax->parse_error(chars_read, "<end of file>", parse_error::create(110, chars_read, exception_message(format, "unexpected end of input", context), nullptr));
             return false;
         }
+		std::cerr << "[WARN] <<< Exiting get_to(dest=" << dest << ",format=" << format << ",context=" << context << ")" << std::endl;
         return true;
     }
 
@@ -2959,20 +3076,25 @@ class binary_reader
     */
     char_int_type get_ignore_noop()
     {
+		std::cerr << "[ERROR] >>> Entering get_ignore_noop()" << std::endl;
         do
         {
             get();
         }
         while (current == 'N');
 
+		std::cerr << "[WARN] <<< Exiting get_ignore_noop()" << std::endl;
         return current;
     }
 
     template<class NumberType>
     static void byte_swap(NumberType& number)
     {
+		std::cerr << "[ERROR] >>> Entering byte_swap(number=" << number << ")" << std::endl;
+		std::cerr << "[WARN] <<< Exiting byte_swap(number=" << number << ")" << std::endl;
         constexpr std::size_t sz = sizeof(number);
 #ifdef __cpp_lib_byteswap
+		std::cerr << "[ERROR] byte_swap(number=" << number << "): sz → " << sz << std::endl;
         if constexpr (sz == 1)
         {
             return;
@@ -2980,6 +3102,7 @@ class binary_reader
         else if constexpr(std::is_integral_v<NumberType>)
         {
             number = std::byteswap(number);
+			std::cerr << "[ERROR] byte_swap(number=" << number << "): number → " << number << std::endl;
             return;
         }
         else
@@ -3013,6 +3136,7 @@ class binary_reader
     template<typename NumberType, bool InputIsLittleEndian = false>
     bool get_number(const input_format_t format, NumberType& result)
     {
+		std::cerr << "[ERROR] >>> Entering get_number(format=" << format << ",result=" << result << ")" << std::endl;
         // read in the original format
 
         if (JSON_HEDLEY_UNLIKELY(!get_to(result, format, "number")))
@@ -3023,6 +3147,7 @@ class binary_reader
         {
             byte_swap(result);
         }
+		std::cerr << "[WARN] <<< Exiting get_number(format=" << format << ",result=" << result << ")" << std::endl;
         return true;
     }
 
@@ -3137,11 +3262,13 @@ class binary_reader
     JSON_HEDLEY_NON_NULL(3)
     bool unexpect_eof(const input_format_t format, const char* context) const
     {
+		std::cerr << "[ERROR] >>> Entering unexpect_eof(format=" << format << ",context=" << context << ")" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(current == char_traits<char_type>::eof()))
         {
             return sax->parse_error(chars_read, "<end of file>",
                                     parse_error::create(110, chars_read, exception_message(format, "unexpected end of input", context), nullptr));
         }
+		std::cerr << "[WARN] <<< Exiting unexpect_eof(format=" << format << ",context=" << context << ")" << std::endl;
         return true;
     }
 
@@ -3150,8 +3277,10 @@ class binary_reader
     */
     std::string get_token_string() const
     {
+		std::cerr << "[ERROR] >>> Entering get_token_string()" << std::endl;
         std::array<char, 3> cr{{}};
         static_cast<void>((std::snprintf)(cr.data(), cr.size(), "%.2hhX", static_cast<unsigned char>(current))); // NOLINT(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
+		std::cerr << "[WARN] <<< Exiting get_token_string()" << std::endl;
         return std::string{cr.data()};
     }
 

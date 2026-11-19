@@ -6,6 +6,7 @@ using namespace nlohmann::literals;
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     // create a JSON value
     json j =
     {
@@ -28,6 +29,7 @@ int main()
     }
     catch (const json::parse_error& e)
     {
+		std::cerr << "[ERROR] Exception in main(): " << e.what() << std::endl;
         std::cout << e.what() << '\n';
     }
 
@@ -40,4 +42,5 @@ int main()
     {
         std::cout << e.what() << '\n';
     }
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
 }

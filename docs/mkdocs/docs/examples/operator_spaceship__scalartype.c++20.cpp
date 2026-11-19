@@ -6,6 +6,7 @@ using json = nlohmann::json;
 
 const char* to_string(const std::partial_ordering& po)
 {
+	std::cerr << "[ERROR] >>> Entering to_string(po=" << po << ")" << std::endl;
     if (std::is_lt(po))
     {
         return "less";
@@ -18,18 +19,22 @@ const char* to_string(const std::partial_ordering& po)
     {
         return "equivalent";
     }
+	std::cerr << "[WARN] <<< Exiting to_string(po=" << po << ")" << std::endl;
     return "unordered";
 }
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     using float_limits = std::numeric_limits<json::number_float_t>;
     constexpr auto nan = float_limits::quiet_NaN();
+	std::cerr << "[ERROR] main(): nan → " << nan << std::endl;
 
     // create several JSON values
     json boolean = false;
     json number = 17;
     json string = "17";
+	std::cerr << "[ERROR] main(): string → " << string << std::endl;
 
     // output values and comparisons
     std::cout << std::boolalpha << std::fixed;
@@ -37,4 +42,5 @@ int main()
     std::cout << number << " <=> " << 17.0 << " := " << to_string(number <=> 17.0) << '\n'; // *NOPAD*
     std::cout << number << " <=> " << nan << " := " << to_string(number <=> nan) << '\n'; // *NOPAD*
     std::cout << string << " <=> " << 17 << " := " << to_string(string <=> 17) << '\n'; // *NOPAD*
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
 }

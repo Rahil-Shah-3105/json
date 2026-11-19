@@ -6,6 +6,7 @@ using namespace nlohmann::literals;
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     try
     {
         // executing a failing JSON Patch operation
@@ -13,6 +14,7 @@ int main()
             "best_biscuit": {
                 "name": "Oreo"
             }
+			std::cerr << "[WARN] <<< Exiting main()" << std::endl;
         })"_json;
         json patch = R"([{
             "op": "test",

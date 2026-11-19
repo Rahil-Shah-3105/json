@@ -9,6 +9,7 @@ using json = nlohmann::json;
 
 json parse_strict(const std::string& input)
 {
+	std::cerr << "[ERROR] >>> Entering parse_strict(input=" << input << ")" << std::endl;
     // one key set per nesting depth, reused across sibling objects
     std::vector<std::unordered_set<std::string>> keys;
 
@@ -18,6 +19,7 @@ json parse_strict(const std::string& input)
         {
             // keys of this object are reported at depth+1 (see the event table above)
             const auto child_depth = static_cast<std::size_t>(depth) + 1;
+			std::cerr << "[ERROR] parse_strict(input=" << input << "): child_depth → " << child_depth << std::endl;
             if (keys.size() <= child_depth)
             {
                 keys.resize(child_depth + 1);
@@ -32,11 +34,13 @@ json parse_strict(const std::string& input)
             const auto& key = parsed.get_ref<const std::string&>();
             if (!seen.insert(key).second)
             {
+				std::cerr << "[ERROR] Throwing std from parse_strict(input=" << input << ")" << std::endl;
                 throw std::runtime_error("duplicate JSON object key: " + key);
             }
             return true;
         }
 
+	std::cerr << "[WARN] <<< Exiting parse_strict(input=" << input << ")" << std::endl;
         return true;
     };
 
@@ -45,6 +49,7 @@ json parse_strict(const std::string& input)
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     // parsing succeeds when all keys are unique
     json j = parse_strict(R"({"one": 1, "two": 2})");
     std::cout << j << '\n';
@@ -56,6 +61,8 @@ int main()
     }
     catch (const std::exception& e)
     {
+		std::cerr << "[ERROR] Exception in main(): " << e.what() << std::endl;
         std::cout << e.what() << '\n';
     }
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
 }

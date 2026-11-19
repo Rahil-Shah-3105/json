@@ -38,43 +38,60 @@ import datetime
 import json
 import os
 import re
+import logging
+logger = logging.getLogger(__name__)
 
 
 class Amalgamation(object):
 
     # Prepends self.source_path to file_path if needed.
     def actual_path(self, file_path):
+        logger.error(">>> Entering actual_path(file_path=%s)", file_path, extra={"event.action": "actual_path", "logrite.file_path": file_path})
         if not os.path.isabs(file_path):
             file_path = os.path.join(self.source_path, file_path)
+        logger.error("actual_path(file_path=%s): file_path → %s", file_path, file_path, extra={"event.action": "actual_path", "logrite.file_path": file_path})
+        logger.warning("<<< Exiting actual_path(file_path=%s)", file_path, extra={"event.action": "actual_path", "logrite.file_path": file_path})
         return file_path
 
     # Search included file_path in self.include_paths and
     # in source_dir if specified.
     def find_included_file(self, file_path, source_dir):
+        logger.error(">>> Entering find_included_file(file_path=%s,source_dir=%s)", file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
         search_dirs = self.include_paths[:]
         if source_dir:
             search_dirs.insert(0, source_dir)
 
         for search_dir in search_dirs:
             search_path = os.path.join(search_dir, file_path)
+            logger.error("find_included_file(file_path=%s,source_dir=%s): search_path → %s", file_path, source_dir, search_path, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
             if os.path.isfile(self.actual_path(search_path)):
                 return search_path
+        logger.warning("<<< Exiting find_included_file(file_path=%s,source_dir=%s)", file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
         return None
 
     def __init__(self, args):
+        logger.error(">>> Entering __init__(args=%s)", args, extra={"event.action": "__init__"})
         with open(args.config, 'r') as f:
             config = json.loads(f.read())
+            logger.error("__init__(args=%s): config → %s", args, config, extra={"event.action": "__init__"})
             for key in config:
                 setattr(self, key, config[key])
 
+                logger.warning("<<< Exiting __init__(args=%s)", args, extra={"event.action": "__init__"})
             self.verbose = args.verbose == "yes"
+            logger.error("__init__(args=%s): self.verbose → %s", args, self.verbose, extra={"event.action": "__init__"})
             self.prologue = args.prologue
+            logger.debug("__init__(self=%s,args=%s): self.prologue → %s", self, args, self.prologue, extra={"event.action": "__init__"})
             self.source_path = args.source_path
+            logger.debug("__init__(self=%s,args=%s): self.source_path → %s", self, args, self.source_path, extra={"event.action": "__init__"})
             self.included_files = []
+            logger.debug("__init__(self=%s,args=%s): self.included_files → %s", self, args, self.included_files, extra={"event.action": "__init__"})
 
     # Generate the amalgamation and write it to the target file.
     def generate(self):
+        logger.error(">>> Entering generate()", extra={"event.action": "generate"})
         amalgamation = ""
+        logger.error("generate(): amalgamation → %s", amalgamation, extra={"event.action": "generate"})
 
         if self.prologue:
             with open(self.prologue, 'r') as f:
@@ -92,6 +109,7 @@ class Amalgamation(object):
             # actual_path = self.actual_path(file_path)
             print(" - processing \"{0}\"".format(file_path))
             t = TranslationUnit(file_path, self, True)
+            logger.error("generate(): t → %s", t, extra={"event.action": "generate"})
             amalgamation += t.content
 
         with open(self.target, 'w') as f:
@@ -102,13 +120,16 @@ class Amalgamation(object):
             print("Files processed: {0}".format(self.sources))
             print("Files included: {0}".format(self.included_files))
         print("")
+        logger.warning("<<< Exiting generate()", extra={"event.action": "generate"})
 
 
 def _is_within(match, matches):
+    logger.error(">>> Entering _is_within(match=%s,matches=%s)", match, matches, extra={"event.action": "_is_within", "logrite.match": match, "logrite.matches": matches})
     for m in matches:
         if match.start() > m.start() and \
                 match.end() < m.end():
             return True
+    logger.warning("<<< Exiting _is_within(match=%s,matches=%s)", match, matches, extra={"event.action": "_is_within", "logrite.match": match, "logrite.matches": matches})
     return False
 
 
@@ -134,14 +155,18 @@ class TranslationUnit(object):
     # Search for pattern in self.content, add the match to
     # contexts if found and update the index accordingly.
     def _search_content(self, index, pattern, contexts):
+        logger.error(">>> Entering _search_content(index=%s,pattern=%s,contexts=%s)", index, pattern, contexts, extra={"event.action": "_search_content", "logrite.index": index, "logrite.pattern": pattern, "logrite.contexts": contexts})
         match = pattern.search(self.content, index)
+        logger.error("_search_content(index=%s,pattern=%s,contexts=%s): match → %s", index, pattern, contexts, match, extra={"event.action": "_search_content", "logrite.index": index, "logrite.pattern": pattern, "logrite.contexts": contexts})
         if match:
             contexts.append(match)
             return match.end()
+        logger.warning("<<< Exiting _search_content(index=%s,pattern=%s,contexts=%s)", index, pattern, contexts, extra={"event.action": "_search_content", "logrite.index": index, "logrite.pattern": pattern, "logrite.contexts": contexts})
         return index + 2
 
     # Return all the skippable contexts, i.e., comments and strings
     def _find_skippable_contexts(self):
+        logger.error(">>> Entering _find_skippable_contexts()", extra={"event.action": "_find_skippable_contexts"})
         # Find contexts in the content in which a found include
         # directive should not be processed.
         skippable_contexts = []
@@ -150,6 +175,7 @@ class TranslationUnit(object):
         # skippable contexts using regular expressions when found.
         i = 1
         content_len = len(self.content)
+        logger.error("_find_skippable_contexts(): content_len → %s", content_len, extra={"event.action": "_find_skippable_contexts"})
         while i < content_len:
             j = i - 1
             current = self.content[i]
@@ -171,14 +197,18 @@ class TranslationUnit(object):
                 # Skip to the next char.
                 i += 1
 
+        logger.warning("<<< Exiting _find_skippable_contexts()", extra={"event.action": "_find_skippable_contexts"})
         return skippable_contexts
 
     # Returns True if the match is within list of other matches
 
     # Removes pragma once from content
     def _process_pragma_once(self):
+        logger.error(">>> Entering _process_pragma_once()", extra={"event.action": "_process_pragma_once"})
         content_len = len(self.content)
+        logger.error("_process_pragma_once(): content_len → %s", content_len, extra={"event.action": "_process_pragma_once"})
         if content_len < len("#include <x>"):
+            logger.warning("<<< Exiting _process_pragma_once()", extra={"event.action": "_process_pragma_once"})
             return 0
 
         # Find contexts in the content in which a found include
@@ -202,10 +232,13 @@ class TranslationUnit(object):
             prev_end = pragma_match.end()
         tmp_content += self.content[prev_end:]
         self.content = tmp_content
+        logger.debug("_process_pragma_once(self=%s): self.content → %s", self, self.content, extra={"event.action": "_process_pragma_once"})
 
     # Include all trivial #include directives into self.content.
     def _process_includes(self):
+        logger.error(">>> Entering _process_includes()", extra={"event.action": "_process_includes"})
         content_len = len(self.content)
+        logger.error("_process_includes(): content_len → %s", content_len, extra={"event.action": "_process_includes"})
         if content_len < len("#include <x>"):
             return 0
 
@@ -242,32 +275,45 @@ class TranslationUnit(object):
             prev_end = include_match.end()
         tmp_content += self.content[prev_end:]
         self.content = tmp_content
+        logger.debug("_process_includes(self=%s): self.content → %s", self, self.content, extra={"event.action": "_process_includes"})
 
+        logger.warning("<<< Exiting _process_includes()", extra={"event.action": "_process_includes"})
         return len(includes)
 
     # Make all content processing
     def _process(self):
+        logger.error(">>> Entering _process()", extra={"event.action": "_process"})
         if not self.is_root:
             self._process_pragma_once()
         self._process_includes()
+        logger.warning("<<< Exiting _process()", extra={"event.action": "_process"})
 
     def __init__(self, file_path, amalgamation, is_root):
+        logger.error(">>> Entering __init__(file_path=%s,amalgamation=%s,is_root=%s)", file_path, amalgamation, is_root, extra={"event.action": "__init__", "logrite.file_path": file_path, "logrite.amalgamation": amalgamation, "logrite.is_root": is_root})
         self.file_path = file_path
+        logger.debug("__init__(self=%s,file_path=%s,amalgamation=%s,is_root=%s): self.file_path → %s", self, file_path, amalgamation, is_root, self.file_path, extra={"event.action": "__init__", "logrite.file_path": file_path, "logrite.amalgamation": amalgamation, "logrite.is_root": is_root})
         self.file_dir = os.path.dirname(file_path)
+        logger.error("__init__(file_path=%s,amalgamation=%s,is_root=%s): self.file_dir → %s", file_path, amalgamation, is_root, self.file_dir, extra={"event.action": "__init__", "logrite.file_path": file_path, "logrite.amalgamation": amalgamation, "logrite.is_root": is_root})
         self.amalgamation = amalgamation
+        logger.debug("__init__(self=%s,file_path=%s,amalgamation=%s,is_root=%s): self.amalgamation → %s", self, file_path, amalgamation, is_root, self.amalgamation, extra={"event.action": "__init__", "logrite.file_path": file_path, "logrite.amalgamation": amalgamation, "logrite.is_root": is_root})
         self.is_root = is_root
+        logger.debug("__init__(self=%s,file_path=%s,amalgamation=%s,is_root=%s): self.is_root → %s", self, file_path, amalgamation, is_root, self.is_root, extra={"event.action": "__init__", "logrite.file_path": file_path, "logrite.amalgamation": amalgamation, "logrite.is_root": is_root})
 
         self.amalgamation.included_files.append(self.file_path)
 
         actual_path = self.amalgamation.actual_path(file_path)
+        logger.error("__init__(file_path=%s,amalgamation=%s,is_root=%s): actual_path → %s", file_path, amalgamation, is_root, actual_path, extra={"event.action": "__init__", "logrite.file_path": file_path, "logrite.amalgamation": amalgamation, "logrite.is_root": is_root})
         if not os.path.isfile(actual_path):
             raise IOError("File not found: \"{0}\"".format(file_path))
         with open(actual_path, 'r') as f:
             self.content = f.read()
+            logger.error("__init__(file_path=%s,amalgamation=%s,is_root=%s): self.content → %s", file_path, amalgamation, is_root, self.content, extra={"event.action": "__init__", "logrite.file_path": file_path, "logrite.amalgamation": amalgamation, "logrite.is_root": is_root})
             self._process()
+            logger.warning("<<< Exiting __init__(file_path=%s,amalgamation=%s,is_root=%s)", file_path, amalgamation, is_root, extra={"event.action": "__init__", "logrite.file_path": file_path, "logrite.amalgamation": amalgamation, "logrite.is_root": is_root})
 
 
 def main():
+    logger.error(">>> Entering main()", extra={"event.action": "main"})
     description = "Amalgamate C source and header files."
     usage = " ".join([
         "amalgamate.py",
@@ -292,7 +338,9 @@ def main():
                             required=False, metavar="", help="path to a C prologue file")
 
     amalgamation = Amalgamation(argsparser.parse_args())
+    logger.error("main(): amalgamation → %s", amalgamation, extra={"event.action": "main"})
     amalgamation.generate()
+    logger.warning("<<< Exiting main()", extra={"event.action": "main"})
 
 
 if __name__ == "__main__":

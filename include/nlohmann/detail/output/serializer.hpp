@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // reverse, remove, fill, find, none_of
 #include <array> // array
 #include <clocale> // localeconv, lconv
@@ -390,9 +391,12 @@ class serializer
     */
     void dump_escaped(const string_t& s, const bool ensure_ascii)
     {
+		std::cerr << "[ERROR] >>> Entering dump_escaped(s=" << s << ",ensure_ascii=" << ensure_ascii << ")" << std::endl;
         std::uint32_t codepoint{};
         std::uint8_t state = UTF8_ACCEPT;
+		std::cerr << "[ERROR] dump_escaped(s=" << s << ",ensure_ascii=" << ensure_ascii << "): state → " << state << std::endl;
         std::size_t bytes = 0;  // number of bytes written to string_buffer
+		std::cerr << "[ERROR] dump_escaped(s=" << s << ",ensure_ascii=" << ensure_ascii << "): bytes → " << bytes << std::endl;
 
         // number of bytes written at the point of the last valid byte
         std::size_t bytes_after_last_accept = 0;
@@ -401,6 +405,7 @@ class serializer
         for (std::size_t i = 0; i < s.size(); ++i)
         {
             const auto byte = static_cast<std::uint8_t>(s[i]);
+			std::cerr << "[ERROR] dump_escaped(s=" << s << ",ensure_ascii=" << ensure_ascii << "): byte → " << byte << std::endl;
 
             switch (decode(state, codepoint, byte))
             {
@@ -494,7 +499,9 @@ class serializer
 
                     // remember the byte position of this accept
                     bytes_after_last_accept = bytes;
+					std::cerr << "[ERROR] dump_escaped(s=" << s << ",ensure_ascii=" << ensure_ascii << "): bytes_after_last_accept → " << bytes_after_last_accept << std::endl;
                     undumped_chars = 0;
+					std::cerr << "[ERROR] dump_escaped(s=" << s << ",ensure_ascii=" << ensure_ascii << "): undumped_chars → " << undumped_chars << std::endl;
                     break;
                 }
 
@@ -626,6 +633,7 @@ class serializer
                     JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert) LCOV_EXCL_LINE
             }
         }
+		std::cerr << "[WARN] <<< Exiting dump_escaped(s=" << s << ",ensure_ascii=" << ensure_ascii << ")" << std::endl;
     }
 
   private:
@@ -639,6 +647,7 @@ class serializer
     */
     unsigned int count_digits(number_unsigned_t x) noexcept
     {
+		std::cerr << "[ERROR] >>> Entering count_digits(x=" << x << ")" << std::endl;
         unsigned int n_digits = 1;
         for (;;)
         {
@@ -661,6 +670,7 @@ class serializer
             x = x / 10000u;
             n_digits += 4;
         }
+		std::cerr << "[WARN] <<< Exiting count_digits(x=" << x << ")" << std::endl;
     }
 
     /*!
@@ -670,10 +680,13 @@ class serializer
      */
     static std::string hex_bytes(std::uint8_t byte)
     {
+		std::cerr << "[ERROR] >>> Entering hex_bytes(byte=" << byte << ")" << std::endl;
         std::string result = "FF";
         constexpr const char* nibble_to_hex = "0123456789ABCDEF";
+		std::cerr << "[ERROR] hex_bytes(byte=" << byte << "): result → " << result << std::endl;
         result[0] = nibble_to_hex[byte / 16];
         result[1] = nibble_to_hex[byte % 16];
+		std::cerr << "[WARN] <<< Exiting hex_bytes(byte=" << byte << ")" << std::endl;
         return result;
     }
 
@@ -692,6 +705,7 @@ class serializer
      */
     void write_u_escape(std::size_t& pos, std::uint16_t codeunit) noexcept
     {
+		std::cerr << "[ERROR] >>> Entering write_u_escape(pos=" << pos << ",codeunit=" << codeunit << ")" << std::endl;
         JSON_ASSERT(string_buffer.size() - pos >= 6);
         constexpr const char* nibble_to_hex = "0123456789abcdef";
         string_buffer[pos + 0] = '\\';
@@ -701,12 +715,16 @@ class serializer
         string_buffer[pos + 4] = nibble_to_hex[(codeunit >> 4u) & 0x0Fu];
         string_buffer[pos + 5] = nibble_to_hex[codeunit & 0x0Fu];
         pos += 6;
+		std::cerr << "[WARN] <<< Exiting write_u_escape(pos=" << pos << ",codeunit=" << codeunit << ")" << std::endl;
     }
 
     // templates to avoid warnings about useless casts
     template <typename NumberType, enable_if_t<std::is_signed<NumberType>::value, int> = 0>
     bool is_negative_number(NumberType x)
     {
+		std::cerr << "[ERROR] >>> Entering is_negative_number(x=" << x << ")" << std::endl;
+        std::cerr << "[WARN] <<< Exiting is_negative_number(x=" << x << ")" << std::endl;
+		std::cerr << "[WARN] <<< Exiting is_negative_number()" << std::endl;
         return x < 0;
     }
 
@@ -733,6 +751,7 @@ class serializer
                    int > = 0 >
     void dump_integer(NumberType x)
     {
+		std::cerr << "[ERROR] >>> Entering dump_integer(x=" << x << ")" << std::endl;
         static constexpr std::array<std::array<char, 2>, 100> digits_to_99
         {
             {
@@ -759,6 +778,7 @@ class serializer
         // use a pointer to fill the buffer
         auto buffer_ptr = number_buffer.begin(); // NOLINT(llvm-qualified-auto,readability-qualified-auto,cppcoreguidelines-pro-type-vararg,hicpp-vararg)
 
+		std::cerr << "[ERROR] dump_integer(x=" << x << "): buffer_ptr → " << buffer_ptr << std::endl;
         number_unsigned_t abs_value;
 
         unsigned int n_chars{};
@@ -767,12 +787,16 @@ class serializer
         {
             *buffer_ptr = '-';
             abs_value = remove_sign(static_cast<number_integer_t>(x));
+			std::cerr << "[ERROR] dump_integer(x=" << x << "): abs_value → " << abs_value << std::endl;
+			std::cerr << "[DEBUG] dump_integer(x=" << x << "): abs_value → " << abs_value << std::endl;
 
             // account one more byte for the minus sign
             n_chars = 1 + count_digits(abs_value);
+			std::cerr << "[ERROR] dump_integer(x=" << x << "): n_chars → " << n_chars << std::endl;
         }
         else
         {
+			std::cerr << "[DEBUG] dump_integer(x=" << x << "): n_chars → " << n_chars << std::endl;
             abs_value = static_cast<number_unsigned_t>(x);
             n_chars = count_digits(abs_value);
         }
@@ -789,6 +813,7 @@ class serializer
         while (abs_value >= 100)
         {
             const auto digits_index = static_cast<unsigned>((abs_value % 100));
+			std::cerr << "[ERROR] dump_integer(x=" << x << "): digits_index → " << digits_index << std::endl;
             abs_value /= 100;
             *(--buffer_ptr) = digits_to_99[digits_index][1];
             *(--buffer_ptr) = digits_to_99[digits_index][0];
@@ -806,6 +831,7 @@ class serializer
         }
 
         o->write_characters(number_buffer.data(), n_chars);
+		std::cerr << "[WARN] <<< Exiting dump_integer(x=" << x << ")" << std::endl;
     }
 
     /*!
@@ -843,12 +869,20 @@ class serializer
         auto* end = ::nlohmann::detail::to_chars(begin, begin + number_buffer.size(), x);
 
         o->write_characters(begin, static_cast<size_t>(end - begin));
+		std::cerr << "[ERROR] >>> Entering dump_float(x=" << x << ")" << std::endl;
+		std::cerr << "[ERROR] dump_float(x=" << x << "): end → " << end << std::endl;
+		std::cerr << "[WARN] <<< Exiting dump_float(x=" << x << ")" << std::endl;
+		std::cerr << "[ERROR] dump_float(x=" << x << "): dec_pos → " << dec_pos << std::endl;
     }
 
     JSON_HEDLEY_NON_NULL(1)
     static int snprintf_float(char* buf, std::size_t size, int d, double x)
     {
         // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
+		std::cerr << "[ERROR] >>> Entering JSON_HEDLEY_NON_NULL()" << std::endl;
+		std::cerr << "[WARN] <<< Exiting JSON_HEDLEY_NON_NULL()" << std::endl;
+		std::cerr << "[ERROR] >>> Entering snprintf_float(buf=" << buf << ",size=" << size << ",d=" << d << ",x=" << x << ")" << std::endl;
+		std::cerr << "[WARN] <<< Exiting snprintf_float(buf=" << buf << ",size=" << size << ",d=" << d << ",x=" << x << ")" << std::endl;
         return (std::snprintf)(buf, size, "%.*g", d, x);
     }
 
@@ -866,6 +900,7 @@ class serializer
 
         // the actual conversion
         std::ptrdiff_t len = snprintf_float(number_buffer.data(), number_buffer.size(), d, x);
+		std::cerr << "[ERROR] dump_float(x=" << x << "): len → " << len << std::endl;
 
         // negative value indicates an error
         JSON_ASSERT(len > 0);
@@ -932,6 +967,7 @@ class serializer
     */
     static std::uint8_t decode(std::uint8_t& state, std::uint32_t& codep, const std::uint8_t byte) noexcept
     {
+		std::cerr << "[ERROR] >>> Entering decode(state=" << state << ",codep=" << codep << ",byte=" << byte << ")" << std::endl;
         static const std::array<std::uint8_t, 400> utf8d =
         {
             {
@@ -962,6 +998,8 @@ class serializer
         const std::size_t index = 256u + (static_cast<size_t>(state) * 16u) + static_cast<size_t>(type);
         JSON_ASSERT(index < utf8d.size());
         state = utf8d[index];
+		std::cerr << "[ERROR] decode(state=" << state << ",codep=" << codep << ",byte=" << byte << "): state → " << state << std::endl;
+		std::cerr << "[WARN] <<< Exiting decode(state=" << state << ",codep=" << codep << ",byte=" << byte << ")" << std::endl;
         return state;
     }
 
@@ -988,6 +1026,7 @@ class serializer
     number_unsigned_t remove_sign(number_integer_t x) noexcept
     {
         JSON_ASSERT(x < 0 && x < (std::numeric_limits<number_integer_t>::max)()); // NOLINT(misc-redundant-expression)
+		std::cerr << "[WARN] <<< Exiting remove_sign(x=" << x << ")" << std::endl;
         return static_cast<number_unsigned_t>(-(x + 1)) + 1;
     }
 

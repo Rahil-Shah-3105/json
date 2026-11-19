@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <array> // array
 #include <cstddef> // size_t
 #include <type_traits> // conditional, enable_if, false_type, integral_constant, is_constructible, is_integral, is_same, remove_cv, remove_reference, true_type
@@ -67,6 +68,8 @@ struct integer_sequence
     using value_type = T;
     static constexpr std::size_t size() noexcept
     {
+		std::cerr << "[ERROR] >>> Entering size()" << std::endl;
+        std::cerr << "[WARN] <<< Exiting size()" << std::endl;
         return sizeof...(Ints);
     }
 };

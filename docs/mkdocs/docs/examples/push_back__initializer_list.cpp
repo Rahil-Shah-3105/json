@@ -5,8 +5,10 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     // create JSON values
     json object = {{"one", 1}, {"two", 2}};
+	std::cerr << "[ERROR] main(): object → " << object << std::endl;
     json null;
 
     // print values
@@ -24,4 +26,5 @@ int main()
 
     // would throw:
     //object.push_back({1, 2, 3});
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
 }

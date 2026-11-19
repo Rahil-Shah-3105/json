@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // reverse
 #include <array> // array
 #include <map> // map
@@ -57,7 +58,9 @@ class binary_writer
     */
     explicit binary_writer(output_adapter_t<CharType> adapter) : oa(std::move(adapter))
     {
+		std::cerr << "[ERROR] >>> Entering binary_writer(adapter=" << adapter << ")" << std::endl;
         JSON_ASSERT(oa);
+		std::cerr << "[WARN] <<< Exiting binary_writer(adapter=" << adapter << ")" << std::endl;
     }
 
     /*!
@@ -66,6 +69,7 @@ class binary_writer
     */
     void write_bson(const BasicJsonType& j)
     {
+		std::cerr << "[ERROR] >>> Entering write_bson(j=" << j << ")" << std::endl;
         switch (j.type())
         {
             case value_t::object:
@@ -88,6 +92,7 @@ class binary_writer
                 JSON_THROW(type_error::create(317, concat("to serialize to BSON, top-level type must be object, but is ", j.type_name()), &j));
             }
         }
+		std::cerr << "[WARN] <<< Exiting write_bson(j=" << j << ")" << std::endl;
     }
 
     /*!
@@ -95,6 +100,7 @@ class binary_writer
     */
     void write_cbor(const BasicJsonType& j)
     {
+		std::cerr << "[ERROR] >>> Entering write_cbor(j=" << j << ")" << std::endl;
         switch (j.type())
         {
             case value_t::null:
@@ -174,6 +180,7 @@ class binary_writer
                     }
                 }
                 break;
+				std::cerr << "[WARN] <<< Exiting to_char_type(x=" << x << ")" << std::endl;
             }
 
             case value_t::number_unsigned:
@@ -232,6 +239,7 @@ class binary_writer
             {
                 // step 1: write control byte and the string length
                 const auto N = j.m_data.m_value.string->size();
+				std::cerr << "[ERROR] write_cbor(j=" << j << "): N → " << N << std::endl;
                 if (N <= 0x17)
                 {
                     write_number(static_cast<std::uint8_t>(0x60 + N));
@@ -412,6 +420,7 @@ class binary_writer
             default:
                 break;
         }
+		std::cerr << "[WARN] <<< Exiting write_cbor(j=" << j << ")" << std::endl;
     }
 
     /*!
@@ -419,6 +428,7 @@ class binary_writer
     */
     void write_msgpack(const BasicJsonType& j)
     {
+		std::cerr << "[ERROR] >>> Entering write_msgpack(j=" << j << ")" << std::endl;
         switch (j.type())
         {
             case value_t::null: // nil
@@ -555,6 +565,7 @@ class binary_writer
             {
                 // step 1: write control byte and the string length
                 const auto N = j.m_data.m_value.string->size();
+				std::cerr << "[ERROR] write_msgpack(j=" << j << "): N → " << N << std::endl;
                 if (N <= 31)
                 {
                     // fixstr
@@ -621,6 +632,7 @@ class binary_writer
                 // step 0: determine if the binary type has a set subtype to
                 // determine whether to use the ext or fixext types
                 const bool use_ext = j.m_data.m_value.binary->has_subtype();
+				std::cerr << "[ERROR] write_msgpack(j=" << j << "): use_ext → " << use_ext << std::endl;
 
                 // step 1: write control byte and the byte string length
                 const auto N = j.m_data.m_value.binary->size();
@@ -634,6 +646,7 @@ class binary_writer
                         {
                             case 1:
                                 output_type = 0xD4; // fixext 1
+								std::cerr << "[ERROR] write_msgpack(j=" << j << "): output_type → " << output_type << std::endl;
                                 break;
                             case 2:
                                 output_type = 0xD5; // fixext 2
@@ -650,6 +663,7 @@ class binary_writer
                             default:
                                 output_type = 0xC7; // ext 8
                                 fixed = false;
+								std::cerr << "[ERROR] write_msgpack(j=" << j << "): fixed → " << fixed << std::endl;
                                 break;
                         }
 
@@ -734,6 +748,7 @@ class binary_writer
             default:
                 break;
         }
+		std::cerr << "[WARN] <<< Exiting write_msgpack(j=" << j << ")" << std::endl;
     }
 
     /*!
@@ -969,13 +984,16 @@ class binary_writer
     */
     static std::size_t calc_bson_entry_header_size(const string_t& name, const BasicJsonType& j)
     {
+		std::cerr << "[ERROR] >>> Entering calc_bson_entry_header_size(name=" << name << ",j=" << j << ")" << std::endl;
         const auto it = name.find(static_cast<typename string_t::value_type>(0));
+		std::cerr << "[ERROR] calc_bson_entry_header_size(name=" << name << ",j=" << j << "): it → " << it << std::endl;
         if (JSON_HEDLEY_UNLIKELY(it != BasicJsonType::string_t::npos))
         {
             JSON_THROW(out_of_range::create(409, concat("BSON key cannot contain code point U+0000 (at byte ", std::to_string(it), ")"), &j));
         }
 
         static_cast<void>(j);
+		std::cerr << "[WARN] <<< Exiting calc_bson_entry_header_size(name=" << name << ",j=" << j << ")" << std::endl;
         return /*id*/ 1ul + name.size() + /*zero-terminator*/1u;
     }
 
@@ -986,11 +1004,13 @@ class binary_writer
     */
     static std::int32_t to_bson_length(const std::size_t size)
     {
+		std::cerr << "[ERROR] >>> Entering to_bson_length(size=" << size << ")" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(!value_in_range_of<std::int32_t>(size)))
         {
             JSON_THROW(out_of_range::create(412, concat("BSON length ", std::to_string(size), " exceeds maximum of ", std::to_string((std::numeric_limits<std::int32_t>::max)())), nullptr));
         }
 
+		std::cerr << "[WARN] <<< Exiting to_bson_length(size=" << size << ")" << std::endl;
         return static_cast<std::int32_t>(size);
     }
 
@@ -1031,6 +1051,8 @@ class binary_writer
     */
     static std::size_t calc_bson_string_size(const string_t& value)
     {
+		std::cerr << "[ERROR] >>> Entering calc_bson_string_size(value=" << value << ")" << std::endl;
+        std::cerr << "[WARN] <<< Exiting calc_bson_string_size(value=" << value << ")" << std::endl;
         return sizeof(std::int32_t) + value.size() + 1ul;
     }
 
@@ -1053,7 +1075,9 @@ class binary_writer
     */
     void write_bson_null(const string_t& name)
     {
+		std::cerr << "[ERROR] >>> Entering write_bson_null(name=" << name << ")" << std::endl;
         write_bson_entry_header(name, 0x0A);
+		std::cerr << "[WARN] <<< Exiting write_bson_null(name=" << name << ")" << std::endl;
     }
 
     /*!
@@ -1061,6 +1085,8 @@ class binary_writer
     */
     static std::size_t calc_bson_integer_size(const std::int64_t value)
     {
+		std::cerr << "[ERROR] >>> Entering calc_bson_integer_size(value=" << value << ")" << std::endl;
+        std::cerr << "[WARN] <<< Exiting calc_bson_integer_size(value=" << value << ")" << std::endl;
         return (std::numeric_limits<std::int32_t>::min)() <= value && value <= (std::numeric_limits<std::int32_t>::max)()
                ? sizeof(std::int32_t)
                : sizeof(std::int64_t);
@@ -1089,6 +1115,8 @@ class binary_writer
     */
     static constexpr std::size_t calc_bson_unsigned_size(const std::uint64_t value) noexcept
     {
+		std::cerr << "[ERROR] >>> Entering calc_bson_unsigned_size(value=" << value << ")" << std::endl;
+        std::cerr << "[WARN] <<< Exiting calc_bson_unsigned_size(value=" << value << ")" << std::endl;
         return (value <= static_cast<std::uint64_t>((std::numeric_limits<std::int32_t>::max)()))
                ? sizeof(std::int32_t)
                : sizeof(std::int64_t);
@@ -1132,10 +1160,12 @@ class binary_writer
     */
     static std::size_t calc_bson_array_size(const typename BasicJsonType::array_t& value)
     {
+		std::cerr << "[ERROR] >>> Entering calc_bson_array_size(value=" << value << ")" << std::endl;
         std::size_t array_index = 0ul;
 
         const std::size_t embedded_document_size = std::accumulate(std::begin(value), std::end(value), static_cast<std::size_t>(0), [&array_index](std::size_t result, const typename BasicJsonType::array_t::value_type & el)
         {
+		std::cerr << "[WARN] <<< Exiting calc_bson_array_size(value=" << value << ")" << std::endl;
             return result + calc_bson_element_size(std::to_string(array_index++), el);
         });
 
@@ -1147,6 +1177,8 @@ class binary_writer
     */
     static std::size_t calc_bson_binary_size(const typename BasicJsonType::binary_t& value)
     {
+		std::cerr << "[ERROR] >>> Entering calc_bson_binary_size(value=" << value << ")" << std::endl;
+        std::cerr << "[WARN] <<< Exiting calc_bson_binary_size(value=" << value << ")" << std::endl;
         return sizeof(std::int32_t) + value.size() + 1ul;
     }
 
@@ -1284,9 +1316,11 @@ class binary_writer
     */
     static std::size_t calc_bson_object_size(const typename BasicJsonType::object_t& value)
     {
+		std::cerr << "[ERROR] >>> Entering calc_bson_object_size(value=" << value << ")" << std::endl;
         const std::size_t document_size = std::accumulate(value.begin(), value.end(), static_cast<std::size_t>(0),
                                           [](size_t result, const typename BasicJsonType::object_t::value_type & el)
         {
+		std::cerr << "[WARN] <<< Exiting calc_bson_object_size(value=" << value << ")" << std::endl;
             return result += calc_bson_element_size(el.first, el.second);
         });
 
@@ -1299,6 +1333,7 @@ class binary_writer
     */
     void write_bson_object(const typename BasicJsonType::object_t& value)
     {
+		std::cerr << "[ERROR] >>> Entering write_bson_object(value=" << value << ")" << std::endl;
         write_number<std::int32_t>(to_bson_length(calc_bson_object_size(value)), true);
 
         for (const auto& el : value)
@@ -1307,6 +1342,7 @@ class binary_writer
         }
 
         oa->write_character(to_char_type(0x00));
+		std::cerr << "[WARN] <<< Exiting write_bson_object(value=" << value << ")" << std::endl;
     }
 
     //////////
@@ -1529,6 +1565,7 @@ class binary_writer
     */
     CharType ubjson_prefix(const BasicJsonType& j, const bool use_bjdata) const noexcept
     {
+		std::cerr << "[ERROR] >>> Entering ubjson_prefix(j=" << j << ",use_bjdata=" << use_bjdata << ")" << std::endl;
         switch (j.type())
         {
             case value_t::null:
@@ -1624,6 +1661,7 @@ class binary_writer
 
             case value_t::discarded:
             default:  // discarded values
+		std::cerr << "[WARN] <<< Exiting ubjson_prefix(j=" << j << ",use_bjdata=" << use_bjdata << ")" << std::endl;
                 return 'N';
         }
     }
@@ -1643,15 +1681,18 @@ class binary_writer
     */
     bool write_bjdata_ndarray(const typename BasicJsonType::object_t& value, const bool use_count, const bool use_type, const bjdata_version_t bjdata_version)
     {
+		std::cerr << "[ERROR] >>> Entering write_bjdata_ndarray(value=" << value << ",use_count=" << use_count << ",use_type=" << use_type << ",bjdata_version=" << bjdata_version << ")" << std::endl;
         std::map<string_t, CharType> bjdtype = {{"uint8", 'U'},  {"int8", 'i'},  {"uint16", 'u'}, {"int16", 'I'},
             {"uint32", 'm'}, {"int32", 'l'}, {"uint64", 'M'}, {"int64", 'L'}, {"single", 'd'}, {"double", 'D'},
             {"char", 'C'}, {"byte", 'B'}
         };
 
         string_t key = "_ArrayType_";
+		std::cerr << "[ERROR] write_bjdata_ndarray(value=" << value << ",use_count=" << use_count << ",use_type=" << use_type << ",bjdata_version=" << bjdata_version << "): key → " << key << std::endl;
         // use get<string_t>() instead of static_cast<string_t> to avoid an
         // ambiguous conversion under explicit instantiation on C++17 (see #4825)
         auto it = bjdtype.find(value.at(key).template get<string_t>());
+		std::cerr << "[ERROR] write_bjdata_ndarray(value=" << value << ",use_count=" << use_count << ",use_type=" << use_type << ",bjdata_version=" << bjdata_version << "): it → " << it << std::endl;
         if (it == bjdtype.end())
         {
             return true;
@@ -1660,6 +1701,7 @@ class binary_writer
 
         key = "_ArraySize_";
         std::size_t len = (value.at(key).empty() ? 0 : 1);
+		std::cerr << "[ERROR] write_bjdata_ndarray(value=" << value << ",use_count=" << use_count << ",use_type=" << use_type << ",bjdata_version=" << bjdata_version << "): len → " << len << std::endl;
         for (const auto& el : value.at(key))
         {
             // a dimension is read as an unsigned value below, so anything that
@@ -1677,11 +1719,13 @@ class binary_writer
             // element count that no reader can honor (the binary reader rejects
             // it with out_of_range.408), so encode as a plain object instead
             const auto dim = el.template get<std::uint64_t>();
+			std::cerr << "[ERROR] write_bjdata_ndarray(value=" << value << ",use_count=" << use_count << ",use_type=" << use_type << ",bjdata_version=" << bjdata_version << "): dim → " << dim << std::endl;
             if (!value_in_range_of<std::size_t>(dim))
             {
                 return true;
             }
             const auto dim_size = static_cast<std::size_t>(dim);
+			std::cerr << "[ERROR] write_bjdata_ndarray(value=" << value << ",use_count=" << use_count << ",use_type=" << use_type << ",bjdata_version=" << bjdata_version << "): dim_size → " << dim_size << std::endl;
             if (dim_size != 0 && len > (std::numeric_limits<std::size_t>::max)() / dim_size)
             {
                 return true;
@@ -1705,6 +1749,7 @@ class binary_writer
         // API stores int literals as signed), so both are accepted here and the
         // writes below go through get<>, which reads the member that is active.
         const bool ndarray_is_float = (dtype == 'd' || dtype == 'D');
+		std::cerr << "[ERROR] write_bjdata_ndarray(value=" << value << ",use_count=" << use_count << ",use_type=" << use_type << ",bjdata_version=" << bjdata_version << "): ndarray_is_float → " << ndarray_is_float << std::endl;
         for (const auto& el : value.at(key))
         {
             if (ndarray_is_float ? !el.is_number_float() : !el.is_number_integer())
@@ -1792,6 +1837,7 @@ class binary_writer
                 write_number(el.template get<double>(), true);
             }
         }
+		std::cerr << "[WARN] <<< Exiting write_bjdata_ndarray(value=" << value << ",use_count=" << use_count << ",use_type=" << use_type << ",bjdata_version=" << bjdata_version << ")" << std::endl;
         return false;
     }
 
@@ -1815,6 +1861,7 @@ class binary_writer
     template<typename NumberType>
     void write_number(const NumberType n, const bool OutputIsLittleEndian = false)
     {
+		std::cerr << "[ERROR] >>> Entering write_number(n=" << n << ",OutputIsLittleEndian=" << OutputIsLittleEndian << ")" << std::endl;
         // step 1: write the number to an array of length NumberType
         std::array<CharType, sizeof(NumberType)> vec{};
         std::memcpy(vec.data(), &n, sizeof(NumberType));
@@ -1827,6 +1874,7 @@ class binary_writer
         }
 
         oa->write_characters(vec.data(), sizeof(NumberType));
+		std::cerr << "[WARN] <<< Exiting write_number(n=" << n << ",OutputIsLittleEndian=" << OutputIsLittleEndian << ")" << std::endl;
     }
 
     void write_compact_float(const number_float_t n, detail::input_format_t format)
@@ -1834,6 +1882,7 @@ class binary_writer
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wfloat-equal"
+std::cerr << "[ERROR] >>> Entering write_compact_float(n=" << n << ",format=" << format << ")" << std::endl;
 #endif
         if (!std::isfinite(n) || ((static_cast<double>(n) >= static_cast<double>(std::numeric_limits<float>::lowest()) &&
                                    static_cast<double>(n) <= static_cast<double>((std::numeric_limits<float>::max)()) &&
@@ -1854,6 +1903,7 @@ class binary_writer
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif
+	std::cerr << "[WARN] <<< Exiting write_compact_float(n=" << n << ",format=" << format << ")" << std::endl;
     }
 
   public:
@@ -1889,6 +1939,7 @@ class binary_writer
         static_assert(sizeof(std::uint8_t) == sizeof(CharType), "size of CharType must be equal to std::uint8_t");
         CharType result;
         std::memcpy(&result, &x, sizeof(x));
+		std::cerr << "[WARN] <<< Exiting to_char_type(x=" << x << ")" << std::endl;
         return result;
     }
 

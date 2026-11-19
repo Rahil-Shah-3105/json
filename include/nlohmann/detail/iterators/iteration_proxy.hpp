@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstddef> // size_t
 #include <iterator> // forward_iterator_tag
 #include <tuple> // tuple_size, get, tuple_element
@@ -106,6 +107,7 @@ template<typename IteratorType> class iteration_proxy_value
     /// return key of the iterator
     const string_type& key() const
     {
+		std::cerr << "[ERROR] >>> Entering key()" << std::endl;
         JSON_ASSERT(anchor.m_object != nullptr);
 
         switch (anchor.m_object->type())
@@ -117,6 +119,7 @@ template<typename IteratorType> class iteration_proxy_value
                 {
                     int_to_string( array_index_str, array_index );
                     array_index_last = array_index;
+					std::cerr << "[DEBUG] key(): array_index_last → " << array_index_last << std::endl;
                 }
                 return array_index_str;
             }
@@ -135,6 +138,7 @@ template<typename IteratorType> class iteration_proxy_value
             case value_t::binary:
             case value_t::discarded:
             default:
+				std::cerr << "[WARN] <<< Exiting key()" << std::endl;
                 return empty_str;
         }
     }
@@ -169,12 +173,16 @@ template<typename IteratorType> class iteration_proxy
     /// return iterator begin (needed for range-based for)
     iteration_proxy_value<IteratorType> begin() const noexcept
     {
+		std::cerr << "[ERROR] >>> Entering begin()" << std::endl;
+        std::cerr << "[WARN] <<< Exiting begin()" << std::endl;
         return iteration_proxy_value<IteratorType>(container->begin());
     }
 
     /// return iterator end (needed for range-based for)
     iteration_proxy_value<IteratorType> end() const noexcept
     {
+		std::cerr << "[ERROR] >>> Entering end()" << std::endl;
+        std::cerr << "[WARN] <<< Exiting end()" << std::endl;
         return iteration_proxy_value<IteratorType>(container->end());
     }
 };

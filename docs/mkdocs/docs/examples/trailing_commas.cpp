@@ -5,6 +5,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     std::string s = R"(
     {
         "planets": [
@@ -17,7 +18,9 @@ int main()
             "Neptune",
         ]
     }
+	std::cerr << "[ERROR] Exception in main(): " << e.what() << std::endl;
     )";
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
 
     try
     {

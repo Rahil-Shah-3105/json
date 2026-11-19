@@ -6,6 +6,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     // create a JSON value with different types
     json json_types =
     {
@@ -23,11 +24,18 @@ int main()
 
     // use implicit conversions
     bool v1 = json_types["boolean"];
+	std::cerr << "[ERROR] main(): v1 → " << v1 << std::endl;
     int v2 = json_types["number"]["integer"];
+	std::cerr << "[ERROR] main(): v2 → " << v2 << std::endl;
     short v3 = json_types["number"]["integer"];
+	std::cerr << "[ERROR] main(): v3 → " << v3 << std::endl;
     float v4 = json_types["number"]["floating-point"];
+	std::cerr << "[ERROR] main(): v4 → " << v4 << std::endl;
     int v5 = json_types["number"]["floating-point"];
+	std::cerr << "[ERROR] main(): v5 → " << v5 << std::endl;
     std::string v6 = json_types["string"];
+	std::cerr << "[ERROR] main(): v6 → " << v6 << std::endl;
+	std::cerr << "[ERROR] main(): v7.size() → " << v7.size() << std::endl;
     std::vector<short> v7 = json_types["array"];
     std::unordered_map<std::string, json> v8 = json_types;
 
@@ -55,6 +63,8 @@ int main()
     }
     catch (const json::type_error& e)
     {
+		std::cerr << "[ERROR] Exception in main(): " << e.what() << std::endl;
         std::cout << e.what() << '\n';
     }
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
 }

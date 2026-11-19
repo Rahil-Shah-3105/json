@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cmath> // isfinite
 #include <cstdint> // uint8_t
 #include <functional> // function
@@ -94,6 +95,7 @@ class parser
     */
     void parse(const bool strict, BasicJsonType& result)
     {
+		std::cerr << "[ERROR] >>> Entering parse(strict=" << strict << ",result=" << result << ")" << std::endl;
         if (callback)
         {
             json_sax_dom_callback_parser<BasicJsonType, InputAdapterType> sdp(result, callback, allow_exceptions, &m_lexer);
@@ -112,6 +114,7 @@ class parser
             if (sdp.is_errored())
             {
                 result = value_t::discarded;
+				std::cerr << "[ERROR] parse(strict=" << strict << ",result=" << result << "): result → " << result << std::endl;
                 return;
             }
 
@@ -144,6 +147,7 @@ class parser
         }
 
         result.assert_invariant();
+		std::cerr << "[WARN] <<< Exiting parse(strict=" << strict << ",result=" << result << ")" << std::endl;
     }
 
     /*!
@@ -154,7 +158,9 @@ class parser
     */
     bool accept(const bool strict = true)
     {
+		std::cerr << "[ERROR] >>> Entering accept(strict=" << strict << ")" << std::endl;
         json_sax_acceptor<BasicJsonType> sax_acceptor;
+		std::cerr << "[WARN] <<< Exiting accept(strict=" << strict << ")" << std::endl;
         return sax_parse(&sax_acceptor, strict);
     }
 
@@ -162,8 +168,10 @@ class parser
     JSON_HEDLEY_NON_NULL(2)
     bool sax_parse(SAX* sax, const bool strict = true)
     {
+		std::cerr << "[ERROR] >>> Entering sax_parse(sax=" << sax << ",strict=" << strict << ")" << std::endl;
         (void)detail::is_sax_static_asserts<SAX, BasicJsonType> {};
         const bool result = sax_parse_internal(sax);
+		std::cerr << "[ERROR] sax_parse(sax=" << sax << ",strict=" << strict << "): result → " << result << std::endl;
 
         // strict mode: next byte must be EOF
         if (result && strict && (get_token() != token_type::end_of_input))
@@ -182,6 +190,7 @@ class parser
     bool sax_parse_internal(SAX* sax)
     {
         // stack to remember the hierarchy of structured values we are parsing
+		std::cerr << "[ERROR] >>> Entering sax_parse_internal(sax=" << sax << ")" << std::endl;
         // true = array; false = object
         std::vector<bool> states;
         // value to avoid a goto (see comment where set to true)
@@ -267,6 +276,7 @@ class parser
                     {
                         const auto res = m_lexer.get_number_float();
 
+						std::cerr << "[ERROR] sax_parse_internal(sax=" << sax << "): res → " << res << std::endl;
                         if (JSON_HEDLEY_UNLIKELY(!std::isfinite(res)))
                         {
                             return sax->parse_error(m_lexer.get_position(),
@@ -375,6 +385,7 @@ class parser
             {
                 skip_to_state_evaluation = false;
             }
+			std::cerr << "[ERROR] sax_parse_internal(sax=" << sax << "): skip_to_state_evaluation → " << skip_to_state_evaluation << std::endl;
 
             // we reached this line after we successfully parsed a value
             if (states.empty())
@@ -478,6 +489,7 @@ class parser
                 continue;
             }
 
+		std::cerr << "[WARN] <<< Exiting sax_parse_internal(sax=" << sax << ")" << std::endl;
             return sax->parse_error(m_lexer.get_position(),
                                     m_lexer.get_token_string(),
                                     parse_error::create(101, m_lexer.get_position(), exception_message(token_type::end_object, "object"), nullptr));
@@ -487,13 +499,18 @@ class parser
     /// get next token from lexer
     token_type get_token()
     {
+		std::cerr << "[ERROR] >>> Entering get_token()" << std::endl;
+		std::cerr << "[ERROR] get_token(): last_token → " << last_token << std::endl;
+    std::cerr << "[WARN] <<< Exiting get_token()" << std::endl;
         return last_token = m_lexer.scan();
     }
 
     std::string exception_message(const token_type expected, const std::string& context)
     {
+		std::cerr << "[ERROR] >>> Entering exception_message(expected=" << expected << ",context=" << context << ")" << std::endl;
         std::string error_msg = "syntax error ";
 
+		std::cerr << "[ERROR] exception_message(expected=" << expected << ",context=" << context << "): error_msg → " << error_msg << std::endl;
         if (!context.empty())
         {
             error_msg += concat("while parsing ", context, ' ');
@@ -516,6 +533,7 @@ class parser
             error_msg += concat("; expected ", lexer_t::token_type_name(expected));
         }
 
+		std::cerr << "[WARN] <<< Exiting exception_message(expected=" << expected << ",context=" << context << ")" << std::endl;
         return error_msg;
     }
 

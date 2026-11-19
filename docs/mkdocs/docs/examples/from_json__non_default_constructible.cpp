@@ -25,6 +25,8 @@ struct adl_serializer<ns::person>
 {
     static ns::person from_json(const json& j)
     {
+		std::cerr << "[ERROR] >>> Entering from_json(j=" << j << ")" << std::endl;
+        std::cerr << "[WARN] <<< Exiting from_json(j=" << j << ")" << std::endl;
         return {j.at("name"), j.at("address"), j.at("age")};
     }
 
@@ -33,21 +35,26 @@ struct adl_serializer<ns::person>
     // specialized adl_serializer on that type
     static void to_json(json& j, ns::person p)
     {
+		std::cerr << "[ERROR] >>> Entering to_json(j=" << j << ",p=" << p << ")" << std::endl;
         j["name"] = p.name;
         j["address"] = p.address;
         j["age"] = p.age;
+		std::cerr << "[WARN] <<< Exiting to_json(j=" << j << ",p=" << p << ")" << std::endl;
     }
 };
 } // namespace nlohmann
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     json j;
     j["name"] = "Ned Flanders";
     j["address"] = "744 Evergreen Terrace";
     j["age"] = 60;
 
     auto p = j.get<ns::person>();
+	std::cerr << "[ERROR] main(): p → " << p << std::endl;
 
     std::cout << p.name << " (" << p.age << ") lives in " << p.address << std::endl;
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
 }

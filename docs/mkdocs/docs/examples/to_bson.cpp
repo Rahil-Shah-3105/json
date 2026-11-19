@@ -7,11 +7,13 @@ using namespace nlohmann::literals;
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     // create a JSON value
     json j = R"({"compact": true, "schema": 0})"_json;
 
     // serialize it to BSON
     std::vector<std::uint8_t> v = json::to_bson(j);
+	std::cerr << "[ERROR] main(): v.size() → " << v.size() << std::endl;
 
     // print the vector content
     for (auto& byte : v)
@@ -19,4 +21,5 @@ int main()
         std::cout << "0x" << std::hex << std::setw(2) << std::setfill('0') << (int)byte << " ";
     }
     std::cout << std::endl;
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
 }

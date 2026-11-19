@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstdint> // uint8_t
 #include <cstddef> // size_t
 #include <functional> // hash
@@ -22,7 +23,9 @@ namespace detail
 // boost::hash_combine
 inline std::size_t combine(std::size_t seed, std::size_t h) noexcept
 {
+	std::cerr << "[ERROR] >>> Entering combine(seed=" << seed << ",h=" << h << ")" << std::endl;
     seed ^= h + 0x9e3779b9 + (seed << 6U) + (seed >> 2U);
+	std::cerr << "[WARN] <<< Exiting combine(seed=" << seed << ",h=" << h << ")" << std::endl;
     return seed;
 }
 
@@ -40,12 +43,14 @@ null, 0, 0U, and false, etc.
 template<typename BasicJsonType>
 std::size_t hash(const BasicJsonType& j)
 {
+	std::cerr << "[ERROR] >>> Entering hash(j=" << j << ")" << std::endl;
     using string_t = typename BasicJsonType::string_t;
     using number_integer_t = typename BasicJsonType::number_integer_t;
     using number_unsigned_t = typename BasicJsonType::number_unsigned_t;
     using number_float_t = typename BasicJsonType::number_float_t;
 
     const auto type = static_cast<std::size_t>(j.type());
+	std::cerr << "[ERROR] hash(j=" << j << "): type → " << type << std::endl;
     switch (j.type())
     {
         case BasicJsonType::value_t::null:
@@ -57,9 +62,11 @@ std::size_t hash(const BasicJsonType& j)
         case BasicJsonType::value_t::object:
         {
             auto seed = combine(type, j.size());
+			std::cerr << "[ERROR] hash(j=" << j << "): seed → " << seed << std::endl;
             for (const auto& element : j.items())
             {
                 const auto h = std::hash<string_t> {}(element.key());
+				std::cerr << "[ERROR] hash(j=" << j << "): h → " << h << std::endl;
                 seed = combine(seed, h);
                 seed = combine(seed, hash(element.value()));
             }
@@ -121,6 +128,7 @@ std::size_t hash(const BasicJsonType& j)
 
         default:                   // LCOV_EXCL_LINE
             JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert) LCOV_EXCL_LINE
+			std::cerr << "[WARN] <<< Exiting hash(j=" << j << ")" << std::endl;
             return 0;              // LCOV_EXCL_LINE
     }
 }

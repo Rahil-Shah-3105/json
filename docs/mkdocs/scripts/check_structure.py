@@ -6,17 +6,22 @@ import re
 import sys
 
 import yaml
+import logging
+logger = logging.getLogger(__name__)
 
 warnings = 0
 
 
 def report(rule, location, description) -> None:
+    logger.error(">>> Entering report(rule=%s,location=%s,description=%s)", rule, location, description, extra={"event.action": "report", "logrite.rule": rule, "logrite.location": location, "logrite.description": description})
     global warnings
     warnings += 1
     print(f'{warnings:3}. {location}:  {description} [{rule}]')
+    logger.warning("<<< Exiting report(rule=%s,location=%s,description=%s)", rule, location, description, extra={"event.action": "report", "logrite.rule": rule, "logrite.location": location, "logrite.description": description})
 
 
 def check_structure() -> None:
+    logger.error(">>> Entering check_structure()", extra={"event.action": "check_structure"})
     expected_sections = [
         "Template parameters",
         "Specializations",
@@ -48,6 +53,7 @@ def check_structure() -> None:
     ]
 
     files = sorted(glob.glob("api/**/*.md", recursive=True))
+    logger.error("check_structure(): files → %s", files, extra={"event.action": "check_structure"})
     for file in files:
         with open(file) as file_content:
             section_idx = -1                 # the index of the current h2 section
@@ -58,9 +64,11 @@ def check_structure() -> None:
             last_overload = 0                # the last seen overload number in the code example
             documented_overloads = {}        # the overloads that have been documented in the current block
             current_section = None           # the name of the current section
+            logger.error("check_structure(): current_section → %s", current_section, extra={"event.action": "check_structure"})
 
             for lineno, original_line in enumerate(file_content.readlines()):
                 line = original_line.strip()
+                logger.error("check_structure(): line → %s", line, extra={"event.action": "check_structure"})
 
                 if line.startswith("# "):
                     h1sections += 1
@@ -90,6 +98,7 @@ def check_structure() -> None:
                     if current_section in documented_overloads and last_overload != 0:
                         if len(documented_overloads[current_section]) > 0 and len(documented_overloads[current_section]) != last_overload:
                             expected = list(range(1, last_overload+1))
+                            logger.error("check_structure(): expected → %s", expected, extra={"event.action": "check_structure"})
                             undocumented = [x for x in expected if x not in documented_overloads[current_section]]
                             unexpected = [x for x in documented_overloads[current_section] if x not in expected]
                             if len(undocumented):
@@ -102,6 +111,7 @@ def check_structure() -> None:
 
                     if current_section in expected_sections:
                         idx = expected_sections.index(current_section)
+                        logger.error("check_structure(): idx → %s", idx, extra={"event.action": "check_structure"})
                         if idx <= section_idx:
                             report("structure/section_order", f"{file}:{lineno+1}", f'section "{current_section}" is in an unexpected order (should be before "{expected_sections[section_idx]}")')
                         section_idx = idx
@@ -112,6 +122,7 @@ def check_structure() -> None:
                 if last_overload != 0 and not in_initial_code_example:
                     if len(original_line) and original_line[0].isdigit():
                         number = int(re.findall(r"^(\d+).", original_line)[0])
+                        logger.error("check_structure(): number → %s", number, extra={"event.action": "check_structure"})
                         if current_section not in documented_overloads:
                             documented_overloads[current_section] = []
                         documented_overloads[current_section].append(number)
@@ -140,6 +151,7 @@ def check_structure() -> None:
 
                 # check that non-example admonitions have titles
                 untitled_admonition = re.match(r"^(\?\?\?|!!!) ([^ ]+)$", line)
+                logger.error("check_structure(): untitled_admonition → %s", untitled_admonition, extra={"event.action": "check_structure"})
                 if untitled_admonition and untitled_admonition.group(2) != "example":
                     report("style/admonition_title", f"{file}:{lineno} ({current_section})", f'"{untitled_admonition.group(2)}" admonitions should have a title')
 
@@ -149,25 +161,32 @@ def check_structure() -> None:
                 for required_section in required_sections:
                     if required_section not in existing_sections:
                         report("structure/missing_section", f"{file}:{lineno+1}", f'required section "{required_section}" was not found')
+                        logger.warning("<<< Exiting check_structure()", extra={"event.action": "check_structure"})
 
 
 def check_examples() -> None:
+    logger.error(">>> Entering check_examples()", extra={"event.action": "check_examples"})
     example_files = sorted(glob.glob("../../examples/*.cpp"))
+    logger.error("check_examples(): example_files → %s", example_files, extra={"event.action": "check_examples"})
     markdown_files = sorted(glob.glob("**/*.md", recursive=True))
+    logger.error("check_examples(): markdown_files → %s", markdown_files, extra={"event.action": "check_examples"})
 
     # check if every example file is used in at least one markdown file
     for example_file in example_files:
         example_file = os.path.join("examples", os.path.basename(example_file))
+        logger.error("check_examples(): example_file → %s", example_file, extra={"event.action": "check_examples"})
 
         found = False
         for markdown_file in markdown_files:
             content = " ".join(open(markdown_file).readlines())
+            logger.error("check_examples(): content → %s", content, extra={"event.action": "check_examples"})
             if example_file in content:
                 found = True
                 break
 
         if not found:
             report("examples/missing", f"{example_file}", "example file is not used in any documentation file")
+            logger.warning("<<< Exiting check_examples()", extra={"event.action": "check_examples"})
 
 
 def check_links() -> None:
@@ -184,9 +203,12 @@ def check_links() -> None:
 
     - 'NLOHMANN_JSON_VERSION_MAJOR, NLOHMANN_JSON_VERSION_MINOR': api/macros/nlohmann_json_version_major.md
     """
+    logger.error(">>> Entering check_links()", extra={"event.action": "check_links"})
     file_with_path = {}
+    logger.warning("<<< Exiting check_links()", extra={"event.action": "check_links"})
 
     def collect_links(node, path="") -> None:
+        logger.error(">>> Entering collect_links(node=%s,path=%s)", node, path, extra={"event.action": "collect_links", "logrite.node": node, "logrite.path": path})
         if isinstance(node, list):
             for x in node:
                 collect_links(x, path)
@@ -197,6 +219,7 @@ def check_links() -> None:
             if node not in file_with_path:
                 file_with_path[node] = []
             file_with_path[node].append(path)
+            logger.warning("<<< Exiting collect_links(node=%s,path=%s)", node, path, extra={"event.action": "collect_links", "logrite.node": node, "logrite.path": path})
 
     with open("../mkdocs.yml") as mkdocs_file:
         # see https://github.com/yaml/pyyaml/issues/86#issuecomment-1042485535

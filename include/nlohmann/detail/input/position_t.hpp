@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstddef> // size_t
 
 #include <nlohmann/detail/abi_macros.hpp>
@@ -29,6 +30,8 @@ struct position_t
     /// conversion to size_t to preserve SAX interface
     constexpr operator size_t() const
     {
+		std::cerr << "[ERROR] >>> Entering size_t()" << std::endl;
+        std::cerr << "[WARN] <<< Exiting size_t()" << std::endl;
         return chars_read_total;
     }
 };

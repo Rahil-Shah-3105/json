@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstdint> // uint8_t, uint64_t
 #include <tuple> // tie
 #include <utility> // move
@@ -69,14 +70,18 @@ class byte_container_with_subtype : public BinaryType
     /// @sa https://json.nlohmann.me/api/byte_container_with_subtype/set_subtype/
     void set_subtype(subtype_type subtype_) noexcept
     {
+		std::cerr << "[ERROR] >>> Entering set_subtype(subtype_=" << subtype_ << ")" << std::endl;
         m_subtype = subtype_;
         m_has_subtype = true;
+		std::cerr << "[DEBUG] set_subtype(subtype_=" << subtype_ << "): m_has_subtype → " << m_has_subtype << std::endl;
     }
 
     /// @brief return the binary subtype
     /// @sa https://json.nlohmann.me/api/byte_container_with_subtype/subtype/
     constexpr subtype_type subtype() const noexcept
     {
+		std::cerr << "[ERROR] >>> Entering subtype()" << std::endl;
+        std::cerr << "[WARN] <<< Exiting subtype()" << std::endl;
         return m_has_subtype ? m_subtype : static_cast<subtype_type>(-1);
     }
 
@@ -84,6 +89,8 @@ class byte_container_with_subtype : public BinaryType
     /// @sa https://json.nlohmann.me/api/byte_container_with_subtype/has_subtype/
     constexpr bool has_subtype() const noexcept
     {
+		std::cerr << "[ERROR] >>> Entering has_subtype()" << std::endl;
+        std::cerr << "[WARN] <<< Exiting has_subtype()" << std::endl;
         return m_has_subtype;
     }
 
@@ -91,8 +98,11 @@ class byte_container_with_subtype : public BinaryType
     /// @sa https://json.nlohmann.me/api/byte_container_with_subtype/clear_subtype/
     void clear_subtype() noexcept
     {
+		std::cerr << "[ERROR] >>> Entering clear_subtype()" << std::endl;
         m_subtype = 0;
         m_has_subtype = false;
+		std::cerr << "[DEBUG] clear_subtype(): m_subtype → " << m_subtype << std::endl;
+    std::cerr << "[WARN] <<< Exiting clear_subtype()" << std::endl;
     }
 
   private:

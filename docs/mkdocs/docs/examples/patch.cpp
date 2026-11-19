@@ -7,6 +7,7 @@ using namespace nlohmann::literals;
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     // the original document
     json doc = R"(
         {
@@ -14,6 +15,7 @@ int main()
           "foo": "bar"
         }
     )"_json;
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
 
     // the patch
     json patch = R"(
@@ -26,6 +28,7 @@ int main()
 
     // apply the patch
     json patched_doc = doc.patch(patch);
+	std::cerr << "[ERROR] main(): patched_doc → " << patched_doc << std::endl;
 
     // output original and patched document
     std::cout << std::setw(4) << doc << "\n\n"

@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <nlohmann/detail/abi_macros.hpp>
 
 NLOHMANN_JSON_NAMESPACE_BEGIN
@@ -49,8 +50,10 @@ inline void replace_substring(StringType& s, const StringType& f,
 template<typename StringType>
 inline StringType escape(StringType s)
 {
+	std::cerr << "[ERROR] >>> Entering escape(s=" << s << ")" << std::endl;
     replace_substring(s, StringType{"~"}, StringType{"~0"});
     replace_substring(s, StringType{"/"}, StringType{"~1"});
+	std::cerr << "[WARN] <<< Exiting escape(s=" << s << ")" << std::endl;
     return s;
 }
 
@@ -64,8 +67,10 @@ inline StringType escape(StringType s)
 template<typename StringType>
 inline void unescape(StringType& s)
 {
+	std::cerr << "[ERROR] >>> Entering unescape(s=" << s << ")" << std::endl;
     replace_substring(s, StringType{"~1"}, StringType{"/"});
     replace_substring(s, StringType{"~0"}, StringType{"~"});
+	std::cerr << "[WARN] <<< Exiting unescape(s=" << s << ")" << std::endl;
 }
 
 }  // namespace detail

@@ -7,6 +7,7 @@ using namespace nlohmann::literals;
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     // the source document
     json source = R"(
         {
@@ -15,6 +16,7 @@ int main()
         }
     )"_json;
 
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
     // the target document
     json target = R"(
         {
@@ -27,9 +29,11 @@ int main()
 
     // create the patch
     json patch = json::diff(source, target);
+	std::cerr << "[ERROR] main(): patch → " << patch << std::endl;
 
     // roundtrip
     json patched_source = source.patch(patch);
+	std::cerr << "[ERROR] main(): patched_source → " << patched_source << std::endl;
 
     // output patch and roundtrip result
     std::cout << std::setw(4) << patch << "\n\n"

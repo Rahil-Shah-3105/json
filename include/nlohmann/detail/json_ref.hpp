@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <initializer_list>
 #include <utility>
 
@@ -52,10 +53,12 @@ class json_ref
 
     value_type moved_or_copied() const
     {
+		std::cerr << "[ERROR] >>> Entering moved_or_copied()" << std::endl;
         if (value_ref == nullptr)
         {
             return std::move(owned_value);
         }
+		std::cerr << "[WARN] <<< Exiting moved_or_copied()" << std::endl;
         return *value_ref;
     }
 

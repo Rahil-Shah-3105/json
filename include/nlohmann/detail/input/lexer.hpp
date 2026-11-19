@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <array> // array
 #include <clocale> // localeconv
 #include <cstddef> // size_t
@@ -60,6 +61,8 @@ class lexer_base
     /// return name of values of type token_type (only used for errors)
     JSON_HEDLEY_RETURNS_NON_NULL
     JSON_HEDLEY_CONST
+	std::cerr << "[ERROR] >>> Entering token_type_name(t=" << t << ")" << std::endl;
+	std::cerr << "[WARN] <<< Exiting token_type_name(t=" << t << ")" << std::endl;
     static const char* token_type_name(const token_type t) noexcept
     {
         switch (t)
@@ -116,6 +119,8 @@ using detect_supports_seek = decltype(InputAdapterType::supports_seek);
 template<typename InputAdapterType>
 constexpr bool input_adapter_supports_seek(std::true_type /*detected*/)
 {
+	std::cerr << "[ERROR] >>> Entering input_adapter_supports_seek()" << std::endl;
+    std::cerr << "[WARN] <<< Exiting input_adapter_supports_seek()" << std::endl;
     return InputAdapterType::supports_seek;
 }
 
@@ -171,8 +176,10 @@ class lexer : public lexer_base<BasicJsonType>
     JSON_HEDLEY_PURE
     static char get_decimal_point() noexcept
     {
+		std::cerr << "[ERROR] >>> Entering get_decimal_point()" << std::endl;
         const auto* loc = localeconv();
         JSON_ASSERT(loc != nullptr);
+		std::cerr << "[WARN] <<< Exiting get_decimal_point()" << std::endl;
         return (loc->decimal_point == nullptr) ? '.' : *(loc->decimal_point);
     }
 
@@ -197,6 +204,7 @@ class lexer : public lexer_base<BasicJsonType>
     */
     int get_codepoint()
     {
+		std::cerr << "[ERROR] >>> Entering get_codepoint()" << std::endl;
         // this function only makes sense after reading `\u`
         JSON_ASSERT(current == 'u');
         int codepoint = 0;
@@ -225,6 +233,7 @@ class lexer : public lexer_base<BasicJsonType>
         }
 
         JSON_ASSERT(0x0000 <= codepoint && codepoint <= 0xFFFF);
+		std::cerr << "[WARN] <<< Exiting get_codepoint()" << std::endl;
         return codepoint;
     }
 
@@ -245,11 +254,13 @@ class lexer : public lexer_base<BasicJsonType>
     */
     bool next_byte_in_range(std::initializer_list<char_int_type> ranges)
     {
+		std::cerr << "[ERROR] >>> Entering next_byte_in_range(ranges=" << ranges << ")" << std::endl;
         JSON_ASSERT(ranges.size() == 2 || ranges.size() == 4 || ranges.size() == 6);
         add(current);
 
         for (auto range = ranges.begin(); range != ranges.end(); ++range)
         {
+			std::cerr << "[ERROR] next_byte_in_range(ranges=" << ranges << "): range → " << range << std::endl;
             get();
             if (JSON_HEDLEY_LIKELY(*range <= current && current <= *(++range))) // NOLINT(bugprone-inc-dec-in-conditions)
             {
@@ -258,10 +269,13 @@ class lexer : public lexer_base<BasicJsonType>
             else
             {
                 error_message = "invalid string: ill-formed UTF-8 byte";
+				std::cerr << "[ERROR] next_byte_in_range(ranges=" << ranges << "): error_message → " << error_message << std::endl;
+				std::cerr << "[DEBUG] next_byte_in_range(ranges=" << ranges << "): error_message → " << error_message << std::endl;
                 return false;
             }
         }
 
+		std::cerr << "[WARN] <<< Exiting next_byte_in_range(ranges=" << ranges << ")" << std::endl;
         return true;
     }
 
@@ -282,6 +296,7 @@ class lexer : public lexer_base<BasicJsonType>
     */
     token_type scan_string()
     {
+		std::cerr << "[ERROR] >>> Entering scan_string()" << std::endl;
         // reset token_buffer (ignore opening quote)
         reset();
 
@@ -297,6 +312,8 @@ class lexer : public lexer_base<BasicJsonType>
                 case char_traits<char_type>::eof():
                 {
                     error_message = "invalid string: missing closing quote";
+					std::cerr << "[ERROR] scan_string(): error_message → " << error_message << std::endl;
+					std::cerr << "[DEBUG] scan_string(): error_message → " << error_message << std::endl;
                     return token_type::parse_error;
                 }
 
@@ -348,10 +365,12 @@ class lexer : public lexer_base<BasicJsonType>
                         case 'u':
                         {
                             const int codepoint1 = get_codepoint();
+							std::cerr << "[ERROR] scan_string(): codepoint1 → " << codepoint1 << std::endl;
                             int codepoint = codepoint1; // start with codepoint1
 
                             if (JSON_HEDLEY_UNLIKELY(codepoint1 == -1))
                             {
+								std::cerr << "[ERROR] Exception in scan_string(): " << e.what() << std::endl;
                                 error_message = "invalid string: '\\u' must be followed by 4 hex digits";
                                 return token_type::parse_error;
                             }
@@ -363,6 +382,7 @@ class lexer : public lexer_base<BasicJsonType>
                                 if (JSON_HEDLEY_LIKELY(get() == '\\' && get() == 'u'))
                                 {
                                     const int codepoint2 = get_codepoint();
+									std::cerr << "[ERROR] scan_string(): codepoint2 → " << codepoint2 << std::endl;
 
                                     if (JSON_HEDLEY_UNLIKELY(codepoint2 == -1))
                                     {
@@ -389,6 +409,9 @@ class lexer : public lexer_base<BasicJsonType>
                                         error_message = "invalid string: surrogate U+D800..U+DBFF must be followed by U+DC00..U+DFFF";
                                         return token_type::parse_error;
                                     }
+									std::cerr << "[ERROR] >>> Entering get()" << std::endl;
+									std::cerr << "[DEBUG] get(): position.chars_read_current_line → " << position.chars_read_current_line << std::endl;
+									std::cerr << "[WARN] <<< Exiting get()" << std::endl;
                                 }
                                 else
                                 {
@@ -860,6 +883,7 @@ class lexer : public lexer_base<BasicJsonType>
                 default:
                 {
                     error_message = "invalid string: ill-formed UTF-8 byte";
+					std::cerr << "[WARN] <<< Exiting scan_string()" << std::endl;
                     return token_type::parse_error;
                 }
             }
@@ -872,6 +896,7 @@ class lexer : public lexer_base<BasicJsonType>
      */
     bool scan_comment()
     {
+		std::cerr << "[ERROR] >>> Entering scan_comment()" << std::endl;
         switch (get())
         {
             // single-line comments skip input until a newline or EOF is read
@@ -906,6 +931,7 @@ class lexer : public lexer_base<BasicJsonType>
                         case '\0':
                         {
                             error_message = "invalid comment; missing closing '*/'";
+							std::cerr << "[ERROR] scan_comment(): error_message → " << error_message << std::endl;
                             return false;
                         }
 
@@ -936,6 +962,7 @@ class lexer : public lexer_base<BasicJsonType>
             default:
             {
                 error_message = "invalid comment; expecting '/' or '*' after '/'";
+				std::cerr << "[WARN] <<< Exiting scan_comment()" << std::endl;
                 return false;
             }
         }
@@ -951,6 +978,9 @@ class lexer : public lexer_base<BasicJsonType>
     static void strtof(double& f, const char* str, char** endptr) noexcept
     {
         f = std::strtod(str, endptr);
+		std::cerr << "[ERROR] >>> Entering strtof(f=" << f << ",str=" << str << ",endptr=" << endptr << ")" << std::endl;
+		std::cerr << "[ERROR] strtof(f=" << f << ",str=" << str << ",endptr=" << endptr << "): f → " << f << std::endl;
+    std::cerr << "[WARN] <<< Exiting strtof(f=" << f << ",str=" << str << ",endptr=" << endptr << ")" << std::endl;
     }
 
     JSON_HEDLEY_NON_NULL(2)
@@ -1335,15 +1365,19 @@ scan_number_done:
     token_type scan_literal(const char_type* literal_text, const std::size_t length,
                             token_type return_type)
     {
+		std::cerr << "[ERROR] >>> Entering JSON_HEDLEY_NON_NULL()" << std::endl;
         JSON_ASSERT(char_traits<char_type>::to_char_type(current) == literal_text[0]);
         for (std::size_t i = 1; i < length; ++i)
         {
             if (JSON_HEDLEY_UNLIKELY(char_traits<char_type>::to_char_type(get()) != literal_text[i]))
             {
                 error_message = "invalid literal";
+				std::cerr << "[ERROR] JSON_HEDLEY_NON_NULL(): error_message → " << error_message << std::endl;
+				std::cerr << "[DEBUG] JSON_HEDLEY_NON_NULL(): error_message → " << error_message << std::endl;
                 return token_type::parse_error;
             }
         }
+		std::cerr << "[WARN] <<< Exiting JSON_HEDLEY_NON_NULL()" << std::endl;
         return return_type;
     }
 
@@ -1354,12 +1388,16 @@ scan_number_done:
     /// reset token_buffer; current character is beginning of token
     void reset() noexcept
     {
+		std::cerr << "[ERROR] >>> Entering reset()" << std::endl;
         token_buffer.clear();
         decimal_point_position = std::string::npos;
+		std::cerr << "[WARN] <<< Exiting reset()" << std::endl;
+		std::cerr << "[DEBUG] reset(): decimal_point_position → " << decimal_point_position << std::endl;
 
 #if JSON_DIAGNOSTIC_POSITIONS
         // the first character of the token has already been read, hence the -1
         token_start_position = position.chars_read_total - 1;
+		std::cerr << "[DEBUG] reset(): token_start_position → " << token_start_position << std::endl;
 #endif
 
         note_token_start(std::integral_constant<bool, lazy_token_string> {});
@@ -1371,6 +1409,8 @@ scan_number_done:
     void note_token_start(std::true_type /*lazy*/) noexcept
     {
         token_string_start = ia.get_consumed_count() - 1;
+		std::cerr << "[ERROR] >>> Entering note_token_start()" << std::endl;
+		std::cerr << "[WARN] <<< Exiting note_token_start()" << std::endl;
     }
 
     /// streaming adapter: start copying the token eagerly, beginning with the
@@ -1395,15 +1435,19 @@ scan_number_done:
     {
         ++position.chars_read_total;
         ++position.chars_read_current_line;
+		std::cerr << "[ERROR] >>> Entering get()" << std::endl;
 
         if (next_unget)
         {
             // only reset the next_unget variable and work with current
             next_unget = false;
+			std::cerr << "[DEBUG] get(): next_unget → " << next_unget << std::endl;
         }
         else
         {
             current = ia.get_character();
+			std::cerr << "[ERROR] get(): current → " << current << std::endl;
+			std::cerr << "[DEBUG] get(): current → " << current << std::endl;
         }
 
         // seekable adapters reconstruct the token lazily on error (see
@@ -1416,6 +1460,7 @@ scan_number_done:
             position.chars_read_current_line = 0;
         }
 
+		std::cerr << "[WARN] <<< Exiting get()" << std::endl;
         return current;
     }
 
@@ -1425,10 +1470,12 @@ scan_number_done:
     /// streaming adapter: copy the scanned character into token_string
     void capture_char(std::false_type /*lazy*/)
     {
+		std::cerr << "[ERROR] >>> Entering capture_char()" << std::endl;
         if (JSON_HEDLEY_LIKELY(current != char_traits<char_type>::eof()))
         {
             token_string.push_back(char_traits<char_type>::to_char_type(current));
         }
+		std::cerr << "[WARN] <<< Exiting capture_char()" << std::endl;
     }
 
     /*!
@@ -1441,9 +1488,11 @@ scan_number_done:
     */
     void unget()
     {
+		std::cerr << "[ERROR] >>> Entering unget()" << std::endl;
         next_unget = true;
 
         --position.chars_read_total;
+		std::cerr << "[DEBUG] unget(): next_unget → " << next_unget << std::endl;
 
         // in case we "unget" a newline, we have to also decrement the lines_read
         if (position.chars_read_current_line == 0)
@@ -1459,6 +1508,7 @@ scan_number_done:
         }
 
         uncapture_char(std::integral_constant<bool, lazy_token_string> {});
+		std::cerr << "[WARN] <<< Exiting unget()" << std::endl;
     }
 
     /// seekable adapter: nothing was captured, so nothing to undo
@@ -1467,17 +1517,21 @@ scan_number_done:
     /// streaming adapter: drop the character copied by the matching get()
     void uncapture_char(std::false_type /*lazy*/)
     {
+		std::cerr << "[ERROR] >>> Entering uncapture_char()" << std::endl;
         if (JSON_HEDLEY_LIKELY(current != char_traits<char_type>::eof()))
         {
             JSON_ASSERT(!token_string.empty());
             token_string.pop_back();
         }
+		std::cerr << "[WARN] <<< Exiting uncapture_char()" << std::endl;
     }
 
     /// add a character to token_buffer
     void add(char_int_type c)
     {
+		std::cerr << "[ERROR] >>> Entering add(c=" << c << ")" << std::endl;
         token_buffer.push_back(static_cast<typename string_t::value_type>(c));
+		std::cerr << "[WARN] <<< Exiting add(c=" << c << ")" << std::endl;
     }
 
   public:
@@ -1488,29 +1542,37 @@ scan_number_done:
     /// return integer value
     constexpr number_integer_t get_number_integer() const noexcept
     {
+		std::cerr << "[ERROR] >>> Entering get_number_integer()" << std::endl;
+        std::cerr << "[WARN] <<< Exiting get_number_integer()" << std::endl;
         return value_integer;
     }
 
     /// return unsigned integer value
     constexpr number_unsigned_t get_number_unsigned() const noexcept
     {
+		std::cerr << "[ERROR] >>> Entering get_number_unsigned()" << std::endl;
+        std::cerr << "[WARN] <<< Exiting get_number_unsigned()" << std::endl;
         return value_unsigned;
     }
 
     /// return floating-point value
     constexpr number_float_t get_number_float() const noexcept
     {
+		std::cerr << "[ERROR] >>> Entering get_number_float()" << std::endl;
+        std::cerr << "[WARN] <<< Exiting get_number_float()" << std::endl;
         return value_float;
     }
 
     /// return current string value (implicitly resets the token; useful only once)
     string_t& get_string()
     {
+		std::cerr << "[ERROR] >>> Entering get_string()" << std::endl;
         // translate decimal points from locale back to '.' (#4084)
         if (decimal_point_char != '.' && decimal_point_position != std::string::npos)
         {
             token_buffer[decimal_point_position] = '.';
         }
+		std::cerr << "[WARN] <<< Exiting get_string()" << std::endl;
         return token_buffer;
     }
 
@@ -1521,6 +1583,8 @@ scan_number_done:
     /// return position of last read token
     constexpr position_t get_position() const noexcept
     {
+		std::cerr << "[ERROR] >>> Entering get_position()" << std::endl;
+        std::cerr << "[WARN] <<< Exiting get_position()" << std::endl;
         return position;
     }
 
@@ -1529,6 +1593,8 @@ scan_number_done:
     /// the token's parsed value, this accounts for escape sequences
     constexpr std::size_t get_token_start_position() const noexcept
     {
+		std::cerr << "[ERROR] >>> Entering get_token_start_position()" << std::endl;
+        std::cerr << "[WARN] <<< Exiting get_token_start_position()" << std::endl;
         return token_start_position;
     }
 #endif
@@ -1536,15 +1602,19 @@ scan_number_done:
     /// seekable adapter: rebuild the last read token from the input on demand
     const std::vector<char_type>& collect_token_chars(std::vector<char_type>& out, std::true_type /*lazy*/) const
     {
+		std::cerr << "[ERROR] >>> Entering collect_token_chars(out=" << out << ")" << std::endl;
         // a pending unget of a real (non-EOF) character means that character
         // was consumed from the input but is not part of the token; EOF is
         // never consumed, so it must not be subtracted (mirrors unget())
         const bool pending_real_unget = next_unget && current != char_traits<char_type>::eof();
+		std::cerr << "[ERROR] collect_token_chars(out=" << out << "): pending_real_unget → " << pending_real_unget << std::endl;
         const std::size_t stop = ia.get_consumed_count() - (pending_real_unget ? 1u : 0u);
+		std::cerr << "[ERROR] collect_token_chars(out=" << out << "): stop → " << stop << std::endl;
         if (JSON_HEDLEY_LIKELY(stop >= token_string_start))
         {
             ia.copy_consumed_range(token_string_start, stop, out);
         }
+		std::cerr << "[WARN] <<< Exiting collect_token_chars(out=" << out << ")" << std::endl;
         return out;
     }
 
@@ -1559,6 +1629,7 @@ scan_number_done:
     /// 255 may legitimately occur.  May contain NUL, which should be escaped.
     std::string get_token_string() const
     {
+		std::cerr << "[ERROR] >>> Entering get_token_string()" << std::endl;
         std::vector<char_type> reconstructed;
         const std::vector<char_type>& chars = collect_token_chars(reconstructed, std::integral_constant<bool, lazy_token_string> {});
 
@@ -1580,11 +1651,14 @@ scan_number_done:
             }
         }
 
+		std::cerr << "[WARN] <<< Exiting get_token_string()" << std::endl;
         return result;
     }
 
     /// return syntax error message
     JSON_HEDLEY_RETURNS_NON_NULL
+	std::cerr << "[ERROR] >>> Entering get_error_message()" << std::endl;
+        std::cerr << "[WARN] <<< Exiting get_error_message()" << std::endl;
     constexpr const char* get_error_message() const noexcept
     {
         return error_message;
@@ -1600,6 +1674,7 @@ scan_number_done:
     */
     bool skip_bom()
     {
+		std::cerr << "[ERROR] >>> Entering skip_bom()" << std::endl;
         if (get() == 0xEF)
         {
             // check if we completely parse the BOM
@@ -1609,24 +1684,29 @@ scan_number_done:
         // the first character is not the beginning of the BOM; unget it to
         // process is later
         unget();
+		std::cerr << "[WARN] <<< Exiting skip_bom()" << std::endl;
         return true;
     }
 
     void skip_whitespace()
     {
+		std::cerr << "[ERROR] >>> Entering skip_whitespace()" << std::endl;
         do
         {
             get();
         }
         while (current == ' ' || current == '\t' || current == '\n' || current == '\r');
+		std::cerr << "[WARN] <<< Exiting skip_whitespace()" << std::endl;
     }
 
     token_type scan()
     {
+		std::cerr << "[ERROR] >>> Entering scan()" << std::endl;
         // initially, skip the BOM
         if (position.chars_read_total == 0 && !skip_bom())
         {
             error_message = "invalid BOM; must be 0xEF 0xBB 0xBF if given";
+			std::cerr << "[ERROR] scan(): error_message → " << error_message << std::endl;
             return token_type::parse_error;
         }
 
@@ -1665,16 +1745,19 @@ scan_number_done:
             case 't':
             {
                 std::array<char_type, 4> true_literal = {{static_cast<char_type>('t'), static_cast<char_type>('r'), static_cast<char_type>('u'), static_cast<char_type>('e')}};
+				std::cerr << "[ERROR] scan(): true_literal.size() → " << true_literal.size() << std::endl;
                 return scan_literal(true_literal.data(), true_literal.size(), token_type::literal_true);
             }
             case 'f':
             {
                 std::array<char_type, 5> false_literal = {{static_cast<char_type>('f'), static_cast<char_type>('a'), static_cast<char_type>('l'), static_cast<char_type>('s'), static_cast<char_type>('e')}};
+				std::cerr << "[ERROR] scan(): false_literal.size() → " << false_literal.size() << std::endl;
                 return scan_literal(false_literal.data(), false_literal.size(), token_type::literal_false);
             }
             case 'n':
             {
                 std::array<char_type, 4> null_literal = {{static_cast<char_type>('n'), static_cast<char_type>('u'), static_cast<char_type>('l'), static_cast<char_type>('l')}};
+				std::cerr << "[ERROR] scan(): null_literal.size() → " << null_literal.size() << std::endl;
                 return scan_literal(null_literal.data(), null_literal.size(), token_type::literal_null);
             }
 
@@ -1705,6 +1788,8 @@ scan_number_done:
             // error
             default:
                 error_message = "invalid literal";
+				std::cerr << "[DEBUG] scan(): error_message → " << error_message << std::endl;
+				std::cerr << "[WARN] <<< Exiting scan()" << std::endl;
                 return token_type::parse_error;
         }
     }

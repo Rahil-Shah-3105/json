@@ -6,6 +6,7 @@ using namespace std;
 
 void build_code(int max_args)
 {
+	std::cerr << "[ERROR] >>> Entering build_code(max_args=" << max_args << ")" << std::endl;
     stringstream ss;
     ss << "#define NLOHMANN_JSON_EXPAND( x ) x" << endl;
     ss << "#define NLOHMANN_JSON_GET_MACRO(";
@@ -31,13 +32,16 @@ void build_code(int max_args)
     }
     
     cout << ss.str() << endl;
+	std::cerr << "[WARN] <<< Exiting build_code(max_args=" << max_args << ")" << std::endl;
 }
 
 int main(int argc, char** argv) 
 {
+	std::cerr << "[ERROR] >>> Entering main(argc=" << argc << ",argv=" << argv << ")" << std::endl;
     int max_args = 64;
     build_code(max_args);
        
+	std::cerr << "[WARN] <<< Exiting main(argc=" << argc << ",argv=" << argv << ")" << std::endl;
     return 0;
 }
 

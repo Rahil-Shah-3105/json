@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <array> // array
 #include <cstddef> // size_t
 #include <cstring> // strlen
@@ -54,7 +55,11 @@ class file_input_adapter
     explicit file_input_adapter(std::FILE* f) noexcept
         : m_file(f)
     {
+		std::cerr << "[ERROR] >>> Entering JSON_HEDLEY_NON_NULL()" << std::endl;
         JSON_ASSERT(m_file != nullptr);
+		std::cerr << "[WARN] <<< Exiting JSON_HEDLEY_NON_NULL()" << std::endl;
+		std::cerr << "[ERROR] >>> Entering file_input_adapter(f=" << f << ")" << std::endl;
+    std::cerr << "[WARN] <<< Exiting file_input_adapter(f=" << f << ")" << std::endl;
     }
 
     // make class move-only
@@ -132,6 +137,7 @@ class input_stream_adapter
         {
             is->clear(is->rdstate() | std::ios::eofbit);
         }
+		std::cerr << "[WARN] <<< Exiting get_character()" << std::endl;
         return res;
     }
 
@@ -143,6 +149,7 @@ class input_stream_adapter
         {
             is->clear(is->rdstate() | std::ios::eofbit);
         }
+		std::cerr << "[WARN] <<< Exiting get_elements(dest=" << dest << ",count=" << count << ")" << std::endl;
         return res;
     }
 
@@ -193,6 +200,8 @@ class iterator_input_adapter
     // number of characters consumed from the input so far
     std::size_t get_consumed_count() const
     {
+		std::cerr << "[ERROR] >>> Entering get_consumed_count()" << std::endl;
+        std::cerr << "[WARN] <<< Exiting get_consumed_count()" << std::endl;
         return static_cast<std::size_t>(std::distance(begin, current));
     }
 
@@ -201,8 +210,12 @@ class iterator_input_adapter
     template<typename ContainerType>
     void copy_consumed_range(std::size_t first_index, std::size_t last_index, ContainerType& out) const
     {
+		std::cerr << "[ERROR] >>> Entering copy_consumed_range(first_index=" << first_index << ",last_index=" << last_index << ",out=" << out << ")" << std::endl;
         const auto from = std::next(begin, static_cast<typename std::iterator_traits<IteratorType>::difference_type>(first_index));
+		std::cerr << "[WARN] <<< Exiting copy_consumed_range(first_index=" << first_index << ",last_index=" << last_index << ",out=" << out << ")" << std::endl;
         const auto to = std::next(begin, static_cast<typename std::iterator_traits<IteratorType>::difference_type>(last_index));
+		std::cerr << "[ERROR] copy_consumed_range(first_index=" << first_index << ",last_index=" << last_index << ",out=" << out << "): to → " << to << std::endl;
+		std::cerr << "[ERROR] copy_consumed_range(first_index=" << first_index << ",last_index=" << last_index << ",out=" << out << "): from → " << from << std::endl;
         out.insert(out.end(), from, to);
     }
 
@@ -235,15 +248,20 @@ class iterator_input_adapter
     template<class T>
     std::size_t get_elements_impl(T* dest, std::size_t count, std::true_type /*contiguous*/)
     {
+		std::cerr << "[ERROR] >>> Entering get_elements_impl(dest=" << dest << ",count=" << count << ")" << std::endl;
+		std::cerr << "[WARN] <<< Exiting get_elements_impl(dest=" << dest << ",count=" << count << ")" << std::endl;
         const std::size_t wanted = count * sizeof(T);
 #if defined(__cpp_lib_concepts) && defined(JSON_HAS_CPP_20)
+		std::cerr << "[ERROR] get_elements_impl(dest=" << dest << ",count=" << count << "): wanted → " << wanted << std::endl;
         // std::ranges::distance also supports sized sentinels of a different
         // type (e.g. std::counted_iterator + std::default_sentinel_t)
         const std::size_t available = static_cast<std::size_t>(std::ranges::distance(current, end)) * sizeof(char_type);
+		std::cerr << "[ERROR] get_elements_impl(dest=" << dest << ",count=" << count << "): available → " << available << std::endl;
 #else
         const std::size_t available = static_cast<std::size_t>(std::distance(current, end)) * sizeof(char_type);
 #endif
         const std::size_t copied = (std::min)(wanted, available);
+		std::cerr << "[ERROR] get_elements_impl(dest=" << dest << ",count=" << count << "): copied → " << copied << std::endl;
         if (JSON_HEDLEY_LIKELY(copied != 0))
         {
             // the copy must stay within both buffers: the caller-provided
@@ -288,6 +306,8 @@ class iterator_input_adapter
 
     bool empty() const
     {
+		std::cerr << "[ERROR] >>> Entering empty()" << std::endl;
+        std::cerr << "[WARN] <<< Exiting empty()" << std::endl;
         return current == end;
     }
 };
@@ -354,6 +374,7 @@ struct wide_string_input_helper<BaseInputAdapter, 4>
                 utf8_bytes_filled = 1;
             }
         }
+		std::cerr << "[WARN] <<< Exiting fill_buffer()" << std::endl;
     }
 };
 
@@ -429,6 +450,7 @@ struct wide_string_input_helper<BaseInputAdapter, 2>
                 }
             }
         }
+		std::cerr << "[ERROR] >>> Entering fill_buffer()" << std::endl;
     }
 };
 
@@ -567,6 +589,7 @@ template < typename IteratorType, typename SentinelType = IteratorType,
 typename iterator_input_adapter_factory<IteratorType, SentinelType>::adapter_type input_adapter(IteratorType first, SentinelType last)
 {
     using factory_type = iterator_input_adapter_factory<IteratorType, SentinelType>;
+	std::cerr << "[WARN] <<< Exiting input_adapter(file=" << file << ")" << std::endl;
     return factory_type::create(first, last);
 }
 
@@ -600,6 +623,7 @@ struct container_input_adapter_factory< ContainerType,
 template<typename ContainerType>
 typename container_input_adapter_factory_impl::container_input_adapter_factory<ContainerType>::adapter_type input_adapter(ContainerType&& container)
 {
+	std::cerr << "[ERROR] >>> Entering input_adapter(file=" << file << ")" << std::endl;
     return container_input_adapter_factory_impl::container_input_adapter_factory<ContainerType>::create(std::forward<ContainerType>(container));
 }
 
@@ -619,11 +643,16 @@ inline file_input_adapter input_adapter(std::FILE* file)
 
 inline input_stream_adapter input_adapter(std::istream& stream)
 {
+	std::cerr << "[ERROR] >>> Entering input_adapter(stream=" << stream << ")" << std::endl;
+    std::cerr << "[WARN] <<< Exiting input_adapter(stream=" << stream << ")" << std::endl;
     return input_stream_adapter(stream);
 }
 
 inline input_stream_adapter input_adapter(std::istream&& stream)
 {
+	std::cerr << "[ERROR] >>> Entering input_adapter(b=" << b << ")" << std::endl;
+	std::cerr << "[ERROR] input_adapter(b=" << b << "): length → " << length << std::endl;
+	std::cerr << "[WARN] <<< Exiting input_adapter(b=" << b << ")" << std::endl;
     return input_stream_adapter(stream);
 }
 #endif  // JSON_NO_IO
@@ -646,6 +675,8 @@ contiguous_bytes_input_adapter input_adapter(CharT b)
     }
     auto length = std::strlen(reinterpret_cast<const char*>(b));
     const auto* ptr = reinterpret_cast<const char*>(b);
+	std::cerr << "[ERROR] >>> Entering input_adapter()" << std::endl;
+    std::cerr << "[WARN] <<< Exiting input_adapter()" << std::endl;
     return input_adapter(ptr, ptr + length); // cppcheck-suppress[nullPointerArithmeticRedundantCheck]
 }
 
@@ -679,6 +710,8 @@ class span_input_adapter
 
     contiguous_bytes_input_adapter&& get()
     {
+		std::cerr << "[ERROR] >>> Entering get()" << std::endl;
+        std::cerr << "[WARN] <<< Exiting get()" << std::endl;
         return std::move(ia); // NOLINT(hicpp-move-const-arg,performance-move-const-arg)
     }
 

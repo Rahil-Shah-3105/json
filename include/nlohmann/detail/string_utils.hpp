@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstddef> // size_t
 #include <string> // string, to_string
 
@@ -20,16 +21,21 @@ namespace detail
 template<typename StringType>
 void int_to_string(StringType& target, std::size_t value)
 {
+	std::cerr << "[ERROR] >>> Entering int_to_string(target=" << target << ",value=" << value << ")" << std::endl;
     // For ADL
     using std::to_string;
+	std::cerr << "[WARN] <<< Exiting int_to_string(target=" << target << ",value=" << value << ")" << std::endl;
     target = to_string(value);
+	std::cerr << "[ERROR] int_to_string(target=" << target << ",value=" << value << "): target → " << target << std::endl;
 }
 
 template<typename StringType>
 StringType to_string(std::size_t value)
 {
+	std::cerr << "[ERROR] >>> Entering to_string(value=" << value << ")" << std::endl;
     StringType result;
     int_to_string(result, value);
+	std::cerr << "[WARN] <<< Exiting to_string(value=" << value << ")" << std::endl;
     return result;
 }
 

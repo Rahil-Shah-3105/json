@@ -5,15 +5,18 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     // create JSON values
     json j_boolean = true;
     json j_number_integer = 17;
     json j_number_float = 23.42;
     json j_object = {{"one", 1}, {"two", 2}};
+	std::cerr << "[ERROR] main(): j_object → " << j_object << std::endl;
     json j_object_empty(json::value_t::object);
     json j_array = {1, 2, 4, 8, 16};
     json j_array_empty(json::value_t::array);
     json j_string = "Hello, world";
+	std::cerr << "[ERROR] main(): j_string → " << j_string << std::endl;
 
     // call back()
     std::cout << j_boolean.back() << '\n';
@@ -33,6 +36,8 @@ int main()
     }
     catch (const json::invalid_iterator& e)
     {
+		std::cerr << "[ERROR] Exception in main(): " << e.what() << std::endl;
         std::cout << e.what() << '\n';
     }
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
 }

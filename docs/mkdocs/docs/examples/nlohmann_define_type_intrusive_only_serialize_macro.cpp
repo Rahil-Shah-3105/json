@@ -25,9 +25,14 @@ class person
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering NLOHMANN_DEFINE_TYPE_INTRUSIVE(person=" << person << ",name=" << name << ",address=" << address << ",age=" << age << ")" << std::endl;
     ns::person p = {"Ned Flanders", "744 Evergreen Terrace", 60};
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
 
     // serialization: person -> json
+	std::cerr << "[ERROR] NLOHMANN_DEFINE_TYPE_INTRUSIVE(person=" << person << ",name=" << name << ",address=" << address << ",age=" << age << "): p → " << p << std::endl;
     json j = p;
     std::cout << "serialization: " << j << std::endl;
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
+	std::cerr << "[WARN] <<< Exiting NLOHMANN_DEFINE_TYPE_INTRUSIVE(person=" << person << ",name=" << name << ",address=" << address << ",age=" << age << ")" << std::endl;
 }

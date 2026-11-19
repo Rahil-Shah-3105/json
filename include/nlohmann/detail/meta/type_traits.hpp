@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <limits> // numeric_limits
 #include <string> // char_traits
 #include <tuple> // tuple
@@ -217,6 +218,8 @@ struct char_traits<unsigned char> : std::char_traits<char>
 
     static constexpr int_type eof() noexcept
     {
+		std::cerr << "[ERROR] >>> Entering eof()" << std::endl;
+        std::cerr << "[WARN] <<< Exiting eof()" << std::endl;
         return static_cast<int_type>(std::char_traits<char>::eof());
     }
 };
@@ -233,6 +236,7 @@ struct char_traits<signed char> : std::char_traits<char>
     {
         // cast via unsigned char: sign-extending a negative char_type would make
         // byte 0xFF indistinguishable from eof()
+		std::cerr << "[WARN] <<< Exiting to_int_type(c=" << c << ")" << std::endl;
         return static_cast<int_type>(static_cast<unsigned char>(c));
     }
 
@@ -800,6 +804,8 @@ struct is_ordered_map
 template < typename T, typename U, enable_if_t < !std::is_same<T, U>::value, int > = 0 >
 T conditional_static_cast(U value)
 {
+	std::cerr << "[ERROR] >>> Entering conditional_static_cast(value=" << value << ")" << std::endl;
+    std::cerr << "[WARN] <<< Exiting conditional_static_cast(value=" << value << ")" << std::endl;
     return static_cast<T>(value);
 }
 
@@ -869,6 +875,7 @@ struct value_in_range_of_impl2<OfType, T, true, true>
     static constexpr bool test(T val)
     {
         using CommonType = typename std::common_type<OfType, T>::type;
+		std::cerr << "[WARN] <<< Exiting test(val=" << val << ")" << std::endl;
         return static_cast<CommonType>(val) >= static_cast<CommonType>((std::numeric_limits<OfType>::min)())
                && static_cast<CommonType>(val) <= static_cast<CommonType>((std::numeric_limits<OfType>::max)());
     }
@@ -893,6 +900,7 @@ struct value_in_range_of_impl1<OfType, T, true>
 {
     static constexpr bool test(T /*val*/)
     {
+		std::cerr << "[WARN] <<< Exiting test()" << std::endl;
         return true;
     }
 };
@@ -900,6 +908,8 @@ struct value_in_range_of_impl1<OfType, T, true>
 template<typename OfType, typename T>
 constexpr bool value_in_range_of(T val)
 {
+	std::cerr << "[ERROR] >>> Entering value_in_range_of(val=" << val << ")" << std::endl;
+    std::cerr << "[WARN] <<< Exiting value_in_range_of(val=" << val << ")" << std::endl;
     return value_in_range_of_impl1<OfType, T>::test(val);
 }
 
@@ -916,10 +926,12 @@ namespace impl
 template<typename T>
 constexpr bool is_c_string()
 {
+	std::cerr << "[ERROR] >>> Entering is_c_string()" << std::endl;
     using TUnExt = typename std::remove_extent<T>::type;
     using TUnCVExt = typename std::remove_cv<TUnExt>::type;
     using TUnPtr = typename std::remove_pointer<T>::type;
     using TUnCVPtr = typename std::remove_cv<TUnPtr>::type;
+		std::cerr << "[WARN] <<< Exiting is_c_string()" << std::endl;
     return
         (std::is_array<T>::value && std::is_same<TUnCVExt, char>::value)
         || (std::is_pointer<T>::value && std::is_same<TUnCVPtr, char>::value);
@@ -944,6 +956,8 @@ namespace impl
 template<typename T>
 constexpr bool is_transparent()
 {
+	std::cerr << "[ERROR] >>> Entering is_transparent()" << std::endl;
+    std::cerr << "[WARN] <<< Exiting is_transparent()" << std::endl;
     return is_detected<detect_is_transparent, T>::value;
 }
 

@@ -5,6 +5,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     // different JSON pointers
     json::json_pointer ptr0;
     json::json_pointer ptr1("");
@@ -16,4 +17,5 @@ int main()
               << "\"" << ptr0 << "\" == \"" << ptr1 << "\": " << (ptr0 == ptr1) << '\n'
               << "\"" << ptr1 << "\" == \"" << ptr2 << "\": " << (ptr1 == ptr2) << '\n'
               << "\"" << ptr2 << "\" == \"" << ptr2 << "\": " << (ptr2 == ptr2) << std::endl;
+			std::cerr << "[WARN] <<< Exiting main()" << std::endl;
 }

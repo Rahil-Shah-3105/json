@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <nlohmann/detail/macro_scope.hpp> // JSON_HAS_CPP_17
 #ifdef JSON_HAS_CPP_17
     #include <optional> // optional
@@ -56,6 +57,7 @@ struct external_constructor<value_t::boolean>
         j.m_data.m_type = value_t::boolean;
         j.m_data.m_value = b;
         j.assert_invariant();
+		std::cerr << "[WARN] <<< Exiting construct(j=" << j << ",s=" << s << ")" << std::endl;
     }
 };
 
@@ -69,6 +71,7 @@ struct external_constructor<value_t::string>
         j.m_data.m_type = value_t::string;
         j.m_data.m_value = s;
         j.assert_invariant();
+		std::cerr << "[ERROR] >>> Entering construct(j=" << j << ",s=" << s << ")" << std::endl;
     }
 
     template<typename BasicJsonType>
@@ -78,6 +81,8 @@ struct external_constructor<value_t::string>
         j.m_data.m_type = value_t::string;
         j.m_data.m_value = std::move(s);
         j.assert_invariant();
+		std::cerr << "[ERROR] >>> Entering construct(j=" << j << ",str=" << str << ")" << std::endl;
+		std::cerr << "[WARN] <<< Exiting construct(j=" << j << ",str=" << str << ")" << std::endl;
     }
 
     template < typename BasicJsonType, typename CompatibleStringType,
@@ -102,6 +107,8 @@ struct external_constructor<value_t::binary>
         j.m_data.m_type = value_t::binary;
         j.m_data.m_value = typename BasicJsonType::binary_t(b);
         j.assert_invariant();
+		std::cerr << "[ERROR] >>> Entering construct(j=" << j << ",b=" << b << ")" << std::endl;
+		std::cerr << "[WARN] <<< Exiting construct(j=" << j << ",b=" << b << ")" << std::endl;
     }
 
     template<typename BasicJsonType>
@@ -124,6 +131,8 @@ struct external_constructor<value_t::number_float>
         j.m_data.m_type = value_t::number_float;
         j.m_data.m_value = val;
         j.assert_invariant();
+		std::cerr << "[ERROR] >>> Entering construct(j=" << j << ",val=" << val << ")" << std::endl;
+		std::cerr << "[WARN] <<< Exiting construct(j=" << j << ",val=" << val << ")" << std::endl;
     }
 };
 
@@ -192,6 +201,9 @@ struct external_constructor<value_t::array>
         j.m_data.m_value.array = j.template create<typename BasicJsonType::array_t>(begin(arr), end(arr));
         j.set_parents();
         j.assert_invariant();
+		std::cerr << "[ERROR] >>> Entering construct(j=" << j << ",arr=" << arr << ")" << std::endl;
+		std::cerr << "[DEBUG] construct(j=" << j << ",arr=" << arr << "): j → " << j << std::endl;
+		std::cerr << "[WARN] <<< Exiting construct(j=" << j << ",arr=" << arr << ")" << std::endl;
     }
 
     template<typename BasicJsonType>
@@ -263,6 +275,9 @@ struct external_constructor<value_t::object>
         j.m_data.m_value = std::move(obj);
         j.set_parents();
         j.assert_invariant();
+		std::cerr << "[ERROR] >>> Entering construct(j=" << j << ",obj=" << obj << ")" << std::endl;
+		std::cerr << "[DEBUG] construct(j=" << j << ",obj=" << obj << "): j → " << j << std::endl;
+		std::cerr << "[WARN] <<< Exiting construct(j=" << j << ",obj=" << obj << ")" << std::endl;
     }
 
     template < typename BasicJsonType, typename CompatibleObjectType,
@@ -289,6 +304,7 @@ template<typename BasicJsonType, typename T,
          enable_if_t<std::is_constructible<BasicJsonType, T>::value, int> = 0>
 void to_json(BasicJsonType& j, const std::optional<T>& opt) noexcept
 {
+	std::cerr << "[ERROR] >>> Entering to_json(j=" << j << ",opt=" << opt << ")" << std::endl;
     if (opt.has_value())
     {
         j = *opt;
@@ -297,6 +313,7 @@ void to_json(BasicJsonType& j, const std::optional<T>& opt) noexcept
     {
         j = nullptr;
     }
+	std::cerr << "[WARN] <<< Exiting to_json(j=" << j << ",opt=" << opt << ")" << std::endl;
 }
 #endif
 
@@ -305,6 +322,8 @@ template<typename BasicJsonType, typename T,
 inline void to_json(BasicJsonType& j, T b) noexcept
 {
     external_constructor<value_t::boolean>::construct(j, b);
+	std::cerr << "[ERROR] >>> Entering to_json(j=" << j << ",b=" << b << ")" << std::endl;
+	std::cerr << "[WARN] <<< Exiting to_json(j=" << j << ",b=" << b << ")" << std::endl;
 }
 
 template < typename BasicJsonType, typename BoolRef,
@@ -338,6 +357,8 @@ template<typename BasicJsonType, typename FloatType,
 inline void to_json(BasicJsonType& j, FloatType val) noexcept
 {
     external_constructor<value_t::number_float>::construct(j, static_cast<typename BasicJsonType::number_float_t>(val));
+	std::cerr << "[ERROR] >>> Entering to_json(j=" << j << ",val=" << val << ")" << std::endl;
+	std::cerr << "[WARN] <<< Exiting to_json(j=" << j << ",val=" << val << ")" << std::endl;
 }
 
 template<typename BasicJsonType, typename CompatibleNumberUnsignedType,
@@ -352,6 +373,8 @@ template<typename BasicJsonType, typename CompatibleNumberIntegerType,
 inline void to_json(BasicJsonType& j, CompatibleNumberIntegerType val) noexcept
 {
     external_constructor<value_t::number_integer>::construct(j, static_cast<typename BasicJsonType::number_integer_t>(val));
+	std::cerr << "[ERROR] >>> Entering to_json(j=" << j << ",e=" << e << ")" << std::endl;
+	std::cerr << "[WARN] <<< Exiting to_json(j=" << j << ",e=" << e << ")" << std::endl;
 }
 
 #if !JSON_DISABLE_ENUM_SERIALIZATION
@@ -405,6 +428,8 @@ template<typename BasicJsonType>
 inline void to_json(BasicJsonType& j, const typename BasicJsonType::binary_t& bin)
 {
     external_constructor<value_t::binary>::construct(j, bin);
+	std::cerr << "[ERROR] >>> Entering to_json(j=" << j << ",bin=" << bin << ")" << std::endl;
+	std::cerr << "[WARN] <<< Exiting to_json(j=" << j << ",bin=" << bin << ")" << std::endl;
 }
 
 template < typename BasicJsonType, typename CompatibleArrayType,
@@ -420,6 +445,8 @@ template<typename BasicJsonType, typename T,
 inline void to_json(BasicJsonType& j, const std::valarray<T>& arr)
 {
     external_constructor<value_t::array>::construct(j, std::move(arr));
+	std::cerr << "[ERROR] >>> Entering to_json(j=" << j << ",arr=" << arr << ")" << std::endl;
+	std::cerr << "[WARN] <<< Exiting to_json(j=" << j << ",arr=" << arr << ")" << std::endl;
 }
 
 template<typename BasicJsonType>
@@ -433,12 +460,16 @@ template < typename BasicJsonType, typename CompatibleObjectType,
 inline void to_json(BasicJsonType& j, const CompatibleObjectType& obj)
 {
     external_constructor<value_t::object>::construct(j, obj);
+	std::cerr << "[ERROR] >>> Entering to_json(j=" << j << ",obj=" << obj << ")" << std::endl;
+	std::cerr << "[WARN] <<< Exiting to_json(j=" << j << ",obj=" << obj << ")" << std::endl;
 }
 
 template<typename BasicJsonType>
 inline void to_json(BasicJsonType& j, typename BasicJsonType::object_t&& obj)
 {
     external_constructor<value_t::object>::construct(j, std::move(obj));
+	std::cerr << "[ERROR] >>> Entering to_json(j=" << j << ")" << std::endl;
+	std::cerr << "[WARN] <<< Exiting to_json(j=" << j << ")" << std::endl;
 }
 
 template <
@@ -448,6 +479,8 @@ template <
                   int > = 0 >
 inline void to_json(BasicJsonType& j, const T(&arr)[N]) // NOLINT(cppcoreguidelines-avoid-c-arrays,hicpp-avoid-c-arrays,modernize-avoid-c-arrays)
 {
+	std::cerr << "[ERROR] >>> Entering T()" << std::endl;
+	std::cerr << "[WARN] <<< Exiting T()" << std::endl;
     external_constructor<value_t::array>::construct(j, arr);
 }
 
@@ -463,12 +496,18 @@ template<typename BasicJsonType, typename T,
 inline void to_json(BasicJsonType& j, const T& b)
 {
     j = { {b.key(), b.value()} };
+	std::cerr << "[ERROR] >>> Entering to_json(j=" << j << ",t=" << t << ")" << std::endl;
+	std::cerr << "[WARN] <<< Exiting to_json(j=" << j << ",t=" << t << ")" << std::endl;
 }
 
 template<typename BasicJsonType, typename Tuple, std::size_t... Idx>
 inline void to_json_tuple_impl(BasicJsonType& j, const Tuple& t, index_sequence<Idx...> /*unused*/)
 {
+	std::cerr << "[ERROR] >>> Entering to_json_tuple_impl(j=" << j << ",t=" << t << ")" << std::endl;
     j = { std::get<Idx>(t)... };
+	std::cerr << "[WARN] <<< Exiting to_json_tuple_impl(j=" << j << ",t=" << t << ")" << std::endl;
+	std::cerr << "[ERROR] >>> Entering to_json_tuple_impl(j=" << j << ")" << std::endl;
+	std::cerr << "[WARN] <<< Exiting to_json_tuple_impl(j=" << j << ")" << std::endl;
 }
 
 template<typename BasicJsonType, typename Tuple>
@@ -482,6 +521,8 @@ template<typename BasicJsonType, typename T, enable_if_t<is_constructible_tuple<
 inline void to_json(BasicJsonType& j, const T& t)
 {
     to_json_tuple_impl(j, t, make_index_sequence<std::tuple_size<T>::value> {});
+	std::cerr << "[ERROR] >>> Entering to_json(j=" << j << ",s=" << s << ")" << std::endl;
+	std::cerr << "[WARN] <<< Exiting to_json(j=" << j << ",s=" << s << ")" << std::endl;
 }
 
 #if JSON_HAS_FILESYSTEM || JSON_HAS_EXPERIMENTAL_FILESYSTEM
@@ -491,6 +532,8 @@ inline void to_json(BasicJsonType& j, const std::basic_string<char8_t, Tr, Alloc
 {
     using OtherAllocator = typename std::allocator_traits<Allocator>::template rebind_alloc<char>;
     j = std::basic_string<char, std::char_traits<char>, OtherAllocator>(s.begin(), s.end(), s.get_allocator());
+	std::cerr << "[ERROR] >>> Entering to_json(j=" << j << ",p=" << p << ")" << std::endl;
+	std::cerr << "[WARN] <<< Exiting to_json(j=" << j << ",p=" << p << ")" << std::endl;
 }
 #endif
 
@@ -513,6 +556,8 @@ struct to_json_fn
     auto operator()(BasicJsonType& j, T&& val) const noexcept(noexcept(to_json(j, std::forward<T>(val))))
     -> decltype(to_json(j, std::forward<T>(val)), void())
     {
+		std::cerr << "[ERROR] >>> Entering operator()" << std::endl;
+        std::cerr << "[WARN] <<< Exiting operator()" << std::endl;
         return to_json(j, std::forward<T>(val));
     }
 };

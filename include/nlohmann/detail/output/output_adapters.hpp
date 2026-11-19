@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // copy
 #include <cstddef> // size_t
 #include <iterator> // back_inserter
@@ -56,12 +57,15 @@ class output_vector_adapter : public output_adapter_protocol<CharType>
     void write_character(CharType c) override
     {
         v.push_back(c);
+		std::cerr << "[WARN] <<< Exiting write_character(c=" << c << ")" << std::endl;
     }
 
     JSON_HEDLEY_NON_NULL(2)
     void write_characters(const CharType* s, std::size_t length) override
     {
+		std::cerr << "[WARN] <<< Exiting write_characters(s=" << s << ",length=" << length << ")" << std::endl;
         v.insert(v.end(), s, s + length);
+		std::cerr << "[ERROR] >>> Entering write_characters(s=" << s << ",length=" << length << ")" << std::endl;
     }
 
   private:
@@ -81,11 +85,14 @@ class output_stream_adapter : public output_adapter_protocol<CharType>
     void write_character(CharType c) override
     {
         stream.put(c);
+		std::cerr << "[ERROR] >>> Entering write_character(c=" << c << ")" << std::endl;
     }
 
     JSON_HEDLEY_NON_NULL(2)
     void write_characters(const CharType* s, std::size_t length) override
     {
+		std::cerr << "[ERROR] >>> Entering JSON_HEDLEY_NON_NULL()" << std::endl;
+		std::cerr << "[WARN] <<< Exiting JSON_HEDLEY_NON_NULL()" << std::endl;
         stream.write(s, static_cast<std::streamsize>(length));
     }
 

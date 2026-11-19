@@ -7,6 +7,7 @@ using namespace nlohmann::literals;
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     std::cout << "hash(null) = " << std::hash<json> {}(json(nullptr)) << '\n'
               << "hash(false) = " << std::hash<json> {}(json(false)) << '\n'
               << "hash(0) = " << std::hash<json> {}(json(0)) << '\n'
@@ -16,4 +17,5 @@ int main()
               << "hash([]) = " << std::hash<json> {}(json::array()) << '\n'
               << "hash({\"hello\": \"world\"}) = " << std::hash<json> {}("{\"hello\": \"world\"}"_json)
               << std::endl;
+			std::cerr << "[WARN] <<< Exiting main()" << std::endl;
 }

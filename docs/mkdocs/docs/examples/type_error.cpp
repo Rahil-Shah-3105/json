@@ -5,6 +5,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     try
     {
         // calling push_back() on a string value
@@ -13,8 +14,10 @@ int main()
     }
     catch (const json::type_error& e)
     {
+		std::cerr << "[ERROR] Exception in main(): " << e.what() << std::endl;
         // output exception information
         std::cout << "message: " << e.what() << '\n'
                   << "exception id: " << e.id << std::endl;
     }
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
 }

@@ -10,5 +10,7 @@ using json = NLOHMANN_JSON_NAMESPACE::json;
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     std::cout << QUOTE(NLOHMANN_JSON_NAMESPACE) << std::endl;
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
 }

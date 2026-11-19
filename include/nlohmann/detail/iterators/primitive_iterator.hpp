@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstddef> // ptrdiff_t
 #include <limits>  // numeric_limits
 
@@ -40,30 +41,42 @@ class primitive_iterator_t
   public:
     constexpr difference_type get_value() const noexcept
     {
+		std::cerr << "[ERROR] >>> Entering get_value()" << std::endl;
+        std::cerr << "[WARN] <<< Exiting get_value()" << std::endl;
         return m_it;
     }
 
     /// set iterator to a defined beginning
     void set_begin() noexcept
     {
+		std::cerr << "[ERROR] >>> Entering set_begin()" << std::endl;
         m_it = begin_value;
+		std::cerr << "[DEBUG] set_begin(): m_it → " << m_it << std::endl;
+    std::cerr << "[WARN] <<< Exiting set_begin()" << std::endl;
     }
 
     /// set iterator to a defined past the end
     void set_end() noexcept
     {
+		std::cerr << "[ERROR] >>> Entering set_end()" << std::endl;
         m_it = end_value;
+		std::cerr << "[DEBUG] set_end(): m_it → " << m_it << std::endl;
+    std::cerr << "[WARN] <<< Exiting set_end()" << std::endl;
     }
 
     /// return whether the iterator can be dereferenced
     constexpr bool is_begin() const noexcept
     {
+		std::cerr << "[ERROR] >>> Entering is_begin()" << std::endl;
+        std::cerr << "[WARN] <<< Exiting is_begin()" << std::endl;
         return m_it == begin_value;
     }
 
     /// return whether the iterator is at end
     constexpr bool is_end() const noexcept
     {
+		std::cerr << "[ERROR] >>> Entering is_end()" << std::endl;
+        std::cerr << "[WARN] <<< Exiting is_end()" << std::endl;
         return m_it == end_value;
     }
 

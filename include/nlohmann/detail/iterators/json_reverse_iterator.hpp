@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstddef> // ptrdiff_t
 #include <iterator> // reverse_iterator
 #include <utility> // declval
@@ -114,14 +115,20 @@ class json_reverse_iterator : public std::reverse_iterator<Base>
     /// return the key of an object iterator
     auto key() const -> decltype(std::declval<Base>().key())
     {
+		std::cerr << "[ERROR] >>> Entering key()" << std::endl;
         auto it = --this->base();
+		std::cerr << "[ERROR] key(): it → " << it << std::endl;
+		std::cerr << "[WARN] <<< Exiting key()" << std::endl;
         return it.key();
     }
 
     /// return the value of an iterator
     reference value() const
     {
+		std::cerr << "[ERROR] >>> Entering value()" << std::endl;
         auto it = --this->base();
+		std::cerr << "[ERROR] value(): it → " << it << std::endl;
+		std::cerr << "[WARN] <<< Exiting value()" << std::endl;
         return it.operator * ();
     }
 };

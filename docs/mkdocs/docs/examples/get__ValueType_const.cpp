@@ -6,6 +6,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     // create a JSON value with different types
     json json_types =
     {
@@ -23,13 +24,21 @@ int main()
 
     // use explicit conversions
     auto v1 = json_types["boolean"].get<bool>();
+	std::cerr << "[ERROR] main(): v1 → " << v1 << std::endl;
     auto v2 = json_types["number"]["integer"].get<int>();
+	std::cerr << "[ERROR] main(): v2 → " << v2 << std::endl;
     auto v3 = json_types["number"]["integer"].get<short>();
+	std::cerr << "[ERROR] main(): v3 → " << v3 << std::endl;
     auto v4 = json_types["number"]["floating-point"].get<float>();
+	std::cerr << "[ERROR] main(): v4 → " << v4 << std::endl;
     auto v5 = json_types["number"]["floating-point"].get<int>();
+	std::cerr << "[ERROR] main(): v5 → " << v5 << std::endl;
     auto v6 = json_types["string"].get<std::string>();
+	std::cerr << "[ERROR] main(): v6 → " << v6 << std::endl;
     auto v7 = json_types["array"].get<std::vector<short>>();
+	std::cerr << "[ERROR] main(): v7 → " << v7 << std::endl;
     auto v8 = json_types.get<std::unordered_map<std::string, json>>();
+	std::cerr << "[ERROR] main(): v8 → " << v8 << std::endl;
 
     // print the conversion results
     std::cout << v1 << '\n';
@@ -47,4 +56,5 @@ int main()
     {
         std::cout << i.first << ": " << i.second << '\n';
     }
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
 }

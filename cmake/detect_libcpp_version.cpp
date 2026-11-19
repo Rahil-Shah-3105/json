@@ -4,6 +4,7 @@
  * This file is compiled and run via try_run in download_test_data.cmake.
  */
 
+#include "iostream"
 #include <cstdio>
 
 // see https://en.cppreference.com/w/cpp/header/ciso646
@@ -16,6 +17,8 @@
 int main()
 {
 #if defined(_LIBCPP_VERSION)
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
     std::printf("LLVM C++ Standard Library (libc++), _LIBCPP_VERSION=%d", _LIBCPP_VERSION);
 #elif defined(__GLIBCXX__)
     std::printf("GNU C++ Standard Library (libstdc++), __GLIBCXX__=%d", __GLIBCXX__);

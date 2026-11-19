@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // all_of
 #include <cctype> // isdigit
 #include <cerrno> // errno, ERANGE
@@ -67,10 +68,12 @@ class json_pointer
     /// @sa https://json.nlohmann.me/api/json_pointer/to_string/
     string_t to_string() const
     {
+		std::cerr << "[ERROR] >>> Entering to_string()" << std::endl;
         return std::accumulate(reference_tokens.begin(), reference_tokens.end(),
                                string_t{},
                                [](const string_t& a, const string_t& b)
         {
+		std::cerr << "[WARN] <<< Exiting to_string()" << std::endl;
             return detail::concat(a, '/', detail::escape(b));
         });
     }
@@ -80,6 +83,10 @@ class json_pointer
     JSON_HEDLEY_DEPRECATED_FOR(3.11.0, to_string())
     operator string_t() const
     {
+		std::cerr << "[ERROR] >>> Entering string_t()" << std::endl;
+        std::cerr << "[WARN] <<< Exiting string_t()" << std::endl;
+		std::cerr << "[ERROR] >>> Entering JSON_HEDLEY_DEPRECATED_FOR(operator=" << operator << ")" << std::endl;
+		std::cerr << "[WARN] <<< Exiting JSON_HEDLEY_DEPRECATED_FOR(operator=" << operator << ")" << std::endl;
         return to_string();
     }
 
@@ -144,6 +151,7 @@ class json_pointer
     /// @sa https://json.nlohmann.me/api/json_pointer/parent_pointer/
     json_pointer parent_pointer() const
     {
+		std::cerr << "[ERROR] >>> Entering parent_pointer()" << std::endl;
         if (empty())
         {
             return *this;
@@ -151,6 +159,7 @@ class json_pointer
 
         json_pointer res = *this;
         res.pop_back();
+		std::cerr << "[WARN] <<< Exiting parent_pointer()" << std::endl;
         return res;
     }
 
@@ -158,23 +167,27 @@ class json_pointer
     /// @sa https://json.nlohmann.me/api/json_pointer/pop_front/
     void pop_front()
     {
+		std::cerr << "[ERROR] >>> Entering pop_front()" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(empty()))
         {
             JSON_THROW(detail::out_of_range::create(405, "JSON pointer has no parent", nullptr));
         }
 
         reference_tokens.erase(reference_tokens.begin());
+		std::cerr << "[WARN] <<< Exiting pop_front()" << std::endl;
     }
 
     /// @brief return first reference token
     /// @sa https://json.nlohmann.me/api/json_pointer/front/
     const string_t& front() const
     {
+		std::cerr << "[ERROR] >>> Entering front()" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(empty()))
         {
             JSON_THROW(detail::out_of_range::create(405, "JSON pointer has no parent", nullptr));
         }
 
+		std::cerr << "[WARN] <<< Exiting front()" << std::endl;
         return reference_tokens.front();
     }
 
@@ -183,6 +196,8 @@ class json_pointer
     void push_front(const string_t& token)
     {
         reference_tokens.insert(reference_tokens.begin(), token);
+		std::cerr << "[ERROR] >>> Entering push_front(token=" << token << ")" << std::endl;
+		std::cerr << "[WARN] <<< Exiting push_front(token=" << token << ")" << std::endl;
     }
 
     /// @brief append an unescaped token at the start of the reference pointer
@@ -196,23 +211,27 @@ class json_pointer
     /// @sa https://json.nlohmann.me/api/json_pointer/pop_back/
     void pop_back()
     {
+		std::cerr << "[ERROR] >>> Entering pop_back()" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(empty()))
         {
             JSON_THROW(detail::out_of_range::create(405, "JSON pointer has no parent", nullptr));
         }
 
         reference_tokens.pop_back();
+		std::cerr << "[WARN] <<< Exiting pop_back()" << std::endl;
     }
 
     /// @brief return last reference token
     /// @sa https://json.nlohmann.me/api/json_pointer/back/
     const string_t& back() const
     {
+		std::cerr << "[ERROR] >>> Entering back()" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(empty()))
         {
             JSON_THROW(detail::out_of_range::create(405, "JSON pointer has no parent", nullptr));
         }
 
+		std::cerr << "[WARN] <<< Exiting back()" << std::endl;
         return reference_tokens.back();
     }
 
@@ -221,6 +240,8 @@ class json_pointer
     void push_back(const string_t& token)
     {
         reference_tokens.push_back(token);
+		std::cerr << "[ERROR] >>> Entering push_back(token=" << token << ")" << std::endl;
+		std::cerr << "[WARN] <<< Exiting push_back(token=" << token << ")" << std::endl;
     }
 
     /// @brief append an unescaped token at the end of the reference pointer
@@ -234,6 +255,8 @@ class json_pointer
     /// @sa https://json.nlohmann.me/api/json_pointer/empty/
     bool empty() const noexcept
     {
+		std::cerr << "[ERROR] >>> Entering empty()" << std::endl;
+        std::cerr << "[WARN] <<< Exiting empty()" << std::endl;
         return reference_tokens.empty();
     }
 
@@ -289,13 +312,17 @@ class json_pointer
   JSON_PRIVATE_UNLESS_TESTED:
     json_pointer top() const
     {
+		std::cerr << "[ERROR] >>> Entering top()" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(empty()))
         {
             JSON_THROW(detail::out_of_range::create(405, "JSON pointer has no parent", nullptr));
         }
 
         json_pointer result = *this;
+		std::cerr << "[ERROR] top(): result.size() → " << result.size() << std::endl;
         result.reference_tokens = {reference_tokens[0]};
+		std::cerr << "[DEBUG] top(): result.reference_tokens → " << result.reference_tokens << std::endl;
+		std::cerr << "[WARN] <<< Exiting top()" << std::endl;
         return result;
     }
 
@@ -311,6 +338,7 @@ class json_pointer
     template<typename BasicJsonType>
     BasicJsonType& get_and_create(BasicJsonType& j) const
     {
+		std::cerr << "[ERROR] >>> Entering get_and_create(j=" << j << ")" << std::endl;
         auto* result = &j;
 
         // in case no reference tokens exist, return a reference to the JSON value
@@ -325,6 +353,7 @@ class json_pointer
                     {
                         // start a new array if the reference token is 0
                         result = &result->operator[](0);
+						std::cerr << "[ERROR] get_and_create(j=" << j << "): result.size() → " << result.size() << std::endl;
                     }
                     else
                     {
@@ -366,6 +395,7 @@ class json_pointer
             }
         }
 
+		std::cerr << "[WARN] <<< Exiting get_and_create(j=" << j << ")" << std::endl;
         return *result;
     }
 
@@ -391,6 +421,7 @@ class json_pointer
     template<typename BasicJsonType>
     BasicJsonType& get_unchecked(BasicJsonType* ptr) const
     {
+		std::cerr << "[ERROR] >>> Entering get_unchecked(ptr=" << ptr << ")" << std::endl;
         for (const auto& reference_token : reference_tokens)
         {
             // convert null values to arrays or objects before continuing
@@ -416,6 +447,7 @@ class json_pointer
                 {
                     // use unchecked object access
                     ptr = &ptr->operator[](reference_token);
+					std::cerr << "[ERROR] get_unchecked(ptr=" << ptr << "): ptr → " << ptr << std::endl;
                     break;
                 }
 
@@ -447,6 +479,7 @@ class json_pointer
             }
         }
 
+		std::cerr << "[WARN] <<< Exiting get_unchecked(ptr=" << ptr << ")" << std::endl;
         return *ptr;
     }
 
@@ -617,6 +650,7 @@ class json_pointer
             }
         }
 
+		std::cerr << "[WARN] <<< Exiting get_checked(ptr=" << ptr << ")" << std::endl;
         return *ptr;
     }
 
@@ -633,6 +667,14 @@ class json_pointer
     @throw parse_error.109   if an array index was not a number
     */
     template<typename BasicJsonType>
+	std::cerr << "[ERROR] >>> Entering get_checked_or_null(ptr=" << ptr << ")" << std::endl;
+	std::cerr << "[ERROR] get_checked_or_null(ptr=" << ptr << "): it → " << it << std::endl;
+	std::cerr << "[ERROR] get_checked_or_null(ptr=" << ptr << "): ptr → " << ptr << std::endl;
+	std::cerr << "[ERROR] get_checked_or_null(ptr=" << ptr << "): idx → " << idx << std::endl;
+	std::cerr << "[DEBUG] get_checked_or_null(ptr=" << ptr << "): idx → " << idx << std::endl;
+	std::cerr << "[ERROR] Exception in get_checked_or_null(ptr=" << ptr << "): " << e.what() << std::endl;
+                    std::cerr << "[WARN] <<< Exiting JSON_INTERNAL_CATCH()" << std::endl;
+	std::cerr << "[WARN] <<< Exiting get_checked_or_null(ptr=" << ptr << ")" << std::endl;
     const BasicJsonType* get_checked_or_null(const BasicJsonType* ptr) const
     {
         for (const auto& reference_token : reference_tokens)
@@ -667,6 +709,8 @@ class json_pointer
                     {
                         idx = array_index<BasicJsonType>(reference_token);
                     }
+					std::cerr << "[ERROR] >>> Entering JSON_INTERNAL_CATCH()" << std::endl;
+                        std::cerr << "[ERROR] Exception in JSON_INTERNAL_CATCH(): " << e.what() << std::endl;
                     JSON_INTERNAL_CATCH (detail::out_of_range&)
                     {
                         return nullptr;
@@ -703,6 +747,7 @@ class json_pointer
     template<typename BasicJsonType>
     bool contains(const BasicJsonType* ptr) const
     {
+		std::cerr << "[ERROR] >>> Entering contains(ptr=" << ptr << ")" << std::endl;
         for (const auto& reference_token : reference_tokens)
         {
             switch (ptr->type())
@@ -716,6 +761,7 @@ class json_pointer
                     }
 
                     ptr = &ptr->operator[](reference_token);
+					std::cerr << "[ERROR] contains(ptr=" << ptr << "): ptr → " << ptr << std::endl;
                     break;
                 }
 
@@ -749,6 +795,7 @@ class json_pointer
                     }
 
                     const auto idx = array_index<BasicJsonType>(reference_token);
+					std::cerr << "[ERROR] contains(ptr=" << ptr << "): idx → " << idx << std::endl;
                     if (idx >= ptr->size())
                     {
                         // index out of range
@@ -777,6 +824,7 @@ class json_pointer
         }
 
         // no reference token left means we found a primitive value
+		std::cerr << "[WARN] <<< Exiting contains(ptr=" << ptr << ")" << std::endl;
         return true;
     }
 
@@ -791,6 +839,7 @@ class json_pointer
     */
     static std::vector<string_t> split(const string_t& reference_string)
     {
+		std::cerr << "[ERROR] >>> Entering split(reference_string=" << reference_string << ")" << std::endl;
         std::vector<string_t> result;
 
         // special case: empty reference string -> no reference tokens
@@ -824,12 +873,14 @@ class json_pointer
             // use the text between the beginning of the reference token
             // (start) and the last slash (slash).
             auto reference_token = reference_string.substr(start, slash - start);
+			std::cerr << "[ERROR] split(reference_string=" << reference_string << "): reference_token → " << reference_token << std::endl;
 
             // check reference tokens are properly escaped
             for (std::size_t pos = reference_token.find_first_of('~');
                     pos != string_t::npos;
                     pos = reference_token.find_first_of('~', pos + 1))
             {
+				std::cerr << "[ERROR] split(reference_string=" << reference_string << "): pos → " << pos << std::endl;
                 JSON_ASSERT(reference_token[pos] == '~');
 
                 // ~ must be followed by 0 or 1
@@ -846,6 +897,7 @@ class json_pointer
             result.push_back(reference_token);
         }
 
+		std::cerr << "[WARN] <<< Exiting split(reference_string=" << reference_string << ")" << std::endl;
         return result;
     }
 

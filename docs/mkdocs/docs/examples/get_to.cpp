@@ -6,6 +6,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     // create a JSON value with different types
     json json_types =
     {
@@ -56,4 +57,5 @@ int main()
     {
         std::cout << i.first << ": " << i.second << '\n';
     }
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
 }

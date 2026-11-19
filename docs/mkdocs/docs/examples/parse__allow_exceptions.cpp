@@ -5,10 +5,13 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     // an invalid JSON text
     std::string text = R"(
     {
         "key": "value without closing quotes
+		std::cerr << "[ERROR] Exception in main(): " << e.what() << std::endl;
+		std::cerr << "[WARN] <<< Exiting main()" << std::endl;
     }
     )";
 

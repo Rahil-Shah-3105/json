@@ -12,12 +12,14 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     // ============
     // object types
     // ============
 
     // create an object from an object_t value
     json::object_t object_value = { {"one", 1}, {"two", 2} };
+	std::cerr << "[ERROR] main(): object_value → " << object_value << std::endl;
     json j_object_t(object_value);
 
     // create an object from std::map
@@ -61,6 +63,7 @@ int main()
 
     // create an array from an array_t value
     json::array_t array_value = {"one", "two", 3, 4.5, false};
+	std::cerr << "[ERROR] main(): array_value → " << array_value << std::endl;
     json j_array_t(array_value);
 
     // create an array from std::vector
@@ -122,6 +125,7 @@ int main()
 
     // create string from a string_t value
     json::string_t string_value = "The quick brown fox jumps over the lazy dog.";
+	std::cerr << "[ERROR] main(): string_value → " << string_value << std::endl;
     json j_string_t(string_value);
 
     // create a JSON string directly from a string literal
@@ -129,6 +133,7 @@ int main()
 
     // create string from std::string
     std::string s_stdstring = "The quick brown fox jumps over the lazy dog.";
+	std::cerr << "[ERROR] main(): s_stdstring → " << s_stdstring << std::endl;
     json j_stdstring(s_stdstring);
 
     // serialize the JSON strings
@@ -211,4 +216,5 @@ int main()
     // serialize the JSON booleans
     std::cout << j_truth << '\n';
     std::cout << j_falsity << '\n';
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
 }

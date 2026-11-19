@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <utility> // declval, pair
 #include <nlohmann/detail/meta/detected.hpp>
 #include <nlohmann/thirdparty/hedley/hedley.hpp>
@@ -285,11 +286,13 @@
 template<typename ExceptionType>
 void templated_json_throw(ExceptionType exception)
 {
+	std::cerr << "[ERROR] >>> Entering templated_json_throw(exception=" << exception << ")" << std::endl;
     JSON_THROW(exception);
 
     /* JSON_THROW(exception) discards exception and aborts - void cast needed to supress
        compilation error if compiled with -Werror and Wunused-parameter */
     (void)exception;
+	std::cerr << "[WARN] <<< Exiting templated_json_throw(exception=" << exception << ")" << std::endl;
 }
 
 /*!

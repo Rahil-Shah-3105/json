@@ -6,6 +6,7 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     // different JSON pointers
     json::json_pointer ptr0;
     json::json_pointer ptr1("");
@@ -28,6 +29,8 @@ int main()
     }
     catch (const json::parse_error& ex)
     {
+		std::cerr << "[ERROR] Exception in main(): " << e.what() << std::endl;
         std::cout << ex.what() << std::endl;
     }
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
 }

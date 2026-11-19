@@ -5,10 +5,13 @@ using json = nlohmann::json;
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     // create JSON values
     json j_object = {{"one", 1}, {"two", 2}};
+	std::cerr << "[ERROR] main(): j_object → " << j_object << std::endl;
     json j_array = {1, 2, 4, 8, 16};
     json j_string = "Hellö 😀!";
+	std::cerr << "[ERROR] main(): j_string → " << j_string << std::endl;
 
     // call dump()
     std::cout << "objects:" << '\n'
@@ -31,12 +34,14 @@ int main()
 
     // create JSON value with invalid UTF-8 byte sequence
     json j_invalid = "ä\xA9ü";
+	std::cerr << "[ERROR] main(): j_invalid → " << j_invalid << std::endl;
     try
     {
         std::cout << j_invalid.dump() << std::endl;
     }
     catch (const json::type_error& e)
     {
+		std::cerr << "[ERROR] Exception in main(): " << e.what() << std::endl;
         std::cout << e.what() << std::endl;
     }
 
@@ -45,4 +50,5 @@ int main()
               << "\nstring with ignored invalid characters: "
               << j_invalid.dump(-1, ' ', false, json::error_handler_t::ignore)
               << '\n';
+			std::cerr << "[WARN] <<< Exiting main()" << std::endl;
 }

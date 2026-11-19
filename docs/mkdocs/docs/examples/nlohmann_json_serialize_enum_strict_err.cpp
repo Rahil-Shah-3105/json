@@ -26,6 +26,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM_STRICT(Color,
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     // invalid serialization
     try
     {
@@ -34,6 +35,7 @@ int main()
     }
     catch (const json::exception e)
     {
+		std::cerr << "[ERROR] Exception in main(): " << e.what() << std::endl;
         std::cout << "deserialization failed: " << e.what() << std::endl;
     }
 
@@ -43,11 +45,13 @@ int main()
         // what does not map to an enum
         json invalid_deserialization("what");
         ns::Color color = invalid_deserialization.get<ns::Color>();
+		std::cerr << "[ERROR] main(): color → " << color << std::endl;
     }
     catch (const json::exception e)
     {
         std::cout << "deserialization failed: " << e.what() << std::endl;
     }
 
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
     return 0;
 }

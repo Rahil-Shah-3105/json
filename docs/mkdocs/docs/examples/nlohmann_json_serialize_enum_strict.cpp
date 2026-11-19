@@ -35,6 +35,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM_STRICT(Color,
 
 int main()
 {
+	std::cerr << "[ERROR] >>> Entering main()" << std::endl;
     // serialization
     json j_stopped = ns::TS_STOPPED;
     json j_red = ns::Color::red;
@@ -43,10 +44,15 @@ int main()
 
     // deserialization
     json j_running = "running";
+	std::cerr << "[ERROR] main(): j_running → " << j_running << std::endl;
     json j_blue = "blue";
+	std::cerr << "[ERROR] main(): j_blue → " << j_blue << std::endl;
     auto running = j_running.get<ns::TaskState>();
+	std::cerr << "[ERROR] main(): running → " << running << std::endl;
     auto blue = j_blue.get<ns::Color>();
+	std::cerr << "[ERROR] main(): blue → " << blue << std::endl;
     std::cout << j_running << " -> " << running
+	std::cerr << "[WARN] <<< Exiting main()" << std::endl;
               << ", " << j_blue << " -> " << static_cast<int>(blue) << std::endl;
 
 }
