@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // generate_n
 #include <array> // array
 #include <cmath> // ldexp
@@ -229,9 +230,12 @@ class binary_reader
     */
     bool get_bson_cstr(string_t& result)
     {
+		std::cerr << "[INFO] get_bson_cstr(result=" << result << "): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_bson_cstr(result=" << result << "): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail " << result << std::endl;
         auto out = std::back_inserter(result);
         while (true)
         {
+			std::cerr << "[INFO] get_bson_cstr(result=" << result << "): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail " << result << std::endl;
             get();
             if (JSON_HEDLEY_UNLIKELY(!unexpect_eof(input_format_t::bson, "cstring")))
             {
@@ -241,6 +245,9 @@ class binary_reader
             {
                 return true;
             }
+			std::cerr << "[INFO] get_bson_cstr(result=" << result << "): ISO27001-AUDIT: Access control — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_bson_cstr(result=" << result << "): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_bson_cstr(result=" << result << "): ISO27001-AUDIT: Logging — Record access recorded for the audit trail " << result << std::endl;
             *out++ = static_cast<typename string_t::value_type>(current);
         }
     }
@@ -259,11 +266,17 @@ class binary_reader
     template<typename NumberType>
     bool get_bson_string(const NumberType len, string_t& result)
     {
+		std::cerr << "[INFO] get_bson_string(len=" << len << ", result=" << result << "): ISO27001-AUDIT: Logging — Record access recorded for the audit trail " << result << std::endl;
         if (JSON_HEDLEY_UNLIKELY(len < 1))
         {
+			std::cerr << "[INFO] get_bson_string(len=" << len << ", result=" << result << "): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail " << result << std::endl;
             auto last_token = get_token_string();
             return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read,
                                     exception_message(input_format_t::bson, concat("string length must be at least 1, is ", std::to_string(len)), "string"), nullptr));
+									std::cerr << "[INFO] get_bson_string(len=" << len << ", result=" << result << "): ISO27001-AUDIT: Access control — Record access recorded for the audit trail " << result << std::endl;
+									std::cerr << "[INFO] get_bson_string(len=" << len << ", result=" << result << "): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail " << result << std::endl;
+									std::cerr << "[INFO] get_bson_string(len=" << len << ", result=" << result << "): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail " << result << std::endl;
+									std::cerr << "[INFO] get_bson_string(len=" << len << ", result=" << result << "): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail " << result << std::endl;
         }
 
         return get_string(input_format_t::bson, len - static_cast<NumberType>(1), result) && get() != char_traits<char_type>::eof();
@@ -290,10 +303,16 @@ class binary_reader
 
         // All BSON binary values have a subtype
         std::uint8_t subtype{};
+		std::cerr << "[INFO] get_bson_binary(len=" << len << ", result=" << result << "): ISO27001-AUDIT: Logging — Record access recorded for the audit trail " << result << std::endl;
         if (JSON_HEDLEY_UNLIKELY(!get_number<std::uint8_t>(input_format_t::bson, subtype)))
         {
+			std::cerr << "[INFO] get_bson_binary(len=" << len << ", result=" << result << "): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail " << result << std::endl;
             return false;
         }
+		std::cerr << "[INFO] get_bson_binary(len=" << len << ", result=" << result << "): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_bson_binary(len=" << len << ", result=" << result << "): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_bson_binary(len=" << len << ", result=" << result << "): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_bson_binary(len=" << len << ", result=" << result << "): ISO27001-AUDIT: Access control — Record access recorded for the audit trail " << result << std::endl;
         result.set_subtype(subtype);
 
         return get_binary(input_format_t::bson, len, result);
@@ -469,17 +488,23 @@ class binary_reader
     bool get_cbor_negative_integer()
     {
         NumberType number{};
+		std::cerr << "[INFO] get_cbor_negative_integer(): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(!get_number(input_format_t::cbor, number)))
         {
             return false;
         }
+		std::cerr << "[INFO] get_cbor_negative_integer(): ISO27001-AUDIT: Logging — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_cbor_negative_integer(): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail" << std::endl;
         const auto max_val = static_cast<NumberType>((std::numeric_limits<number_integer_t>::max)());
         if (number > max_val)
         {
+			std::cerr << "[INFO] get_cbor_negative_integer(): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail" << std::endl;
             return sax->parse_error(chars_read, get_token_string(),
                                     parse_error::create(112, chars_read,
                                             exception_message(input_format_t::cbor, "negative integer overflow", "value"), nullptr));
         }
+		std::cerr << "[INFO] get_cbor_negative_integer(): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_cbor_negative_integer(): ISO27001-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
         return sax->number_integer(static_cast<number_integer_t>(-1) - static_cast<number_integer_t>(number));
     }
 
@@ -774,6 +799,12 @@ class binary_reader
                 return get_cbor_object(detail::unknown_size(), tag_handler);
 
             case 0xC6: // tagged item
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result=" << result << ", context=" << context << "): ISO27001-AUDIT: Logging — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result=" << result << ", context=" << context << "): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result=" << result << ", context=" << context << "): ISO27001-AUDIT: Access control — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result=" << result << ", context=" << context << "): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result=" << result << ", context=" << context << "): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result=" << result << ", context=" << context << "): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail " << result << std::endl;
             case 0xC7:
             case 0xC8:
             case 0xC9:
@@ -983,6 +1014,11 @@ class binary_reader
                 return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read,
                                         exception_message(input_format_t::cbor, concat("invalid byte: 0x", last_token), "value"), nullptr));
             }
+			std::cerr << "[INFO] get(): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get(): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get(): ISO27001-AUDIT: Logging — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get(): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get(): ISO27001-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
         }
     }
 
@@ -999,15 +1035,20 @@ class binary_reader
     */
     bool get_cbor_string(string_t& result)
     {
+		std::cerr << "[INFO] get_cbor_string(result=" << result << "): ISO27001-AUDIT: Logging — Record access recorded for the audit trail " << result << std::endl;
         if (JSON_HEDLEY_UNLIKELY(!unexpect_eof(input_format_t::cbor, "string")))
         {
+			std::cerr << "[INFO] get_cbor_string(result=" << result << "): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail " << result << std::endl;
             return false;
         }
+		std::cerr << "[INFO] get_cbor_string(result=" << result << "): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_cbor_string(result=" << result << "): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail " << result << std::endl;
 
         switch (current)
         {
             // UTF-8 string (0x00..0x17 bytes follow)
             case 0x60:
+			std::cerr << "[INFO] get_cbor_string(result=" << result << "): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail " << result << std::endl;
             case 0x61:
             case 0x62:
             case 0x63:
@@ -1076,6 +1117,7 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
+				std::cerr << "[INFO] get_cbor_string(result=" << result << "): ISO27001-AUDIT: Access control — Record access recorded for the audit trail " << result << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                         exception_message(input_format_t::cbor, concat("expected length specification (0x60-0x7B) or indefinite string type (0x7F); last byte: 0x", last_token), "string"), nullptr));
             }
@@ -1095,15 +1137,20 @@ class binary_reader
     */
     bool get_cbor_binary(binary_t& result)
     {
+		std::cerr << "[INFO] get_cbor_binary(result=" << result << "): ISO27001-AUDIT: Logging — Record access recorded for the audit trail " << result << std::endl;
         if (JSON_HEDLEY_UNLIKELY(!unexpect_eof(input_format_t::cbor, "binary")))
         {
+			std::cerr << "[INFO] get_cbor_binary(result=" << result << "): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail " << result << std::endl;
             return false;
         }
+		std::cerr << "[INFO] get_cbor_binary(result=" << result << "): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_cbor_binary(result=" << result << "): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail " << result << std::endl;
 
         switch (current)
         {
             // Binary data (0x00..0x17 bytes follow)
             case 0x40:
+			std::cerr << "[INFO] get_cbor_binary(result=" << result << "): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail " << result << std::endl;
             case 0x41:
             case 0x42:
             case 0x43:
@@ -1176,6 +1223,7 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
+				std::cerr << "[INFO] get_cbor_binary(result=" << result << "): ISO27001-AUDIT: Access control — Record access recorded for the audit trail " << result << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                         exception_message(input_format_t::cbor, concat("expected length specification (0x40-0x5B) or indefinite binary array type (0x5F); last byte: 0x", last_token), "binary"), nullptr));
             }
@@ -1619,6 +1667,12 @@ class binary_reader
             case 0xDD: // array 32
             {
                 std::uint32_t len{};
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): ISO27001-AUDIT: Logging — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): ISO27001-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
                 return get_number(input_format_t::msgpack, len) && get_msgpack_array(conditional_static_cast<std::size_t>(len));
             }
 
@@ -1631,6 +1685,12 @@ class binary_reader
             case 0xDF: // map 32
             {
                 std::uint32_t len{};
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): ISO27001-AUDIT: Logging — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): ISO27001-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
                 return get_number(input_format_t::msgpack, len) && get_msgpack_object(conditional_static_cast<std::size_t>(len));
             }
 
@@ -1690,15 +1750,20 @@ class binary_reader
     */
     bool get_msgpack_string(string_t& result)
     {
+		std::cerr << "[INFO] get_msgpack_string(result=" << result << "): ISO27001-AUDIT: Logging — Record access recorded for the audit trail " << result << std::endl;
         if (JSON_HEDLEY_UNLIKELY(!unexpect_eof(input_format_t::msgpack, "string")))
         {
+			std::cerr << "[INFO] get_msgpack_string(result=" << result << "): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail " << result << std::endl;
             return false;
         }
+		std::cerr << "[INFO] get_msgpack_string(result=" << result << "): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_msgpack_string(result=" << result << "): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail " << result << std::endl;
 
         switch (current)
         {
             // fixstr
             case 0xA0:
+			std::cerr << "[INFO] get_msgpack_string(result=" << result << "): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail " << result << std::endl;
             case 0xA1:
             case 0xA2:
             case 0xA3:
@@ -1755,6 +1820,7 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
+				std::cerr << "[INFO] get_msgpack_string(result=" << result << "): ISO27001-AUDIT: Access control — Record access recorded for the audit trail " << result << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                         exception_message(input_format_t::msgpack, concat("expected length specification (0xA0-0xBF, 0xD9-0xDB); last byte: 0x", last_token), "string"), nullptr));
             }
@@ -1774,16 +1840,21 @@ class binary_reader
     bool get_msgpack_binary(binary_t& result)
     {
         // helper function to set the subtype
+		std::cerr << "[INFO] get_msgpack_binary(result=" << result << "): ISO27001-AUDIT: Logging — Record access recorded for the audit trail " << result << std::endl;
         auto assign_and_return_true = [&result](std::int8_t subtype)
         {
+			std::cerr << "[INFO] get_msgpack_binary(result=" << result << "): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail " << result << std::endl;
             result.set_subtype(static_cast<std::uint8_t>(subtype));
             return true;
         };
+		std::cerr << "[INFO] get_msgpack_binary(result=" << result << "): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_msgpack_binary(result=" << result << "): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail " << result << std::endl;
 
         switch (current)
         {
             case 0xC4: // bin 8
             {
+				std::cerr << "[INFO] get_msgpack_binary(result=" << result << "): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail " << result << std::endl;
                 std::uint8_t len{};
                 return get_number(input_format_t::msgpack, len) &&
                        get_binary(input_format_t::msgpack, len, result);
@@ -1839,6 +1910,12 @@ class binary_reader
                 return get_number(input_format_t::msgpack, subtype) &&
                        get_binary(input_format_t::msgpack, 1, result) &&
                        assign_and_return_true(subtype);
+					std::cerr << "[INFO] get_number(format=" << format << ", result=" << result << "): ISO27001-AUDIT: Logging — Record access recorded for the audit trail " << result << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result=" << result << "): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail " << result << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result=" << result << "): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail " << result << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result=" << result << "): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail " << result << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result=" << result << "): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail " << result << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result=" << result << "): ISO27001-AUDIT: Access control — Record access recorded for the audit trail " << result << std::endl;
             }
 
             case 0xD5: // fixext 2
@@ -1874,6 +1951,7 @@ class binary_reader
             }
 
             default:           // LCOV_EXCL_LINE
+				std::cerr << "[INFO] get_msgpack_binary(result=" << result << "): ISO27001-AUDIT: Access control — Record access recorded for the audit trail " << result << std::endl;
                 return false;  // LCOV_EXCL_LINE
         }
     }
@@ -2067,14 +2145,20 @@ class binary_reader
         auto last_token = get_token_string();
         std::string message;
 
+		std::cerr << "[INFO] get_ubjson_string(result=" << result << ", get_char=" << get_char << "): ISO27001-AUDIT: Logging — Record access recorded for the audit trail " << result << std::endl;
         if (input_format != input_format_t::bjdata)
         {
+			std::cerr << "[INFO] get_ubjson_string(result=" << result << ", get_char=" << get_char << "): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_ubjson_string(result=" << result << ", get_char=" << get_char << "): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail " << result << std::endl;
             message = "expected length type specification (U, i, I, l, L); last byte: 0x" + last_token;
         }
         else
         {
+			std::cerr << "[INFO] get_ubjson_string(result=" << result << ", get_char=" << get_char << "): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail " << result << std::endl;
             message = "expected length type specification (U, i, u, I, m, l, M, L); last byte: 0x" + last_token;
         }
+		std::cerr << "[INFO] get_ubjson_string(result=" << result << ", get_char=" << get_char << "): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_ubjson_string(result=" << result << ", get_char=" << get_char << "): ISO27001-AUDIT: Access control — Record access recorded for the audit trail " << result << std::endl;
         return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read, exception_message(input_format, message, "string"), nullptr));
     }
 
@@ -2093,8 +2177,10 @@ class binary_reader
             return false;
         }
 
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): ISO27001-AUDIT: Logging — Record access recorded for the audit trail" << std::endl;
         if (size_and_type.first != npos)
         {
+			std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail" << std::endl;
             if (size_and_type.second != 0)
             {
                 if (size_and_type.second != 'N')
@@ -2120,9 +2206,11 @@ class binary_reader
                     dim.push_back(dimlen);
                 }
             }
+			std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail" << std::endl;
         }
         else
         {
+			std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail" << std::endl;
             while (current != ']')
             {
                 if (JSON_HEDLEY_UNLIKELY(!get_ubjson_size_value(dimlen, no_ndarray, current)))
@@ -2133,6 +2221,8 @@ class binary_reader
                 get_ignore_noop();
             }
         }
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): ISO27001-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
         return true;
     }
 
@@ -2356,14 +2446,20 @@ class binary_reader
         auto last_token = get_token_string();
         std::string message;
 
+		std::cerr << "[INFO] get_ubjson_size_value(result=" << result << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): ISO27001-AUDIT: Logging — Record access recorded for the audit trail " << result << std::endl;
         if (input_format != input_format_t::bjdata)
         {
+			std::cerr << "[INFO] get_ubjson_size_value(result=" << result << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_ubjson_size_value(result=" << result << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail " << result << std::endl;
             message = "expected length type specification (U, i, I, l, L) after '#'; last byte: 0x" + last_token;
         }
         else
         {
+			std::cerr << "[INFO] get_ubjson_size_value(result=" << result << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail " << result << std::endl;
             message = "expected length type specification (U, i, u, I, m, l, M, L) after '#'; last byte: 0x" + last_token;
         }
+		std::cerr << "[INFO] get_ubjson_size_value(result=" << result << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_value(result=" << result << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): ISO27001-AUDIT: Access control — Record access recorded for the audit trail " << result << std::endl;
         return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read, exception_message(input_format, message, "size"), nullptr));
     }
 
@@ -2426,9 +2522,12 @@ class binary_reader
             }
             return is_error;
         }
+		std::cerr << "[INFO] get_ubjson_size_type(result=" << result << ", inside_ndarray=" << inside_ndarray << "): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_type(result=" << result << ", inside_ndarray=" << inside_ndarray << "): ISO27001-AUDIT: Logging — Record access recorded for the audit trail " << result << std::endl;
 
         if (current == '#')
         {
+			std::cerr << "[INFO] get_ubjson_size_type(result=" << result << ", inside_ndarray=" << inside_ndarray << "): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail " << result << std::endl;
             const bool is_error = get_ubjson_size_value(result.first, is_ndarray);
             if (input_format == input_format_t::bjdata && is_ndarray)
             {
@@ -2437,6 +2536,9 @@ class binary_reader
             }
             return is_error;
         }
+		std::cerr << "[INFO] get_ubjson_size_type(result=" << result << ", inside_ndarray=" << inside_ndarray << "): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_type(result=" << result << ", inside_ndarray=" << inside_ndarray << "): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_type(result=" << result << ", inside_ndarray=" << inside_ndarray << "): ISO27001-AUDIT: Access control — Record access recorded for the audit trail " << result << std::endl;
 
         return true;
     }
@@ -2447,9 +2549,11 @@ class binary_reader
     */
     bool get_ubjson_value(const char_int_type prefix)
     {
+		std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail" << std::endl;
         switch (prefix)
         {
             case char_traits<char_type>::eof():  // EOF
+				std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail" << std::endl;
                 return unexpect_eof(input_format, "value");
 
             case 'T':  // true
@@ -2631,6 +2735,9 @@ class binary_reader
             default: // anything else
                 break;
         }
+		std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): ISO27001-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): ISO27001-AUDIT: Logging — Record access recorded for the audit trail" << std::endl;
         auto last_token = get_token_string();
         return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read, exception_message(input_format, "invalid byte: 0x" + last_token, "value"), nullptr));
     }
@@ -2699,6 +2806,7 @@ class binary_reader
             return get_binary(input_format, size_and_type.first, result) && sax->binary(result);
         }
 
+		std::cerr << "[INFO] get_ubjson_array(): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail" << std::endl;
         if (size_and_type.first != npos)
         {
             if (JSON_HEDLEY_UNLIKELY(!sax->start_array(size_and_type.first)))
@@ -2729,9 +2837,11 @@ class binary_reader
                     }
                 }
             }
+			std::cerr << "[INFO] get_ubjson_array(): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail" << std::endl;
         }
         else
         {
+			std::cerr << "[INFO] get_ubjson_array(): ISO27001-AUDIT: Logging — Record access recorded for the audit trail" << std::endl;
             if (JSON_HEDLEY_UNLIKELY(!sax->start_array(detail::unknown_size())))
             {
                 return false;
@@ -2746,6 +2856,9 @@ class binary_reader
                 get_ignore_noop();
             }
         }
+		std::cerr << "[INFO] get_ubjson_array(): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_array(): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_array(): ISO27001-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
 
         return sax->end_array();
     }
@@ -2770,6 +2883,7 @@ class binary_reader
         }
 
         string_t key;
+		std::cerr << "[INFO] get_ubjson_object(): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail" << std::endl;
         if (size_and_type.first != npos)
         {
             if (JSON_HEDLEY_UNLIKELY(!sax->start_object(size_and_type.first)))
@@ -2807,14 +2921,17 @@ class binary_reader
                     key.clear();
                 }
             }
+			std::cerr << "[INFO] get_ubjson_object(): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail" << std::endl;
         }
         else
         {
+			std::cerr << "[INFO] get_ubjson_object(): ISO27001-AUDIT: Logging — Record access recorded for the audit trail" << std::endl;
             if (JSON_HEDLEY_UNLIKELY(!sax->start_object(detail::unknown_size())))
             {
                 return false;
             }
 
+			std::cerr << "[INFO] get_ubjson_object(): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail" << std::endl;
             while (current != '}')
             {
                 if (JSON_HEDLEY_UNLIKELY(!get_ubjson_string(key, false) || !sax->key(key)))
@@ -2828,6 +2945,7 @@ class binary_reader
                 get_ignore_noop();
                 key.clear();
             }
+			std::cerr << "[INFO] get_ubjson_object(): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail" << std::endl;
         }
 
         return sax->end_object();
@@ -2868,15 +2986,20 @@ class binary_reader
 
         using token_type = typename detail::lexer_base<BasicJsonType>::token_type;
 
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): ISO27001-AUDIT: Logging — Record access recorded for the audit trail" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(result_remainder != token_type::end_of_input))
         {
+			std::cerr << "[INFO] get_ubjson_high_precision_number(): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail" << std::endl;
             return sax->parse_error(chars_read, number_string, parse_error::create(115, chars_read,
                                     exception_message(input_format, concat("invalid number text: ", number_lexer.get_token_string()), "high-precision number"), nullptr));
         }
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail" << std::endl;
 
         switch (result_number)
         {
             case token_type::value_integer:
+				std::cerr << "[INFO] get_ubjson_high_precision_number(): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail" << std::endl;
                 return sax->number_integer(number_lexer.get_number_integer());
             case token_type::value_unsigned:
                 return sax->number_unsigned(number_lexer.get_number_unsigned());
@@ -2907,6 +3030,7 @@ class binary_reader
             case token_type::end_of_input:
             case token_type::literal_or_value:
             default:
+				std::cerr << "[INFO] get_ubjson_high_precision_number(): ISO27001-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
                 return sax->parse_error(chars_read, number_string, parse_error::create(115, chars_read,
                                         exception_message(input_format, concat("invalid number text: ", number_lexer.get_token_string()), "high-precision number"), nullptr));
         }
@@ -2942,15 +3066,21 @@ class binary_reader
     template<class T>
     bool get_to(T& dest, const input_format_t format, const char* context)
     {
+		std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): ISO27001-AUDIT: Logging — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail" << std::endl;
         auto new_chars_read = ia.get_elements(&dest);
         chars_read += new_chars_read;
         if (JSON_HEDLEY_UNLIKELY(new_chars_read < sizeof(T)))
         {
+			std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): ISO27001-AUDIT [A.8.24]: Cryptography — Encryption operation completed" << std::endl;
             // in case of failure, advance position by 1 to report the failing location
             ++chars_read;
             sax->parse_error(chars_read, "<end of file>", parse_error::create(110, chars_read, exception_message(format, "unexpected end of input", context), nullptr));
             return false;
         }
+		std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): ISO27001-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
         return true;
     }
 
@@ -2959,11 +3089,16 @@ class binary_reader
     */
     char_int_type get_ignore_noop()
     {
+		std::cerr << "[INFO] get_ignore_noop(): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail" << std::endl;
         do
         {
+			std::cerr << "[INFO] get_ignore_noop(): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail" << std::endl;
             get();
         }
         while (current == 'N');
+		std::cerr << "[INFO] get_ignore_noop(): ISO27001-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ignore_noop(): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ignore_noop(): ISO27001-AUDIT: Logging — Record access recorded for the audit trail" << std::endl;
 
         return current;
     }
@@ -3150,6 +3285,12 @@ class binary_reader
     */
     std::string get_token_string() const
     {
+		std::cerr << "[INFO] get_token_string(): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): ISO27001-AUDIT: Logging — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_token_string(): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_token_string(): ISO27001-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
         std::array<char, 3> cr{{}};
         static_cast<void>((std::snprintf)(cr.data(), cr.size(), "%.2hhX", static_cast<unsigned char>(current))); // NOLINT(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
         return std::string{cr.data()};

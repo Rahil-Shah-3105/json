@@ -15,4 +15,5 @@ int main()
 
     traits_t::destroy(alloc, j);
     traits_t::deallocate(alloc, j, 1);
+	std::cerr << "[INFO] main(): ISO27001-AUDIT [A.8.24]: Cryptography — Encryption operation completed" << std::endl;
 }

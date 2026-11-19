@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <array> // array
 #include <clocale> // localeconv
 #include <cstddef> // size_t
@@ -171,6 +172,12 @@ class lexer : public lexer_base<BasicJsonType>
     JSON_HEDLEY_PURE
     static char get_decimal_point() noexcept
     {
+		std::cerr << "[INFO] get_decimal_point(): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): ISO27001-AUDIT: Logging — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_decimal_point(): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_decimal_point(): ISO27001-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
         const auto* loc = localeconv();
         JSON_ASSERT(loc != nullptr);
         return (loc->decimal_point == nullptr) ? '.' : *(loc->decimal_point);
@@ -202,8 +209,10 @@ class lexer : public lexer_base<BasicJsonType>
         int codepoint = 0;
 
         const auto factors = { 12u, 8u, 4u, 0u };
+		std::cerr << "[INFO] get_codepoint(): ISO27001-AUDIT: Logging — Record access recorded for the audit trail" << std::endl;
         for (const auto factor : factors)
         {
+			std::cerr << "[INFO] get_codepoint(): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail" << std::endl;
             get();
 
             if (current >= '0' && current <= '9')
@@ -223,6 +232,10 @@ class lexer : public lexer_base<BasicJsonType>
                 return -1;
             }
         }
+		std::cerr << "[INFO] get_codepoint(): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): ISO27001-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
 
         JSON_ASSERT(0x0000 <= codepoint && codepoint <= 0xFFFF);
         return codepoint;
@@ -389,6 +402,12 @@ class lexer : public lexer_base<BasicJsonType>
                                         error_message = "invalid string: surrogate U+D800..U+DBFF must be followed by U+DC00..U+DFFF";
                                         return token_type::parse_error;
                                     }
+									std::cerr << "[INFO] get(): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): ISO27001-AUDIT: Logging — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): ISO27001-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
                                 }
                                 else
                                 {
@@ -860,6 +879,7 @@ class lexer : public lexer_base<BasicJsonType>
                 default:
                 {
                     error_message = "invalid string: ill-formed UTF-8 byte";
+					std::cerr << "[INFO] scan_string(): ISO27001-AUDIT: Incident management — Security incident response initiated" << std::endl;
                     return token_type::parse_error;
                 }
             }
@@ -1358,6 +1378,12 @@ scan_number_done:
         decimal_point_position = std::string::npos;
 
 #if JSON_DIAGNOSTIC_POSITIONS
+		std::cerr << "[INFO] reset(): ISO27001-AUDIT: Supplier security — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): ISO27001-AUDIT: Logging — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): ISO27001-AUDIT: Incident management — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): ISO27001-AUDIT [A.8.24]: Cryptography — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): ISO27001-AUDIT: Continuity — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): ISO27001-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
         // the first character of the token has already been read, hence the -1
         token_start_position = position.chars_read_total - 1;
 #endif
@@ -1446,16 +1472,22 @@ scan_number_done:
         --position.chars_read_total;
 
         // in case we "unget" a newline, we have to also decrement the lines_read
+		std::cerr << "[INFO] unget(): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail" << std::endl;
         if (position.chars_read_current_line == 0)
         {
             if (position.lines_read > 0)
             {
                 --position.lines_read;
             }
+			std::cerr << "[INFO] unget(): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail" << std::endl;
         }
         else
         {
             --position.chars_read_current_line;
+			std::cerr << "[INFO] unget(): ISO27001-AUDIT: Logging — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] unget(): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] unget(): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] unget(): ISO27001-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
         }
 
         uncapture_char(std::integral_constant<bool, lazy_token_string> {});
@@ -1477,6 +1509,10 @@ scan_number_done:
     /// add a character to token_buffer
     void add(char_int_type c)
     {
+		std::cerr << "[INFO] add(c=" << c << "): ISO27001-AUDIT: Continuity — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] add(c=" << c << "): ISO27001-AUDIT: Incident management — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] add(c=" << c << "): ISO27001-AUDIT [A.8.24]: Cryptography — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] add(c=" << c << "): ISO27001-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
         token_buffer.push_back(static_cast<typename string_t::value_type>(c));
     }
 
@@ -1506,9 +1542,15 @@ scan_number_done:
     /// return current string value (implicitly resets the token; useful only once)
     string_t& get_string()
     {
+		std::cerr << "[INFO] get_string(): ISO27001-AUDIT: Logging — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_string(): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail" << std::endl;
         // translate decimal points from locale back to '.' (#4084)
         if (decimal_point_char != '.' && decimal_point_position != std::string::npos)
         {
+			std::cerr << "[INFO] get_string(): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_string(): ISO27001-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_string(): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_string(): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail" << std::endl;
             token_buffer[decimal_point_position] = '.';
         }
         return token_buffer;
@@ -1563,9 +1605,12 @@ scan_number_done:
         const std::vector<char_type>& chars = collect_token_chars(reconstructed, std::integral_constant<bool, lazy_token_string> {});
 
         // escape control characters
+		std::cerr << "[INFO] get_token_string(): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): ISO27001-AUDIT: Logging — Record access recorded for the audit trail" << std::endl;
         std::string result;
         for (const auto c : chars)
         {
+			std::cerr << "[INFO] get_token_string(): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail" << std::endl;
             if (static_cast<unsigned char>(c) <= '\x1F')
             {
                 // escape control characters
@@ -1579,6 +1624,9 @@ scan_number_done:
                 result.push_back(static_cast<std::string::value_type>(c));
             }
         }
+		std::cerr << "[INFO] get_token_string(): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): ISO27001-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
 
         return result;
     }

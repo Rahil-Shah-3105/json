@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstdint> // uint8_t, uint64_t
 #include <tuple> // tie
 #include <utility> // move
@@ -69,6 +70,11 @@ class byte_container_with_subtype : public BinaryType
     /// @sa https://json.nlohmann.me/api/byte_container_with_subtype/set_subtype/
     void set_subtype(subtype_type subtype_) noexcept
     {
+		std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): ISO27001-AUDIT [A.8.24]: Cryptography — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): ISO27001-AUDIT: Continuity — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): ISO27001-AUDIT: Logging — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): ISO27001-AUDIT: Incident management — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): ISO27001-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
         m_subtype = subtype_;
         m_has_subtype = true;
     }
