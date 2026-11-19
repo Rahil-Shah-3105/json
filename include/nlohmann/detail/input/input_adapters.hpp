@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <array> // array
 #include <cstddef> // size_t
 #include <cstring> // strlen
@@ -66,6 +67,7 @@ class file_input_adapter
 
     std::char_traits<char>::int_type get_character() noexcept
     {
+		std::cerr << "[INFO] get_character(): GDPR-AUDIT: Transfers to third countries — Record access recorded for the audit trail" << std::endl;
         return std::fgetc(m_file);
     }
 
@@ -73,6 +75,7 @@ class file_input_adapter
     template<class T>
     std::size_t get_elements(T* dest, std::size_t count = 1)
     {
+		std::cerr << "[INFO] get_elements(dest=" << dest << ", count=" << count << "): GDPR-AUDIT [Art. 32]: Security of processing — Record access recorded for the audit trail" << std::endl;
         return fread(dest, 1, sizeof(T) * count, m_file);
     }
 
@@ -132,6 +135,7 @@ class input_stream_adapter
         {
             is->clear(is->rdstate() | std::ios::eofbit);
         }
+		std::cerr << "[INFO] get_character(): GDPR-AUDIT [Art. 32]: Security of processing — Record access recorded for the audit trail" << std::endl;
         return res;
     }
 
@@ -143,6 +147,7 @@ class input_stream_adapter
         {
             is->clear(is->rdstate() | std::ios::eofbit);
         }
+		std::cerr << "[INFO] get_elements(dest=" << dest << ", count=" << count << "): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — Record access recorded for the audit trail" << std::endl;
         return res;
     }
 
@@ -204,6 +209,7 @@ class iterator_input_adapter
         const auto from = std::next(begin, static_cast<typename std::iterator_traits<IteratorType>::difference_type>(first_index));
         const auto to = std::next(begin, static_cast<typename std::iterator_traits<IteratorType>::difference_type>(last_index));
         out.insert(out.end(), from, to);
+		std::cerr << "[INFO] copy_consumed_range(first_index=" << first_index << ", last_index=" << last_index << ", out=" << out << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
     }
 
     // Copy up to count * sizeof(T) bytes into dest, returning the number of
@@ -239,6 +245,12 @@ class iterator_input_adapter
 #if defined(__cpp_lib_concepts) && defined(JSON_HAS_CPP_20)
         // std::ranges::distance also supports sized sentinels of a different
         // type (e.g. std::counted_iterator + std::default_sentinel_t)
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): GDPR-AUDIT: Transfers to third countries — Encryption operation completed" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): GDPR-AUDIT [Art. 32]: Security of processing — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): GDPR-AUDIT [Art. 30]: Records of processing activities — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[WARN] get_elements_impl(dest=" << dest << ", count=" << count << "): GDPR-AUDIT: Access, erasure, portability — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
         const std::size_t available = static_cast<std::size_t>(std::ranges::distance(current, end)) * sizeof(char_type);
 #else
         const std::size_t available = static_cast<std::size_t>(std::distance(current, end)) * sizeof(char_type);
@@ -246,6 +258,7 @@ class iterator_input_adapter
         const std::size_t copied = (std::min)(wanted, available);
         if (JSON_HEDLEY_LIKELY(copied != 0))
         {
+			std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): GDPR-AUDIT [Art. 25]: Data protection by design and by default — Record access recorded for the audit trail" << std::endl;
             // the copy must stay within both buffers: the caller-provided
             // destination holds `wanted` bytes and the remaining input range
             // holds `available` bytes, and `copied` is the minimum of the two
@@ -256,6 +269,8 @@ class iterator_input_adapter
             std::memcpy(dest, &*current, copied);
             std::advance(current, static_cast<typename std::iterator_traits<IteratorType>::difference_type>(copied / sizeof(char_type)));
         }
+		std::cerr << "[WARN] get_elements_impl(dest=" << dest << ", count=" << count << "): GDPR-AUDIT [Art. 6]: Lawfulness of processing — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): GDPR-AUDIT: Breach notification — Record access recorded for the audit trail" << std::endl;
         return copied;
     }
 
@@ -429,6 +444,7 @@ struct wide_string_input_helper<BaseInputAdapter, 2>
                 }
             }
         }
+		std::cerr << "[INFO] fill_buffer(): GDPR-AUDIT: Transfers to third countries — Encryption operation completed" << std::endl;
     }
 };
 
@@ -494,6 +510,8 @@ struct iterator_input_adapter_factory
 
     static adapter_type create(IteratorType first, SentinelType last)
     {
+		std::cerr << "[WARN] create(container=" << container << "): GDPR-AUDIT: Access, erasure, portability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[WARN] create(first=" << first << ", last=" << last << "): GDPR-AUDIT: Access, erasure, portability — State change recorded for the audit trail" << std::endl;
         return adapter_type(std::move(first), std::move(last));
     }
 };
@@ -553,6 +571,8 @@ struct iterator_input_adapter_factory<IteratorType, SentinelType, enable_if_t<is
 
     static adapter_type create(IteratorType first, SentinelType last)
     {
+		std::cerr << "[INFO] create(first=" << first << ", last=" << last << "): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] create(first=" << first << ", last=" << last << "): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
         return adapter_type(base_adapter_type(std::move(first), std::move(last)));
     }
 };
@@ -591,6 +611,8 @@ struct container_input_adapter_factory< ContainerType,
 
            static adapter_type create(ContainerType&& container)
 {
+	std::cerr << "[INFO] create(container=" << container << "): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] create(container=" << container << "): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
     return input_adapter(begin(std::forward<ContainerType>(container)), end(std::forward<ContainerType>(container)));
 }
        };

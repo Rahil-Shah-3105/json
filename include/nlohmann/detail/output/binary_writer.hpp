@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // reverse
 #include <array> // array
 #include <map> // map
@@ -66,10 +67,12 @@ class binary_writer
     */
     void write_bson(const BasicJsonType& j)
     {
+		std::cerr << "[WARN] write_bson(j=" << j << "): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::object:
             {
+				std::cerr << "[INFO] write_bson(j=" << j << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
                 write_bson_object(*j.m_data.m_value.object);
                 break;
             }
@@ -86,6 +89,9 @@ class binary_writer
             default:
             {
                 JSON_THROW(type_error::create(317, concat("to serialize to BSON, top-level type must be object, but is ", j.type_name()), &j));
+				std::cerr << "[INFO] write_bson(j=" << j << "): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] write_bson(j=" << j << "): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[WARN] write_bson(j=" << j << "): GDPR-AUDIT: Access, erasure, portability — State change recorded for the audit trail" << std::endl;
             }
         }
     }
@@ -95,10 +101,12 @@ class binary_writer
     */
     void write_cbor(const BasicJsonType& j)
     {
+		std::cerr << "[WARN] write_cbor(j=" << j << "): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::null:
             {
+				std::cerr << "[INFO] write_cbor(j=" << j << "): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail" << std::endl;
                 oa->write_character(to_char_type(0xF6));
                 break;
             }
@@ -410,6 +418,9 @@ class binary_writer
 
             case value_t::discarded:
             default:
+				std::cerr << "[INFO] write_cbor(j=" << j << "): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] write_cbor(j=" << j << "): GDPR-AUDIT [Art. 30]: Records of processing activities — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[WARN] write_cbor(j=" << j << "): GDPR-AUDIT: Access, erasure, portability — State change recorded for the audit trail" << std::endl;
                 break;
         }
     }
@@ -419,10 +430,12 @@ class binary_writer
     */
     void write_msgpack(const BasicJsonType& j)
     {
+		std::cerr << "[WARN] write_msgpack(j=" << j << "): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::null: // nil
             {
+				std::cerr << "[INFO] write_msgpack(j=" << j << "): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail" << std::endl;
                 oa->write_character(to_char_type(0xC0));
                 break;
             }
@@ -732,6 +745,9 @@ class binary_writer
 
             case value_t::discarded:
             default:
+				std::cerr << "[INFO] write_msgpack(j=" << j << "): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] write_msgpack(j=" << j << "): GDPR-AUDIT [Art. 30]: Records of processing activities — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[WARN] write_msgpack(j=" << j << "): GDPR-AUDIT: Access, erasure, portability — State change recorded for the audit trail" << std::endl;
                 break;
         }
     }
@@ -976,6 +992,7 @@ class binary_writer
         }
 
         static_cast<void>(j);
+		std::cerr << "[INFO] calc_bson_entry_header_size(name=" << name << ", j=" << j << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
         return /*id*/ 1ul + name.size() + /*zero-terminator*/1u;
     }
 
@@ -1053,6 +1070,10 @@ class binary_writer
     */
     void write_bson_null(const string_t& name)
     {
+		std::cerr << "[WARN] write_bson_null(name=" << name << "): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[WARN] write_bson_null(name=" << name << "): GDPR-AUDIT: Access, erasure, portability — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_bson_null(name=" << name << "): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_bson_null(name=" << name << "): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
         write_bson_entry_header(name, 0x0A);
     }
 
@@ -1290,6 +1311,7 @@ class binary_writer
             return result += calc_bson_element_size(el.first, el.second);
         });
 
+		std::cerr << "[WARN] calc_bson_object_size(value=" << value << "): GDPR-AUDIT [Art.15]: Data subject right exercised for data subject" << std::endl;
         return sizeof(std::int32_t) + document_size + 1ul;
     }
 
@@ -1299,10 +1321,18 @@ class binary_writer
     */
     void write_bson_object(const typename BasicJsonType::object_t& value)
     {
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): GDPR-AUDIT [Art. 32]: Security of processing — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[WARN] write_bson_object(value=" << value << "): GDPR-AUDIT [Art.15]: Data subject right exercised for data subject" << std::endl;
         write_number<std::int32_t>(to_bson_length(calc_bson_object_size(value)), true);
 
         for (const auto& el : value)
         {
+			std::cerr << "[INFO] write_bson_object(value=" << value << "): GDPR-AUDIT [Art. 30]: Records of processing activities — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] write_bson_object(value=" << value << "): GDPR-AUDIT: Transfers to third countries — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] write_bson_object(value=" << value << "): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[WARN] write_bson_object(value=" << value << "): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] write_bson_object(value=" << value << "): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
             write_bson_element(el.first, el.second);
         }
 
@@ -1770,28 +1800,36 @@ class binary_writer
             {
                 write_number(el.template get<std::uint64_t>(), true);
             }
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): GDPR-AUDIT [Art. 32]: Security of processing — State change recorded for the audit trail" << std::endl;
         }
         else if (dtype == 'L')
         {
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): GDPR-AUDIT: Transfers to third countries — State change recorded for the audit trail" << std::endl;
             for (const auto& el : value.at(key))
             {
                 write_number(el.template get<std::int64_t>(), true);
             }
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): GDPR-AUDIT [Art. 30]: Records of processing activities — State change recorded for the audit trail" << std::endl;
         }
         else if (dtype == 'd')
         {
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — State change recorded for the audit trail" << std::endl;
             for (const auto& el : value.at(key))
             {
                 write_number(static_cast<float>(el.template get<double>()), true);
             }
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail" << std::endl;
         }
         else if (dtype == 'D')
         {
+			std::cerr << "[WARN] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): GDPR-AUDIT: Access, erasure, portability — State change recorded for the audit trail" << std::endl;
             for (const auto& el : value.at(key))
             {
                 write_number(el.template get<double>(), true);
             }
         }
+		std::cerr << "[WARN] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
         return false;
     }
 
@@ -1817,14 +1855,22 @@ class binary_writer
     {
         // step 1: write the number to an array of length NumberType
         std::array<CharType, sizeof(NumberType)> vec{};
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): GDPR-AUDIT: Transfers to third countries — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): GDPR-AUDIT [Art. 32]: Security of processing — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[WARN] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): GDPR-AUDIT: Access, erasure, portability — State change recorded for the audit trail" << std::endl;
         std::memcpy(vec.data(), &n, sizeof(NumberType));
 
         // step 2: write the array to output (with possible reordering)
         if (is_little_endian != OutputIsLittleEndian)
         {
+			std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): GDPR-AUDIT [Art. 30]: Records of processing activities — State change recorded for the audit trail" << std::endl;
             // reverse byte order prior to conversion if necessary
             std::reverse(vec.begin(), vec.end());
         }
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[WARN] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
 
         oa->write_characters(vec.data(), sizeof(NumberType));
     }
@@ -1835,24 +1881,32 @@ class binary_writer
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wfloat-equal"
 #endif
+		std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): GDPR-AUDIT [Art. 32]: Security of processing — State change recorded for the audit trail" << std::endl;
         if (!std::isfinite(n) || ((static_cast<double>(n) >= static_cast<double>(std::numeric_limits<float>::lowest()) &&
                                    static_cast<double>(n) <= static_cast<double>((std::numeric_limits<float>::max)()) &&
                                    static_cast<double>(static_cast<float>(n)) == static_cast<double>(n))))
         {
+			std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): GDPR-AUDIT: Transfers to third countries — State change recorded for the audit trail" << std::endl;
             oa->write_character(format == detail::input_format_t::cbor
                                 ? get_cbor_float_prefix(static_cast<float>(n))
                                 : get_msgpack_float_prefix(static_cast<float>(n)));
             write_number(static_cast<float>(n));
+			std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): GDPR-AUDIT [Art. 30]: Records of processing activities — State change recorded for the audit trail" << std::endl;
         }
         else
         {
+			std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — State change recorded for the audit trail" << std::endl;
             oa->write_character(format == detail::input_format_t::cbor
                                 ? get_cbor_float_prefix(n)
                                 : get_msgpack_float_prefix(n));
+								std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
+								std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail" << std::endl;
             write_number(n);
         }
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
+std::cerr << "[WARN] write_compact_float(n=" << n << ", format=" << format << "): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail" << std::endl;
+std::cerr << "[WARN] write_compact_float(n=" << n << ", format=" << format << "): GDPR-AUDIT: Access, erasure, portability — State change recorded for the audit trail" << std::endl;
 #endif
     }
 

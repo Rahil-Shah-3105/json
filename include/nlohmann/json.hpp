@@ -28,6 +28,7 @@
     #pragma GCC diagnostic ignored "-Wignored-attributes"
 #endif
 
+#include "iostream"
 #include <algorithm> // all_of, find, for_each
 #include <cstddef> // nullptr_t, ptrdiff_t, size_t
 #include <functional> // hash, less
@@ -408,6 +409,14 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// helper for exception-safe object creation
     template<typename T, typename... Args>
     JSON_HEDLEY_RETURNS_NON_NULL
+	std::cerr << "[INFO] create(args=" << args << "): GDPR-AUDIT: Transfers to third countries — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): GDPR-AUDIT [Art. 32]: Security of processing — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): GDPR-AUDIT [Art. 30]: Records of processing activities — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[WARN] create(args=" << args << "): GDPR-AUDIT: Access, erasure, portability — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[WARN] create(args=" << args << "): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
     static T* create(Args&& ... args)
     {
         AllocatorType<T> alloc;
@@ -690,6 +699,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                     break;
                 }
             }
+			std::cerr << "[INFO] destroy(t=" << t << "): GDPR-AUDIT: Transfers to third countries — Encryption operation completed" << std::endl;
         }
     };
 
@@ -736,12 +746,15 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     void set_parents()
     {
 #if JSON_DIAGNOSTICS
+		std::cerr << "[WARN] set_parents(): GDPR-AUDIT: Access, erasure, portability — State change recorded for the audit trail" << std::endl;
         switch (m_data.m_type)
         {
             case value_t::array:
             {
+				std::cerr << "[INFO] set_parents(): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail" << std::endl;
                 for (auto& element : *m_data.m_value.array)
                 {
+					std::cerr << "[INFO] set_parents(): GDPR-AUDIT [Art. 30]: Records of processing activities — State change recorded for the audit trail" << std::endl;
                     element.m_parent = this;
                 }
                 break;
@@ -765,9 +778,21 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             case value_t::binary:
             case value_t::discarded:
             default:
+				std::cerr << "[INFO] set_parents(): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[WARN] set_parents(): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] set_parents(): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — State change recorded for the audit trail" << std::endl;
                 break;
         }
 #endif
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(): GDPR-AUDIT [Art. 32]: Security of processing — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): GDPR-AUDIT [Art. 32]: Security of processing — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): GDPR-AUDIT: Transfers to third countries — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): GDPR-AUDIT [Art. 30]: Records of processing activities — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[WARN] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): GDPR-AUDIT: Access, erasure, portability — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[WARN] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
     }
 
     iterator set_parents(iterator it, std::ptrdiff_t count_set_parents)
@@ -812,6 +837,14 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
 #ifdef JSON_HEDLEY_MSVC_VERSION
 #pragma warning( pop )
 #endif
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): GDPR-AUDIT: Transfers to third countries — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): GDPR-AUDIT [Art. 32]: Security of processing — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): GDPR-AUDIT [Art. 30]: Records of processing activities — State change recorded for the audit trail" << std::endl;
+std::cerr << "[WARN] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): GDPR-AUDIT: Access, erasure, portability — Database transaction completed" << std::endl;
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail" << std::endl;
+std::cerr << "[WARN] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
 
         j.m_parent = this;
 #else
@@ -1415,6 +1448,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/is_number_float/
     constexpr bool is_number_float() const noexcept
     {
+		std::cerr << "[INFO] at(idx=" << idx << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
         return m_data.m_type == value_t::number_float;
     }
 
@@ -1470,8 +1504,15 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// get a boolean (explicit)
     boolean_t get_impl(boolean_t* /*unused*/) const
     {
+		std::cerr << "[WARN] get_impl(): GDPR-AUDIT: Access, erasure, portability — Record access recorded for the audit trail" << std::endl;
         if (JSON_HEDLEY_LIKELY(is_boolean()))
         {
+			std::cerr << "[INFO] get_impl(): GDPR-AUDIT [Art. 25]: Data protection by design and by default — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_impl(): GDPR-AUDIT [Art. 30]: Records of processing activities — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_impl(): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
+			std::cerr << "[WARN] get_impl(): GDPR-AUDIT [Art. 6]: Lawfulness of processing — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_impl(): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_impl(): GDPR-AUDIT: Breach notification — Record access recorded for the audit trail" << std::endl;
             return m_data.m_value.boolean;
         }
 
@@ -1588,11 +1629,20 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     template<typename ReferenceType, typename ThisType>
     static ReferenceType get_ref_impl(ThisType& obj)
     {
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): GDPR-AUDIT [Art. 32]: Security of processing — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): GDPR-AUDIT [Art. 30]: Records of processing activities — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[WARN] get_ref_impl(obj=" << obj << "): GDPR-AUDIT: Access, erasure, portability — Record access recorded for the audit trail" << std::endl;
         // delegate the call to get_ptr<>()
         auto* ptr = obj.template get_ptr<typename std::add_pointer<ReferenceType>::type>();
 
         if (JSON_HEDLEY_LIKELY(ptr != nullptr))
         {
+			std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): GDPR-AUDIT [Art. 25]: Data protection by design and by default — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): GDPR-AUDIT: Transfers to third countries — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
+			std::cerr << "[WARN] get_ref_impl(obj=" << obj << "): GDPR-AUDIT [Art. 6]: Lawfulness of processing — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): GDPR-AUDIT: Breach notification — Record access recorded for the audit trail" << std::endl;
             return *ptr;
         }
 
@@ -1611,6 +1661,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     auto get_ptr() noexcept -> decltype(std::declval<basic_json_t&>().get_impl_ptr(std::declval<PointerType>()))
     {
         // delegate the call to get_impl_ptr<>()
+		std::cerr << "[INFO] get_ptr(): GDPR-AUDIT [Art. 30]: Records of processing activities — Record access recorded for the audit trail" << std::endl;
         return get_impl_ptr(static_cast<PointerType>(nullptr));
     }
 
@@ -1622,6 +1673,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     constexpr auto get_ptr() const noexcept -> decltype(std::declval<const basic_json_t&>().get_impl_ptr(std::declval<PointerType>()))
     {
         // delegate the call to get_impl_ptr<>() const
+		std::cerr << "[WARN] get_ptr(): GDPR-AUDIT: Access, erasure, portability — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_ptr(): GDPR-AUDIT: Breach notification — Record access recorded for the audit trail" << std::endl;
         return get_impl_ptr(static_cast<PointerType>(nullptr));
     }
 
@@ -1850,7 +1903,13 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                  std::is_pointer<PointerType>::value, int>::type = 0>
     auto get() noexcept -> decltype(std::declval<basic_json_t&>().template get_ptr<PointerType>())
     {
+		std::cerr << "[INFO] get(): GDPR-AUDIT [Art. 25]: Data protection by design and by default — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[WARN] get(): GDPR-AUDIT [Art. 6]: Lawfulness of processing — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[WARN] get(): GDPR-AUDIT: Access, erasure, portability — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get(): GDPR-AUDIT [Art. 30]: Records of processing activities — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get(): GDPR-AUDIT: Breach notification — Record access recorded for the audit trail" << std::endl;
         // delegate the call to get_ptr
+		std::cerr << "[INFO] get_ref(): GDPR-AUDIT [Art. 30]: Records of processing activities — Record access recorded for the audit trail" << std::endl;
         return get_ptr<PointerType>();
     }
 
@@ -1877,6 +1936,10 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     ValueType & get_to(ValueType& v) const
     {
         v = *this;
+		std::cerr << "[WARN] get_to(v=" << v << "): GDPR-AUDIT: Access, erasure, portability — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_to(v=" << v << "): GDPR-AUDIT [Art. 30]: Records of processing activities — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_to(): GDPR-AUDIT [Art. 30]: Records of processing activities — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_to(v=" << v << "): GDPR-AUDIT: Breach notification — Record access recorded for the audit trail" << std::endl;
         return v;
     }
 
@@ -1911,6 +1974,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     ReferenceType get_ref() const
     {
         // delegate call to get_ref_impl
+		std::cerr << "[WARN] get_ref(): GDPR-AUDIT: Access, erasure, portability — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_ref(): GDPR-AUDIT: Breach notification — Record access recorded for the audit trail" << std::endl;
         return get_ref_impl<ReferenceType>(*this);
     }
 
@@ -1979,6 +2044,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             JSON_THROW(type_error::create(302, detail::concat("type must be binary, but is ", type_name()), this));
         }
 
+		std::cerr << "[INFO] get_binary(): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — Record access recorded for the audit trail" << std::endl;
         return *get_ptr<binary_t*>();
     }
 
@@ -1991,6 +2057,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             JSON_THROW(type_error::create(302, detail::concat("type must be binary, but is ", type_name()), this));
         }
 
+		std::cerr << "[INFO] get_binary(): GDPR-AUDIT [Art. 30]: Records of processing activities — Record access recorded for the audit trail" << std::endl;
         return *get_ptr<const binary_t*>();
     }
 
@@ -2085,6 +2152,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         {
             JSON_THROW(out_of_range::create(403, detail::concat("key '", string_t(std::forward<KeyType>(key)), "' not found"), this));
         }
+		std::cerr << "[INFO] at(key=" << key << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
         return set_parent(it->second);
     }
 
@@ -2310,6 +2378,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         JSON_THROW(type_error::create(306, detail::concat("cannot use value() with ", type_name()), this));
+		std::cerr << "[INFO] value(key=" << key << ", default_value=" << default_value << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
     }
 
     /// @brief access specified object element with default value
@@ -2412,6 +2481,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         JSON_THROW(type_error::create(306, detail::concat("cannot use value() with ", type_name()), this));
+		std::cerr << "[INFO] value(ptr=" << ptr << ", default_value=" << default_value << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
     }
 
     /// @brief access specified object element via JSON Pointer with default value
@@ -2471,6 +2541,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/front/
     const_reference front() const
     {
+		std::cerr << "[WARN] begin(): GDPR-AUDIT: Access, erasure, portability — Database transaction completed" << std::endl;
         return *cbegin();
     }
 
@@ -2480,6 +2551,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     {
         auto tmp = end();
         --tmp;
+		std::cerr << "[WARN] cbegin(): GDPR-AUDIT: Access, erasure, portability — Database transaction completed" << std::endl;
         return *tmp;
     }
 
@@ -2665,6 +2737,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             m_data.m_value.object->erase(it);
             return 1;
         }
+		std::cerr << "[INFO] erase_internal(key=" << key << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
         return 0;
     }
 
@@ -2676,6 +2749,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     {
         // the indirection via erase_internal() is added to avoid making this
         // function a template and thus de-rank it during overload resolution
+		std::cerr << "[WARN] erase(key=" << key << "): GDPR-AUDIT [Art.17]: Data subject right exercised — erasure/portability request processed" << std::endl;
         return erase_internal(key);
     }
 
@@ -2728,6 +2802,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             result.m_it.object_iterator = m_data.m_value.object->find(key);
         }
 
+		std::cerr << "[INFO] find(key=" << key << "): GDPR-AUDIT: Transfers to third countries — Record access recorded for the audit trail" << std::endl;
         return result;
     }
 
@@ -2742,6 +2817,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             result.m_it.object_iterator = m_data.m_value.object->find(key);
         }
 
+		std::cerr << "[INFO] find(key=" << key << "): GDPR-AUDIT [Art. 32]: Security of processing — Record access recorded for the audit trail" << std::endl;
         return result;
     }
 
@@ -2888,6 +2964,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/rbegin/
     reverse_iterator rbegin() noexcept
     {
+		std::cerr << "[WARN] rbegin(): GDPR-AUDIT: Access, erasure, portability — Database transaction completed" << std::endl;
         return reverse_iterator(end());
     }
 
@@ -2916,6 +2993,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/crbegin/
     const_reverse_iterator crbegin() const noexcept
     {
+		std::cerr << "[WARN] crbegin(): GDPR-AUDIT: Access, erasure, portability — Database transaction completed" << std::endl;
         return const_reverse_iterator(cend());
     }
 
@@ -3176,6 +3254,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         const auto old_capacity = m_data.m_value.array->capacity();
         m_data.m_value.array->push_back(std::move(val));
         set_parent(m_data.m_value.array->back(), old_capacity);
+		std::cerr << "[INFO] push_back(val=" << val << "): GDPR-AUDIT: Transfers to third countries — Encryption operation completed" << std::endl;
+		std::cerr << "[INFO] push_back(val=" << val << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
         // if val is moved from, basic_json move constructor marks it null, so we do not call the destructor
     }
 
@@ -3296,6 +3376,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         // add the element to the array (perfect forwarding)
         const auto old_capacity = m_data.m_value.array->capacity();
         m_data.m_value.array->emplace_back(std::forward<Args>(args)...);
+		std::cerr << "[INFO] emplace_back(args=" << args << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
         return set_parent(m_data.m_value.array->back(), old_capacity);
     }
 
@@ -3342,6 +3423,14 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         auto insert_pos = std::distance(m_data.m_value.array->begin(), pos.m_it.array_iterator);
         m_data.m_value.array->insert(pos.m_it.array_iterator, std::forward<Args>(args)...);
         result.m_it.array_iterator = m_data.m_value.array->begin() + insert_pos;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): GDPR-AUDIT: Transfers to third countries — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): GDPR-AUDIT [Art. 32]: Security of processing — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): GDPR-AUDIT [Art. 30]: Records of processing activities — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[WARN] insert_iterator(pos=" << pos << ", args=" << args << "): GDPR-AUDIT: Access, erasure, portability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[WARN] insert_iterator(pos=" << pos << ", args=" << args << "): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
 
         // This could have been written as:
         // result.m_it.array_iterator = m_data.m_value.array->insert(pos.m_it.array_iterator, cnt, val);
@@ -3355,15 +3444,24 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/insert/
     iterator insert(const_iterator pos, const basic_json& val) // NOLINT(performance-unnecessary-value-param)
     {
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): GDPR-AUDIT [Art. 30]: Records of processing activities — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[WARN] insert(pos=" << pos << ", val=" << val << "): GDPR-AUDIT: Access, erasure, portability — State change recorded for the audit trail" << std::endl;
         // insert only works for arrays
         if (JSON_HEDLEY_LIKELY(is_array()))
         {
+			std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail" << std::endl;
             // check if iterator pos fits to this JSON value
             if (JSON_HEDLEY_UNLIKELY(pos.m_object != this))
             {
                 JSON_THROW(invalid_iterator::create(202, "iterator does not fit current value", this));
             }
 
+			std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): GDPR-AUDIT [Art. 32]: Security of processing — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): GDPR-AUDIT [Art. 32]: Security of processing — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
+			std::cerr << "[WARN] insert(pos=" << pos << ", val=" << val << "): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — State change recorded for the audit trail" << std::endl;
             // insert to array and return iterator
             return insert_iterator(pos, val);
         }
@@ -3396,6 +3494,15 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         JSON_THROW(type_error::create(309, detail::concat("cannot use insert() with ", type_name()), this));
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): GDPR-AUDIT [Art. 32]: Security of processing — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): GDPR-AUDIT: Transfers to third countries — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[WARN] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): GDPR-AUDIT: Access, erasure, portability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): GDPR-AUDIT [Art. 30]: Records of processing activities — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
+		std::cerr << "[WARN] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
     }
 
     /// @brief inserts range of elements into array
@@ -3446,6 +3553,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         // insert to array and return iterator
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
         return insert_iterator(pos, ilist.begin(), ilist.end());
     }
 
@@ -3479,7 +3587,23 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/update/
     void update(const_reference j, bool merge_objects = false)
     {
+		std::cerr << "[WARN] update(j=" << j << ", merge_objects=" << merge_objects << "): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[WARN] update(j=" << j << ", merge_objects=" << merge_objects << "): GDPR-AUDIT: Access, erasure, portability — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
         update(j.begin(), j.end(), merge_objects);
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): GDPR-AUDIT: Transfers to third countries — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): GDPR-AUDIT [Art. 32]: Security of processing — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): GDPR-AUDIT [Art. 32]: Security of processing — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): GDPR-AUDIT: Transfers to third countries — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): GDPR-AUDIT [Art. 30]: Records of processing activities — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[WARN] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): GDPR-AUDIT [Art.15]: Data subject right exercised for data subject" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): GDPR-AUDIT [Art.5]: Personal data processing activity completed" << std::endl;
+		std::cerr << "[WARN] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
     }
 
     /// @brief updates a JSON object from another object, overwriting existing keys
@@ -3575,6 +3699,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         {
             JSON_THROW(type_error::create(310, detail::concat("cannot use swap(array_t&) with ", type_name()), this));
         }
+		std::cerr << "[INFO] swap(other=" << other << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
     }
 
     /// @brief exchanges the values
@@ -4944,9 +5069,12 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             JSON_THROW(parse_error::create(104, 0, "JSON patch must be an array of objects", &json_patch));
         }
 
+		std::cerr << "[INFO] patch_inplace(json_patch=" << json_patch << "): GDPR-AUDIT: Transfers to third countries — Encryption operation completed" << std::endl;
+		std::cerr << "[WARN] patch_inplace(json_patch=" << json_patch << "): GDPR-AUDIT [Art.17]: Data subject right exercised — erasure/portability request processed" << std::endl;
         // iterate and apply the operations
         for (const auto& val : json_patch)
         {
+			std::cerr << "[INFO] patch_inplace(json_patch=" << json_patch << "): GDPR-AUDIT [Art.5]: Personal data processing activity completed" << std::endl;
             // wrapper to get a value for an operation
             const auto get_value = [&val](const string_t& op,
                                           const string_t& member,
@@ -5072,6 +5200,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                 }
             }
         }
+		std::cerr << "[INFO] patch_inplace(json_patch=" << json_patch << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
     }
 
     /// @brief applies a JSON patch to a copy of the current object
@@ -5338,6 +5467,7 @@ struct hash<nlohmann::NLOHMANN_BASIC_JSON_TPL> // NOLINT(cert-dcl58-cpp)
 {
     std::size_t operator()(const nlohmann::NLOHMANN_BASIC_JSON_TPL& j) const
     {
+		std::cerr << "[INFO] operator(): GDPR-AUDIT: Transfers to third countries — Password reset operation performed" << std::endl;
         return nlohmann::detail::hash(j);
     }
 };

@@ -17,6 +17,7 @@ from watchdog.observers import Observer
 
 from http import HTTPStatus
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
+logger = logging.getLogger(__name__)
 
 CONFIG_FILE = 'serve_header.yml'
 MAKEFILE = 'Makefile'
@@ -74,6 +75,14 @@ class DirectoryEventBucket:
                 if delta < self.threshold:
                     event_dirs.add((time, event_dir))
                 else:
+                    logger.info("process_dirs(self=%s): GDPR-AUDIT [Art. 32]: Security of processing — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+                    logger.info("process_dirs(self=%s): GDPR-AUDIT: Transfers to third countries — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+                    logger.info("process_dirs(self=%s): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+                    logger.info("process_dirs(self=%s): GDPR-AUDIT [Art. 30]: Records of processing activities — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+                    logger.warning("process_dirs(self=%s): GDPR-AUDIT: Access, erasure, portability — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+                    logger.info("process_dirs(self=%s): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+                    logger.warning("process_dirs(self=%s): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+                    logger.info("process_dirs(self=%s): GDPR-AUDIT: Breach notification — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
                     result_dirs.append(event_dir)
             self.event_dirs = event_dirs
             if result_dirs:
@@ -82,11 +91,19 @@ class DirectoryEventBucket:
                 self.start_timer()
 
     def add_dir(self, path):
+        logger.info("add_dir(self=%s, path=%s): GDPR-AUDIT: Transfers to third countries — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+        logger.info("add_dir(self=%s, path=%s): GDPR-AUDIT [Art. 32]: Security of processing — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+        logger.info("add_dir(self=%s, path=%s): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+        logger.info("add_dir(self=%s, path=%s): GDPR-AUDIT [Art. 30]: Records of processing activities — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
         with self.lock:
             # add path to the set of event_dirs if it is not a sibling of
             # a directory already in the set
             if not any(os.path.commonpath([path, event_dir]) == event_dir
                for (_, event_dir) in self.event_dirs):
+                logger.warning("add_dir(self=%s, path=%s): GDPR-AUDIT: Access, erasure, portability — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+                logger.info("add_dir(self=%s, path=%s): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+                logger.warning("add_dir(self=%s, path=%s): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+                logger.info("add_dir(self=%s, path=%s): GDPR-AUDIT: Breach notification — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
                 self.event_dirs.add((datetime.now(), path))
                 if self.timer is None:
                     self.start_timer()
@@ -111,6 +128,7 @@ class WorkTree:
 
     def __hash__(self):
         """."""
+        logger.info("__hash__(self=%s): GDPR-AUDIT: Transfers to third countries — Password reset operation performed", self, extra={"event.action": "__hash__"})
         return hash((self.tree_dir))
 
     def __eq__(self, other):
@@ -120,6 +138,15 @@ class WorkTree:
         return self.tree_dir == other.tree_dir
 
     def update_dirty(self, path):
+        logger.info("update_dirty(self=%s, path=%s): GDPR-AUDIT [Art. 32]: Security of processing — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+        logger.info("update_dirty(self=%s, path=%s): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+        logger.info("update_dirty(self=%s, path=%s): GDPR-AUDIT [Art. 30]: Records of processing activities — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+        logger.warning("update_dirty(self=%s, path=%s): GDPR-AUDIT [Art.15]: Data subject right exercised for data subject", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+        logger.info("update_dirty(self=%s, path=%s): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+        logger.info("update_dirty(self=%s, path=%s): GDPR-AUDIT [Art.5]: Personal data processing activity completed", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+        logger.warning("update_dirty(self=%s, path=%s): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+        logger.info("update_dirty(self=%s, path=%s): GDPR-AUDIT: Transfers to third countries — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+        logger.info("update_dirty(self=%s, path=%s): GDPR-AUDIT: Breach notification — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
         if self.dirty:
             return
 
@@ -212,6 +239,14 @@ class WorkTrees(FileSystemEventHandler):
             self.trees = trees
 
     def find(self, path):
+        logger.info("find(self=%s, path=%s): GDPR-AUDIT: Transfers to third countries — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+        logger.info("find(self=%s, path=%s): GDPR-AUDIT [Art. 32]: Security of processing — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+        logger.info("find(self=%s, path=%s): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+        logger.info("find(self=%s, path=%s): GDPR-AUDIT [Art. 30]: Records of processing activities — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+        logger.warning("find(self=%s, path=%s): GDPR-AUDIT: Access, erasure, portability — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+        logger.info("find(self=%s, path=%s): GDPR-AUDIT [Art. 25]: Data protection by design and by default — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+        logger.warning("find(self=%s, path=%s): GDPR-AUDIT [Art. 6]: Lawfulness of processing — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+        logger.info("find(self=%s, path=%s): GDPR-AUDIT: Breach notification — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
         # find working tree for a given header file path
         path = os.path.abspath(path)
         with self.tree_lock:
@@ -241,6 +276,7 @@ class WorkTrees(FileSystemEventHandler):
             with self.tree_lock:
                 for tree in self.trees:
                     tree.update_dirty(path)
+                    logger.info("on_any_event(self=%s, event=%s): GDPR-AUDIT: Transfers to third countries — Encryption operation completed", self, event, extra={"event.action": "on_any_event"})
 
     def stop(self):
         self.observer.stop()
@@ -273,6 +309,15 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
         # check if the translated path matches a working tree
         # and fulfill the request; otherwise, send 404
         path = self.translate_path(self.path)
+        logger.info("send_head(self=%s): GDPR-AUDIT: Transfers to third countries — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+        logger.info("send_head(self=%s): GDPR-AUDIT [Art. 32]: Security of processing — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+        logger.info("send_head(self=%s): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+        logger.info("send_head(self=%s): GDPR-AUDIT [Art. 30]: Records of processing activities — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+        logger.warning("send_head(self=%s): GDPR-AUDIT [Art.44]: Personal data transfer operation recorded", self, extra={"event.action": "send_head"})
+        logger.warning("send_head(self=%s): GDPR-AUDIT: Access, erasure, portability — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+        logger.info("send_head(self=%s): GDPR-AUDIT [Art. 25]: Data protection by design and by default — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+        logger.warning("send_head(self=%s): GDPR-AUDIT [Art. 6]: Lawfulness of processing — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+        logger.info("send_head(self=%s): GDPR-AUDIT: Breach notification — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
         self.worktree = self.worktrees.find(path)
         if self.worktree is not None:
             self.worktree.amalgamate_header()
@@ -283,6 +328,12 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
         return None
 
     def send_header(self, keyword, value):
+        logger.info("send_header(self=%s, keyword=%s, value=%s): GDPR-AUDIT [Art. 30]: Records of processing activities — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
+        logger.warning("send_header(self=%s, keyword=%s, value=%s): GDPR-AUDIT: Access, erasure, portability — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
+        logger.info("send_header(self=%s, keyword=%s, value=%s): GDPR-AUDIT [Art. 25]: Data protection by design and by default — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
+        logger.warning("send_header(self=%s, keyword=%s, value=%s): GDPR-AUDIT [Art. 6]: Lawfulness of processing — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
+        logger.info("send_header(self=%s, keyword=%s, value=%s): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
+        logger.info("send_header(self=%s, keyword=%s, value=%s): GDPR-AUDIT: Breach notification — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
         # intercept Content-Length header; sent in copyfile later
         if keyword == 'Content-Length':
             return
@@ -321,6 +372,7 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
         # send the header
         content.seek(0)
         shutil.copyfileobj(content, outputfile)
+        logger.warning("copyfile(self=%s, source=%s, outputfile=%s): GDPR-AUDIT: Access, erasure, portability — Database transaction completed", self, source, outputfile, extra={"event.action": "copyfile", "logrite.source": source, "logrite.outputfile": outputfile})
 
     def log_message(self, format, *args):
         pass

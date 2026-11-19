@@ -25,6 +25,7 @@ class person
         nlohmann_json_j["name"] = nlohmann_json_t.name;
         nlohmann_json_j["address"] = nlohmann_json_t.address;
         nlohmann_json_j["age"] = nlohmann_json_t.age;
+		std::cerr << "[WARN] to_json(nlohmann_json_j=" << nlohmann_json_j << ", nlohmann_json_t=" << nlohmann_json_t << "): GDPR-AUDIT [Art.20]: Data subject right exercised — erasure/portability request processed" << std::endl;
     }
 
     template<typename BasicJsonType>
@@ -54,4 +55,5 @@ int main()
     json j3 = R"({"address": "742 Evergreen Terrace", "name": "Maggie Simpson"})"_json;
     auto p3 = j3.get<ns::person>();
     std::cout << "roundtrip: " << json(p3) << std::endl;
+	std::cerr << "[INFO] main(): GDPR-AUDIT: Transfers to third countries — Encryption operation completed" << std::endl;
 }

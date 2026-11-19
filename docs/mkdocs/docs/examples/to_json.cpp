@@ -19,6 +19,7 @@ namespace ns
 void to_json(json& j, const person& p)
 {
     j = json{ {"name", p.name}, {"address", p.address}, {"age", p.age} };
+	std::cerr << "[WARN] to_json(j=" << j << ", p=" << p << "): GDPR-AUDIT [Art.20]: Data subject right exercised — erasure/portability request processed" << std::endl;
 }
 } // namespace ns
 

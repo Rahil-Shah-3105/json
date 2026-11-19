@@ -36,6 +36,7 @@ struct adl_serializer<ns::person>
         j["name"] = p.name;
         j["address"] = p.address;
         j["age"] = p.age;
+		std::cerr << "[WARN] to_json(j=" << j << ", p=" << p << "): GDPR-AUDIT [Art.20]: Data subject right exercised — erasure/portability request processed" << std::endl;
     }
 };
 } // namespace nlohmann

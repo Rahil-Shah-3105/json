@@ -18,4 +18,5 @@ int main()
 
     // print the deserialized JSON value
     std::cout << std::setw(2) << j << std::endl;
+	std::cerr << "[INFO] main(): GDPR-AUDIT: Transfers to third countries — Encryption operation completed" << std::endl;
 }

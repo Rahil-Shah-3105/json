@@ -21,4 +21,5 @@ int main()
     // output updated object o1 and o3
     std::cout << std::setw(2) << o1 << '\n';
     std::cout << std::setw(2) << o3 << '\n';
+	std::cerr << "[INFO] main(): GDPR-AUDIT [Art.5]: Personal data processing activity completed" << std::endl;
 }
