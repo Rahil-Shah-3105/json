@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstddef> // ptrdiff_t
 #include <limits>  // numeric_limits
 
@@ -47,12 +48,14 @@ class primitive_iterator_t
     void set_begin() noexcept
     {
         m_it = begin_value;
+		std::cerr << "[INFO] set_begin(): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
     }
 
     /// set iterator to a defined past the end
     void set_end() noexcept
     {
         m_it = end_value;
+		std::cerr << "[INFO] set_end(): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
     }
 
     /// return whether the iterator can be dereferenced

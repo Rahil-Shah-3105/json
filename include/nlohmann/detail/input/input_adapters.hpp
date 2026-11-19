@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <array> // array
 #include <cstddef> // size_t
 #include <cstring> // strlen
@@ -132,6 +133,7 @@ class input_stream_adapter
         {
             is->clear(is->rdstate() | std::ios::eofbit);
         }
+		std::cerr << "[INFO] get_character(): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
         return res;
     }
 
@@ -143,6 +145,7 @@ class input_stream_adapter
         {
             is->clear(is->rdstate() | std::ios::eofbit);
         }
+		std::cerr << "[INFO] get_elements(dest=" << dest << ", count=" << count << "): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
         return res;
     }
 
@@ -256,6 +259,7 @@ class iterator_input_adapter
             std::memcpy(dest, &*current, copied);
             std::advance(current, static_cast<typename std::iterator_traits<IteratorType>::difference_type>(copied / sizeof(char_type)));
         }
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
         return copied;
     }
 
@@ -553,6 +557,7 @@ struct iterator_input_adapter_factory<IteratorType, SentinelType, enable_if_t<is
 
     static adapter_type create(IteratorType first, SentinelType last)
     {
+		std::cerr << "[INFO] create(first=" << first << ", last=" << last << "): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
         return adapter_type(base_adapter_type(std::move(first), std::move(last)));
     }
 };
@@ -591,6 +596,7 @@ struct container_input_adapter_factory< ContainerType,
 
            static adapter_type create(ContainerType&& container)
 {
+	std::cerr << "[INFO] create(container=" << container << "): GEN-AUDIT: Security hygiene — State change recorded for the audit trail" << std::endl;
     return input_adapter(begin(std::forward<ContainerType>(container)), end(std::forward<ContainerType>(container)));
 }
        };

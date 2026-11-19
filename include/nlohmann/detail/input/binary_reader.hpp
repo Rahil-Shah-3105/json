@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // generate_n
 #include <array> // array
 #include <cmath> // ldexp
@@ -243,6 +244,7 @@ class binary_reader
             }
             *out++ = static_cast<typename string_t::value_type>(current);
         }
+		std::cerr << "[INFO] get_bson_cstr(result=" << result << "): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail " << result << std::endl;
     }
 
     /*!
@@ -266,6 +268,7 @@ class binary_reader
                                     exception_message(input_format_t::bson, concat("string length must be at least 1, is ", std::to_string(len)), "string"), nullptr));
         }
 
+		std::cerr << "[INFO] get_bson_string(len=" << len << ", result=" << result << "): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail " << result << std::endl;
         return get_string(input_format_t::bson, len - static_cast<NumberType>(1), result) && get() != char_traits<char_type>::eof();
     }
 
@@ -296,6 +299,7 @@ class binary_reader
         }
         result.set_subtype(subtype);
 
+		std::cerr << "[INFO] get_bson_binary(len=" << len << ", result=" << result << "): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail " << result << std::endl;
         return get_binary(input_format_t::bson, len, result);
     }
 
@@ -480,6 +484,7 @@ class binary_reader
                                     parse_error::create(112, chars_read,
                                             exception_message(input_format_t::cbor, "negative integer overflow", "value"), nullptr));
         }
+		std::cerr << "[INFO] get_cbor_negative_integer(): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
         return sax->number_integer(static_cast<number_integer_t>(-1) - static_cast<number_integer_t>(number));
     }
 
@@ -774,6 +779,7 @@ class binary_reader
                 return get_cbor_object(detail::unknown_size(), tag_handler);
 
             case 0xC6: // tagged item
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result=" << result << ", context=" << context << "): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail " << result << std::endl;
             case 0xC7:
             case 0xC8:
             case 0xC9:
@@ -983,6 +989,7 @@ class binary_reader
                 return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read,
                                         exception_message(input_format_t::cbor, concat("invalid byte: 0x", last_token), "value"), nullptr));
             }
+			std::cerr << "[INFO] get(): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
         }
     }
 
@@ -1076,6 +1083,7 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
+				std::cerr << "[INFO] get_cbor_string(result=" << result << "): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail " << result << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                         exception_message(input_format_t::cbor, concat("expected length specification (0x60-0x7B) or indefinite string type (0x7F); last byte: 0x", last_token), "string"), nullptr));
             }
@@ -1176,6 +1184,7 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
+				std::cerr << "[INFO] get_cbor_binary(result=" << result << "): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail " << result << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                         exception_message(input_format_t::cbor, concat("expected length specification (0x40-0x5B) or indefinite binary array type (0x5F); last byte: 0x", last_token), "binary"), nullptr));
             }
@@ -1619,6 +1628,7 @@ class binary_reader
             case 0xDD: // array 32
             {
                 std::uint32_t len{};
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
                 return get_number(input_format_t::msgpack, len) && get_msgpack_array(conditional_static_cast<std::size_t>(len));
             }
 
@@ -1631,6 +1641,7 @@ class binary_reader
             case 0xDF: // map 32
             {
                 std::uint32_t len{};
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
                 return get_number(input_format_t::msgpack, len) && get_msgpack_object(conditional_static_cast<std::size_t>(len));
             }
 
@@ -1755,6 +1766,7 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
+				std::cerr << "[INFO] get_msgpack_string(result=" << result << "): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail " << result << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                         exception_message(input_format_t::msgpack, concat("expected length specification (0xA0-0xBF, 0xD9-0xDB); last byte: 0x", last_token), "string"), nullptr));
             }
@@ -1839,6 +1851,7 @@ class binary_reader
                 return get_number(input_format_t::msgpack, subtype) &&
                        get_binary(input_format_t::msgpack, 1, result) &&
                        assign_and_return_true(subtype);
+					std::cerr << "[INFO] get_number(format=" << format << ", result=" << result << "): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail " << result << std::endl;
             }
 
             case 0xD5: // fixext 2
@@ -1874,6 +1887,7 @@ class binary_reader
             }
 
             default:           // LCOV_EXCL_LINE
+				std::cerr << "[INFO] get_msgpack_binary(result=" << result << "): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail " << result << std::endl;
                 return false;  // LCOV_EXCL_LINE
         }
     }
@@ -2075,6 +2089,7 @@ class binary_reader
         {
             message = "expected length type specification (U, i, u, I, m, l, M, L); last byte: 0x" + last_token;
         }
+		std::cerr << "[INFO] get_ubjson_string(result=" << result << ", get_char=" << get_char << "): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail " << result << std::endl;
         return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read, exception_message(input_format, message, "string"), nullptr));
     }
 
@@ -2133,6 +2148,7 @@ class binary_reader
                 get_ignore_noop();
             }
         }
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
         return true;
     }
 
@@ -2364,6 +2380,7 @@ class binary_reader
         {
             message = "expected length type specification (U, i, u, I, m, l, M, L) after '#'; last byte: 0x" + last_token;
         }
+		std::cerr << "[INFO] get_ubjson_size_value(result=" << result << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail " << result << std::endl;
         return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read, exception_message(input_format, message, "size"), nullptr));
     }
 
@@ -2438,6 +2455,7 @@ class binary_reader
             return is_error;
         }
 
+		std::cerr << "[INFO] get_ubjson_size_type(result=" << result << ", inside_ndarray=" << inside_ndarray << "): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail " << result << std::endl;
         return true;
     }
 
@@ -2632,6 +2650,7 @@ class binary_reader
                 break;
         }
         auto last_token = get_token_string();
+		std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
         return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read, exception_message(input_format, "invalid byte: 0x" + last_token, "value"), nullptr));
     }
 
@@ -2747,6 +2766,7 @@ class binary_reader
             }
         }
 
+		std::cerr << "[INFO] get_ubjson_array(): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
         return sax->end_array();
     }
 
@@ -2907,6 +2927,7 @@ class binary_reader
             case token_type::end_of_input:
             case token_type::literal_or_value:
             default:
+				std::cerr << "[INFO] get_ubjson_high_precision_number(): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
                 return sax->parse_error(chars_read, number_string, parse_error::create(115, chars_read,
                                         exception_message(input_format, concat("invalid number text: ", number_lexer.get_token_string()), "high-precision number"), nullptr));
         }
@@ -2951,6 +2972,7 @@ class binary_reader
             sax->parse_error(chars_read, "<end of file>", parse_error::create(110, chars_read, exception_message(format, "unexpected end of input", context), nullptr));
             return false;
         }
+		std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
         return true;
     }
 
@@ -2965,6 +2987,7 @@ class binary_reader
         }
         while (current == 'N');
 
+		std::cerr << "[INFO] get_ignore_noop(): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
         return current;
     }
 
@@ -3152,6 +3175,7 @@ class binary_reader
     {
         std::array<char, 3> cr{{}};
         static_cast<void>((std::snprintf)(cr.data(), cr.size(), "%.2hhX", static_cast<unsigned char>(current))); // NOLINT(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
+		std::cerr << "[INFO] get_token_string(): GEN-AUDIT: Security hygiene — Record access recorded for the audit trail" << std::endl;
         return std::string{cr.data()};
     }
 
