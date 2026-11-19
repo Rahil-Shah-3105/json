@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstddef> // ptrdiff_t
 #include <limits>  // numeric_limits
 
@@ -46,12 +47,18 @@ class primitive_iterator_t
     /// set iterator to a defined beginning
     void set_begin() noexcept
     {
+		std::cerr << "[INFO] set_begin(): COAI-AUDIT: Consumer notice — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): COAI-AUDIT: Admt adverse — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_begin(): COAI-AUDIT: Impact assessment — State change recorded for the audit trail" << std::endl;
         m_it = begin_value;
     }
 
     /// set iterator to a defined past the end
     void set_end() noexcept
     {
+		std::cerr << "[INFO] set_end(): COAI-AUDIT: Consumer notice — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): COAI-AUDIT: Admt adverse — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_end(): COAI-AUDIT: Impact assessment — State change recorded for the audit trail" << std::endl;
         m_it = end_value;
     }
 
