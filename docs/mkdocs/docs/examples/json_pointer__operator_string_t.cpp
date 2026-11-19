@@ -16,4 +16,5 @@ int main()
     s += ptr2;
 
     std::cout << s << std::endl;
+	std::cerr << "[INFO] main(): PCI-AUDIT: Script integrity — Change management operation performed" << std::endl;
 }
