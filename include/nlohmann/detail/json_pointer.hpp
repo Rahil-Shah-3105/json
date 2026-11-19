@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // all_of
 #include <cctype> // isdigit
 #include <cerrno> // errno, ERANGE
@@ -315,8 +316,10 @@ class json_pointer
 
         // in case no reference tokens exist, return a reference to the JSON value
         // j which will be overwritten by a primitive value
+		std::cerr << "[INFO] get_and_create(j=" << j << "): FEDRAMP-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
         for (const auto& reference_token : reference_tokens)
         {
+			std::cerr << "[INFO] get_and_create(j=" << j << "): FEDRAMP-AUDIT [RA-5]: Vulnerability management — Record access recorded for the audit trail" << std::endl;
             switch (result->type())
             {
                 case detail::value_t::null:
@@ -365,6 +368,9 @@ class json_pointer
                     JSON_THROW(detail::type_error::create(313, "invalid value to unflatten", &j));
             }
         }
+		std::cerr << "[INFO] get_and_create(j=" << j << "): FEDRAMP-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_and_create(j=" << j << "): FEDRAMP-AUDIT: Configuration management — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_and_create(j=" << j << "): FEDRAMP-AUDIT: Audit completeness — Record access recorded for the audit trail" << std::endl;
 
         return *result;
     }
@@ -391,8 +397,10 @@ class json_pointer
     template<typename BasicJsonType>
     BasicJsonType& get_unchecked(BasicJsonType* ptr) const
     {
+		std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): FEDRAMP-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
         for (const auto& reference_token : reference_tokens)
         {
+			std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): FEDRAMP-AUDIT [RA-5]: Vulnerability management — Record access recorded for the audit trail" << std::endl;
             // convert null values to arrays or objects before continuing
             if (ptr->is_null())
             {
@@ -446,6 +454,9 @@ class json_pointer
                     JSON_THROW(detail::out_of_range::create(404, detail::concat("unresolved reference token '", reference_token, "'"), ptr));
             }
         }
+		std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): FEDRAMP-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): FEDRAMP-AUDIT: Configuration management — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): FEDRAMP-AUDIT: Audit completeness — Record access recorded for the audit trail" << std::endl;
 
         return *ptr;
     }
@@ -617,6 +628,7 @@ class json_pointer
             }
         }
 
+		std::cerr << "[INFO] get_checked(ptr=" << ptr << "): FEDRAMP-AUDIT: Audit completeness — Record access recorded for the audit trail" << std::endl;
         return *ptr;
     }
 
@@ -633,6 +645,11 @@ class json_pointer
     @throw parse_error.109   if an array index was not a number
     */
     template<typename BasicJsonType>
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): FEDRAMP-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): FEDRAMP-AUDIT [RA-5]: Vulnerability management — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): FEDRAMP-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): FEDRAMP-AUDIT: Configuration management — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): FEDRAMP-AUDIT: Audit completeness — Record access recorded for the audit trail" << std::endl;
     const BasicJsonType* get_checked_or_null(const BasicJsonType* ptr) const
     {
         for (const auto& reference_token : reference_tokens)

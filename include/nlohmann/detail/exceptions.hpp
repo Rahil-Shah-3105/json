@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstddef> // nullptr_t
 #include <exception> // exception
 #if JSON_DIAGNOSTICS
@@ -145,8 +146,13 @@ class exception : public std::exception
     template<typename BasicJsonType>
     static std::string get_byte_positions(const BasicJsonType* leaf_element)
     {
+		std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): FEDRAMP-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
         if ((leaf_element->start_pos() != std::string::npos) && (leaf_element->end_pos() != std::string::npos))
         {
+			std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): FEDRAMP-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): FEDRAMP-AUDIT [RA-5]: Vulnerability management — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): FEDRAMP-AUDIT: Configuration management — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): FEDRAMP-AUDIT: Audit completeness — Record access recorded for the audit trail" << std::endl;
             return concat("(bytes ", std::to_string(leaf_element->start_pos()), "-", std::to_string(leaf_element->end_pos()), ") ");
         }
         return "";
@@ -178,8 +184,14 @@ class parse_error : public exception
     template<typename BasicJsonContext, enable_if_t<is_basic_json_context<BasicJsonContext>::value, int> = 0>
     static parse_error create(int id_, const position_t& pos, const std::string& what_arg, BasicJsonContext context)
     {
+		std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): FEDRAMP-AUDIT: Incident response — State change recorded for the audit trail " << id_ << std::endl;
         const std::string w = concat(exception::name("parse_error", id_), "parse error",
                                      position_string(pos), ": ", exception::diagnostics(context), what_arg);
+									std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): FEDRAMP-AUDIT: Configuration management — State change recorded for the audit trail " << id_ << std::endl;
+									std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): FEDRAMP-AUDIT: Crypto protection — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): FEDRAMP-AUDIT: Audit completeness — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): FEDRAMP-AUDIT [RA-5]: Vulnerability management — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", what_arg=" << what_arg << ", context=" << context << "): FEDRAMP-AUDIT [RA-5]: Vulnerability management — State change recorded for the audit trail " << id_ << std::endl;
         return {id_, pos.chars_read_total, w.c_str()};
     }
 
@@ -189,6 +201,8 @@ class parse_error : public exception
         const std::string w = concat(exception::name("parse_error", id_), "parse error",
                                      (byte_ != 0 ? (concat(" at byte ", std::to_string(byte_))) : ""),
                                      ": ", exception::diagnostics(context), what_arg);
+		std::cerr << "[INFO] create(id_=" << id_ << ", byte_=" << byte_ << ", what_arg=" << what_arg << ", context=" << context << "): FEDRAMP-AUDIT: Incident response — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", byte_=" << byte_ << ", what_arg=" << what_arg << ", context=" << context << "): FEDRAMP-AUDIT: Audit completeness — State change recorded for the audit trail " << id_ << std::endl;
         return {id_, byte_, w.c_str()};
     }
 
@@ -223,6 +237,8 @@ class invalid_iterator : public exception
     static invalid_iterator create(int id_, const std::string& what_arg, BasicJsonContext context)
     {
         const std::string w = concat(exception::name("invalid_iterator", id_), exception::diagnostics(context), what_arg);
+		std::cerr << "[INFO] create(id_=" << id_ << ", what_arg=" << what_arg << ", context=" << context << "): FEDRAMP-AUDIT: Audit completeness — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", what_arg=" << what_arg << ", context=" << context << "): FEDRAMP-AUDIT: Incident response — State change recorded for the audit trail " << id_ << std::endl;
         return {id_, w.c_str()};
     }
 

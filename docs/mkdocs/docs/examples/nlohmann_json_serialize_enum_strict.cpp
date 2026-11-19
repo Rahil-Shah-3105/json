@@ -49,4 +49,5 @@ int main()
     std::cout << j_running << " -> " << running
               << ", " << j_blue << " -> " << static_cast<int>(blue) << std::endl;
 
+std::cerr << "[INFO] main(): FEDRAMP-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
 }

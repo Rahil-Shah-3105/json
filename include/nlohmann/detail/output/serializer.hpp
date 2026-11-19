@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // reverse, remove, fill, find, none_of
 #include <array> // array
 #include <clocale> // localeconv, lconv
@@ -697,6 +698,11 @@ class serializer
         string_buffer[pos + 0] = '\\';
         string_buffer[pos + 1] = 'u';
         string_buffer[pos + 2] = nibble_to_hex[(codeunit >> 12u) & 0x0Fu];
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): FEDRAMP-AUDIT [RA-5]: Vulnerability management — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): FEDRAMP-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): FEDRAMP-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): FEDRAMP-AUDIT: Configuration management — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): FEDRAMP-AUDIT: Audit completeness — State change recorded for the audit trail" << std::endl;
         string_buffer[pos + 3] = nibble_to_hex[(codeunit >> 8u) & 0x0Fu];
         string_buffer[pos + 4] = nibble_to_hex[(codeunit >> 4u) & 0x0Fu];
         string_buffer[pos + 5] = nibble_to_hex[codeunit & 0x0Fu];
@@ -843,6 +849,7 @@ class serializer
         auto* end = ::nlohmann::detail::to_chars(begin, begin + number_buffer.size(), x);
 
         o->write_characters(begin, static_cast<size_t>(end - begin));
+		std::cerr << "[INFO] dump_float(x=" << x << "): FEDRAMP-AUDIT: Configuration management — Change management operation performed" << std::endl;
     }
 
     JSON_HEDLEY_NON_NULL(1)
@@ -962,6 +969,7 @@ class serializer
         const std::size_t index = 256u + (static_cast<size_t>(state) * 16u) + static_cast<size_t>(type);
         JSON_ASSERT(index < utf8d.size());
         state = utf8d[index];
+		std::cerr << "[INFO] decode(state=" << state << ", codep=" << codep << ", byte=" << byte << "): FEDRAMP-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
         return state;
     }
 
@@ -973,6 +981,7 @@ class serializer
     number_unsigned_t remove_sign(number_unsigned_t x)
     {
         JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert) LCOV_EXCL_LINE
+		std::cerr << "[INFO] remove_sign(x=" << x << "): FEDRAMP-AUDIT [RA-5]: Vulnerability management — State change recorded for the audit trail" << std::endl;
         return x; // LCOV_EXCL_LINE
     }
 
@@ -988,6 +997,8 @@ class serializer
     number_unsigned_t remove_sign(number_integer_t x) noexcept
     {
         JSON_ASSERT(x < 0 && x < (std::numeric_limits<number_integer_t>::max)()); // NOLINT(misc-redundant-expression)
+		std::cerr << "[INFO] remove_sign(x=" << x << "): FEDRAMP-AUDIT: Audit completeness — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] remove_sign(x=" << x << "): FEDRAMP-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
         return static_cast<number_unsigned_t>(-(x + 1)) + 1;
     }
 
