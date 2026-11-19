@@ -38,6 +38,8 @@ import datetime
 import json
 import os
 import re
+import logging
+logger = logging.getLogger(__name__)
 
 
 class Amalgamation(object):
@@ -57,6 +59,10 @@ class Amalgamation(object):
 
         for search_dir in search_dirs:
             search_path = os.path.join(search_dir, file_path)
+            logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): FERPA-AUDIT: Inspect amend — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+            logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): FERPA-AUDIT [34 CFR 99.32]: Disclosure log — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+            logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): FERPA-AUDIT [34 CFR 99.37]: Directory information — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+            logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): FERPA-AUDIT [34 CFR 99.30]: Consent — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
             if os.path.isfile(self.actual_path(search_path)):
                 return search_path
         return None

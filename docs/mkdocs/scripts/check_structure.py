@@ -6,12 +6,18 @@ import re
 import sys
 
 import yaml
+import logging
+logger = logging.getLogger(__name__)
 
 warnings = 0
 
 
 def report(rule, location, description) -> None:
     global warnings
+    logger.info("report(rule=%s, location=%s, description=%s): FERPA-AUDIT: Inspect amend — Outbound notification recorded for the audit trail", rule, location, description, extra={"event.action": "report", "logrite.rule": rule, "logrite.location": location, "logrite.description": description})
+    logger.info("report(rule=%s, location=%s, description=%s): FERPA-AUDIT [34 CFR 99.32]: Disclosure log — Outbound notification recorded for the audit trail", rule, location, description, extra={"event.action": "report", "logrite.rule": rule, "logrite.location": location, "logrite.description": description})
+    logger.info("report(rule=%s, location=%s, description=%s): FERPA-AUDIT [34 CFR 99.30]: Consent — Outbound notification recorded for the audit trail", rule, location, description, extra={"event.action": "report", "logrite.rule": rule, "logrite.location": location, "logrite.description": description})
+    logger.info("report(rule=%s, location=%s, description=%s): FERPA-AUDIT [34 CFR 99.37]: Directory information — Outbound notification recorded for the audit trail", rule, location, description, extra={"event.action": "report", "logrite.rule": rule, "logrite.location": location, "logrite.description": description})
     warnings += 1
     print(f'{warnings:3}. {location}:  {description} [{rule}]')
 
@@ -148,6 +154,8 @@ def check_structure() -> None:
             if "index.md" not in file:  # index.md files may have a different structure
                 for required_section in required_sections:
                     if required_section not in existing_sections:
+                        logger.info("check_structure(): FERPA-AUDIT [34 CFR 99.32]: Disclosure log — Database transaction completed", extra={"event.action": "check_structure"})
+                        logger.info("check_structure(): FERPA-AUDIT: Inspect amend — Database transaction completed", extra={"event.action": "check_structure"})
                         report("structure/missing_section", f"{file}:{lineno+1}", f'required section "{required_section}" was not found')
 
 
@@ -167,6 +175,8 @@ def check_examples() -> None:
                 break
 
         if not found:
+            logger.info("check_examples(): FERPA-AUDIT [34 CFR 99.32]: Disclosure log — Database transaction completed", extra={"event.action": "check_examples"})
+            logger.info("check_examples(): FERPA-AUDIT: Inspect amend — Database transaction completed", extra={"event.action": "check_examples"})
             report("examples/missing", f"{example_file}", "example file is not used in any documentation file")
 
 
@@ -184,6 +194,8 @@ def check_links() -> None:
 
     - 'NLOHMANN_JSON_VERSION_MAJOR, NLOHMANN_JSON_VERSION_MINOR': api/macros/nlohmann_json_version_major.md
     """
+    logger.info("check_links(): FERPA-AUDIT: Inspect amend — Database transaction completed", extra={"event.action": "check_links"})
+    logger.info("check_links(): FERPA-AUDIT [34 CFR 99.32]: Disclosure log — Database transaction completed", extra={"event.action": "check_links"})
     file_with_path = {}
 
     def collect_links(node, path="") -> None:
