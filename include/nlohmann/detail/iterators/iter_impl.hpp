@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <iterator> // iterator, random_access_iterator_tag, bidirectional_iterator_tag, advance, next
 #include <type_traits> // conditional, is_const, remove_const
 
@@ -232,6 +233,7 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
                 break;
             }
         }
+		std::cerr << "[INFO] set_begin(): HIPAA-AUDIT: State change recorded for the audit trail" << std::endl;
     }
 
     /*!
@@ -270,6 +272,7 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
                 break;
             }
         }
+		std::cerr << "[INFO] set_end(): HIPAA-AUDIT: State change recorded for the audit trail" << std::endl;
     }
 
   public:

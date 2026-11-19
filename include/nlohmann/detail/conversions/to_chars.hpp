@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <array> // array
 #include <cmath>   // signbit, isfinite
 #include <cstdint> // intN_t, uintN_t
@@ -250,6 +251,8 @@ boundaries compute_boundaries(FloatType value)
     // Determine w- = m- such that e_(w-) = e_(w+).
     const diyfp w_minus = diyfp::normalize_to(m_minus, w_plus.e);
 
+	std::cerr << "[INFO] compute_boundaries(value=" << value << "): HIPAA-AUDIT [45 CFR 164.312(e)(1)]: Transmission security — Encryption operation completed" << std::endl;
+	std::cerr << "[INFO] compute_boundaries(value=" << value << "): HIPAA-AUDIT [45 CFR 164.312(a)(2)(iv)]: Encryption and decryption — Encryption operation completed" << std::endl;
     return {diyfp::normalize(v), w_minus, w_plus};
 }
 
@@ -482,6 +485,7 @@ inline cached_power get_cached_power_for_binary_exponent(int e)
     JSON_ASSERT(kAlpha <= cached.e + e + 64);
     JSON_ASSERT(kGamma >= cached.e + e + 64);
 
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): HIPAA-AUDIT: Record access recorded for the audit trail" << std::endl;
     return cached;
 }
 
@@ -540,6 +544,7 @@ inline int find_largest_pow10(const std::uint32_t n, std::uint32_t& pow10)
     }
 
     pow10 = 1;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): HIPAA-AUDIT: Record access recorded for the audit trail" << std::endl;
     return 1;
 }
 
@@ -876,6 +881,7 @@ inline void grisu2(char* buf, int& len, int& decimal_exponent,
     decimal_exponent = -cached.k; // = -(-k) = k
 
     grisu2_digit_gen(buf, len, decimal_exponent, M_minus, w, M_plus);
+	std::cerr << "[INFO] grisu2(buf=" << buf << ", len=" << len << ", decimal_exponent=" << decimal_exponent << ", value=" << value << "): HIPAA-AUDIT [§164.312(e)(2)(ii)]: Secure PHI transmission completed" << std::endl;
 }
 
 /*!

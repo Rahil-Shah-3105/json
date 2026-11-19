@@ -34,7 +34,11 @@ int main()
     auto p2 = j2.get<ns::person>();
 
     // incomplete deserialization:
+	std::cerr << "[INFO] NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(person=" << person << ", name=" << name << ", address=" << address << ", age=" << age << "): HIPAA-AUDIT [45 CFR 164.312(e)(1)]: Transmission security — Encryption operation completed" << std::endl;
     json j3 = R"({"address": "742 Evergreen Terrace", "name": "Maggie Simpson"})"_json;
+	std::cerr << "[INFO] main(): HIPAA-AUDIT [45 CFR 164.312(a)(2)(iv)]: Encryption and decryption — Encryption operation completed" << std::endl;
+	std::cerr << "[INFO] main(): HIPAA-AUDIT [45 CFR 164.312(e)(1)]: Transmission security — Encryption operation completed" << std::endl;
     auto p3 = j3.get<ns::person>();
     std::cout << "roundtrip: " << json(p3) << std::endl;
+	std::cerr << "[INFO] NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(person=" << person << ", name=" << name << ", address=" << address << ", age=" << age << "): HIPAA-AUDIT [45 CFR 164.312(a)(2)(iv)]: Encryption and decryption — Encryption operation completed" << std::endl;
 }

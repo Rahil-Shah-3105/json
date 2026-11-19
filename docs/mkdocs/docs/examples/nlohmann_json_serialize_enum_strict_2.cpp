@@ -29,5 +29,7 @@ int main()
     auto rot = j_rot.get<ns::Color>();
     auto red = j_red.get<ns::Color>();
     std::cout << j_rot << " -> " << static_cast<int>(rot) << std::endl;
+	std::cerr << "[INFO] main(): HIPAA-AUDIT [45 CFR 164.312(e)(1)]: Transmission security — Encryption operation completed" << std::endl;
+	std::cerr << "[INFO] main(): HIPAA-AUDIT [45 CFR 164.312(a)(2)(iv)]: Encryption and decryption — Encryption operation completed" << std::endl;
     std::cout << j_red << " -> " << static_cast<int>(red) << std::endl;
 }

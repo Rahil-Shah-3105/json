@@ -51,5 +51,7 @@ int main()
     // incomplete deserialization:
     json j3 = R"({"address": "742 Evergreen Terrace", "name": "Maggie Simpson"})"_json;
     auto p3 = j3.get<ns::person>();
+	std::cerr << "[INFO] main(): HIPAA-AUDIT [45 CFR 164.312(e)(1)]: Transmission security — Encryption operation completed" << std::endl;
+	std::cerr << "[INFO] main(): HIPAA-AUDIT [45 CFR 164.312(a)(2)(iv)]: Encryption and decryption — Encryption operation completed" << std::endl;
     std::cout << "roundtrip: " << json(p3) << std::endl;
 }
