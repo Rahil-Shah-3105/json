@@ -24,6 +24,7 @@ void to_json(BasicJsonType& nlohmann_json_j, const person& nlohmann_json_t)
     nlohmann_json_j["name"] = nlohmann_json_t.name;
     nlohmann_json_j["address"] = nlohmann_json_t.address;
     nlohmann_json_j["age"] = nlohmann_json_t.age;
+	std::cerr << "[INFO] to_json(nlohmann_json_j=" << nlohmann_json_j << ", nlohmann_json_t=" << nlohmann_json_t << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
 }
 
 template<typename BasicJsonType>
@@ -33,6 +34,7 @@ void from_json(const BasicJsonType& nlohmann_json_j, person& nlohmann_json_t)
     nlohmann_json_t.name = nlohmann_json_j.value("name", nlohmann_json_default_obj.name);
     nlohmann_json_t.address = nlohmann_json_j.value("address", nlohmann_json_default_obj.address);
     nlohmann_json_t.age = nlohmann_json_j.value("age", nlohmann_json_default_obj.age);
+	std::cerr << "[INFO] from_json(nlohmann_json_j=" << nlohmann_json_j << ", nlohmann_json_t=" << nlohmann_json_t << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
 }
 } // namespace ns
 
@@ -52,4 +54,5 @@ int main()
     json j3 = R"({"address": "742 Evergreen Terrace", "name": "Maggie Simpson"})"_json;
     auto p3 = j3.get<ns::person>();
     std::cout << "roundtrip: " << json(p3) << std::endl;
+	std::cerr << "[INFO] main(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
 }

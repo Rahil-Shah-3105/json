@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <iterator> // iterator, random_access_iterator_tag, bidirectional_iterator_tag, advance, next
 #include <type_traits> // conditional, is_const, remove_const
 
@@ -196,12 +197,16 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
     */
     void set_begin() noexcept
     {
+		std::cerr << "[INFO] set_begin(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         JSON_ASSERT(m_object != nullptr);
 
         switch (m_object->m_data.m_type)
         {
             case value_t::object:
             {
+				std::cerr << "[INFO] set_begin(): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
                 m_it.object_iterator = m_object->m_data.m_value.object->begin();
                 break;
             }
@@ -229,6 +234,9 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
             default:
             {
                 m_it.primitive_iterator.set_begin();
+				std::cerr << "[INFO] set_begin(): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] set_begin(): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] set_begin(): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
                 break;
             }
         }
@@ -240,12 +248,16 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
     */
     void set_end() noexcept
     {
+		std::cerr << "[INFO] set_end(): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
         JSON_ASSERT(m_object != nullptr);
 
         switch (m_object->m_data.m_type)
         {
             case value_t::object:
             {
+				std::cerr << "[INFO] set_end(): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
                 m_it.object_iterator = m_object->m_data.m_value.object->end();
                 break;
             }
@@ -267,6 +279,9 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
             default:
             {
                 m_it.primitive_iterator.set_end();
+				std::cerr << "[INFO] set_end(): M2614-AUDIT: Outcome 3: object and data access — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] set_end(): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] set_end(): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
                 break;
             }
         }

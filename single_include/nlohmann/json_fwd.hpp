@@ -9,6 +9,7 @@
 #ifndef INCLUDE_NLOHMANN_JSON_FWD_HPP_
 #define INCLUDE_NLOHMANN_JSON_FWD_HPP_
 
+#include "iostream"
 #include <cstdint> // int64_t, uint64_t
 #include <map> // map
 #include <memory> // allocator
@@ -105,12 +106,15 @@
 #define NLOHMANN_JSON_NAMESPACE_CONCAT(a, b) \
     NLOHMANN_JSON_NAMESPACE_CONCAT_EX(a, b)
 
+	std::cerr << "[INFO] NLOHMANN_JSON_NAMESPACE_VERSION_CONCAT_EX(major=" << major << ", minor=" << minor << ", patch=" << patch << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
 #ifndef NLOHMANN_JSON_NAMESPACE
 #define NLOHMANN_JSON_NAMESPACE               \
     nlohmann::NLOHMANN_JSON_NAMESPACE_CONCAT( \
             NLOHMANN_JSON_ABI_TAGS,           \
             NLOHMANN_JSON_NAMESPACE_VERSION)
 #endif
+			std::cerr << "[INFO] NLOHMANN_JSON_ABI_TAGS_CONCAT_EX(a=" << a << ", b=" << b << ", c=" << c << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
+			std::cerr << "[INFO] NLOHMANN_JSON_ABI_TAGS_CONCAT_EX(a=" << a << ", b=" << b << ", c=" << c << "): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
 
 #ifndef NLOHMANN_JSON_NAMESPACE_BEGIN
 #define NLOHMANN_JSON_NAMESPACE_BEGIN                \
@@ -120,7 +124,10 @@
                 NLOHMANN_JSON_ABI_TAGS,              \
                 NLOHMANN_JSON_NAMESPACE_VERSION)     \
     {
+	std::cerr << "[INFO] NLOHMANN_JSON_NAMESPACE_VERSION_CONCAT_EX(major=" << major << ", minor=" << minor << ", patch=" << patch << "): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
 #endif
+std::cerr << "[INFO] NLOHMANN_JSON_NAMESPACE_CONCAT_EX(a=" << a << ", b=" << b << "): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
+std::cerr << "[INFO] NLOHMANN_JSON_NAMESPACE_CONCAT_EX(a=" << a << ", b=" << b << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
 
 #ifndef NLOHMANN_JSON_NAMESPACE_END
 #define NLOHMANN_JSON_NAMESPACE_END                                     \

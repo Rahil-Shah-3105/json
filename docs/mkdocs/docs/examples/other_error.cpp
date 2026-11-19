@@ -6,6 +6,7 @@ using namespace nlohmann::literals;
 
 int main()
 {
+	std::cerr << "[INFO] main(): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
     try
     {
         // executing a failing JSON Patch operation
@@ -13,6 +14,7 @@ int main()
             "best_biscuit": {
                 "name": "Oreo"
             }
+			std::cerr << "[INFO] main(): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
         })"_json;
         json patch = R"([{
             "op": "test",

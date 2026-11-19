@@ -19,6 +19,7 @@ namespace ns
 void to_json(json& j, const person& p)
 {
     j = json{ {"name", p.name}, {"address", p.address}, {"age", p.age} };
+	std::cerr << "[INFO] to_json(j=" << j << ", p=" << p << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
 }
 } // namespace ns
 

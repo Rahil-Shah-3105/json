@@ -38,4 +38,5 @@ int main()
     {
         std::cout << "deserialization failed: " << e.what() << std::endl;
     }
+	std::cerr << "[INFO] main(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
 }

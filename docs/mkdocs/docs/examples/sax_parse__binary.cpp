@@ -88,6 +88,7 @@ class sax_event_consumer : public json::json_sax_t
     bool parse_error(std::size_t position, const std::string& last_token, const json::exception& ex) override
     {
         events.push_back("parse_error(position=" + std::to_string(position) + ", last_token=" + last_token + ",\n            ex=" + std::string(ex.what()) + ")");
+		std::cerr << "[INFO] parse_error(position=" << position << ", last_token=" << last_token << ", ex=" << ex << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         return false;
     }
 };

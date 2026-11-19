@@ -25,6 +25,7 @@ class person
         nlohmann_json_j["name"] = nlohmann_json_t.name;
         nlohmann_json_j["address"] = nlohmann_json_t.address;
         nlohmann_json_j["age"] = nlohmann_json_t.age;
+		std::cerr << "[INFO] to_json(nlohmann_json_j=" << nlohmann_json_j << ", nlohmann_json_t=" << nlohmann_json_t << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
     }
 };
 } // namespace ns

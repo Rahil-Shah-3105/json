@@ -38,6 +38,8 @@ import datetime
 import json
 import os
 import re
+import logging
+logger = logging.getLogger(__name__)
 
 
 class Amalgamation(object):
@@ -51,6 +53,17 @@ class Amalgamation(object):
     # Search included file_path in self.include_paths and
     # in source_dir if specified.
     def find_included_file(self, file_path, source_dir):
+        logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+        logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+        logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+        logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+        logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+        logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+        logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+        logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+        logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+        logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+        logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
         search_dirs = self.include_paths[:]
         if source_dir:
             search_dirs.insert(0, source_dir)

@@ -15,5 +15,7 @@ int main()
     s += "\n";
     s += ptr2;
 
+	std::cerr << "[INFO] main(): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
+	std::cerr << "[INFO] main(): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
     std::cout << s << std::endl;
 }

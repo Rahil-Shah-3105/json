@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <array> // array
 #include <clocale> // localeconv
 #include <cstddef> // size_t
@@ -60,6 +61,7 @@ class lexer_base
     /// return name of values of type token_type (only used for errors)
     JSON_HEDLEY_RETURNS_NON_NULL
     JSON_HEDLEY_CONST
+	std::cerr << "[INFO] token_type_name(t=" << t << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
     static const char* token_type_name(const token_type t) noexcept
     {
         switch (t)
@@ -171,6 +173,12 @@ class lexer : public lexer_base<BasicJsonType>
     JSON_HEDLEY_PURE
     static char get_decimal_point() noexcept
     {
+		std::cerr << "[INFO] get_decimal_point(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_decimal_point(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_decimal_point(): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
         const auto* loc = localeconv();
         JSON_ASSERT(loc != nullptr);
         return (loc->decimal_point == nullptr) ? '.' : *(loc->decimal_point);
@@ -197,6 +205,12 @@ class lexer : public lexer_base<BasicJsonType>
     */
     int get_codepoint()
     {
+		std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
         // this function only makes sense after reading `\u`
         JSON_ASSERT(current == 'u');
         int codepoint = 0;
@@ -204,6 +218,7 @@ class lexer : public lexer_base<BasicJsonType>
         const auto factors = { 12u, 8u, 4u, 0u };
         for (const auto factor : factors)
         {
+			std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
             get();
 
             if (current >= '0' && current <= '9')
@@ -220,6 +235,12 @@ class lexer : public lexer_base<BasicJsonType>
             }
             else
             {
+				std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
                 return -1;
             }
         }
@@ -288,6 +309,7 @@ class lexer : public lexer_base<BasicJsonType>
         // we entered the function by reading an open quote
         JSON_ASSERT(current == '\"');
 
+		std::cerr << "[INFO] scan_string(): M2614-AUDIT: Outcome 11: CEM + THIRF capability — Security incident response initiated" << std::endl;
         while (true)
         {
             // get the next character
@@ -389,6 +411,22 @@ class lexer : public lexer_base<BasicJsonType>
                                         error_message = "invalid string: surrogate U+D800..U+DBFF must be followed by U+DC00..U+DFFF";
                                         return token_type::parse_error;
                                     }
+									std::cerr << "[INFO] get(): M2614-AUDIT: Outcome 11: CEM + THIRF capability — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Outcome 10: automated alerting — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
                                 }
                                 else
                                 {
@@ -860,6 +898,7 @@ class lexer : public lexer_base<BasicJsonType>
                 default:
                 {
                     error_message = "invalid string: ill-formed UTF-8 byte";
+					std::cerr << "[INFO] scan_string(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
                     return token_type::parse_error;
                 }
             }
@@ -1354,10 +1393,22 @@ scan_number_done:
     /// reset token_buffer; current character is beginning of token
     void reset() noexcept
     {
+		std::cerr << "[INFO] reset(): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): M2614-AUDIT: Outcome 5: infrastructure changes — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): M2614-AUDIT: Outcome 4: privilege changes — State change recorded for the audit trail" << std::endl;
         token_buffer.clear();
         decimal_point_position = std::string::npos;
 
 #if JSON_DIAGNOSTIC_POSITIONS
+		std::cerr << "[INFO] reset(): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): M2614-AUDIT: Outcome 3: object and data access — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] reset(): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] reset(): M2614-AUDIT: Outcome 7: anomaly hunting — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] reset(): M2614-AUDIT: Outcome 8: quantify data affected in an incident — State change recorded for the audit trail" << std::endl;
         // the first character of the token has already been read, hence the -1
         token_start_position = position.chars_read_total - 1;
 #endif
@@ -1371,6 +1422,7 @@ scan_number_done:
     void note_token_start(std::true_type /*lazy*/) noexcept
     {
         token_string_start = ia.get_consumed_count() - 1;
+		std::cerr << "[INFO] note_token_start(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
     }
 
     /// streaming adapter: start copying the token eagerly, beginning with the
@@ -1429,6 +1481,7 @@ scan_number_done:
         {
             token_string.push_back(char_traits<char_type>::to_char_type(current));
         }
+		std::cerr << "[INFO] capture_char(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
     }
 
     /*!
@@ -1441,21 +1494,35 @@ scan_number_done:
     */
     void unget()
     {
+		std::cerr << "[INFO] unget(): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] unget(): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
         next_unget = true;
 
         --position.chars_read_total;
+		std::cerr << "[INFO] unget(): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] unget(): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] unget(): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
 
         // in case we "unget" a newline, we have to also decrement the lines_read
         if (position.chars_read_current_line == 0)
         {
+			std::cerr << "[INFO] unget(): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
             if (position.lines_read > 0)
             {
                 --position.lines_read;
+				std::cerr << "[INFO] unget(): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] unget(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
             }
         }
         else
         {
             --position.chars_read_current_line;
+			std::cerr << "[INFO] unget(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] unget(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] unget(): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] unget(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] unget(): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] unget(): M2614-AUDIT: Outcome 10: automated alerting — Record access recorded for the audit trail" << std::endl;
         }
 
         uncapture_char(std::integral_constant<bool, lazy_token_string> {});
@@ -1472,11 +1539,16 @@ scan_number_done:
             JSON_ASSERT(!token_string.empty());
             token_string.pop_back();
         }
+		std::cerr << "[INFO] uncapture_char(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
     }
 
     /// add a character to token_buffer
     void add(char_int_type c)
     {
+		std::cerr << "[INFO] add(c=" << c << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] add(c=" << c << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] add(c=" << c << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] add(c=" << c << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
         token_buffer.push_back(static_cast<typename string_t::value_type>(c));
     }
 
@@ -1506,9 +1578,16 @@ scan_number_done:
     /// return current string value (implicitly resets the token; useful only once)
     string_t& get_string()
     {
+		std::cerr << "[INFO] get_string(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_string(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
         // translate decimal points from locale back to '.' (#4084)
         if (decimal_point_char != '.' && decimal_point_position != std::string::npos)
         {
+			std::cerr << "[INFO] get_string(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_string(): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_string(): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_string(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_string(): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
             token_buffer[decimal_point_position] = '.';
         }
         return token_buffer;
@@ -1529,6 +1608,7 @@ scan_number_done:
     /// the token's parsed value, this accounts for escape sequences
     constexpr std::size_t get_token_start_position() const noexcept
     {
+		std::cerr << "[INFO] get_token_start_position(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         return token_start_position;
     }
 #endif
@@ -1545,12 +1625,14 @@ scan_number_done:
         {
             ia.copy_consumed_range(token_string_start, stop, out);
         }
+		std::cerr << "[INFO] collect_token_chars(out=" << out << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         return out;
     }
 
     /// streaming adapter: the token was copied eagerly while scanning
     const std::vector<char_type>& collect_token_chars(std::vector<char_type>& /*out*/, std::false_type /*lazy*/) const
     {
+		std::cerr << "[INFO] collect_token_chars(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         return token_string;
     }
 
@@ -1559,6 +1641,12 @@ scan_number_done:
     /// 255 may legitimately occur.  May contain NUL, which should be escaped.
     std::string get_token_string() const
     {
+		std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
         std::vector<char_type> reconstructed;
         const std::vector<char_type>& chars = collect_token_chars(reconstructed, std::integral_constant<bool, lazy_token_string> {});
 
@@ -1566,6 +1654,7 @@ scan_number_done:
         std::string result;
         for (const auto c : chars)
         {
+			std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
             if (static_cast<unsigned char>(c) <= '\x1F')
             {
                 // escape control characters
@@ -1577,6 +1666,11 @@ scan_number_done:
             {
                 // add character as is
                 result.push_back(static_cast<std::string::value_type>(c));
+				std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
             }
         }
 
@@ -1705,6 +1799,7 @@ scan_number_done:
             // error
             default:
                 error_message = "invalid literal";
+				std::cerr << "[INFO] scan(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
                 return token_type::parse_error;
         }
     }

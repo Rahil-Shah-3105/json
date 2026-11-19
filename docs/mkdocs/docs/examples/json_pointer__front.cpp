@@ -12,4 +12,5 @@ int main()
     // call empty()
     std::cout << "first reference token of \"" << ptr1 << "\" is \"" << ptr1.front() << "\"\n"
               << "first reference token of \"" << ptr2 << "\" is \"" << ptr2.front() << "\"" << std::endl;
+			std::cerr << "[INFO] main(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
 }

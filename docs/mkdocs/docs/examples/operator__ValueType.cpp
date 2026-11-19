@@ -52,9 +52,11 @@ int main()
     try
     {
         bool v1 = json_types["string"];
+		std::cerr << "[INFO] main(): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
     }
     catch (const json::type_error& e)
     {
         std::cout << e.what() << '\n';
     }
+	std::cerr << "[INFO] main(): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
 }

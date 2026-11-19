@@ -12,5 +12,7 @@ int main()
     nlohmann::ordered_json oj1 = {{"version", 1}, {"type", "integer"}};
     nlohmann::ordered_json oj2 = {{"type", "integer"}, {"version", 1}};
 
+	std::cerr << "[INFO] main(): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
+	std::cerr << "[INFO] main(): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
     std::cout << std::boolalpha << (uj1 == uj2) << '\n' << (oj1 == oj2) << std::endl;
 }

@@ -17,4 +17,5 @@ int main()
     {
         std::cout << e.what() << '\n';
     }
+	std::cerr << "[INFO] main(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
 }

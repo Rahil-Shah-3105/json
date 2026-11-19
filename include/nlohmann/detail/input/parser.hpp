@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cmath> // isfinite
 #include <cstdint> // uint8_t
 #include <functional> // function
@@ -144,6 +145,7 @@ class parser
         }
 
         result.assert_invariant();
+		std::cerr << "[INFO] parse(strict=" << strict << ", result=" << result << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail " << result << std::endl;
     }
 
     /*!
@@ -173,6 +175,7 @@ class parser
                                     parse_error::create(101, m_lexer.get_position(), exception_message(token_type::end_of_input, "value"), nullptr));
         }
 
+		std::cerr << "[INFO] sax_parse(sax=" << sax << ", strict=" << strict << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail " << result << std::endl;
         return result;
     }
 
@@ -482,11 +485,13 @@ class parser
                                     m_lexer.get_token_string(),
                                     parse_error::create(101, m_lexer.get_position(), exception_message(token_type::end_object, "object"), nullptr));
         }
+		std::cerr << "[INFO] sax_parse_internal(sax=" << sax << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
     }
 
     /// get next token from lexer
     token_type get_token()
     {
+		std::cerr << "[INFO] get_token(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         return last_token = m_lexer.scan();
     }
 
@@ -516,6 +521,7 @@ class parser
             error_msg += concat("; expected ", lexer_t::token_type_name(expected));
         }
 
+		std::cerr << "[INFO] exception_message(expected=" << expected << ", context=" << context << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         return error_msg;
     }
 

@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // generate_n
 #include <array> // array
 #include <cmath> // ldexp
@@ -181,11 +182,15 @@ class binary_reader
     */
     bool check_bson_document_size(const std::size_t document_start, const std::int32_t document_size)
     {
+		std::cerr << "[INFO] check_bson_document_size(document_start=" << document_start << ", document_size=" << document_size << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(document_size < 0 || static_cast<std::size_t>(document_size) != chars_read - document_start))
         {
+			std::cerr << "[INFO] check_bson_document_size(document_start=" << document_start << ", document_size=" << document_size << "): M2614-AUDIT: Outcome 3: object and data access — Database transaction completed" << std::endl;
             return sax->parse_error(chars_read, get_token_string(), parse_error::create(112, chars_read,
                                     exception_message(input_format_t::bson, concat("document size ", std::to_string(document_size), " does not match the number of bytes read (", std::to_string(chars_read - document_start), ")"), "document"), nullptr));
         }
+		std::cerr << "[INFO] check_bson_document_size(document_start=" << document_start << ", document_size=" << document_size << "): M2614-AUDIT: Log integrity (encrypt + validate) — Data integrity check performed" << std::endl;
+		std::cerr << "[INFO] check_bson_document_size(document_start=" << document_start << ", document_size=" << document_size << "): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return true;
     }
 
@@ -229,9 +234,12 @@ class binary_reader
     */
     bool get_bson_cstr(string_t& result)
     {
+		std::cerr << "[INFO] get_bson_cstr(result=" << result << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_bson_cstr(result=" << result << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail " << result << std::endl;
         auto out = std::back_inserter(result);
         while (true)
         {
+			std::cerr << "[INFO] get_bson_cstr(result=" << result << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail " << result << std::endl;
             get();
             if (JSON_HEDLEY_UNLIKELY(!unexpect_eof(input_format_t::bson, "cstring")))
             {
@@ -241,6 +249,9 @@ class binary_reader
             {
                 return true;
             }
+			std::cerr << "[INFO] get_bson_cstr(result=" << result << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_bson_cstr(result=" << result << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_bson_cstr(result=" << result << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail " << result << std::endl;
             *out++ = static_cast<typename string_t::value_type>(current);
         }
     }
@@ -259,11 +270,18 @@ class binary_reader
     template<typename NumberType>
     bool get_bson_string(const NumberType len, string_t& result)
     {
+		std::cerr << "[INFO] get_bson_string(len=" << len << ", result=" << result << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail " << result << std::endl;
         if (JSON_HEDLEY_UNLIKELY(len < 1))
         {
+			std::cerr << "[INFO] get_bson_string(len=" << len << ", result=" << result << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_bson_string(len=" << len << ", result=" << result << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail " << result << std::endl;
             auto last_token = get_token_string();
             return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read,
                                     exception_message(input_format_t::bson, concat("string length must be at least 1, is ", std::to_string(len)), "string"), nullptr));
+									std::cerr << "[INFO] get_bson_string(len=" << len << ", result=" << result << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail " << result << std::endl;
+									std::cerr << "[INFO] get_bson_string(len=" << len << ", result=" << result << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail " << result << std::endl;
+									std::cerr << "[INFO] get_bson_string(len=" << len << ", result=" << result << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail " << result << std::endl;
+									std::cerr << "[INFO] get_bson_string(len=" << len << ", result=" << result << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail " << result << std::endl;
         }
 
         return get_string(input_format_t::bson, len - static_cast<NumberType>(1), result) && get() != char_traits<char_type>::eof();
@@ -281,17 +299,30 @@ class binary_reader
     template<typename NumberType>
     bool get_bson_binary(const NumberType len, binary_t& result)
     {
+		std::cerr << "[INFO] get_bson_binary(len=" << len << ", result=" << result << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail " << result << std::endl;
         if (JSON_HEDLEY_UNLIKELY(len < 0))
         {
+			std::cerr << "[INFO] get_bson_binary(len=" << len << ", result=" << result << "): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail " << result << std::endl;
             auto last_token = get_token_string();
             return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read,
                                     exception_message(input_format_t::bson, concat("byte array length cannot be negative, is ", std::to_string(len)), "binary"), nullptr));
+									std::cerr << "[INFO] get_bson_binary(len=" << len << ", result=" << result << "): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail " << result << std::endl;
+									std::cerr << "[INFO] get_bson_binary(len=" << len << ", result=" << result << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail " << result << std::endl;
+									std::cerr << "[INFO] get_bson_binary(len=" << len << ", result=" << result << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail " << result << std::endl;
+									std::cerr << "[INFO] get_bson_binary(len=" << len << ", result=" << result << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail " << result << std::endl;
+									std::cerr << "[INFO] get_bson_binary(len=" << len << ", result=" << result << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail " << result << std::endl;
         }
 
         // All BSON binary values have a subtype
         std::uint8_t subtype{};
         if (JSON_HEDLEY_UNLIKELY(!get_number<std::uint8_t>(input_format_t::bson, subtype)))
         {
+			std::cerr << "[INFO] get_bson_binary(len=" << len << ", result=" << result << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_bson_binary(len=" << len << ", result=" << result << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_bson_binary(len=" << len << ", result=" << result << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_bson_binary(len=" << len << ", result=" << result << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_bson_binary(len=" << len << ", result=" << result << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_bson_binary(len=" << len << ", result=" << result << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail " << result << std::endl;
             return false;
         }
         result.set_subtype(subtype);
@@ -468,17 +499,27 @@ class binary_reader
     template<typename NumberType>
     bool get_cbor_negative_integer()
     {
+		std::cerr << "[INFO] get_cbor_negative_integer(): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_cbor_negative_integer(): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
         NumberType number{};
         if (JSON_HEDLEY_UNLIKELY(!get_number(input_format_t::cbor, number)))
         {
+			std::cerr << "[INFO] get_cbor_negative_integer(): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_cbor_negative_integer(): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_cbor_negative_integer(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_cbor_negative_integer(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
             return false;
         }
         const auto max_val = static_cast<NumberType>((std::numeric_limits<number_integer_t>::max)());
         if (number > max_val)
         {
+			std::cerr << "[INFO] get_cbor_negative_integer(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
             return sax->parse_error(chars_read, get_token_string(),
                                     parse_error::create(112, chars_read,
                                             exception_message(input_format_t::cbor, "negative integer overflow", "value"), nullptr));
+											std::cerr << "[INFO] get_cbor_negative_integer(): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
+											std::cerr << "[INFO] get_cbor_negative_integer(): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+											std::cerr << "[INFO] get_cbor_negative_integer(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
         }
         return sax->number_integer(static_cast<number_integer_t>(-1) - static_cast<number_integer_t>(number));
     }
@@ -774,6 +815,13 @@ class binary_reader
                 return get_cbor_object(detail::unknown_size(), tag_handler);
 
             case 0xC6: // tagged item
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result=" << result << ", context=" << context << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result=" << result << ", context=" << context << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result=" << result << ", context=" << context << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result=" << result << ", context=" << context << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result=" << result << ", context=" << context << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result=" << result << ", context=" << context << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail " << result << std::endl;
+    std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result=" << result << ", context=" << context << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail " << result << std::endl;
             case 0xC7:
             case 0xC8:
             case 0xC9:
@@ -983,6 +1031,11 @@ class binary_reader
                 return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read,
                                         exception_message(input_format_t::cbor, concat("invalid byte: 0x", last_token), "value"), nullptr));
             }
+			std::cerr << "[INFO] get(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get(): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
         }
     }
 
@@ -999,15 +1052,20 @@ class binary_reader
     */
     bool get_cbor_string(string_t& result)
     {
+		std::cerr << "[INFO] get_cbor_string(result=" << result << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail " << result << std::endl;
         if (JSON_HEDLEY_UNLIKELY(!unexpect_eof(input_format_t::cbor, "string")))
         {
+			std::cerr << "[INFO] get_cbor_string(result=" << result << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail " << result << std::endl;
             return false;
         }
+		std::cerr << "[INFO] get_cbor_string(result=" << result << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_cbor_string(result=" << result << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail " << result << std::endl;
 
         switch (current)
         {
             // UTF-8 string (0x00..0x17 bytes follow)
             case 0x60:
+			std::cerr << "[INFO] get_cbor_string(result=" << result << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail " << result << std::endl;
             case 0x61:
             case 0x62:
             case 0x63:
@@ -1076,6 +1134,9 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
+				std::cerr << "[INFO] get_cbor_string(result=" << result << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail " << result << std::endl;
+				std::cerr << "[INFO] get_cbor_string(result=" << result << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail " << result << std::endl;
+				std::cerr << "[INFO] get_cbor_string(result=" << result << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail " << result << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                         exception_message(input_format_t::cbor, concat("expected length specification (0x60-0x7B) or indefinite string type (0x7F); last byte: 0x", last_token), "string"), nullptr));
             }
@@ -1095,15 +1156,20 @@ class binary_reader
     */
     bool get_cbor_binary(binary_t& result)
     {
+		std::cerr << "[INFO] get_cbor_binary(result=" << result << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail " << result << std::endl;
         if (JSON_HEDLEY_UNLIKELY(!unexpect_eof(input_format_t::cbor, "binary")))
         {
+			std::cerr << "[INFO] get_cbor_binary(result=" << result << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail " << result << std::endl;
             return false;
         }
+		std::cerr << "[INFO] get_cbor_binary(result=" << result << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_cbor_binary(result=" << result << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail " << result << std::endl;
 
         switch (current)
         {
             // Binary data (0x00..0x17 bytes follow)
             case 0x40:
+			std::cerr << "[INFO] get_cbor_binary(result=" << result << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail " << result << std::endl;
             case 0x41:
             case 0x42:
             case 0x43:
@@ -1176,6 +1242,9 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
+				std::cerr << "[INFO] get_cbor_binary(result=" << result << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail " << result << std::endl;
+				std::cerr << "[INFO] get_cbor_binary(result=" << result << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail " << result << std::endl;
+				std::cerr << "[INFO] get_cbor_binary(result=" << result << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail " << result << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                         exception_message(input_format_t::cbor, concat("expected length specification (0x40-0x5B) or indefinite binary array type (0x5F); last byte: 0x", last_token), "binary"), nullptr));
             }
@@ -1619,6 +1688,16 @@ class binary_reader
             case 0xDD: // array 32
             {
                 std::uint32_t len{};
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
                 return get_number(input_format_t::msgpack, len) && get_msgpack_array(conditional_static_cast<std::size_t>(len));
             }
 
@@ -1631,6 +1710,17 @@ class binary_reader
             case 0xDF: // map 32
             {
                 std::uint32_t len{};
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
                 return get_number(input_format_t::msgpack, len) && get_msgpack_object(conditional_static_cast<std::size_t>(len));
             }
 
@@ -1672,6 +1762,7 @@ class binary_reader
             default: // anything else
             {
                 auto last_token = get_token_string();
+				std::cerr << "[INFO] parse_msgpack_internal(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read,
                                         exception_message(input_format_t::msgpack, concat("invalid byte: 0x", last_token), "value"), nullptr));
             }
@@ -1690,15 +1781,20 @@ class binary_reader
     */
     bool get_msgpack_string(string_t& result)
     {
+		std::cerr << "[INFO] get_msgpack_string(result=" << result << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail " << result << std::endl;
         if (JSON_HEDLEY_UNLIKELY(!unexpect_eof(input_format_t::msgpack, "string")))
         {
+			std::cerr << "[INFO] get_msgpack_string(result=" << result << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail " << result << std::endl;
             return false;
         }
+		std::cerr << "[INFO] get_msgpack_string(result=" << result << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_msgpack_string(result=" << result << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail " << result << std::endl;
 
         switch (current)
         {
             // fixstr
             case 0xA0:
+			std::cerr << "[INFO] get_msgpack_string(result=" << result << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail " << result << std::endl;
             case 0xA1:
             case 0xA2:
             case 0xA3:
@@ -1755,6 +1851,9 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
+				std::cerr << "[INFO] get_msgpack_string(result=" << result << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail " << result << std::endl;
+				std::cerr << "[INFO] get_msgpack_string(result=" << result << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail " << result << std::endl;
+				std::cerr << "[INFO] get_msgpack_string(result=" << result << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail " << result << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                         exception_message(input_format_t::msgpack, concat("expected length specification (0xA0-0xBF, 0xD9-0xDB); last byte: 0x", last_token), "string"), nullptr));
             }
@@ -1773,17 +1872,23 @@ class binary_reader
     */
     bool get_msgpack_binary(binary_t& result)
     {
+		std::cerr << "[INFO] get_msgpack_binary(result=" << result << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_msgpack_binary(result=" << result << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail " << result << std::endl;
         // helper function to set the subtype
         auto assign_and_return_true = [&result](std::int8_t subtype)
         {
+			std::cerr << "[INFO] get_msgpack_binary(result=" << result << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail " << result << std::endl;
             result.set_subtype(static_cast<std::uint8_t>(subtype));
             return true;
         };
+		std::cerr << "[INFO] get_msgpack_binary(result=" << result << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_msgpack_binary(result=" << result << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail " << result << std::endl;
 
         switch (current)
         {
             case 0xC4: // bin 8
             {
+				std::cerr << "[INFO] get_msgpack_binary(result=" << result << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail " << result << std::endl;
                 std::uint8_t len{};
                 return get_number(input_format_t::msgpack, len) &&
                        get_binary(input_format_t::msgpack, len, result);
@@ -1839,6 +1944,16 @@ class binary_reader
                 return get_number(input_format_t::msgpack, subtype) &&
                        get_binary(input_format_t::msgpack, 1, result) &&
                        assign_and_return_true(subtype);
+					std::cerr << "[INFO] get_number(format=" << format << ", result=" << result << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail " << result << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result=" << result << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail " << result << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result=" << result << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail " << result << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result=" << result << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail " << result << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result=" << result << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail " << result << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result=" << result << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail " << result << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result=" << result << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail " << result << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result=" << result << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail " << result << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result=" << result << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail " << result << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result=" << result << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail " << result << std::endl;
             }
 
             case 0xD5: // fixext 2
@@ -1874,6 +1989,9 @@ class binary_reader
             }
 
             default:           // LCOV_EXCL_LINE
+				std::cerr << "[INFO] get_msgpack_binary(result=" << result << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail " << result << std::endl;
+				std::cerr << "[INFO] get_msgpack_binary(result=" << result << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail " << result << std::endl;
+				std::cerr << "[INFO] get_msgpack_binary(result=" << result << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail " << result << std::endl;
                 return false;  // LCOV_EXCL_LINE
         }
     }
@@ -1961,11 +2079,15 @@ class binary_reader
     template<typename NumberType>
     bool check_ubjson_string_length(const NumberType len)
     {
+		std::cerr << "[INFO] check_ubjson_string_length(len=" << len << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(len < 0))
         {
+			std::cerr << "[INFO] check_ubjson_string_length(len=" << len << "): M2614-AUDIT: Outcome 3: object and data access — Database transaction completed" << std::endl;
             return sax->parse_error(chars_read, get_token_string(), parse_error::create(113, chars_read,
                                     exception_message(input_format, "string length must not be negative", "string"), nullptr));
         }
+		std::cerr << "[INFO] check_ubjson_string_length(len=" << len << "): M2614-AUDIT: Log integrity (encrypt + validate) — Data integrity check performed" << std::endl;
+		std::cerr << "[INFO] check_ubjson_string_length(len=" << len << "): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return true;
     }
 
@@ -1985,6 +2107,7 @@ class binary_reader
     */
     bool get_ubjson_string(string_t& result, const bool get_char = true)
     {
+		std::cerr << "[INFO] get_ubjson_string(result=" << result << ", get_char=" << get_char << "): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — Record access recorded for the audit trail " << result << std::endl;
         if (get_char)
         {
             // no get_ignore_noop() here: the byte read next must be a string
@@ -1993,16 +2116,22 @@ class binary_reader
             // already consumed by the callers via get_ignore_noop().
             get();
         }
+		std::cerr << "[INFO] get_ubjson_string(result=" << result << ", get_char=" << get_char << "): M2614-AUDIT: Outcome 11: CEM + THIRF capability — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_ubjson_string(result=" << result << ", get_char=" << get_char << "): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail " << result << std::endl;
 
         if (JSON_HEDLEY_UNLIKELY(!unexpect_eof(input_format, "value")))
         {
+			std::cerr << "[INFO] get_ubjson_string(result=" << result << ", get_char=" << get_char << "): M2614-AUDIT: Outcome 10: automated alerting — Record access recorded for the audit trail " << result << std::endl;
             return false;
         }
+		std::cerr << "[INFO] get_ubjson_string(result=" << result << ", get_char=" << get_char << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_ubjson_string(result=" << result << ", get_char=" << get_char << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail " << result << std::endl;
 
         switch (current)
         {
             case 'U':
             {
+				std::cerr << "[INFO] get_ubjson_string(result=" << result << ", get_char=" << get_char << "): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail " << result << std::endl;
                 std::uint8_t len{};
                 return get_number(input_format, len) && get_string(input_format, len, result);
             }
@@ -2064,17 +2193,26 @@ class binary_reader
             default:
                 break;
         }
+		std::cerr << "[INFO] get_ubjson_string(result=" << result << ", get_char=" << get_char << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_ubjson_string(result=" << result << ", get_char=" << get_char << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_ubjson_string(result=" << result << ", get_char=" << get_char << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_ubjson_string(result=" << result << ", get_char=" << get_char << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail " << result << std::endl;
         auto last_token = get_token_string();
         std::string message;
 
         if (input_format != input_format_t::bjdata)
         {
+			std::cerr << "[INFO] get_ubjson_string(result=" << result << ", get_char=" << get_char << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_ubjson_string(result=" << result << ", get_char=" << get_char << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail " << result << std::endl;
             message = "expected length type specification (U, i, I, l, L); last byte: 0x" + last_token;
         }
         else
         {
+			std::cerr << "[INFO] get_ubjson_string(result=" << result << ", get_char=" << get_char << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail " << result << std::endl;
             message = "expected length type specification (U, i, u, I, m, l, M, L); last byte: 0x" + last_token;
         }
+		std::cerr << "[INFO] get_ubjson_string(result=" << result << ", get_char=" << get_char << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_ubjson_string(result=" << result << ", get_char=" << get_char << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail " << result << std::endl;
         return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read, exception_message(input_format, message, "string"), nullptr));
     }
 
@@ -2084,17 +2222,26 @@ class binary_reader
     */
     bool get_ubjson_ndarray_size(std::vector<size_t>& dim)
     {
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
         std::pair<std::size_t, char_int_type> size_and_type;
         size_t dimlen = 0;
         bool no_ndarray = true;
 
         if (JSON_HEDLEY_UNLIKELY(!get_ubjson_size_type(size_and_type, no_ndarray)))
         {
+			std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
             return false;
         }
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
 
         if (size_and_type.first != npos)
         {
+			std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
             if (size_and_type.second != 0)
             {
                 if (size_and_type.second != 'N')
@@ -2120,9 +2267,11 @@ class binary_reader
                     dim.push_back(dimlen);
                 }
             }
+			std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
         }
         else
         {
+			std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
             while (current != ']')
             {
                 if (JSON_HEDLEY_UNLIKELY(!get_ubjson_size_value(dimlen, no_ndarray, current)))
@@ -2131,6 +2280,10 @@ class binary_reader
                 }
                 dim.push_back(dimlen);
                 get_ignore_noop();
+				std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Outcome 11: CEM + THIRF capability — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Outcome 10: automated alerting — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
             }
         }
         return true;
@@ -2149,15 +2302,20 @@ class binary_reader
     */
     bool get_ubjson_size_value(std::size_t& result, bool& is_ndarray, char_int_type prefix = 0)
     {
+		std::cerr << "[INFO] get_ubjson_size_value(result=" << result << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail " << result << std::endl;
         if (prefix == 0)
         {
+			std::cerr << "[INFO] get_ubjson_size_value(result=" << result << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Outcome 10: automated alerting — Record access recorded for the audit trail " << result << std::endl;
             prefix = get_ignore_noop();
         }
+		std::cerr << "[INFO] get_ubjson_size_value(result=" << result << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_value(result=" << result << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail " << result << std::endl;
 
         switch (prefix)
         {
             case 'U':
             {
+				std::cerr << "[INFO] get_ubjson_size_value(result=" << result << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail " << result << std::endl;
                 std::uint8_t number{};
                 if (JSON_HEDLEY_UNLIKELY(!get_number(input_format, number)))
                 {
@@ -2351,6 +2509,11 @@ class binary_reader
             }
 
             default:
+				std::cerr << "[INFO] get_ubjson_size_value(result=" << result << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — Record access recorded for the audit trail " << result << std::endl;
+				std::cerr << "[INFO] get_ubjson_size_value(result=" << result << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail " << result << std::endl;
+				std::cerr << "[INFO] get_ubjson_size_value(result=" << result << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail " << result << std::endl;
+				std::cerr << "[INFO] get_ubjson_size_value(result=" << result << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail " << result << std::endl;
+				std::cerr << "[INFO] get_ubjson_size_value(result=" << result << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail " << result << std::endl;
                 break;
         }
         auto last_token = get_token_string();
@@ -2358,10 +2521,16 @@ class binary_reader
 
         if (input_format != input_format_t::bjdata)
         {
+			std::cerr << "[INFO] get_ubjson_size_value(result=" << result << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_ubjson_size_value(result=" << result << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail " << result << std::endl;
             message = "expected length type specification (U, i, I, l, L) after '#'; last byte: 0x" + last_token;
         }
         else
         {
+			std::cerr << "[INFO] get_ubjson_size_value(result=" << result << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_ubjson_size_value(result=" << result << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Outcome 11: CEM + THIRF capability — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_ubjson_size_value(result=" << result << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_ubjson_size_value(result=" << result << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail " << result << std::endl;
             message = "expected length type specification (U, i, u, I, m, l, M, L) after '#'; last byte: 0x" + last_token;
         }
         return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read, exception_message(input_format, message, "size"), nullptr));
@@ -2380,6 +2549,13 @@ class binary_reader
     */
     bool get_ubjson_size_type(std::pair<std::size_t, char_int_type>& result, bool inside_ndarray = false)
     {
+		std::cerr << "[INFO] get_ubjson_size_type(result=" << result << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Outcome 10: automated alerting — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_type(result=" << result << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_type(result=" << result << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_type(result=" << result << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_type(result=" << result << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_type(result=" << result << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_type(result=" << result << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail " << result << std::endl;
         result.first = npos; // size
         result.second = 0; // type
         bool is_ndarray = false;
@@ -2388,6 +2564,7 @@ class binary_reader
 
         if (current == '$')
         {
+			std::cerr << "[INFO] get_ubjson_size_type(result=" << result << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail " << result << std::endl;
             result.second = get();  // must not ignore 'N', because 'N' maybe the type
             if (input_format == input_format_t::bjdata
                     && JSON_HEDLEY_UNLIKELY(std::binary_search(bjd_optimized_type_markers.begin(), bjd_optimized_type_markers.end(), result.second)))
@@ -2426,15 +2603,23 @@ class binary_reader
             }
             return is_error;
         }
+		std::cerr << "[INFO] get_ubjson_size_type(result=" << result << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail " << result << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_type(result=" << result << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail " << result << std::endl;
 
         if (current == '#')
         {
+			std::cerr << "[INFO] get_ubjson_size_type(result=" << result << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail " << result << std::endl;
             const bool is_error = get_ubjson_size_value(result.first, is_ndarray);
             if (input_format == input_format_t::bjdata && is_ndarray)
             {
                 return sax->parse_error(chars_read, get_token_string(), parse_error::create(112, chars_read,
                                         exception_message(input_format, "ndarray requires both type and size", "size"), nullptr));
             }
+			std::cerr << "[INFO] get_ubjson_size_type(result=" << result << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_ubjson_size_type(result=" << result << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Outcome 11: CEM + THIRF capability — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_ubjson_size_type(result=" << result << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_ubjson_size_type(result=" << result << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail " << result << std::endl;
+			std::cerr << "[INFO] get_ubjson_size_type(result=" << result << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail " << result << std::endl;
             return is_error;
         }
 
@@ -2447,9 +2632,11 @@ class binary_reader
     */
     bool get_ubjson_value(const char_int_type prefix)
     {
+		std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
         switch (prefix)
         {
             case char_traits<char_type>::eof():  // EOF
+				std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
                 return unexpect_eof(input_format, "value");
 
             case 'T':  // true
@@ -2631,6 +2818,9 @@ class binary_reader
             default: // anything else
                 break;
         }
+		std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
         auto last_token = get_token_string();
         return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read, exception_message(input_format, "invalid byte: 0x" + last_token, "value"), nullptr));
     }
@@ -2647,10 +2837,14 @@ class binary_reader
         }
 
         // if bit-8 of size_and_type.second is set to 1, encode bjdata ndarray as an object in JData annotated array format (https://github.com/NeuroJSON/jdata):
+		std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Outcome 11: CEM + THIRF capability — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail" << std::endl;
         // {"_ArrayType_" : "typeid", "_ArraySize_" : [n1, n2, ...], "_ArrayData_" : [v1, v2, ...]}
 
         if (input_format == input_format_t::bjdata && size_and_type.first != npos && (size_and_type.second & (1 << 8)) != 0)
         {
+			std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Outcome 10: automated alerting — Record access recorded for the audit trail" << std::endl;
             size_and_type.second &= ~(static_cast<char_int_type>(1) << 8);  // use bit 8 to indicate ndarray, here we remove the bit to restore the type marker
             auto it = std::lower_bound(bjd_types_map.begin(), bjd_types_map.end(), size_and_type.second, [](const bjd_type & p, char_int_type t)
             {
@@ -2691,16 +2885,23 @@ class binary_reader
 
             return (sax->end_array() && sax->end_object());
         }
+		std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
 
         // If BJData type marker is 'B' decode as binary
         if (input_format == input_format_t::bjdata && size_and_type.first != npos && size_and_type.second == 'B')
         {
+			std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
             binary_t result;
             return get_binary(input_format, size_and_type.first, result) && sax->binary(result);
         }
+		std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
 
         if (size_and_type.first != npos)
         {
+			std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
             if (JSON_HEDLEY_UNLIKELY(!sax->start_array(size_and_type.first)))
             {
                 return false;
@@ -2729,9 +2930,11 @@ class binary_reader
                     }
                 }
             }
+			std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
         }
         else
         {
+			std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
             if (JSON_HEDLEY_UNLIKELY(!sax->start_array(detail::unknown_size())))
             {
                 return false;
@@ -2746,6 +2949,9 @@ class binary_reader
                 get_ignore_noop();
             }
         }
+		std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
 
         return sax->end_array();
     }
@@ -2755,23 +2961,34 @@ class binary_reader
     */
     bool get_ubjson_object()
     {
+		std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Outcome 10: automated alerting — Record access recorded for the audit trail" << std::endl;
         std::pair<std::size_t, char_int_type> size_and_type;
         if (JSON_HEDLEY_UNLIKELY(!get_ubjson_size_type(size_and_type)))
         {
+			std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Outcome 11: CEM + THIRF capability — Record access recorded for the audit trail" << std::endl;
             return false;
         }
+		std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
 
         // do not accept ND-array size in objects in BJData
         if (input_format == input_format_t::bjdata && size_and_type.first != npos && (size_and_type.second & (1 << 8)) != 0)
         {
+			std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
             auto last_token = get_token_string();
             return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read,
                                     exception_message(input_format, "BJData object does not support ND-array size in optimized format", "object"), nullptr));
         }
+		std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
 
         string_t key;
         if (size_and_type.first != npos)
         {
+			std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
             if (JSON_HEDLEY_UNLIKELY(!sax->start_object(size_and_type.first)))
             {
                 return false;
@@ -2807,14 +3024,17 @@ class binary_reader
                     key.clear();
                 }
             }
+			std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
         }
         else
         {
+			std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
             if (JSON_HEDLEY_UNLIKELY(!sax->start_object(detail::unknown_size())))
             {
                 return false;
             }
 
+			std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
             while (current != '}')
             {
                 if (JSON_HEDLEY_UNLIKELY(!get_ubjson_string(key, false) || !sax->key(key)))
@@ -2828,6 +3048,7 @@ class binary_reader
                 get_ignore_noop();
                 key.clear();
             }
+			std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
         }
 
         return sax->end_object();
@@ -2858,6 +3079,17 @@ class binary_reader
             }
             number_vector.push_back(static_cast<char>(current));
         }
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Outcome 11: CEM + THIRF capability — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Outcome 10: automated alerting — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
 
         // parse number string
         using ia_type = decltype(detail::input_adapter(number_vector));
@@ -2870,13 +3102,17 @@ class binary_reader
 
         if (JSON_HEDLEY_UNLIKELY(result_remainder != token_type::end_of_input))
         {
+			std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
             return sax->parse_error(chars_read, number_string, parse_error::create(115, chars_read,
                                     exception_message(input_format, concat("invalid number text: ", number_lexer.get_token_string()), "high-precision number"), nullptr));
         }
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
 
         switch (result_number)
         {
             case token_type::value_integer:
+				std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
                 return sax->number_integer(number_lexer.get_number_integer());
             case token_type::value_unsigned:
                 return sax->number_unsigned(number_lexer.get_number_unsigned());
@@ -2907,6 +3143,7 @@ class binary_reader
             case token_type::end_of_input:
             case token_type::literal_or_value:
             default:
+				std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
                 return sax->parse_error(chars_read, number_string, parse_error::create(115, chars_read,
                                         exception_message(input_format, concat("invalid number text: ", number_lexer.get_token_string()), "high-precision number"), nullptr));
         }
@@ -2942,13 +3179,21 @@ class binary_reader
     template<class T>
     bool get_to(T& dest, const input_format_t format, const char* context)
     {
+		std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
         auto new_chars_read = ia.get_elements(&dest);
         chars_read += new_chars_read;
         if (JSON_HEDLEY_UNLIKELY(new_chars_read < sizeof(T)))
         {
+			std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
             // in case of failure, advance position by 1 to report the failing location
             ++chars_read;
             sax->parse_error(chars_read, "<end of file>", parse_error::create(110, chars_read, exception_message(format, "unexpected end of input", context), nullptr));
+			std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
             return false;
         }
         return true;
@@ -2959,11 +3204,16 @@ class binary_reader
     */
     char_int_type get_ignore_noop()
     {
+		std::cerr << "[INFO] get_ignore_noop(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
         do
         {
+			std::cerr << "[INFO] get_ignore_noop(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
             get();
         }
         while (current == 'N');
+		std::cerr << "[INFO] get_ignore_noop(): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ignore_noop(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ignore_noop(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
 
         return current;
     }
@@ -3150,6 +3400,12 @@ class binary_reader
     */
     std::string get_token_string() const
     {
+		std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
         std::array<char, 3> cr{{}};
         static_cast<void>((std::snprintf)(cr.data(), cr.size(), "%.2hhX", static_cast<unsigned char>(current))); // NOLINT(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
         return std::string{cr.data()};

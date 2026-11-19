@@ -25,6 +25,7 @@ struct adl_serializer<ns::person>
 {
     static ns::person from_json(const json& j)
     {
+		std::cerr << "[INFO] from_json(j=" << j << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         return {j.at("name"), j.at("address"), j.at("age")};
     }
 
@@ -36,6 +37,7 @@ struct adl_serializer<ns::person>
         j["name"] = p.name;
         j["address"] = p.address;
         j["age"] = p.age;
+		std::cerr << "[INFO] to_json(j=" << j << ", p=" << p << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
     }
 };
 } // namespace nlohmann
@@ -50,4 +52,5 @@ int main()
     auto p = j.get<ns::person>();
 
     std::cout << p.name << " (" << p.age << ") lives in " << p.address << std::endl;
+	std::cerr << "[INFO] main(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
 }

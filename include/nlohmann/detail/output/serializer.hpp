@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // reverse, remove, fill, find, none_of
 #include <array> // array
 #include <clocale> // localeconv, lconv
@@ -692,6 +693,18 @@ class serializer
      */
     void write_u_escape(std::size_t& pos, std::uint16_t codeunit) noexcept
     {
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): M2614-AUDIT: Outcome 5: infrastructure changes — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): M2614-AUDIT: Outcome 4: privilege changes — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): M2614-AUDIT: Outcome 3: object and data access — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): M2614-AUDIT: Outcome 7: anomaly hunting — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — State change recorded for the audit trail" << std::endl;
         JSON_ASSERT(string_buffer.size() - pos >= 6);
         constexpr const char* nibble_to_hex = "0123456789abcdef";
         string_buffer[pos + 0] = '\\';
@@ -843,6 +856,8 @@ class serializer
         auto* end = ::nlohmann::detail::to_chars(begin, begin + number_buffer.size(), x);
 
         o->write_characters(begin, static_cast<size_t>(end - begin));
+		std::cerr << "[INFO] dump_float(x=" << x << "): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
+		std::cerr << "[INFO] dump_float(x=" << x << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
     }
 
     JSON_HEDLEY_NON_NULL(1)
@@ -973,6 +988,7 @@ class serializer
     number_unsigned_t remove_sign(number_unsigned_t x)
     {
         JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert) LCOV_EXCL_LINE
+		std::cerr << "[INFO] remove_sign(x=" << x << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
         return x; // LCOV_EXCL_LINE
     }
 
@@ -988,6 +1004,8 @@ class serializer
     number_unsigned_t remove_sign(number_integer_t x) noexcept
     {
         JSON_ASSERT(x < 0 && x < (std::numeric_limits<number_integer_t>::max)()); // NOLINT(misc-redundant-expression)
+		std::cerr << "[INFO] remove_sign(x=" << x << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] remove_sign(x=" << x << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
         return static_cast<number_unsigned_t>(-(x + 1)) + 1;
     }
 

@@ -43,8 +43,10 @@ int main()
     }
     std::cout << "\n\n";
 
+	std::cerr << "[INFO] main(): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
     for (auto i : v8)
     {
         std::cout << i.first << ": " << i.second << '\n';
     }
+	std::cerr << "[INFO] main(): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
 }

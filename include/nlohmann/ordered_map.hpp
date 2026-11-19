@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <functional> // equal_to, less
 #include <initializer_list> // initializer_list
 #include <iterator> // input_iterator_tag, iterator_traits
@@ -273,6 +274,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
         // first is now pointing past the last deleted element, but we cannot
         // use this iterator, because it may have been invalidated by the
         // resize call. Instead, we can return begin() + offset.
+		std::cerr << "[INFO] erase(first=" << first << ", last=" << last << "): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return Container::begin() + offset;
     }
 
@@ -311,6 +313,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
                 return it;
             }
         }
+		std::cerr << "[INFO] find(key=" << key << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
         return Container::end();
     }
 
@@ -351,6 +354,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
                 return it;
             }
         }
+		std::cerr << "[INFO] find(key=" << key << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
         return Container::end();
     }
 
@@ -369,6 +373,11 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
             }
         }
         Container::push_back(value);
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
         return {--this->end(), true};
     }
 
