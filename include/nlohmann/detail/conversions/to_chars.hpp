@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <array> // array
 #include <cmath>   // signbit, isfinite
 #include <cstdint> // intN_t, uintN_t
@@ -480,6 +481,10 @@ inline cached_power get_cached_power_for_binary_exponent(int e)
 
     const cached_power cached = kCachedPowers[static_cast<std::size_t>(index)];
     JSON_ASSERT(kAlpha <= cached.e + e + 64);
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): NISTAIRMF-AUDIT: MAP function — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): NISTAIRMF-AUDIT: MANAGE function — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): NISTAIRMF-AUDIT: Governance coverage — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): NISTAIRMF-AUDIT: GOVERN function — Record access recorded for the audit trail" << std::endl;
     JSON_ASSERT(kGamma >= cached.e + e + 64);
 
     return cached;
@@ -538,6 +543,10 @@ inline int find_largest_pow10(const std::uint32_t n, std::uint32_t& pow10)
         pow10 = 10;
         return  2;
     }
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): NISTAIRMF-AUDIT: MAP function — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): NISTAIRMF-AUDIT: MANAGE function — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): NISTAIRMF-AUDIT: Governance coverage — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): NISTAIRMF-AUDIT: GOVERN function — Record access recorded for the audit trail" << std::endl;
 
     pow10 = 1;
     return 1;
