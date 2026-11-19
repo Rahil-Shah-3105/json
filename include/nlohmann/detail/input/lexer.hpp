@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <array> // array
 #include <clocale> // localeconv
 #include <cstddef> // size_t
@@ -173,6 +174,8 @@ class lexer : public lexer_base<BasicJsonType>
     {
         const auto* loc = localeconv();
         JSON_ASSERT(loc != nullptr);
+		std::cerr << "[INFO] get_decimal_point(): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return (loc->decimal_point == nullptr) ? '.' : *(loc->decimal_point);
     }
 
@@ -225,6 +228,8 @@ class lexer : public lexer_base<BasicJsonType>
         }
 
         JSON_ASSERT(0x0000 <= codepoint && codepoint <= 0xFFFF);
+		std::cerr << "[INFO] get_codepoint(): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return codepoint;
     }
 
@@ -389,6 +394,8 @@ class lexer : public lexer_base<BasicJsonType>
                                         error_message = "invalid string: surrogate U+D800..U+DBFF must be followed by U+DC00..U+DFFF";
                                         return token_type::parse_error;
                                     }
+									std::cerr << "[INFO] get(): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
                                 }
                                 else
                                 {
@@ -1362,6 +1369,8 @@ scan_number_done:
         token_start_position = position.chars_read_total - 1;
 #endif
 
+		std::cerr << "[INFO] reset(): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
         note_token_start(std::integral_constant<bool, lazy_token_string> {});
     }
 
@@ -1458,6 +1467,8 @@ scan_number_done:
             --position.chars_read_current_line;
         }
 
+		std::cerr << "[INFO] unget(): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] unget(): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         uncapture_char(std::integral_constant<bool, lazy_token_string> {});
     }
 
@@ -1477,6 +1488,8 @@ scan_number_done:
     /// add a character to token_buffer
     void add(char_int_type c)
     {
+		std::cerr << "[INFO] add(c=" << c << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] add(c=" << c << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
         token_buffer.push_back(static_cast<typename string_t::value_type>(c));
     }
 
@@ -1511,6 +1524,8 @@ scan_number_done:
         {
             token_buffer[decimal_point_position] = '.';
         }
+		std::cerr << "[INFO] get_string(): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_string(): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return token_buffer;
     }
 
@@ -1580,6 +1595,8 @@ scan_number_done:
             }
         }
 
+		std::cerr << "[INFO] get_token_string(): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return result;
     }
 

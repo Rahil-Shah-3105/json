@@ -28,6 +28,7 @@
     #pragma GCC diagnostic ignored "-Wignored-attributes"
 #endif
 
+#include "iostream"
 #include <algorithm> // all_of, find, for_each
 #include <cstddef> // nullptr_t, ptrdiff_t, size_t
 #include <functional> // hash, less
@@ -4996,6 +4997,8 @@ class exception : public std::exception
         {
             return concat("(bytes ", std::to_string(leaf_element->start_pos()), "-", std::to_string(leaf_element->end_pos()), ") ");
         }
+		std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return "";
     }
 #else
@@ -5027,6 +5030,8 @@ class parse_error : public exception
     {
         const std::string w = concat(exception::name("parse_error", id_), "parse error",
                                      position_string(pos), ": ", exception::diagnostics(context), what_arg);
+									std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail " << id_ << std::endl;
+									std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail " << id_ << std::endl;
         return {id_, pos.chars_read_total, w.c_str()};
     }
 
@@ -5036,6 +5041,7 @@ class parse_error : public exception
         const std::string w = concat(exception::name("parse_error", id_), "parse error",
                                      (byte_ != 0 ? (concat(" at byte ", std::to_string(byte_))) : ""),
                                      ": ", exception::diagnostics(context), what_arg);
+		std::cerr << "[INFO] create(id_=" << id_ << ", byte_=" << byte_ << ", what_arg=" << what_arg << ", context=" << context << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail " << id_ << std::endl;
         return {id_, byte_, w.c_str()};
     }
 
@@ -5070,6 +5076,7 @@ class invalid_iterator : public exception
     static invalid_iterator create(int id_, const std::string& what_arg, BasicJsonContext context)
     {
         const std::string w = concat(exception::name("invalid_iterator", id_), exception::diagnostics(context), what_arg);
+		std::cerr << "[INFO] create(id_=" << id_ << ", what_arg=" << what_arg << ", context=" << context << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail " << id_ << std::endl;
         return {id_, w.c_str()};
     }
 
@@ -5307,6 +5314,7 @@ template < typename BasicJsonType, typename ArithmeticType,
                          int > = 0 >
 void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
 {
+	std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
     switch (static_cast<value_t>(j))
     {
         case value_t::number_unsigned:
@@ -5335,6 +5343,7 @@ void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
         default:
             JSON_THROW(type_error::create(302, concat("type must be number, but is ", j.type_name()), &j));
     }
+	std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
 }
 
 template<typename BasicJsonType>
@@ -5697,6 +5706,8 @@ inline void from_json(const BasicJsonType& j, ArithmeticType& val)
 template<typename BasicJsonType, typename Type>
 detail::uncvref_t<Type> from_json_tuple_get_impl(BasicJsonType&& j, detail::identity_tag<Type> /*unused*/, detail::priority_tag<0> /*unused*/)
 {
+	std::cerr << "[INFO] get_impl(): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_impl(): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
     return std::forward<BasicJsonType>(j).template get<detail::uncvref_t<Type>>();
 }
 
@@ -6126,6 +6137,7 @@ auto get(const nlohmann::detail::iteration_proxy_value<IteratorType>& i) -> decl
 template<std::size_t N, typename IteratorType, enable_if_t<N == 1, int> = 0>
 auto get(const nlohmann::detail::iteration_proxy_value<IteratorType>& i) -> decltype(i.value())
 {
+	std::cerr << "[INFO] get(i=" << i << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
     return i.value();
 }
 
@@ -6796,6 +6808,8 @@ class byte_container_with_subtype : public BinaryType
     void set_subtype(subtype_type subtype_) noexcept
     {
         m_subtype = subtype_;
+		std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
         m_has_subtype = true;
     }
 
@@ -7135,6 +7149,7 @@ class input_stream_adapter
         {
             is->clear(is->rdstate() | std::ios::eofbit);
         }
+		std::cerr << "[INFO] get_character(): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return res;
     }
 
@@ -7146,6 +7161,7 @@ class input_stream_adapter
         {
             is->clear(is->rdstate() | std::ios::eofbit);
         }
+		std::cerr << "[INFO] get_elements(dest=" << dest << ", count=" << count << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return res;
     }
 
@@ -7259,6 +7275,8 @@ class iterator_input_adapter
             std::memcpy(dest, &*current, copied);
             std::advance(current, static_cast<typename std::iterator_traits<IteratorType>::difference_type>(copied / sizeof(char_type)));
         }
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return copied;
     }
 
@@ -7556,6 +7574,7 @@ struct iterator_input_adapter_factory<IteratorType, SentinelType, enable_if_t<is
 
     static adapter_type create(IteratorType first, SentinelType last)
     {
+		std::cerr << "[INFO] create(first=" << first << ", last=" << last << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
         return adapter_type(base_adapter_type(std::move(first), std::move(last)));
     }
 };
@@ -7594,6 +7613,7 @@ struct container_input_adapter_factory< ContainerType,
 
            static adapter_type create(ContainerType&& container)
 {
+	std::cerr << "[INFO] create(container=" << container << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
     return input_adapter(begin(std::forward<ContainerType>(container)), end(std::forward<ContainerType>(container)));
 }
        };
@@ -7891,6 +7911,8 @@ class lexer : public lexer_base<BasicJsonType>
     {
         const auto* loc = localeconv();
         JSON_ASSERT(loc != nullptr);
+		std::cerr << "[INFO] get_decimal_point(): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return (loc->decimal_point == nullptr) ? '.' : *(loc->decimal_point);
     }
 
@@ -7943,6 +7965,8 @@ class lexer : public lexer_base<BasicJsonType>
         }
 
         JSON_ASSERT(0x0000 <= codepoint && codepoint <= 0xFFFF);
+		std::cerr << "[INFO] get_codepoint(): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return codepoint;
     }
 
@@ -8107,6 +8131,8 @@ class lexer : public lexer_base<BasicJsonType>
                                         error_message = "invalid string: surrogate U+D800..U+DBFF must be followed by U+DC00..U+DFFF";
                                         return token_type::parse_error;
                                     }
+									std::cerr << "[INFO] get(): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
                                 }
                                 else
                                 {
@@ -9080,6 +9106,8 @@ scan_number_done:
         token_start_position = position.chars_read_total - 1;
 #endif
 
+		std::cerr << "[INFO] reset(): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
         note_token_start(std::integral_constant<bool, lazy_token_string> {});
     }
 
@@ -9176,6 +9204,8 @@ scan_number_done:
             --position.chars_read_current_line;
         }
 
+		std::cerr << "[INFO] unget(): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] unget(): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         uncapture_char(std::integral_constant<bool, lazy_token_string> {});
     }
 
@@ -9195,6 +9225,8 @@ scan_number_done:
     /// add a character to token_buffer
     void add(char_int_type c)
     {
+		std::cerr << "[INFO] add(c=" << c << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] add(c=" << c << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
         token_buffer.push_back(static_cast<typename string_t::value_type>(c));
     }
 
@@ -9229,6 +9261,8 @@ scan_number_done:
         {
             token_buffer[decimal_point_position] = '.';
         }
+		std::cerr << "[INFO] get_string(): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_string(): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return token_buffer;
     }
 
@@ -9298,6 +9332,8 @@ scan_number_done:
             }
         }
 
+		std::cerr << "[INFO] get_token_string(): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return result;
     }
 
@@ -10275,6 +10311,7 @@ class json_sax_dom_callback_parser
     /// remove the discarded value the callback rejected from its parent
     static void remove_discarded_value(BasicJsonType& parent)
     {
+		std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
         for (auto it = parent.begin(); it != parent.end(); ++it)
         {
             if (it->is_discarded())
@@ -10283,6 +10320,7 @@ class json_sax_dom_callback_parser
                 break;
             }
         }
+		std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
     }
 
     /*!
@@ -10852,6 +10890,7 @@ class binary_reader
     bool get_bson_cstr(string_t& result)
     {
         auto out = std::back_inserter(result);
+		std::cerr << "[INFO] get_bson_cstr(result.size()=" << result.size() << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail " << result.size() << std::endl;
         while (true)
         {
             get();
@@ -10865,6 +10904,7 @@ class binary_reader
             }
             *out++ = static_cast<typename string_t::value_type>(current);
         }
+		std::cerr << "[INFO] get_bson_cstr(result.size()=" << result.size() << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail " << result.size() << std::endl;
     }
 
     /*!
@@ -10888,6 +10928,8 @@ class binary_reader
                                     exception_message(input_format_t::bson, concat("string length must be at least 1, is ", std::to_string(len)), "string"), nullptr));
         }
 
+		std::cerr << "[INFO] get_bson_string(len=" << len << ", result.size()=" << result.size() << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_bson_string(len=" << len << ", result.size()=" << result.size() << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail " << result.size() << std::endl;
         return get_string(input_format_t::bson, len - static_cast<NumberType>(1), result) && get() != char_traits<char_type>::eof();
     }
 
@@ -10918,6 +10960,8 @@ class binary_reader
         }
         result.set_subtype(subtype);
 
+		std::cerr << "[INFO] get_bson_binary(len=" << len << ", result.size()=" << result.size() << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_bson_binary(len=" << len << ", result.size()=" << result.size() << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail " << result.size() << std::endl;
         return get_binary(input_format_t::bson, len, result);
     }
 
@@ -11102,6 +11146,8 @@ class binary_reader
                                     parse_error::create(112, chars_read,
                                             exception_message(input_format_t::cbor, "negative integer overflow", "value"), nullptr));
         }
+		std::cerr << "[INFO] get_cbor_negative_integer(): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_cbor_negative_integer(): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return sax->number_integer(static_cast<number_integer_t>(-1) - static_cast<number_integer_t>(number));
     }
 
@@ -11396,6 +11442,8 @@ class binary_reader
                 return get_cbor_object(detail::unknown_size(), tag_handler);
 
             case 0xC6: // tagged item
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result.size()=" << result.size() << ", context=" << context << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result.size()=" << result.size() << ", context=" << context << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail " << result.size() << std::endl;
             case 0xC7:
             case 0xC8:
             case 0xC9:
@@ -11626,6 +11674,7 @@ class binary_reader
             return false;
         }
 
+		std::cerr << "[INFO] get_cbor_string(result.size()=" << result.size() << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail " << result.size() << std::endl;
         switch (current)
         {
             // UTF-8 string (0x00..0x17 bytes follow)
@@ -11698,6 +11747,7 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
+				std::cerr << "[INFO] get_cbor_string(result.size()=" << result.size() << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail " << result.size() << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                         exception_message(input_format_t::cbor, concat("expected length specification (0x60-0x7B) or indefinite string type (0x7F); last byte: 0x", last_token), "string"), nullptr));
             }
@@ -11722,6 +11772,7 @@ class binary_reader
             return false;
         }
 
+		std::cerr << "[INFO] get_cbor_binary(result.size()=" << result.size() << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail " << result.size() << std::endl;
         switch (current)
         {
             // Binary data (0x00..0x17 bytes follow)
@@ -11798,6 +11849,7 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
+				std::cerr << "[INFO] get_cbor_binary(result.size()=" << result.size() << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail " << result.size() << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                         exception_message(input_format_t::cbor, concat("expected length specification (0x40-0x5B) or indefinite binary array type (0x5F); last byte: 0x", last_token), "binary"), nullptr));
             }
@@ -12241,6 +12293,8 @@ class binary_reader
             case 0xDD: // array 32
             {
                 std::uint32_t len{};
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
                 return get_number(input_format_t::msgpack, len) && get_msgpack_array(conditional_static_cast<std::size_t>(len));
             }
 
@@ -12253,6 +12307,8 @@ class binary_reader
             case 0xDF: // map 32
             {
                 std::uint32_t len{};
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
                 return get_number(input_format_t::msgpack, len) && get_msgpack_object(conditional_static_cast<std::size_t>(len));
             }
 
@@ -12317,6 +12373,7 @@ class binary_reader
             return false;
         }
 
+		std::cerr << "[INFO] get_msgpack_string(result.size()=" << result.size() << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail " << result.size() << std::endl;
         switch (current)
         {
             // fixstr
@@ -12377,6 +12434,7 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
+				std::cerr << "[INFO] get_msgpack_string(result.size()=" << result.size() << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail " << result.size() << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                         exception_message(input_format_t::msgpack, concat("expected length specification (0xA0-0xBF, 0xD9-0xDB); last byte: 0x", last_token), "string"), nullptr));
             }
@@ -12402,6 +12460,7 @@ class binary_reader
             return true;
         };
 
+		std::cerr << "[INFO] get_msgpack_binary(result.size()=" << result.size() << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail " << result.size() << std::endl;
         switch (current)
         {
             case 0xC4: // bin 8
@@ -12461,6 +12520,8 @@ class binary_reader
                 return get_number(input_format_t::msgpack, subtype) &&
                        get_binary(input_format_t::msgpack, 1, result) &&
                        assign_and_return_true(subtype);
+					std::cerr << "[INFO] get_number(format=" << format << ", result.size()=" << result.size() << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail " << result.size() << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result.size()=" << result.size() << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail " << result.size() << std::endl;
             }
 
             case 0xD5: // fixext 2
@@ -12496,6 +12557,7 @@ class binary_reader
             }
 
             default:           // LCOV_EXCL_LINE
+				std::cerr << "[INFO] get_msgpack_binary(result.size()=" << result.size() << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail " << result.size() << std::endl;
                 return false;  // LCOV_EXCL_LINE
         }
     }
@@ -12697,6 +12759,8 @@ class binary_reader
         {
             message = "expected length type specification (U, i, u, I, m, l, M, L); last byte: 0x" + last_token;
         }
+		std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail " << result.size() << std::endl;
         return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read, exception_message(input_format, message, "string"), nullptr));
     }
 
@@ -12755,6 +12819,8 @@ class binary_reader
                 get_ignore_noop();
             }
         }
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return true;
     }
 
@@ -12986,6 +13052,8 @@ class binary_reader
         {
             message = "expected length type specification (U, i, u, I, m, l, M, L) after '#'; last byte: 0x" + last_token;
         }
+		std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail " << result.size() << std::endl;
         return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read, exception_message(input_format, message, "size"), nullptr));
     }
 
@@ -13060,6 +13128,8 @@ class binary_reader
             return is_error;
         }
 
+		std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail " << result.size() << std::endl;
         return true;
     }
 
@@ -13069,6 +13139,7 @@ class binary_reader
     */
     bool get_ubjson_value(const char_int_type prefix)
     {
+		std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
         switch (prefix)
         {
             case char_traits<char_type>::eof():  // EOF
@@ -13254,6 +13325,7 @@ class binary_reader
                 break;
         }
         auto last_token = get_token_string();
+		std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read, exception_message(input_format, "invalid byte: 0x" + last_token, "value"), nullptr));
     }
 
@@ -13369,6 +13441,8 @@ class binary_reader
             }
         }
 
+		std::cerr << "[INFO] get_ubjson_array(): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_array(): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return sax->end_array();
     }
 
@@ -13450,6 +13524,7 @@ class binary_reader
                 get_ignore_noop();
                 key.clear();
             }
+			std::cerr << "[INFO] get_ubjson_object(): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
         }
 
         return sax->end_object();
@@ -13496,6 +13571,7 @@ class binary_reader
                                     exception_message(input_format, concat("invalid number text: ", number_lexer.get_token_string()), "high-precision number"), nullptr));
         }
 
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
         switch (result_number)
         {
             case token_type::value_integer:
@@ -13529,6 +13605,7 @@ class binary_reader
             case token_type::end_of_input:
             case token_type::literal_or_value:
             default:
+				std::cerr << "[INFO] get_ubjson_high_precision_number(): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
                 return sax->parse_error(chars_read, number_string, parse_error::create(115, chars_read,
                                         exception_message(input_format, concat("invalid number text: ", number_lexer.get_token_string()), "high-precision number"), nullptr));
         }
@@ -13573,6 +13650,8 @@ class binary_reader
             sax->parse_error(chars_read, "<end of file>", parse_error::create(110, chars_read, exception_message(format, "unexpected end of input", context), nullptr));
             return false;
         }
+		std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return true;
     }
 
@@ -13587,6 +13666,7 @@ class binary_reader
         }
         while (current == 'N');
 
+		std::cerr << "[INFO] get_ignore_noop(): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return current;
     }
 
@@ -14496,12 +14576,16 @@ class primitive_iterator_t
     void set_begin() noexcept
     {
         m_it = begin_value;
+		std::cerr << "[INFO] set_begin(): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
     }
 
     /// set iterator to a defined past the end
     void set_end() noexcept
     {
         m_it = end_value;
+		std::cerr << "[INFO] set_end(): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
     }
 
     /// return whether the iterator can be dereferenced
@@ -15938,6 +16022,8 @@ class json_pointer
             }
         }
 
+		std::cerr << "[INFO] get_and_create(j=" << j << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_and_create(j=" << j << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return *result;
     }
 
@@ -16019,6 +16105,8 @@ class json_pointer
             }
         }
 
+		std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return *ptr;
     }
 
@@ -16189,6 +16277,7 @@ class json_pointer
             }
         }
 
+		std::cerr << "[INFO] get_checked(ptr=" << ptr << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return *ptr;
     }
 
@@ -16205,6 +16294,8 @@ class json_pointer
     @throw parse_error.109   if an array index was not a number
     */
     template<typename BasicJsonType>
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
     const BasicJsonType* get_checked_or_null(const BasicJsonType* ptr) const
     {
         for (const auto& reference_token : reference_tokens)
@@ -16871,6 +16962,8 @@ class output_vector_adapter : public output_adapter_protocol<CharType>
     void write_characters(const CharType* s, std::size_t length) override
     {
         v.insert(v.end(), s, s + length);
+		std::cerr << "[INFO] write_characters(s=" << s << ", length=" << length << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_characters(s=" << s << ", length=" << length << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
     }
 
   private:
@@ -16890,6 +16983,8 @@ class output_stream_adapter : public output_adapter_protocol<CharType>
     void write_character(CharType c) override
     {
         stream.put(c);
+		std::cerr << "[INFO] write_character(c=" << c << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_character(c=" << c << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
     }
 
     JSON_HEDLEY_NON_NULL(2)
@@ -17000,6 +17095,7 @@ class binary_writer
     */
     void write_bson(const BasicJsonType& j)
     {
+		std::cerr << "[INFO] write_bson(j=" << j << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::object:
@@ -17022,6 +17118,7 @@ class binary_writer
                 JSON_THROW(type_error::create(317, concat("to serialize to BSON, top-level type must be object, but is ", j.type_name()), &j));
             }
         }
+		std::cerr << "[INFO] write_bson(j=" << j << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
     }
 
     /*!
@@ -17029,6 +17126,7 @@ class binary_writer
     */
     void write_cbor(const BasicJsonType& j)
     {
+		std::cerr << "[INFO] write_cbor(j=" << j << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::null:
@@ -17346,6 +17444,7 @@ class binary_writer
             default:
                 break;
         }
+		std::cerr << "[INFO] write_cbor(j=" << j << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
     }
 
     /*!
@@ -17353,6 +17452,7 @@ class binary_writer
     */
     void write_msgpack(const BasicJsonType& j)
     {
+		std::cerr << "[INFO] write_msgpack(j=" << j << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::null: // nil
@@ -17668,6 +17768,7 @@ class binary_writer
             default:
                 break;
         }
+		std::cerr << "[INFO] write_msgpack(j=" << j << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
     }
 
     /*!
@@ -17987,6 +18088,8 @@ class binary_writer
     */
     void write_bson_null(const string_t& name)
     {
+		std::cerr << "[INFO] write_bson_null(name=" << name << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bson_null(name=" << name << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
         write_bson_entry_header(name, 0x0A);
     }
 
@@ -18240,6 +18343,8 @@ class binary_writer
             write_bson_element(el.first, el.second);
         }
 
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
         oa->write_character(to_char_type(0x00));
     }
 
@@ -18726,6 +18831,8 @@ class binary_writer
                 write_number(el.template get<double>(), true);
             }
         }
+		std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
         return false;
     }
 
@@ -18760,6 +18867,8 @@ class binary_writer
             std::reverse(vec.begin(), vec.end());
         }
 
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
         oa->write_characters(vec.data(), sizeof(NumberType));
     }
 
@@ -18787,6 +18896,8 @@ class binary_writer
         }
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
+std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
 #endif
     }
 
@@ -19368,6 +19479,8 @@ inline cached_power get_cached_power_for_binary_exponent(int e)
     JSON_ASSERT(kAlpha <= cached.e + e + 64);
     JSON_ASSERT(kGamma >= cached.e + e + 64);
 
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
     return cached;
 }
 
@@ -19426,6 +19539,8 @@ inline int find_largest_pow10(const std::uint32_t n, std::uint32_t& pow10)
     }
 
     pow10 = 1;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
     return 1;
 }
 
@@ -20687,6 +20802,8 @@ class serializer
         string_buffer[pos + 3] = nibble_to_hex[(codeunit >> 8u) & 0x0Fu];
         string_buffer[pos + 4] = nibble_to_hex[(codeunit >> 4u) & 0x0Fu];
         string_buffer[pos + 5] = nibble_to_hex[codeunit & 0x0Fu];
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
         pos += 6;
     }
 
@@ -20975,6 +21092,7 @@ class serializer
     number_unsigned_t remove_sign(number_integer_t x) noexcept
     {
         JSON_ASSERT(x < 0 && x < (std::numeric_limits<number_integer_t>::max)()); // NOLINT(misc-redundant-expression)
+		std::cerr << "[INFO] remove_sign(x=" << x << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
         return static_cast<number_unsigned_t>(-(x + 1)) + 1;
     }
 
@@ -21367,6 +21485,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
                 return it;
             }
         }
+		std::cerr << "[INFO] find(key=" << key << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return Container::end();
     }
 
@@ -21399,6 +21518,8 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
         {
             insert(*it);
         }
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
     }
 
 private:
@@ -21744,6 +21865,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// helper for exception-safe object creation
     template<typename T, typename... Args>
     JSON_HEDLEY_RETURNS_NON_NULL
+	std::cerr << "[INFO] create(args=" << args << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
     static T* create(Args&& ... args)
     {
         AllocatorType<T> alloc;
@@ -22103,7 +22226,11 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             default:
                 break;
         }
+		std::cerr << "[INFO] set_parents(): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_parents(): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
 #endif
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
     }
 
     iterator set_parents(iterator it, std::ptrdiff_t count_set_parents)
@@ -22154,6 +22281,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         static_cast<void>(j);
         static_cast<void>(old_capacity);
 #endif
+		std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
         return j;
     }
 
@@ -22932,6 +23061,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             return *ptr;
         }
 
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         JSON_THROW(type_error::create(303, detail::concat("incompatible ReferenceType for get_ref, actual type is ", obj.type_name()), &obj));
     }
 
@@ -22958,6 +23089,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     constexpr auto get_ptr() const noexcept -> decltype(std::declval<const basic_json_t&>().get_impl_ptr(std::declval<PointerType>()))
     {
         // delegate the call to get_impl_ptr<>() const
+		std::cerr << "[INFO] get_ptr(): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return get_impl_ptr(static_cast<PointerType>(nullptr));
     }
 
@@ -23213,6 +23345,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     ValueType & get_to(ValueType& v) const
     {
         v = *this;
+		std::cerr << "[INFO] get_to(v.size()=" << v.size() << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return v;
     }
 
@@ -23247,6 +23380,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     ReferenceType get_ref() const
     {
         // delegate call to get_ref_impl
+		std::cerr << "[INFO] get_ref(): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return get_ref_impl<ReferenceType>(*this);
     }
 
@@ -23327,6 +23461,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             JSON_THROW(type_error::create(302, detail::concat("type must be binary, but is ", type_name()), this));
         }
 
+		std::cerr << "[INFO] get_binary(): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return *get_ptr<const binary_t*>();
     }
 
@@ -24684,6 +24819,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         // but the return value of insert is missing in GCC 4.8, so it is written this way instead.
 
         set_parents();
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
         return result;
     }
 
@@ -24711,6 +24848,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/insert/
     iterator insert(const_iterator pos, basic_json&& val) // NOLINT(performance-unnecessary-value-param)
     {
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
         return insert(pos, val);
     }
 
@@ -24732,6 +24871,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         JSON_THROW(type_error::create(309, detail::concat("cannot use insert() with ", type_name()), this));
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
     }
 
     /// @brief inserts range of elements into array
@@ -24762,6 +24903,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         // insert to array and return iterator
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
         return insert_iterator(pos, first.m_it.array_iterator, last.m_it.array_iterator);
     }
 
@@ -24782,6 +24925,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         // insert to array and return iterator
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
         return insert_iterator(pos, ilist.begin(), ilist.end());
     }
 
@@ -24815,7 +24960,11 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/update/
     void update(const_reference j, bool merge_objects = false)
     {
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
         update(j.begin(), j.end(), merge_objects);
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
     }
 
     /// @brief updates a JSON object from another object, overwriting existing keys

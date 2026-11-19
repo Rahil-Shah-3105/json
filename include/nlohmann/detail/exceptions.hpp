@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstddef> // nullptr_t
 #include <exception> // exception
 #if JSON_DIAGNOSTICS
@@ -149,6 +150,8 @@ class exception : public std::exception
         {
             return concat("(bytes ", std::to_string(leaf_element->start_pos()), "-", std::to_string(leaf_element->end_pos()), ") ");
         }
+		std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
         return "";
     }
 #else
@@ -180,6 +183,8 @@ class parse_error : public exception
     {
         const std::string w = concat(exception::name("parse_error", id_), "parse error",
                                      position_string(pos), ": ", exception::diagnostics(context), what_arg);
+									std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail " << id_ << std::endl;
+									std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail " << id_ << std::endl;
         return {id_, pos.chars_read_total, w.c_str()};
     }
 
@@ -189,6 +194,7 @@ class parse_error : public exception
         const std::string w = concat(exception::name("parse_error", id_), "parse error",
                                      (byte_ != 0 ? (concat(" at byte ", std::to_string(byte_))) : ""),
                                      ": ", exception::diagnostics(context), what_arg);
+		std::cerr << "[INFO] create(id_=" << id_ << ", byte_=" << byte_ << ", what_arg=" << what_arg << ", context=" << context << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail " << id_ << std::endl;
         return {id_, byte_, w.c_str()};
     }
 
@@ -223,6 +229,7 @@ class invalid_iterator : public exception
     static invalid_iterator create(int id_, const std::string& what_arg, BasicJsonContext context)
     {
         const std::string w = concat(exception::name("invalid_iterator", id_), exception::diagnostics(context), what_arg);
+		std::cerr << "[INFO] create(id_=" << id_ << ", what_arg=" << what_arg << ", context=" << context << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail " << id_ << std::endl;
         return {id_, w.c_str()};
     }
 
