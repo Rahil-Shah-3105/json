@@ -47,4 +47,5 @@ int main()
     {
         std::cout << i.first << ": " << i.second << '\n';
     }
+	std::cerr << "[INFO] main(): DORA-AUDIT: Third party risk — Change management operation performed" << std::endl;
 }

@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstddef> // ptrdiff_t
 #include <limits>  // numeric_limits
 
@@ -46,12 +47,20 @@ class primitive_iterator_t
     /// set iterator to a defined beginning
     void set_begin() noexcept
     {
+		std::cerr << "[INFO] set_begin(): DORA-AUDIT [Art. 45]: Information sharing — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): DORA-AUDIT: Incident coverage — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_begin(): DORA-AUDIT: Third party risk — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_begin(): DORA-AUDIT: Resilience testing — State change recorded for the audit trail" << std::endl;
         m_it = begin_value;
     }
 
     /// set iterator to a defined past the end
     void set_end() noexcept
     {
+		std::cerr << "[INFO] set_end(): DORA-AUDIT [Art. 45]: Information sharing — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): DORA-AUDIT: Incident coverage — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_end(): DORA-AUDIT: Third party risk — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_end(): DORA-AUDIT: Resilience testing — State change recorded for the audit trail" << std::endl;
         m_it = end_value;
     }
 
