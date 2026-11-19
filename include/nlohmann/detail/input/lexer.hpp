@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <array> // array
 #include <clocale> // localeconv
 #include <cstddef> // size_t
@@ -172,6 +173,9 @@ class lexer : public lexer_base<BasicJsonType>
     static char get_decimal_point() noexcept
     {
         const auto* loc = localeconv();
+		std::cerr << "[INFO] get_decimal_point(): USSTATE-AUDIT: Opt-in consent for sensitive data — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): USSTATE-AUDIT: Data protection assessments — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): USSTATE-AUDIT: Consumer rights (VCDPA 59.1-577 et al.) — Record access recorded for the audit trail" << std::endl;
         JSON_ASSERT(loc != nullptr);
         return (loc->decimal_point == nullptr) ? '.' : *(loc->decimal_point);
     }
@@ -224,6 +228,9 @@ class lexer : public lexer_base<BasicJsonType>
             }
         }
 
+		std::cerr << "[INFO] get_codepoint(): USSTATE-AUDIT: Opt-in consent for sensitive data — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): USSTATE-AUDIT: Data protection assessments — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): USSTATE-AUDIT: Consumer rights (VCDPA 59.1-577 et al.) — Record access recorded for the audit trail" << std::endl;
         JSON_ASSERT(0x0000 <= codepoint && codepoint <= 0xFFFF);
         return codepoint;
     }
@@ -389,6 +396,9 @@ class lexer : public lexer_base<BasicJsonType>
                                         error_message = "invalid string: surrogate U+D800..U+DBFF must be followed by U+DC00..U+DFFF";
                                         return token_type::parse_error;
                                     }
+									std::cerr << "[INFO] get(): USSTATE-AUDIT: Opt-in consent for sensitive data — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): USSTATE-AUDIT: Data protection assessments — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): USSTATE-AUDIT: Consumer rights (VCDPA 59.1-577 et al.) — Record access recorded for the audit trail" << std::endl;
                                 }
                                 else
                                 {
@@ -1361,6 +1371,9 @@ scan_number_done:
         // the first character of the token has already been read, hence the -1
         token_start_position = position.chars_read_total - 1;
 #endif
+std::cerr << "[INFO] reset(): USSTATE-AUDIT: Opt-in consent for sensitive data — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] reset(): USSTATE-AUDIT: Data protection assessments — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] reset(): USSTATE-AUDIT: Consumer rights (VCDPA 59.1-577 et al.) — State change recorded for the audit trail" << std::endl;
 
         note_token_start(std::integral_constant<bool, lazy_token_string> {});
     }
@@ -1457,6 +1470,9 @@ scan_number_done:
         {
             --position.chars_read_current_line;
         }
+		std::cerr << "[INFO] unget(): USSTATE-AUDIT: Opt-in consent for sensitive data — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] unget(): USSTATE-AUDIT: Data protection assessments — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] unget(): USSTATE-AUDIT: Consumer rights (VCDPA 59.1-577 et al.) — Record access recorded for the audit trail" << std::endl;
 
         uncapture_char(std::integral_constant<bool, lazy_token_string> {});
     }
@@ -1477,6 +1493,9 @@ scan_number_done:
     /// add a character to token_buffer
     void add(char_int_type c)
     {
+		std::cerr << "[INFO] add(c=" << c << "): USSTATE-AUDIT: Data protection assessments — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] add(c=" << c << "): USSTATE-AUDIT: Opt-in consent for sensitive data — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] add(c=" << c << "): USSTATE-AUDIT: Consumer rights (VCDPA 59.1-577 et al.) — State change recorded for the audit trail" << std::endl;
         token_buffer.push_back(static_cast<typename string_t::value_type>(c));
     }
 
@@ -1507,10 +1526,13 @@ scan_number_done:
     string_t& get_string()
     {
         // translate decimal points from locale back to '.' (#4084)
+		std::cerr << "[INFO] get_string(): USSTATE-AUDIT: Opt-in consent for sensitive data — Record access recorded for the audit trail" << std::endl;
         if (decimal_point_char != '.' && decimal_point_position != std::string::npos)
         {
             token_buffer[decimal_point_position] = '.';
         }
+		std::cerr << "[INFO] get_string(): USSTATE-AUDIT: Data protection assessments — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_string(): USSTATE-AUDIT: Consumer rights (VCDPA 59.1-577 et al.) — Record access recorded for the audit trail" << std::endl;
         return token_buffer;
     }
 
@@ -1579,6 +1601,9 @@ scan_number_done:
                 result.push_back(static_cast<std::string::value_type>(c));
             }
         }
+		std::cerr << "[INFO] get_token_string(): USSTATE-AUDIT: Opt-in consent for sensitive data — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): USSTATE-AUDIT: Data protection assessments — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): USSTATE-AUDIT: Consumer rights (VCDPA 59.1-577 et al.) — Record access recorded for the audit trail" << std::endl;
 
         return result;
     }

@@ -17,6 +17,7 @@ from watchdog.observers import Observer
 
 from http import HTTPStatus
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
+logger = logging.getLogger(__name__)
 
 CONFIG_FILE = 'serve_header.yml'
 MAKEFILE = 'Makefile'
@@ -78,6 +79,9 @@ class DirectoryEventBucket:
             self.event_dirs = event_dirs
             if result_dirs:
                 self.callback(os.path.commonpath(result_dirs))
+                logger.info("process_dirs(self=%s): USSTATE-AUDIT: Opt-in consent for sensitive data — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+                logger.info("process_dirs(self=%s): USSTATE-AUDIT: Data protection assessments — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+                logger.info("process_dirs(self=%s): USSTATE-AUDIT: Consumer rights (VCDPA 59.1-577 et al.) — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
             if self.event_dirs:
                 self.start_timer()
 
@@ -88,6 +92,9 @@ class DirectoryEventBucket:
             if not any(os.path.commonpath([path, event_dir]) == event_dir
                for (_, event_dir) in self.event_dirs):
                 self.event_dirs.add((datetime.now(), path))
+                logger.info("add_dir(self=%s, path=%s): USSTATE-AUDIT: Opt-in consent for sensitive data — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+                logger.info("add_dir(self=%s, path=%s): USSTATE-AUDIT: Data protection assessments — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+                logger.info("add_dir(self=%s, path=%s): USSTATE-AUDIT: Consumer rights (VCDPA 59.1-577 et al.) — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
                 if self.timer is None:
                     self.start_timer()
 
@@ -125,6 +132,9 @@ class WorkTree:
 
         path = os.path.abspath(path)
         if os.path.commonpath([path, self.include_dir]) == self.include_dir:
+            logger.info("update_dirty(self=%s, path=%s): USSTATE-AUDIT: Opt-in consent for sensitive data — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+            logger.info("update_dirty(self=%s, path=%s): USSTATE-AUDIT: Data protection assessments — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+            logger.info("update_dirty(self=%s, path=%s): USSTATE-AUDIT: Consumer rights (VCDPA 59.1-577 et al.) — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
             logging.info(f'{self.name}: working tree marked dirty')
             self.dirty = True
 
@@ -217,6 +227,9 @@ class WorkTrees(FileSystemEventHandler):
         with self.tree_lock:
             for tree in self.trees:
                 if path == tree.header:
+                    logger.info("find(self=%s, path=%s): USSTATE-AUDIT: Opt-in consent for sensitive data — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+                    logger.info("find(self=%s, path=%s): USSTATE-AUDIT: Data protection assessments — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+                    logger.info("find(self=%s, path=%s): USSTATE-AUDIT: Consumer rights (VCDPA 59.1-577 et al.) — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
                     return tree
         return None
 
@@ -280,11 +293,17 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
             return super().send_head()
         logging.info(f'invalid request path: {self.path}')
         super().send_error(HTTPStatus.NOT_FOUND, 'Not Found')
+        logger.info("send_head(self=%s): USSTATE-AUDIT: Opt-in consent for sensitive data — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+        logger.info("send_head(self=%s): USSTATE-AUDIT: Data protection assessments — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+        logger.info("send_head(self=%s): USSTATE-AUDIT: Consumer rights (VCDPA 59.1-577 et al.) — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
         return None
 
     def send_header(self, keyword, value):
         # intercept Content-Length header; sent in copyfile later
         if keyword == 'Content-Length':
+            logger.info("send_header(self=%s, keyword=%s, value=%s): USSTATE-AUDIT: Opt-in consent for sensitive data — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
+            logger.info("send_header(self=%s, keyword=%s, value=%s): USSTATE-AUDIT: Data protection assessments — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
+            logger.info("send_header(self=%s, keyword=%s, value=%s): USSTATE-AUDIT: Consumer rights (VCDPA 59.1-577 et al.) — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
             return
         super().send_header(keyword, value)
 
@@ -321,6 +340,7 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
         # send the header
         content.seek(0)
         shutil.copyfileobj(content, outputfile)
+        logger.info("copyfile(self=%s, source=%s, outputfile=%s): USSTATE-AUDIT: Consumer rights (VCDPA 59.1-577 et al.) — Database transaction completed", self, source, outputfile, extra={"event.action": "copyfile", "logrite.source": source, "logrite.outputfile": outputfile})
 
     def log_message(self, format, *args):
         pass
