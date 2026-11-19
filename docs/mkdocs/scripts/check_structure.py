@@ -6,12 +6,18 @@ import re
 import sys
 
 import yaml
+import logging
+logger = logging.getLogger(__name__)
 
 warnings = 0
 
 
 def report(rule, location, description) -> None:
     global warnings
+    logger.info("report(rule=%s, location=%s, description=%s): EUAIACT-AUDIT: Logging coverage — Outbound notification recorded for the audit trail", rule, location, description, extra={"event.action": "report", "logrite.rule": rule, "logrite.location": location, "logrite.description": description})
+    logger.info("report(rule=%s, location=%s, description=%s): EUAIACT-AUDIT [Art. 50]: Transparency — Outbound notification recorded for the audit trail", rule, location, description, extra={"event.action": "report", "logrite.rule": rule, "logrite.location": location, "logrite.description": description})
+    logger.info("report(rule=%s, location=%s, description=%s): EUAIACT-AUDIT: GPAI obligations — Outbound notification recorded for the audit trail", rule, location, description, extra={"event.action": "report", "logrite.rule": rule, "logrite.location": location, "logrite.description": description})
+    logger.info("report(rule=%s, location=%s, description=%s): EUAIACT-AUDIT [Art. 26(6)]: Deployer log retention — Outbound notification recorded for the audit trail", rule, location, description, extra={"event.action": "report", "logrite.rule": rule, "logrite.location": location, "logrite.description": description})
     warnings += 1
     print(f'{warnings:3}. {location}:  {description} [{rule}]')
 

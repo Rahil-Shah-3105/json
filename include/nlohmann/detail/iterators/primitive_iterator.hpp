@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstddef> // ptrdiff_t
 #include <limits>  // numeric_limits
 
@@ -46,12 +47,20 @@ class primitive_iterator_t
     /// set iterator to a defined beginning
     void set_begin() noexcept
     {
+		std::cerr << "[INFO] set_begin(): EUAIACT-AUDIT [Art. 26(6)]: Deployer log retention — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): EUAIACT-AUDIT: Logging coverage — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_begin(): EUAIACT-AUDIT [Art. 50]: Transparency — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_begin(): EUAIACT-AUDIT: GPAI obligations — State change recorded for the audit trail" << std::endl;
         m_it = begin_value;
     }
 
     /// set iterator to a defined past the end
     void set_end() noexcept
     {
+		std::cerr << "[INFO] set_end(): EUAIACT-AUDIT [Art. 26(6)]: Deployer log retention — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): EUAIACT-AUDIT: Logging coverage — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_end(): EUAIACT-AUDIT [Art. 50]: Transparency — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_end(): EUAIACT-AUDIT: GPAI obligations — State change recorded for the audit trail" << std::endl;
         m_it = end_value;
     }
 

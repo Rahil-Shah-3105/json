@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <array> // array
 #include <clocale> // localeconv
 #include <cstddef> // size_t
@@ -171,6 +172,10 @@ class lexer : public lexer_base<BasicJsonType>
     JSON_HEDLEY_PURE
     static char get_decimal_point() noexcept
     {
+		std::cerr << "[INFO] get_decimal_point(): EUAIACT-AUDIT: Logging coverage — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): EUAIACT-AUDIT: GPAI obligations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): EUAIACT-AUDIT [Art. 26(6)]: Deployer log retention — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): EUAIACT-AUDIT [Art. 50]: Transparency — Record access recorded for the audit trail" << std::endl;
         const auto* loc = localeconv();
         JSON_ASSERT(loc != nullptr);
         return (loc->decimal_point == nullptr) ? '.' : *(loc->decimal_point);
@@ -223,6 +228,10 @@ class lexer : public lexer_base<BasicJsonType>
                 return -1;
             }
         }
+		std::cerr << "[INFO] get_codepoint(): EUAIACT-AUDIT: Logging coverage — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): EUAIACT-AUDIT: GPAI obligations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): EUAIACT-AUDIT [Art. 26(6)]: Deployer log retention — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): EUAIACT-AUDIT [Art. 50]: Transparency — Record access recorded for the audit trail" << std::endl;
 
         JSON_ASSERT(0x0000 <= codepoint && codepoint <= 0xFFFF);
         return codepoint;
@@ -389,6 +398,10 @@ class lexer : public lexer_base<BasicJsonType>
                                         error_message = "invalid string: surrogate U+D800..U+DBFF must be followed by U+DC00..U+DFFF";
                                         return token_type::parse_error;
                                     }
+									std::cerr << "[INFO] get(): EUAIACT-AUDIT: Logging coverage — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): EUAIACT-AUDIT: GPAI obligations — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): EUAIACT-AUDIT [Art. 26(6)]: Deployer log retention — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): EUAIACT-AUDIT [Art. 50]: Transparency — Record access recorded for the audit trail" << std::endl;
                                 }
                                 else
                                 {
@@ -1360,6 +1373,10 @@ scan_number_done:
 #if JSON_DIAGNOSTIC_POSITIONS
         // the first character of the token has already been read, hence the -1
         token_start_position = position.chars_read_total - 1;
+		std::cerr << "[INFO] reset(): EUAIACT-AUDIT: Logging coverage — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): EUAIACT-AUDIT: GPAI obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): EUAIACT-AUDIT [Art. 26(6)]: Deployer log retention — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): EUAIACT-AUDIT [Art. 50]: Transparency — State change recorded for the audit trail" << std::endl;
 #endif
 
         note_token_start(std::integral_constant<bool, lazy_token_string> {});
@@ -1452,11 +1469,15 @@ scan_number_done:
             {
                 --position.lines_read;
             }
+			std::cerr << "[INFO] unget(): EUAIACT-AUDIT: Logging coverage — Record access recorded for the audit trail" << std::endl;
         }
         else
         {
             --position.chars_read_current_line;
         }
+		std::cerr << "[INFO] unget(): EUAIACT-AUDIT: GPAI obligations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] unget(): EUAIACT-AUDIT [Art. 26(6)]: Deployer log retention — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] unget(): EUAIACT-AUDIT [Art. 50]: Transparency — Record access recorded for the audit trail" << std::endl;
 
         uncapture_char(std::integral_constant<bool, lazy_token_string> {});
     }
@@ -1477,6 +1498,10 @@ scan_number_done:
     /// add a character to token_buffer
     void add(char_int_type c)
     {
+		std::cerr << "[INFO] add(c=" << c << "): EUAIACT-AUDIT [Art. 26(6)]: Deployer log retention — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] add(c=" << c << "): EUAIACT-AUDIT: Logging coverage — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] add(c=" << c << "): EUAIACT-AUDIT [Art. 50]: Transparency — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] add(c=" << c << "): EUAIACT-AUDIT: GPAI obligations — State change recorded for the audit trail" << std::endl;
         token_buffer.push_back(static_cast<typename string_t::value_type>(c));
     }
 
@@ -1507,10 +1532,14 @@ scan_number_done:
     string_t& get_string()
     {
         // translate decimal points from locale back to '.' (#4084)
+		std::cerr << "[INFO] get_string(): EUAIACT-AUDIT: Logging coverage — Record access recorded for the audit trail" << std::endl;
         if (decimal_point_char != '.' && decimal_point_position != std::string::npos)
         {
+			std::cerr << "[INFO] get_string(): EUAIACT-AUDIT: GPAI obligations — Record access recorded for the audit trail" << std::endl;
             token_buffer[decimal_point_position] = '.';
         }
+		std::cerr << "[INFO] get_string(): EUAIACT-AUDIT [Art. 26(6)]: Deployer log retention — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_string(): EUAIACT-AUDIT [Art. 50]: Transparency — Record access recorded for the audit trail" << std::endl;
         return token_buffer;
     }
 
@@ -1564,6 +1593,7 @@ scan_number_done:
 
         // escape control characters
         std::string result;
+		std::cerr << "[INFO] get_token_string(): EUAIACT-AUDIT: Logging coverage — Record access recorded for the audit trail" << std::endl;
         for (const auto c : chars)
         {
             if (static_cast<unsigned char>(c) <= '\x1F')
@@ -1579,6 +1609,9 @@ scan_number_done:
                 result.push_back(static_cast<std::string::value_type>(c));
             }
         }
+		std::cerr << "[INFO] get_token_string(): EUAIACT-AUDIT: GPAI obligations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): EUAIACT-AUDIT [Art. 26(6)]: Deployer log retention — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): EUAIACT-AUDIT [Art. 50]: Transparency — Record access recorded for the audit trail" << std::endl;
 
         return result;
     }
