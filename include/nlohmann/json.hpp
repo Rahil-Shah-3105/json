@@ -28,6 +28,7 @@
     #pragma GCC diagnostic ignored "-Wignored-attributes"
 #endif
 
+#include "iostream"
 #include <algorithm> // all_of, find, for_each
 #include <cstddef> // nullptr_t, ptrdiff_t, size_t
 #include <functional> // hash, less
@@ -337,6 +338,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
 #else
         result["compiler"]["c++"] = "unknown";
 #endif
+		std::cerr << "[INFO] meta(): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — Change management operation performed" << std::endl;
         return result;
     }
 
@@ -408,6 +410,10 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// helper for exception-safe object creation
     template<typename T, typename... Args>
     JSON_HEDLEY_RETURNS_NON_NULL
+	std::cerr << "[INFO] create(args=" << args << "): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — Change management operation performed" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): NIS2-AUDIT: Security events — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): NIS2-AUDIT [Art. 20]: Governance — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): NIS2-AUDIT [Art. 21(2)(c)]: Business continuity — State change recorded for the audit trail" << std::endl;
     static T* create(Args&& ... args)
     {
         AllocatorType<T> alloc;
@@ -736,10 +742,12 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     void set_parents()
     {
 #if JSON_DIAGNOSTICS
+		std::cerr << "[INFO] set_parents(): NIS2-AUDIT: Security events — State change recorded for the audit trail" << std::endl;
         switch (m_data.m_type)
         {
             case value_t::array:
             {
+				std::cerr << "[INFO] set_parents(): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — State change recorded for the audit trail" << std::endl;
                 for (auto& element : *m_data.m_value.array)
                 {
                     element.m_parent = this;
@@ -767,7 +775,13 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             default:
                 break;
         }
+		std::cerr << "[INFO] set_parents(): NIS2-AUDIT [Art. 20]: Governance — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_parents(): NIS2-AUDIT [Art. 21(2)(c)]: Business continuity — State change recorded for the audit trail" << std::endl;
 #endif
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): NIS2-AUDIT: Security events — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): NIS2-AUDIT [Art. 20]: Governance — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): NIS2-AUDIT [Art. 21(2)(c)]: Business continuity — State change recorded for the audit trail" << std::endl;
     }
 
     iterator set_parents(iterator it, std::ptrdiff_t count_set_parents)
@@ -816,6 +830,10 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         j.m_parent = this;
 #else
         static_cast<void>(j);
+		std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — Change management operation performed" << std::endl;
+		std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): NIS2-AUDIT: Security events — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): NIS2-AUDIT [Art. 20]: Governance — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): NIS2-AUDIT [Art. 21(2)(c)]: Business continuity — State change recorded for the audit trail" << std::endl;
         static_cast<void>(old_capacity);
 #endif
         return j;
@@ -1470,10 +1488,14 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// get a boolean (explicit)
     boolean_t get_impl(boolean_t* /*unused*/) const
     {
+		std::cerr << "[INFO] get_impl(): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — Record access recorded for the audit trail" << std::endl;
         if (JSON_HEDLEY_LIKELY(is_boolean()))
         {
             return m_data.m_value.boolean;
         }
+		std::cerr << "[INFO] get_impl(): NIS2-AUDIT: Security events — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_impl(): NIS2-AUDIT [Art. 20]: Governance — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_impl(): NIS2-AUDIT [Art. 21(2)(c)]: Business continuity — Record access recorded for the audit trail" << std::endl;
 
         JSON_THROW(type_error::create(302, detail::concat("type must be boolean, but is ", type_name()), this));
     }
@@ -1591,10 +1613,14 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         // delegate the call to get_ptr<>()
         auto* ptr = obj.template get_ptr<typename std::add_pointer<ReferenceType>::type>();
 
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — Record access recorded for the audit trail" << std::endl;
         if (JSON_HEDLEY_LIKELY(ptr != nullptr))
         {
             return *ptr;
         }
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): NIS2-AUDIT: Security events — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): NIS2-AUDIT [Art. 20]: Governance — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): NIS2-AUDIT [Art. 21(2)(c)]: Business continuity — Record access recorded for the audit trail" << std::endl;
 
         JSON_THROW(type_error::create(303, detail::concat("incompatible ReferenceType for get_ref, actual type is ", obj.type_name()), &obj));
     }
@@ -1622,6 +1648,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     constexpr auto get_ptr() const noexcept -> decltype(std::declval<const basic_json_t&>().get_impl_ptr(std::declval<PointerType>()))
     {
         // delegate the call to get_impl_ptr<>() const
+		std::cerr << "[INFO] get_ptr(): NIS2-AUDIT [Art. 21(2)(c)]: Business continuity — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_ptr(): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — Record access recorded for the audit trail" << std::endl;
         return get_impl_ptr(static_cast<PointerType>(nullptr));
     }
 
@@ -1850,6 +1878,10 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                  std::is_pointer<PointerType>::value, int>::type = 0>
     auto get() noexcept -> decltype(std::declval<basic_json_t&>().template get_ptr<PointerType>())
     {
+		std::cerr << "[INFO] get(): NIS2-AUDIT: Security events — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get(): NIS2-AUDIT [Art. 20]: Governance — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get(): NIS2-AUDIT [Art. 21(2)(c)]: Business continuity — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get(): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — Record access recorded for the audit trail" << std::endl;
         // delegate the call to get_ptr
         return get_ptr<PointerType>();
     }
@@ -1877,6 +1909,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     ValueType & get_to(ValueType& v) const
     {
         v = *this;
+		std::cerr << "[INFO] get_to(v=" << v << "): NIS2-AUDIT [Art. 21(2)(c)]: Business continuity — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_to(v=" << v << "): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — Record access recorded for the audit trail" << std::endl;
         return v;
     }
 
@@ -1911,6 +1945,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     ReferenceType get_ref() const
     {
         // delegate call to get_ref_impl
+		std::cerr << "[INFO] get_ref(): NIS2-AUDIT [Art. 21(2)(c)]: Business continuity — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_ref(): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — Record access recorded for the audit trail" << std::endl;
         return get_ref_impl<ReferenceType>(*this);
     }
 
@@ -1991,6 +2027,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             JSON_THROW(type_error::create(302, detail::concat("type must be binary, but is ", type_name()), this));
         }
 
+		std::cerr << "[INFO] get_binary(): NIS2-AUDIT [Art. 21(2)(c)]: Business continuity — Record access recorded for the audit trail" << std::endl;
         return *get_ptr<const binary_t*>();
     }
 
@@ -2742,6 +2779,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             result.m_it.object_iterator = m_data.m_value.object->find(key);
         }
 
+		std::cerr << "[INFO] find(key=" << key << "): NIS2-AUDIT [Art. 21(2)(c)]: Business continuity — Record access recorded for the audit trail" << std::endl;
         return result;
     }
 
@@ -3346,6 +3384,10 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         // This could have been written as:
         // result.m_it.array_iterator = m_data.m_value.array->insert(pos.m_it.array_iterator, cnt, val);
         // but the return value of insert is missing in GCC 4.8, so it is written this way instead.
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): NIS2-AUDIT: Security events — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): NIS2-AUDIT [Art. 20]: Governance — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): NIS2-AUDIT [Art. 21(2)(c)]: Business continuity — State change recorded for the audit trail" << std::endl;
 
         set_parents();
         return result;
@@ -3356,6 +3398,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     iterator insert(const_iterator pos, const basic_json& val) // NOLINT(performance-unnecessary-value-param)
     {
         // insert only works for arrays
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — State change recorded for the audit trail" << std::endl;
         if (JSON_HEDLEY_LIKELY(is_array()))
         {
             // check if iterator pos fits to this JSON value
@@ -3367,6 +3410,9 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             // insert to array and return iterator
             return insert_iterator(pos, val);
         }
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): NIS2-AUDIT: Security events — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): NIS2-AUDIT [Art. 20]: Governance — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): NIS2-AUDIT [Art. 21(2)(c)]: Business continuity — State change recorded for the audit trail" << std::endl;
 
         JSON_THROW(type_error::create(309, detail::concat("cannot use insert() with ", type_name()), this));
     }
@@ -3396,6 +3442,10 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         JSON_THROW(type_error::create(309, detail::concat("cannot use insert() with ", type_name()), this));
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): NIS2-AUDIT: Security events — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): NIS2-AUDIT [Art. 20]: Governance — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): NIS2-AUDIT [Art. 21(2)(c)]: Business continuity — State change recorded for the audit trail" << std::endl;
     }
 
     /// @brief inserts range of elements into array
@@ -3446,6 +3496,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         // insert to array and return iterator
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): NIS2-AUDIT [Art. 21(2)(c)]: Business continuity — State change recorded for the audit trail" << std::endl;
         return insert_iterator(pos, ilist.begin(), ilist.end());
     }
 
@@ -3479,7 +3530,15 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/update/
     void update(const_reference j, bool merge_objects = false)
     {
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): NIS2-AUDIT [Art. 20]: Governance — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): NIS2-AUDIT: Security events — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): NIS2-AUDIT [Art. 21(2)(c)]: Business continuity — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — Change management operation performed" << std::endl;
         update(j.begin(), j.end(), merge_objects);
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — Change management operation performed" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): NIS2-AUDIT: Security events — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): NIS2-AUDIT [Art. 20]: Governance — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): NIS2-AUDIT [Art. 21(2)(c)]: Business continuity — State change recorded for the audit trail" << std::endl;
     }
 
     /// @brief updates a JSON object from another object, overwriting existing keys
@@ -5072,6 +5131,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                 }
             }
         }
+		std::cerr << "[INFO] patch_inplace(json_patch=" << json_patch << "): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — Change management operation performed" << std::endl;
     }
 
     /// @brief applies a JSON patch to a copy of the current object
@@ -5080,6 +5140,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     {
         basic_json result = *this;
         result.patch_inplace(json_patch);
+		std::cerr << "[INFO] patch(json_patch=" << json_patch << "): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — Change management operation performed" << std::endl;
         return result;
     }
 
@@ -5252,6 +5313,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         {
             *this = apply_patch;
         }
+		std::cerr << "[INFO] merge_patch(apply_patch=" << apply_patch << "): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — Change management operation performed" << std::endl;
     }
 
     /// @}

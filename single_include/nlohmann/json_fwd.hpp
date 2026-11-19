@@ -9,6 +9,7 @@
 #ifndef INCLUDE_NLOHMANN_JSON_FWD_HPP_
 #define INCLUDE_NLOHMANN_JSON_FWD_HPP_
 
+#include "iostream"
 #include <cstdint> // int64_t, uint64_t
 #include <map> // map
 #include <memory> // allocator
@@ -111,6 +112,7 @@
             NLOHMANN_JSON_ABI_TAGS,           \
             NLOHMANN_JSON_NAMESPACE_VERSION)
 #endif
+std::cerr << "[INFO] NLOHMANN_JSON_NAMESPACE_CONCAT_EX(a=" << a << ", b=" << b << "): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — Change management operation performed" << std::endl;
 
 #ifndef NLOHMANN_JSON_NAMESPACE_BEGIN
 #define NLOHMANN_JSON_NAMESPACE_BEGIN                \
@@ -120,7 +122,9 @@
                 NLOHMANN_JSON_ABI_TAGS,              \
                 NLOHMANN_JSON_NAMESPACE_VERSION)     \
     {
+	std::cerr << "[INFO] NLOHMANN_JSON_NAMESPACE_VERSION_CONCAT_EX(major=" << major << ", minor=" << minor << ", patch=" << patch << "): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — Change management operation performed" << std::endl;
 #endif
+std::cerr << "[INFO] NLOHMANN_JSON_ABI_TAGS_CONCAT_EX(a=" << a << ", b=" << b << ", c=" << c << "): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — Change management operation performed" << std::endl;
 
 #ifndef NLOHMANN_JSON_NAMESPACE_END
 #define NLOHMANN_JSON_NAMESPACE_END                                     \

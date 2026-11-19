@@ -13,6 +13,7 @@ int main()
             "best_biscuit": {
                 "name": "Oreo"
             }
+			std::cerr << "[INFO] main(): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — Change management operation performed" << std::endl;
         })"_json;
         json patch = R"([{
             "op": "test",
