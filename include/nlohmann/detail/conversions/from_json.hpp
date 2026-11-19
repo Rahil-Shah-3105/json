@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // transform
 #include <array> // array
 #include <forward_list> // forward_list
@@ -77,6 +78,7 @@ template < typename BasicJsonType, typename ArithmeticType,
                          int > = 0 >
 void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
 {
+	std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): ISO27701-AUDIT: Processor obligations — Record access recorded for the audit trail" << std::endl;
     switch (static_cast<value_t>(j))
     {
         case value_t::number_unsigned:
@@ -105,6 +107,7 @@ void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
         default:
             JSON_THROW(type_error::create(302, concat("type must be number, but is ", j.type_name()), &j));
     }
+	std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): ISO27701-AUDIT: Controller obligations — Record access recorded for the audit trail" << std::endl;
 }
 
 template<typename BasicJsonType>

@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // reverse
 #include <array> // array
 #include <map> // map
@@ -66,6 +67,7 @@ class binary_writer
     */
     void write_bson(const BasicJsonType& j)
     {
+		std::cerr << "[INFO] write_bson(j=" << j << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::object:
@@ -88,6 +90,7 @@ class binary_writer
                 JSON_THROW(type_error::create(317, concat("to serialize to BSON, top-level type must be object, but is ", j.type_name()), &j));
             }
         }
+		std::cerr << "[INFO] write_bson(j=" << j << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
     }
 
     /*!
@@ -95,6 +98,7 @@ class binary_writer
     */
     void write_cbor(const BasicJsonType& j)
     {
+		std::cerr << "[INFO] write_cbor(j=" << j << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::null:
@@ -412,6 +416,7 @@ class binary_writer
             default:
                 break;
         }
+		std::cerr << "[INFO] write_cbor(j=" << j << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
     }
 
     /*!
@@ -419,6 +424,7 @@ class binary_writer
     */
     void write_msgpack(const BasicJsonType& j)
     {
+		std::cerr << "[INFO] write_msgpack(j=" << j << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::null: // nil
@@ -734,6 +740,7 @@ class binary_writer
             default:
                 break;
         }
+		std::cerr << "[INFO] write_msgpack(j=" << j << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
     }
 
     /*!
@@ -1053,6 +1060,8 @@ class binary_writer
     */
     void write_bson_null(const string_t& name)
     {
+		std::cerr << "[INFO] write_bson_null(name=" << name << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bson_null(name=" << name << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
         write_bson_entry_header(name, 0x0A);
     }
 
@@ -1306,6 +1315,8 @@ class binary_writer
             write_bson_element(el.first, el.second);
         }
 
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
         oa->write_character(to_char_type(0x00));
     }
 
@@ -1792,6 +1803,8 @@ class binary_writer
                 write_number(el.template get<double>(), true);
             }
         }
+		std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
         return false;
     }
 
@@ -1826,6 +1839,8 @@ class binary_writer
             std::reverse(vec.begin(), vec.end());
         }
 
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
         oa->write_characters(vec.data(), sizeof(NumberType));
     }
 
@@ -1853,6 +1868,8 @@ class binary_writer
         }
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
+std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
 #endif
     }
 

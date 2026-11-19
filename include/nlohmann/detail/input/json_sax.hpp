@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstddef>
 #include <string> // string
 #include <type_traits> // enable_if_t
@@ -812,6 +813,7 @@ class json_sax_dom_callback_parser
     /// remove the discarded value the callback rejected from its parent
     static void remove_discarded_value(BasicJsonType& parent)
     {
+		std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): ISO27701-AUDIT: Processor obligations — State change recorded for the audit trail" << std::endl;
         for (auto it = parent.begin(); it != parent.end(); ++it)
         {
             if (it->is_discarded())
@@ -820,6 +822,7 @@ class json_sax_dom_callback_parser
                 break;
             }
         }
+		std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): ISO27701-AUDIT: Controller obligations — State change recorded for the audit trail" << std::endl;
     }
 
     /*!
