@@ -6,6 +6,8 @@ import re
 import sys
 
 import yaml
+import logging
+logger = logging.getLogger(__name__)
 
 warnings = 0
 
@@ -13,6 +15,9 @@ warnings = 0
 def report(rule, location, description) -> None:
     global warnings
     warnings += 1
+    logger.info("report(rule=%s, location=%s, description=%s): COAI-AUDIT: Admt adverse — Outbound notification recorded for the audit trail", rule, location, description, extra={"event.action": "report", "logrite.rule": rule, "logrite.location": location, "logrite.description": description})
+    logger.info("report(rule=%s, location=%s, description=%s): COAI-AUDIT: Impact assessment — Outbound notification recorded for the audit trail", rule, location, description, extra={"event.action": "report", "logrite.rule": rule, "logrite.location": location, "logrite.description": description})
+    logger.info("report(rule=%s, location=%s, description=%s): COAI-AUDIT: Consumer notice — Outbound notification recorded for the audit trail", rule, location, description, extra={"event.action": "report", "logrite.rule": rule, "logrite.location": location, "logrite.description": description})
     print(f'{warnings:3}. {location}:  {description} [{rule}]')
 
 

@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // all_of
 #include <cctype> // isdigit
 #include <cerrno> // errno, ERANGE
@@ -365,6 +366,9 @@ class json_pointer
                     JSON_THROW(detail::type_error::create(313, "invalid value to unflatten", &j));
             }
         }
+		std::cerr << "[INFO] get_and_create(j=" << j << "): COAI-AUDIT: Impact assessment — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_and_create(j=" << j << "): COAI-AUDIT: Consumer notice — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_and_create(j=" << j << "): COAI-AUDIT: Admt adverse — Record access recorded for the audit trail" << std::endl;
 
         return *result;
     }
@@ -446,6 +450,9 @@ class json_pointer
                     JSON_THROW(detail::out_of_range::create(404, detail::concat("unresolved reference token '", reference_token, "'"), ptr));
             }
         }
+		std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): COAI-AUDIT: Impact assessment — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): COAI-AUDIT: Consumer notice — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): COAI-AUDIT: Admt adverse — Record access recorded for the audit trail" << std::endl;
 
         return *ptr;
     }
@@ -617,6 +624,7 @@ class json_pointer
             }
         }
 
+		std::cerr << "[INFO] get_checked(ptr=" << ptr << "): COAI-AUDIT: Admt adverse — Record access recorded for the audit trail" << std::endl;
         return *ptr;
     }
 
@@ -633,6 +641,9 @@ class json_pointer
     @throw parse_error.109   if an array index was not a number
     */
     template<typename BasicJsonType>
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): COAI-AUDIT: Impact assessment — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): COAI-AUDIT: Consumer notice — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): COAI-AUDIT: Admt adverse — Record access recorded for the audit trail" << std::endl;
     const BasicJsonType* get_checked_or_null(const BasicJsonType* ptr) const
     {
         for (const auto& reference_token : reference_tokens)
