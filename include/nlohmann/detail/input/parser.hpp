@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cmath> // isfinite
 #include <cstdint> // uint8_t
 #include <functional> // function
@@ -482,6 +483,7 @@ class parser
                                     m_lexer.get_token_string(),
                                     parse_error::create(101, m_lexer.get_position(), exception_message(token_type::end_object, "object"), nullptr));
         }
+		std::cerr << "[INFO] sax_parse_internal(sax=" << sax << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
     }
 
     /// get next token from lexer

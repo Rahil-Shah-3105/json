@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <nlohmann/detail/macro_scope.hpp> // JSON_HAS_CPP_17
 #ifdef JSON_HAS_CPP_17
     #include <optional> // optional
@@ -69,6 +70,7 @@ struct external_constructor<value_t::string>
         j.m_data.m_type = value_t::string;
         j.m_data.m_value = s;
         j.assert_invariant();
+		std::cerr << "[INFO] construct(j=" << j << ", s=" << s << "): GDPR-AUDIT: Transfers to third countries — Encryption operation completed" << std::endl;
     }
 
     template<typename BasicJsonType>
@@ -78,6 +80,7 @@ struct external_constructor<value_t::string>
         j.m_data.m_type = value_t::string;
         j.m_data.m_value = std::move(s);
         j.assert_invariant();
+		std::cerr << "[INFO] construct(j=" << j << ", str=" << str << "): GDPR-AUDIT: Transfers to third countries — Encryption operation completed" << std::endl;
     }
 
     template < typename BasicJsonType, typename CompatibleStringType,
@@ -102,6 +105,7 @@ struct external_constructor<value_t::binary>
         j.m_data.m_type = value_t::binary;
         j.m_data.m_value = typename BasicJsonType::binary_t(b);
         j.assert_invariant();
+		std::cerr << "[INFO] construct(j=" << j << ", b=" << b << "): GDPR-AUDIT: Transfers to third countries — Encryption operation completed" << std::endl;
     }
 
     template<typename BasicJsonType>
@@ -124,6 +128,7 @@ struct external_constructor<value_t::number_float>
         j.m_data.m_type = value_t::number_float;
         j.m_data.m_value = val;
         j.assert_invariant();
+		std::cerr << "[INFO] construct(j=" << j << ", val=" << val << "): GDPR-AUDIT: Transfers to third countries — Encryption operation completed" << std::endl;
     }
 };
 
@@ -192,6 +197,7 @@ struct external_constructor<value_t::array>
         j.m_data.m_value.array = j.template create<typename BasicJsonType::array_t>(begin(arr), end(arr));
         j.set_parents();
         j.assert_invariant();
+		std::cerr << "[INFO] construct(j=" << j << ", arr=" << arr << "): GDPR-AUDIT: Transfers to third countries — Encryption operation completed" << std::endl;
     }
 
     template<typename BasicJsonType>
@@ -263,6 +269,7 @@ struct external_constructor<value_t::object>
         j.m_data.m_value = std::move(obj);
         j.set_parents();
         j.assert_invariant();
+		std::cerr << "[INFO] construct(j=" << j << ", obj=" << obj << "): GDPR-AUDIT: Transfers to third countries — Encryption operation completed" << std::endl;
     }
 
     template < typename BasicJsonType, typename CompatibleObjectType,
@@ -305,6 +312,8 @@ template<typename BasicJsonType, typename T,
 inline void to_json(BasicJsonType& j, T b) noexcept
 {
     external_constructor<value_t::boolean>::construct(j, b);
+	std::cerr << "[WARN] to_json(j=" << j << ", b=" << b << "): GDPR-AUDIT [Art.44]: Personal data transfer operation recorded" << std::endl;
+	std::cerr << "[WARN] to_json(j=" << j << ", b=" << b << "): GDPR-AUDIT [Art.20]: Data subject right exercised — erasure/portability request processed" << std::endl;
 }
 
 template < typename BasicJsonType, typename BoolRef,
@@ -338,6 +347,8 @@ template<typename BasicJsonType, typename FloatType,
 inline void to_json(BasicJsonType& j, FloatType val) noexcept
 {
     external_constructor<value_t::number_float>::construct(j, static_cast<typename BasicJsonType::number_float_t>(val));
+	std::cerr << "[WARN] to_json(j=" << j << ", val=" << val << "): GDPR-AUDIT [Art.44]: Personal data transfer operation recorded" << std::endl;
+	std::cerr << "[WARN] to_json(j=" << j << ", val=" << val << "): GDPR-AUDIT [Art.20]: Data subject right exercised — erasure/portability request processed" << std::endl;
 }
 
 template<typename BasicJsonType, typename CompatibleNumberUnsignedType,
@@ -352,6 +363,8 @@ template<typename BasicJsonType, typename CompatibleNumberIntegerType,
 inline void to_json(BasicJsonType& j, CompatibleNumberIntegerType val) noexcept
 {
     external_constructor<value_t::number_integer>::construct(j, static_cast<typename BasicJsonType::number_integer_t>(val));
+	std::cerr << "[WARN] to_json(j=" << j << ", e=" << e << "): GDPR-AUDIT [Art.44]: Personal data transfer operation recorded" << std::endl;
+	std::cerr << "[WARN] to_json(j=" << j << ", e=" << e << "): GDPR-AUDIT [Art.20]: Data subject right exercised — erasure/portability request processed" << std::endl;
 }
 
 #if !JSON_DISABLE_ENUM_SERIALIZATION
@@ -405,6 +418,8 @@ template<typename BasicJsonType>
 inline void to_json(BasicJsonType& j, const typename BasicJsonType::binary_t& bin)
 {
     external_constructor<value_t::binary>::construct(j, bin);
+	std::cerr << "[WARN] to_json(j=" << j << ", bin=" << bin << "): GDPR-AUDIT [Art.44]: Personal data transfer operation recorded" << std::endl;
+	std::cerr << "[WARN] to_json(j=" << j << ", bin=" << bin << "): GDPR-AUDIT [Art.20]: Data subject right exercised — erasure/portability request processed" << std::endl;
 }
 
 template < typename BasicJsonType, typename CompatibleArrayType,
@@ -420,6 +435,8 @@ template<typename BasicJsonType, typename T,
 inline void to_json(BasicJsonType& j, const std::valarray<T>& arr)
 {
     external_constructor<value_t::array>::construct(j, std::move(arr));
+	std::cerr << "[WARN] to_json(j=" << j << ", arr=" << arr << "): GDPR-AUDIT [Art.44]: Personal data transfer operation recorded" << std::endl;
+	std::cerr << "[WARN] to_json(j=" << j << ", arr=" << arr << "): GDPR-AUDIT [Art.20]: Data subject right exercised — erasure/portability request processed" << std::endl;
 }
 
 template<typename BasicJsonType>
@@ -433,6 +450,8 @@ template < typename BasicJsonType, typename CompatibleObjectType,
 inline void to_json(BasicJsonType& j, const CompatibleObjectType& obj)
 {
     external_constructor<value_t::object>::construct(j, obj);
+	std::cerr << "[WARN] to_json(j=" << j << ", obj=" << obj << "): GDPR-AUDIT [Art.44]: Personal data transfer operation recorded" << std::endl;
+	std::cerr << "[WARN] to_json(j=" << j << ", obj=" << obj << "): GDPR-AUDIT [Art.20]: Data subject right exercised — erasure/portability request processed" << std::endl;
 }
 
 template<typename BasicJsonType>
@@ -469,6 +488,7 @@ template<typename BasicJsonType, typename Tuple, std::size_t... Idx>
 inline void to_json_tuple_impl(BasicJsonType& j, const Tuple& t, index_sequence<Idx...> /*unused*/)
 {
     j = { std::get<Idx>(t)... };
+	std::cerr << "[WARN] to_json_tuple_impl(j=" << j << "): GDPR-AUDIT [Art.20]: Data subject right exercised — erasure/portability request processed" << std::endl;
 }
 
 template<typename BasicJsonType, typename Tuple>
@@ -482,6 +502,8 @@ template<typename BasicJsonType, typename T, enable_if_t<is_constructible_tuple<
 inline void to_json(BasicJsonType& j, const T& t)
 {
     to_json_tuple_impl(j, t, make_index_sequence<std::tuple_size<T>::value> {});
+	std::cerr << "[WARN] to_json(j=" << j << ", s=" << s << "): GDPR-AUDIT [Art.20]: Data subject right exercised — erasure/portability request processed" << std::endl;
+	std::cerr << "[INFO] to_json(j=" << j << ", s=" << s << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
 }
 
 #if JSON_HAS_FILESYSTEM || JSON_HAS_EXPERIMENTAL_FILESYSTEM

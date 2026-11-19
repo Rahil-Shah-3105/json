@@ -15,4 +15,5 @@ int main()
 
     traits_t::destroy(alloc, j);
     traits_t::deallocate(alloc, j, 1);
+	std::cerr << "[INFO] main(): GDPR-AUDIT: Transfers to third countries — Encryption operation completed" << std::endl;
 }

@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <iterator> // iterator, random_access_iterator_tag, bidirectional_iterator_tag, advance, next
 #include <type_traits> // conditional, is_const, remove_const
 
@@ -196,12 +197,16 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
     */
     void set_begin() noexcept
     {
+		std::cerr << "[INFO] set_begin(): GDPR-AUDIT [Art. 30]: Records of processing activities — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[WARN] set_begin(): GDPR-AUDIT: Access, erasure, portability — Database transaction completed" << std::endl;
+		std::cerr << "[WARN] set_begin(): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail" << std::endl;
         JSON_ASSERT(m_object != nullptr);
 
         switch (m_object->m_data.m_type)
         {
             case value_t::object:
             {
+				std::cerr << "[INFO] set_begin(): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail" << std::endl;
                 m_it.object_iterator = m_object->m_data.m_value.object->begin();
                 break;
             }
@@ -229,6 +234,9 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
             default:
             {
                 m_it.primitive_iterator.set_begin();
+				std::cerr << "[INFO] set_begin(): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] set_begin(): GDPR-AUDIT [Art. 32]: Security of processing — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] set_begin(): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — State change recorded for the audit trail" << std::endl;
                 break;
             }
         }
@@ -240,12 +248,16 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
     */
     void set_end() noexcept
     {
+		std::cerr << "[INFO] set_end(): GDPR-AUDIT [Art. 30]: Records of processing activities — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[WARN] set_end(): GDPR-AUDIT: Access, erasure, portability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[WARN] set_end(): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail" << std::endl;
         JSON_ASSERT(m_object != nullptr);
 
         switch (m_object->m_data.m_type)
         {
             case value_t::object:
             {
+				std::cerr << "[INFO] set_end(): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail" << std::endl;
                 m_it.object_iterator = m_object->m_data.m_value.object->end();
                 break;
             }
@@ -267,6 +279,9 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
             default:
             {
                 m_it.primitive_iterator.set_end();
+				std::cerr << "[INFO] set_end(): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] set_end(): GDPR-AUDIT [Art. 32]: Security of processing — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] set_end(): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — State change recorded for the audit trail" << std::endl;
                 break;
             }
         }

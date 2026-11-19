@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstddef>
 #include <string> // string
 #include <type_traits> // enable_if_t
@@ -812,11 +813,16 @@ class json_sax_dom_callback_parser
     /// remove the discarded value the callback rejected from its parent
     static void remove_discarded_value(BasicJsonType& parent)
     {
+		std::cerr << "[WARN] remove_discarded_value(parent=" << parent << "): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail" << std::endl;
         for (auto it = parent.begin(); it != parent.end(); ++it)
         {
+			std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail" << std::endl;
             if (it->is_discarded())
             {
                 parent.erase(it);
+				std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): GDPR-AUDIT [Art. 30]: Records of processing activities — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[WARN] remove_discarded_value(parent=" << parent << "): GDPR-AUDIT: Access, erasure, portability — State change recorded for the audit trail" << std::endl;
                 break;
             }
         }

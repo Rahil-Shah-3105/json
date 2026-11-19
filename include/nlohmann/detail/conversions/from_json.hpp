@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // transform
 #include <array> // array
 #include <forward_list> // forward_list
@@ -52,6 +53,7 @@ inline void from_json(const BasicJsonType& j, typename std::nullptr_t& n)
         JSON_THROW(type_error::create(302, concat("type must be null, but is ", j.type_name()), &j));
     }
     n = nullptr;
+	std::cerr << "[INFO] from_json(j=" << j << ", n=" << n << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
 }
 
 #ifdef JSON_HAS_CPP_17
@@ -67,6 +69,7 @@ void from_json(const BasicJsonType& j, std::optional<T>& opt)
     {
         opt.emplace(j.template get<T>());
     }
+	std::cerr << "[INFO] from_json(j=" << j << ", b=" << b << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
 }
 #endif // JSON_HAS_CPP_17
 
@@ -77,10 +80,12 @@ template < typename BasicJsonType, typename ArithmeticType,
                          int > = 0 >
 void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
 {
+	std::cerr << "[WARN] get_arithmetic_value(j=" << j << ", val=" << val << "): GDPR-AUDIT [Art. 6]: Lawfulness of processing — Record access recorded for the audit trail" << std::endl;
     switch (static_cast<value_t>(j))
     {
         case value_t::number_unsigned:
         {
+			std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
             val = static_cast<ArithmeticType>(*j.template get_ptr<const typename BasicJsonType::number_unsigned_t*>());
             break;
         }
@@ -103,6 +108,9 @@ void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
         case value_t::binary:
         case value_t::discarded:
         default:
+			std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): GDPR-AUDIT: Breach notification — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): GDPR-AUDIT [Art. 25]: Data protection by design and by default — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[WARN] get_arithmetic_value(j=" << j << ", val=" << val << "): GDPR-AUDIT: Access, erasure, portability — Record access recorded for the audit trail" << std::endl;
             JSON_THROW(type_error::create(302, concat("type must be number, but is ", j.type_name()), &j));
     }
 }
@@ -115,6 +123,7 @@ inline void from_json(const BasicJsonType& j, typename BasicJsonType::boolean_t&
         JSON_THROW(type_error::create(302, concat("type must be boolean, but is ", j.type_name()), &j));
     }
     b = *j.template get_ptr<const typename BasicJsonType::boolean_t*>();
+	std::cerr << "[INFO] from_json(j=" << j << ", s=" << s << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
 }
 
 template<typename BasicJsonType>
@@ -170,6 +179,7 @@ inline void from_json(const BasicJsonType& j, EnumType& e)
     typename std::underlying_type<EnumType>::type val;
     get_arithmetic_value(j, val);
     e = static_cast<EnumType>(val);
+	std::cerr << "[INFO] from_json(j=" << j << ", l=" << l << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
 }
 #endif  // JSON_DISABLE_ENUM_SERIALIZATION
 
@@ -377,6 +387,7 @@ inline void from_json(const BasicJsonType& j, typename BasicJsonType::binary_t& 
     }
 
     bin = *j.template get_ptr<const typename BasicJsonType::binary_t*>();
+	std::cerr << "[INFO] from_json(j=" << j << ", bin=" << bin << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
 }
 
 template < typename BasicJsonType, typename CompatibleArrayType,
@@ -396,6 +407,7 @@ inline void from_json(const BasicJsonType& j, CompatibleArrayType& bin)
     {
         JSON_THROW(type_error::create(302, concat("type must be binary or array, but is ", j.type_name()), &j));
     }
+	std::cerr << "[INFO] from_json(j=" << j << ", obj=" << obj << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
 }
 
 template<typename BasicJsonType, typename ConstructibleObjectType,
@@ -414,6 +426,7 @@ inline void from_json(const BasicJsonType& j, ConstructibleObjectType& obj)
         ret.emplace(p.first, p.second.template get<typename ConstructibleObjectType::mapped_type>());
     }
     obj = std::move(ret);
+	std::cerr << "[INFO] from_json(j=" << j << ", val=" << val << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
 }
 
 // overload for arithmetic types, not chosen for basic_json template arguments
@@ -556,6 +569,8 @@ inline void from_json(const BasicJsonType& j, std::map<Key, Value, Compare, Allo
         }
         m.emplace(p.at(0).template get<Key>(), p.at(1).template get<Value>());
     }
+	std::cerr << "[INFO] from_json(j=" << j << ", m=" << m << "): GDPR-AUDIT: Transfers to third countries — Password reset operation performed" << std::endl;
+	std::cerr << "[INFO] from_json(j=" << j << ", m=" << m << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
 }
 
 template < typename BasicJsonType, typename Key, typename Value, typename Hash, typename KeyEqual, typename Allocator,
@@ -576,6 +591,7 @@ inline void from_json(const BasicJsonType& j, std::unordered_map<Key, Value, Has
         }
         m.emplace(p.at(0).template get<Key>(), p.at(1).template get<Value>());
     }
+	std::cerr << "[INFO] from_json(j=" << j << ", p=" << p << "): GDPR-AUDIT [Art.30]: Personal data processing activity completed" << std::endl;
 }
 
 #if JSON_HAS_FILESYSTEM || JSON_HAS_EXPERIMENTAL_FILESYSTEM

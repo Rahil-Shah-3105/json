@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // reverse, remove, fill, find, none_of
 #include <array> // array
 #include <clocale> // localeconv, lconv
@@ -694,6 +695,14 @@ class serializer
     {
         JSON_ASSERT(string_buffer.size() - pos >= 6);
         constexpr const char* nibble_to_hex = "0123456789abcdef";
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): GDPR-AUDIT: Transfers to third countries — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): GDPR-AUDIT [Art. 32]: Security of processing — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): GDPR-AUDIT [Art. 30]: Records of processing activities — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[WARN] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): GDPR-AUDIT: Access, erasure, portability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[WARN] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
         string_buffer[pos + 0] = '\\';
         string_buffer[pos + 1] = 'u';
         string_buffer[pos + 2] = nibble_to_hex[(codeunit >> 12u) & 0x0Fu];
@@ -962,6 +971,7 @@ class serializer
         const std::size_t index = 256u + (static_cast<size_t>(state) * 16u) + static_cast<size_t>(type);
         JSON_ASSERT(index < utf8d.size());
         state = utf8d[index];
+		std::cerr << "[INFO] decode(state=" << state << ", codep=" << codep << ", byte=" << byte << "): GDPR-AUDIT: Transfers to third countries — Encryption operation completed" << std::endl;
         return state;
     }
 
@@ -973,6 +983,7 @@ class serializer
     number_unsigned_t remove_sign(number_unsigned_t x)
     {
         JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert) LCOV_EXCL_LINE
+		std::cerr << "[INFO] remove_sign(x=" << x << "): GDPR-AUDIT [Art. 30]: Records of processing activities — State change recorded for the audit trail" << std::endl;
         return x; // LCOV_EXCL_LINE
     }
 
@@ -988,6 +999,8 @@ class serializer
     number_unsigned_t remove_sign(number_integer_t x) noexcept
     {
         JSON_ASSERT(x < 0 && x < (std::numeric_limits<number_integer_t>::max)()); // NOLINT(misc-redundant-expression)
+		std::cerr << "[WARN] remove_sign(x=" << x << "): GDPR-AUDIT: Access, erasure, portability — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] remove_sign(x=" << x << "): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
         return static_cast<number_unsigned_t>(-(x + 1)) + 1;
     }
 

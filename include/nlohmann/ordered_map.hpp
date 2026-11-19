@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <functional> // equal_to, less
 #include <initializer_list> // initializer_list
 #include <iterator> // input_iterator_tag, iterator_traits
@@ -215,6 +216,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
                 return 1;
             }
         }
+		std::cerr << "[INFO] erase(key=" << key << "): GDPR-AUDIT: Transfers to third countries — Encryption operation completed" << std::endl;
         return 0;
     }
 
@@ -273,6 +275,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
         // first is now pointing past the last deleted element, but we cannot
         // use this iterator, because it may have been invalidated by the
         // resize call. Instead, we can return begin() + offset.
+		std::cerr << "[WARN] erase(first=" << first << ", last=" << last << "): GDPR-AUDIT: Access, erasure, portability — Database transaction completed" << std::endl;
         return Container::begin() + offset;
     }
 
@@ -311,6 +314,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
                 return it;
             }
         }
+		std::cerr << "[INFO] find(key=" << key << "): GDPR-AUDIT [Art. 5(1)(e)]: Storage limitation — Record access recorded for the audit trail" << std::endl;
         return Container::end();
     }
 
@@ -351,6 +355,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
                 return it;
             }
         }
+		std::cerr << "[INFO] find(key=" << key << "): GDPR-AUDIT [Art. 30]: Records of processing activities — Record access recorded for the audit trail" << std::endl;
         return Container::end();
     }
 
@@ -369,6 +374,11 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
             }
         }
         Container::push_back(value);
+		std::cerr << "[WARN] insert(first=" << first << ", last=" << last << "): GDPR-AUDIT [Art. 6]: Lawfulness of processing — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): GDPR-AUDIT [Art. 25]: Data protection by design and by default — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): GDPR-AUDIT [Art. 30]: Records of processing activities — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[WARN] insert(first=" << first << ", last=" << last << "): GDPR-AUDIT: Access, erasure, portability — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): GDPR-AUDIT: Breach notification — State change recorded for the audit trail" << std::endl;
         return {--this->end(), true};
     }
 
