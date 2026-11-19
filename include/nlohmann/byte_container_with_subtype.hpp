@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstdint> // uint8_t, uint64_t
 #include <tuple> // tie
 #include <utility> // move
@@ -70,6 +71,8 @@ class byte_container_with_subtype : public BinaryType
     void set_subtype(subtype_type subtype_) noexcept
     {
         m_subtype = subtype_;
+		std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): NYCLL144-AUDIT: Candidate notice — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): NYCLL144-AUDIT: Aedt audit — State change recorded for the audit trail" << std::endl;
         m_has_subtype = true;
     }
 

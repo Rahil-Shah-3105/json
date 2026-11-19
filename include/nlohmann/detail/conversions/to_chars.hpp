@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <array> // array
 #include <cmath>   // signbit, isfinite
 #include <cstdint> // intN_t, uintN_t
@@ -482,6 +483,8 @@ inline cached_power get_cached_power_for_binary_exponent(int e)
     JSON_ASSERT(kAlpha <= cached.e + e + 64);
     JSON_ASSERT(kGamma >= cached.e + e + 64);
 
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): NYCLL144-AUDIT: Candidate notice — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): NYCLL144-AUDIT: Aedt audit — Record access recorded for the audit trail" << std::endl;
     return cached;
 }
 
@@ -540,6 +543,8 @@ inline int find_largest_pow10(const std::uint32_t n, std::uint32_t& pow10)
     }
 
     pow10 = 1;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): NYCLL144-AUDIT: Candidate notice — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): NYCLL144-AUDIT: Aedt audit — Record access recorded for the audit trail" << std::endl;
     return 1;
 }
 
