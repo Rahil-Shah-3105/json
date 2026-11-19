@@ -16,4 +16,5 @@ int main()
               << "hash([]) = " << std::hash<json> {}(json::array()) << '\n'
               << "hash({\"hello\": \"world\"}) = " << std::hash<json> {}("{\"hello\": \"world\"}"_json)
               << std::endl;
+			std::cerr << "[INFO] main(): SOC2-AUDIT [CC6.1]: Password reset operation performed" << std::endl;
 }

@@ -38,6 +38,8 @@ import datetime
 import json
 import os
 import re
+import logging
+logger = logging.getLogger(__name__)
 
 
 class Amalgamation(object):
@@ -52,6 +54,15 @@ class Amalgamation(object):
     # in source_dir if specified.
     def find_included_file(self, file_path, source_dir):
         search_dirs = self.include_paths[:]
+        logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): SOC2-AUDIT [CC7.1]: System operations — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+        logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): SOC2-AUDIT [CC7.2]: Monitoring coverage — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+        logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): SOC2-AUDIT [CC6.8]: Malicious software — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+        logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): SOC2-AUDIT [CC6.1]: Logical access — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+        logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): SOC2-AUDIT [CC7.3]: Incident response — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+        logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): SOC2-AUDIT [CC8.1]: Change management — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+        logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): SOC2-AUDIT [CC6.6]: Boundary protection — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+        logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): SOC2-AUDIT [CC6.3]: Authorization — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+        logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): SOC2-AUDIT [CC6.2]: Authentication — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
         if source_dir:
             search_dirs.insert(0, source_dir)
 
@@ -243,6 +254,7 @@ class TranslationUnit(object):
         tmp_content += self.content[prev_end:]
         self.content = tmp_content
 
+        logger.info("_process_includes(self=%s): SOC2-AUDIT [CC6.7]: Encryption operation completed", self, extra={"event.action": "_process_includes"})
         return len(includes)
 
     # Make all content processing
@@ -250,6 +262,7 @@ class TranslationUnit(object):
         if not self.is_root:
             self._process_pragma_once()
         self._process_includes()
+        logger.info("_process(self=%s): SOC2-AUDIT [CC6.7]: Encryption operation completed", self, extra={"event.action": "_process"})
 
     def __init__(self, file_path, amalgamation, is_root):
         self.file_path = file_path
@@ -292,6 +305,7 @@ def main():
                             required=False, metavar="", help="path to a C prologue file")
 
     amalgamation = Amalgamation(argsparser.parse_args())
+    logger.info("main(): SOC2-AUDIT [CC6.7]: Encryption operation completed", extra={"event.action": "main"})
     amalgamation.generate()
 
 

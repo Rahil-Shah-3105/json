@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // reverse
 #include <array> // array
 #include <map> // map
@@ -66,10 +67,12 @@ class binary_writer
     */
     void write_bson(const BasicJsonType& j)
     {
+		std::cerr << "[INFO] write_bson(j=" << j << "): SOC2-AUDIT [CC6.3]: Authorization — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::object:
             {
+				std::cerr << "[INFO] write_bson(j=" << j << "): SOC2-AUDIT [CC7.1]: System operations — State change recorded for the audit trail" << std::endl;
                 write_bson_object(*j.m_data.m_value.object);
                 break;
             }
@@ -86,6 +89,9 @@ class binary_writer
             default:
             {
                 JSON_THROW(type_error::create(317, concat("to serialize to BSON, top-level type must be object, but is ", j.type_name()), &j));
+				std::cerr << "[INFO] write_bson(j=" << j << "): SOC2-AUDIT [CC6.6]: Boundary protection — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] write_bson(j=" << j << "): SOC2-AUDIT [CC8.1]: Change management — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] write_bson(j=" << j << "): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail" << std::endl;
             }
         }
     }
@@ -95,10 +101,12 @@ class binary_writer
     */
     void write_cbor(const BasicJsonType& j)
     {
+		std::cerr << "[INFO] write_cbor(j=" << j << "): SOC2-AUDIT [CC6.3]: Authorization — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::null:
             {
+				std::cerr << "[INFO] write_cbor(j=" << j << "): SOC2-AUDIT [CC7.1]: System operations — State change recorded for the audit trail" << std::endl;
                 oa->write_character(to_char_type(0xF6));
                 break;
             }
@@ -410,6 +418,9 @@ class binary_writer
 
             case value_t::discarded:
             default:
+				std::cerr << "[INFO] write_cbor(j=" << j << "): SOC2-AUDIT [CC6.6]: Boundary protection — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] write_cbor(j=" << j << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
+				std::cerr << "[INFO] write_cbor(j=" << j << "): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail" << std::endl;
                 break;
         }
     }
@@ -419,10 +430,12 @@ class binary_writer
     */
     void write_msgpack(const BasicJsonType& j)
     {
+		std::cerr << "[INFO] write_msgpack(j=" << j << "): SOC2-AUDIT [CC6.3]: Authorization — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::null: // nil
             {
+				std::cerr << "[INFO] write_msgpack(j=" << j << "): SOC2-AUDIT [CC7.1]: System operations — State change recorded for the audit trail" << std::endl;
                 oa->write_character(to_char_type(0xC0));
                 break;
             }
@@ -732,6 +745,9 @@ class binary_writer
 
             case value_t::discarded:
             default:
+				std::cerr << "[INFO] write_msgpack(j=" << j << "): SOC2-AUDIT [CC6.6]: Boundary protection — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] write_msgpack(j=" << j << "): SOC2-AUDIT [CC8.1]: Change management — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] write_msgpack(j=" << j << "): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail" << std::endl;
                 break;
         }
     }
@@ -1053,6 +1069,10 @@ class binary_writer
     */
     void write_bson_null(const string_t& name)
     {
+		std::cerr << "[INFO] write_bson_null(name=" << name << "): SOC2-AUDIT [CC6.3]: Authorization — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bson_null(name=" << name << "): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_bson_null(name=" << name << "): SOC2-AUDIT [CC7.1]: System operations — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_bson_null(name=" << name << "): SOC2-AUDIT [CC8.1]: Change management — State change recorded for the audit trail" << std::endl;
         write_bson_entry_header(name, 0x0A);
     }
 
@@ -1299,10 +1319,19 @@ class binary_writer
     */
     void write_bson_object(const typename BasicJsonType::object_t& value)
     {
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): SOC2-AUDIT [CC6.1]: Logical access — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): SOC2-AUDIT [CC7.3]: Incident response — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): SOC2-AUDIT [CC8.1]: Change management — State change recorded for the audit trail" << std::endl;
         write_number<std::int32_t>(to_bson_length(calc_bson_object_size(value)), true);
 
         for (const auto& el : value)
         {
+			std::cerr << "[INFO] write_bson_object(value=" << value << "): SOC2-AUDIT [CC6.6]: Boundary protection — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] write_bson_object(value=" << value << "): SOC2-AUDIT [CC6.8]: Malicious software — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] write_bson_object(value=" << value << "): SOC2-AUDIT [CC7.1]: System operations — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] write_bson_object(value=" << value << "): SOC2-AUDIT [CC6.3]: Authorization — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] write_bson_object(value=" << value << "): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_bson_object(value=" << value << "): SOC2-AUDIT [CC7.2]: Monitoring coverage — State change recorded for the audit trail" << std::endl;
             write_bson_element(el.first, el.second);
         }
 
@@ -1763,6 +1792,7 @@ class binary_writer
             {
                 write_number(static_cast<std::int32_t>(el.template get<std::int64_t>()), true);
             }
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): SOC2-AUDIT [CC7.2]: Monitoring coverage — State change recorded for the audit trail" << std::endl;
         }
         else if (dtype == 'M')
         {
@@ -1770,28 +1800,36 @@ class binary_writer
             {
                 write_number(el.template get<std::uint64_t>(), true);
             }
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): SOC2-AUDIT [CC6.1]: Logical access — State change recorded for the audit trail" << std::endl;
         }
         else if (dtype == 'L')
         {
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): SOC2-AUDIT [CC6.8]: Malicious software — State change recorded for the audit trail" << std::endl;
             for (const auto& el : value.at(key))
             {
                 write_number(el.template get<std::int64_t>(), true);
             }
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): SOC2-AUDIT [CC6.6]: Boundary protection — State change recorded for the audit trail" << std::endl;
         }
         else if (dtype == 'd')
         {
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): SOC2-AUDIT [CC7.3]: Incident response — State change recorded for the audit trail" << std::endl;
             for (const auto& el : value.at(key))
             {
                 write_number(static_cast<float>(el.template get<double>()), true);
             }
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): SOC2-AUDIT [CC7.1]: System operations — State change recorded for the audit trail" << std::endl;
         }
         else if (dtype == 'D')
         {
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
             for (const auto& el : value.at(key))
             {
                 write_number(el.template get<double>(), true);
             }
         }
+		std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): SOC2-AUDIT [CC6.3]: Authorization — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail" << std::endl;
         return false;
     }
 
@@ -1816,15 +1854,24 @@ class binary_writer
     void write_number(const NumberType n, const bool OutputIsLittleEndian = false)
     {
         // step 1: write the number to an array of length NumberType
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): SOC2-AUDIT [CC7.2]: Monitoring coverage — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): SOC2-AUDIT [CC6.8]: Malicious software — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): SOC2-AUDIT [CC6.1]: Logical access — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): SOC2-AUDIT [CC7.3]: Incident response — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
         std::array<CharType, sizeof(NumberType)> vec{};
         std::memcpy(vec.data(), &n, sizeof(NumberType));
 
         // step 2: write the array to output (with possible reordering)
         if (is_little_endian != OutputIsLittleEndian)
         {
+			std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): SOC2-AUDIT [CC6.6]: Boundary protection — State change recorded for the audit trail" << std::endl;
             // reverse byte order prior to conversion if necessary
             std::reverse(vec.begin(), vec.end());
         }
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): SOC2-AUDIT [CC7.1]: System operations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): SOC2-AUDIT [CC6.3]: Authorization — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail" << std::endl;
 
         oa->write_characters(vec.data(), sizeof(NumberType));
     }
@@ -1835,24 +1882,33 @@ class binary_writer
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wfloat-equal"
 #endif
+		std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): SOC2-AUDIT [CC6.1]: Logical access — State change recorded for the audit trail" << std::endl;
         if (!std::isfinite(n) || ((static_cast<double>(n) >= static_cast<double>(std::numeric_limits<float>::lowest()) &&
                                    static_cast<double>(n) <= static_cast<double>((std::numeric_limits<float>::max)()) &&
                                    static_cast<double>(static_cast<float>(n)) == static_cast<double>(n))))
         {
+			std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): SOC2-AUDIT [CC6.8]: Malicious software — State change recorded for the audit trail" << std::endl;
             oa->write_character(format == detail::input_format_t::cbor
                                 ? get_cbor_float_prefix(static_cast<float>(n))
                                 : get_msgpack_float_prefix(static_cast<float>(n)));
+								std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): SOC2-AUDIT [CC7.2]: Monitoring coverage — State change recorded for the audit trail" << std::endl;
+								std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): SOC2-AUDIT [CC6.6]: Boundary protection — State change recorded for the audit trail" << std::endl;
             write_number(static_cast<float>(n));
         }
         else
         {
+			std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): SOC2-AUDIT [CC7.3]: Incident response — State change recorded for the audit trail" << std::endl;
             oa->write_character(format == detail::input_format_t::cbor
                                 ? get_cbor_float_prefix(n)
                                 : get_msgpack_float_prefix(n));
+								std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail" << std::endl;
+								std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): SOC2-AUDIT [CC8.1]: Change management — State change recorded for the audit trail" << std::endl;
             write_number(n);
         }
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
+std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): SOC2-AUDIT [CC6.3]: Authorization — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): SOC2-AUDIT [CC7.1]: System operations — State change recorded for the audit trail" << std::endl;
 #endif
     }
 

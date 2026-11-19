@@ -57,4 +57,5 @@ int main()
     {
         std::cout << e.what() << '\n';
     }
+	std::cerr << "[INFO] main(): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
 }

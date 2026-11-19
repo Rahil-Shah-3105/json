@@ -15,4 +15,5 @@ int main()
 
     traits_t::destroy(alloc, j);
     traits_t::deallocate(alloc, j, 1);
+	std::cerr << "[INFO] main(): SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
 }

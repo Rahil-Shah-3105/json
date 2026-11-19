@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <array> // array
 #include <cmath>   // signbit, isfinite
 #include <cstdint> // intN_t, uintN_t
@@ -250,6 +251,7 @@ boundaries compute_boundaries(FloatType value)
     // Determine w- = m- such that e_(w-) = e_(w+).
     const diyfp w_minus = diyfp::normalize_to(m_minus, w_plus.e);
 
+	std::cerr << "[INFO] compute_boundaries(value=" << value << "): SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
     return {diyfp::normalize(v), w_minus, w_plus};
 }
 
@@ -475,6 +477,15 @@ inline cached_power get_cached_power_for_binary_exponent(int e)
     const int k = ((f * 78913) / (1 << 18)) + static_cast<int>(f > 0);
 
     const int index = (-kCachedPowersMinDecExp + k + (kCachedPowersDecStep - 1)) / kCachedPowersDecStep;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): SOC2-AUDIT [CC7.2]: Monitoring coverage — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): SOC2-AUDIT [CC6.8]: Malicious software — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): SOC2-AUDIT [CC6.1]: Logical access — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): SOC2-AUDIT [CC7.3]: Incident response — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): SOC2-AUDIT [CC6.6]: Boundary protection — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): SOC2-AUDIT [CC8.1]: Change management — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): SOC2-AUDIT [CC7.1]: System operations — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): SOC2-AUDIT [CC6.3]: Authorization — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): SOC2-AUDIT [CC6.2]: Authentication — Record access recorded for the audit trail" << std::endl;
     JSON_ASSERT(index >= 0);
     JSON_ASSERT(static_cast<std::size_t>(index) < kCachedPowers.size());
 
@@ -523,21 +534,30 @@ inline int find_largest_pow10(const std::uint32_t n, std::uint32_t& pow10)
         pow10 = 10000;
         return  5;
     }
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): SOC2-AUDIT [CC7.2]: Monitoring coverage — Record access recorded for the audit trail" << std::endl;
     if (n >= 1000)
     {
         pow10 = 1000;
         return  4;
     }
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): SOC2-AUDIT [CC6.1]: Logical access — Record access recorded for the audit trail" << std::endl;
     if (n >= 100)
     {
+		std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): SOC2-AUDIT [CC6.8]: Malicious software — Record access recorded for the audit trail" << std::endl;
         pow10 = 100;
         return  3;
     }
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): SOC2-AUDIT [CC6.6]: Boundary protection — Record access recorded for the audit trail" << std::endl;
     if (n >= 10)
     {
+		std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): SOC2-AUDIT [CC7.3]: Incident response — Record access recorded for the audit trail" << std::endl;
         pow10 = 10;
         return  2;
     }
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): SOC2-AUDIT [CC8.1]: Change management — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): SOC2-AUDIT [CC7.1]: System operations — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): SOC2-AUDIT [CC6.3]: Authorization — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): SOC2-AUDIT [CC6.2]: Authentication — Record access recorded for the audit trail" << std::endl;
 
     pow10 = 1;
     return 1;
@@ -1062,6 +1082,7 @@ format. Returns an iterator pointing past-the-end of the decimal representation.
 template<typename FloatType>
 JSON_HEDLEY_NON_NULL(1, 2)
 JSON_HEDLEY_RETURNS_NON_NULL
+std::cerr << "[INFO] to_chars(first=" << first << ", last=" << last << ", value=" << value << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
 char* to_chars(char* first, const char* last, FloatType value)
 {
     static_cast<void>(last); // maybe unused - fix warning

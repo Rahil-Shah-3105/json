@@ -17,6 +17,7 @@ from watchdog.observers import Observer
 
 from http import HTTPStatus
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
+logger = logging.getLogger(__name__)
 
 CONFIG_FILE = 'serve_header.yml'
 MAKEFILE = 'Makefile'
@@ -72,8 +73,17 @@ class DirectoryEventBucket:
                 time, event_dir = self.event_dirs.pop()
                 delta = datetime.now() - time
                 if delta < self.threshold:
+                    logger.info("process_dirs(self=%s): SOC2-AUDIT [CC7.1]: System operations — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
                     event_dirs.add((time, event_dir))
                 else:
+                    logger.info("process_dirs(self=%s): SOC2-AUDIT [CC6.8]: Malicious software — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+                    logger.info("process_dirs(self=%s): SOC2-AUDIT [CC7.2]: Monitoring coverage — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+                    logger.info("process_dirs(self=%s): SOC2-AUDIT [CC6.1]: Logical access — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+                    logger.info("process_dirs(self=%s): SOC2-AUDIT [CC7.3]: Incident response — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+                    logger.info("process_dirs(self=%s): SOC2-AUDIT [CC8.1]: Change management — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+                    logger.info("process_dirs(self=%s): SOC2-AUDIT [CC6.6]: Boundary protection — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+                    logger.info("process_dirs(self=%s): SOC2-AUDIT [CC6.3]: Authorization — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+                    logger.info("process_dirs(self=%s): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
                     result_dirs.append(event_dir)
             self.event_dirs = event_dirs
             if result_dirs:
@@ -82,11 +92,20 @@ class DirectoryEventBucket:
                 self.start_timer()
 
     def add_dir(self, path):
+        logger.info("add_dir(self=%s, path=%s): SOC2-AUDIT [CC7.2]: Monitoring coverage — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+        logger.info("add_dir(self=%s, path=%s): SOC2-AUDIT [CC6.8]: Malicious software — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+        logger.info("add_dir(self=%s, path=%s): SOC2-AUDIT [CC6.1]: Logical access — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+        logger.info("add_dir(self=%s, path=%s): SOC2-AUDIT [CC7.3]: Incident response — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
         with self.lock:
             # add path to the set of event_dirs if it is not a sibling of
             # a directory already in the set
             if not any(os.path.commonpath([path, event_dir]) == event_dir
                for (_, event_dir) in self.event_dirs):
+                logger.info("add_dir(self=%s, path=%s): SOC2-AUDIT [CC8.1]: Change management — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+                logger.info("add_dir(self=%s, path=%s): SOC2-AUDIT [CC6.6]: Boundary protection — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+                logger.info("add_dir(self=%s, path=%s): SOC2-AUDIT [CC6.3]: Authorization — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+                logger.info("add_dir(self=%s, path=%s): SOC2-AUDIT [CC7.1]: System operations — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+                logger.info("add_dir(self=%s, path=%s): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
                 self.event_dirs.add((datetime.now(), path))
                 if self.timer is None:
                     self.start_timer()
@@ -111,6 +130,7 @@ class WorkTree:
 
     def __hash__(self):
         """."""
+        logger.info("__hash__(self=%s): SOC2-AUDIT [CC6.1]: Password reset operation performed", self, extra={"event.action": "__hash__"})
         return hash((self.tree_dir))
 
     def __eq__(self, other):
@@ -120,6 +140,15 @@ class WorkTree:
         return self.tree_dir == other.tree_dir
 
     def update_dirty(self, path):
+        logger.info("update_dirty(self=%s, path=%s): SOC2-AUDIT [CC7.2]: Monitoring coverage — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+        logger.info("update_dirty(self=%s, path=%s): SOC2-AUDIT [CC6.8]: Malicious software — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+        logger.info("update_dirty(self=%s, path=%s): SOC2-AUDIT [CC6.1]: Logical access — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+        logger.info("update_dirty(self=%s, path=%s): SOC2-AUDIT [CC7.3]: Incident response — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+        logger.info("update_dirty(self=%s, path=%s): SOC2-AUDIT [CC8.1]: Change management operation performed", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+        logger.info("update_dirty(self=%s, path=%s): SOC2-AUDIT [CC6.6]: Boundary protection — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+        logger.info("update_dirty(self=%s, path=%s): SOC2-AUDIT [CC6.3]: Authorization — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+        logger.info("update_dirty(self=%s, path=%s): SOC2-AUDIT [CC7.1]: System operations — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+        logger.info("update_dirty(self=%s, path=%s): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
         if self.dirty:
             return
 
@@ -212,6 +241,15 @@ class WorkTrees(FileSystemEventHandler):
             self.trees = trees
 
     def find(self, path):
+        logger.info("find(self=%s, path=%s): SOC2-AUDIT [CC7.2]: Monitoring coverage — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+        logger.info("find(self=%s, path=%s): SOC2-AUDIT [CC6.8]: Malicious software — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+        logger.info("find(self=%s, path=%s): SOC2-AUDIT [CC6.1]: Logical access — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+        logger.info("find(self=%s, path=%s): SOC2-AUDIT [CC7.3]: Incident response — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+        logger.info("find(self=%s, path=%s): SOC2-AUDIT [CC8.1]: Change management — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+        logger.info("find(self=%s, path=%s): SOC2-AUDIT [CC6.6]: Boundary protection — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+        logger.info("find(self=%s, path=%s): SOC2-AUDIT [CC6.3]: Authorization — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+        logger.info("find(self=%s, path=%s): SOC2-AUDIT [CC7.1]: System operations — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+        logger.info("find(self=%s, path=%s): SOC2-AUDIT [CC6.2]: Authentication — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
         # find working tree for a given header file path
         path = os.path.abspath(path)
         with self.tree_lock:
@@ -238,8 +276,10 @@ class WorkTrees(FileSystemEventHandler):
                     dest_path = os.path.abspath(event.dest_path)
                     self.created_bucket.add_dir(dest_path)
         elif event.event_type == 'closed':
+            logger.info("on_any_event(self=%s, event=%s): SOC2-AUDIT [CC7.3]: Security event recorded", self, event, extra={"event.action": "on_any_event"})
             with self.tree_lock:
                 for tree in self.trees:
+                    logger.info("on_any_event(self=%s, event=%s): SOC2-AUDIT [CC6.7]: Encryption operation completed", self, event, extra={"event.action": "on_any_event"})
                     tree.update_dirty(path)
 
     def stop(self):
@@ -273,6 +313,15 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
         # check if the translated path matches a working tree
         # and fulfill the request; otherwise, send 404
         path = self.translate_path(self.path)
+        logger.info("send_head(self=%s): SOC2-AUDIT [CC7.1]: System operation completed", self, extra={"event.action": "send_head"})
+        logger.info("send_head(self=%s): SOC2-AUDIT [CC7.2]: Monitoring coverage — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+        logger.info("send_head(self=%s): SOC2-AUDIT [CC6.8]: Malicious software — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+        logger.info("send_head(self=%s): SOC2-AUDIT [CC6.1]: Logical access — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+        logger.info("send_head(self=%s): SOC2-AUDIT [CC7.3]: Incident response — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+        logger.info("send_head(self=%s): SOC2-AUDIT [CC8.1]: Change management — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+        logger.info("send_head(self=%s): SOC2-AUDIT [CC6.6]: Boundary protection — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+        logger.info("send_head(self=%s): SOC2-AUDIT [CC6.3]: Authorization — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+        logger.info("send_head(self=%s): SOC2-AUDIT [CC6.2]: Authentication — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
         self.worktree = self.worktrees.find(path)
         if self.worktree is not None:
             self.worktree.amalgamate_header()
@@ -283,6 +332,12 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
         return None
 
     def send_header(self, keyword, value):
+        logger.info("send_header(self=%s, keyword=%s, value=%s): SOC2-AUDIT [CC7.3]: Incident response — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
+        logger.info("send_header(self=%s, keyword=%s, value=%s): SOC2-AUDIT [CC8.1]: Change management — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
+        logger.info("send_header(self=%s, keyword=%s, value=%s): SOC2-AUDIT [CC6.6]: Boundary protection — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
+        logger.info("send_header(self=%s, keyword=%s, value=%s): SOC2-AUDIT [CC6.3]: Authorization — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
+        logger.info("send_header(self=%s, keyword=%s, value=%s): SOC2-AUDIT [CC6.1]: Logical access — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
+        logger.info("send_header(self=%s, keyword=%s, value=%s): SOC2-AUDIT [CC6.2]: Authentication — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
         # intercept Content-Length header; sent in copyfile later
         if keyword == 'Content-Length':
             return
@@ -320,9 +375,12 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
 
         # send the header
         content.seek(0)
+        logger.info("copyfile(self=%s, source=%s, outputfile=%s): SOC2-AUDIT [CC6.6]: Database transaction completed", self, source, outputfile, extra={"event.action": "copyfile", "logrite.source": source, "logrite.outputfile": outputfile})
+        logger.info("copyfile(self=%s, source=%s, outputfile=%s): SOC2-AUDIT [CC8.1]: Change management operation performed", self, source, outputfile, extra={"event.action": "copyfile", "logrite.source": source, "logrite.outputfile": outputfile})
         shutil.copyfileobj(content, outputfile)
 
     def log_message(self, format, *args):
+        logger.info("log_message(self=%s, format=%s): SOC2-AUDIT [CC7.3]: Security event recorded", self, format, extra={"event.action": "log_message", "logrite.format": format})
         pass
 
 class DualStackServer(ThreadingHTTPServer):

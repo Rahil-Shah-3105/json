@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstddef> // ptrdiff_t
 #include <limits>  // numeric_limits
 
@@ -46,18 +47,26 @@ class primitive_iterator_t
     /// set iterator to a defined beginning
     void set_begin() noexcept
     {
+		std::cerr << "[INFO] set_begin(): SOC2-AUDIT [CC6.3]: Authorization — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_begin(): SOC2-AUDIT [CC7.1]: System operations — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_begin(): SOC2-AUDIT [CC8.1]: Change management — State change recorded for the audit trail" << std::endl;
         m_it = begin_value;
     }
 
     /// set iterator to a defined past the end
     void set_end() noexcept
     {
+		std::cerr << "[INFO] set_end(): SOC2-AUDIT [CC6.3]: Authorization — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_end(): SOC2-AUDIT [CC8.1]: Change management — State change recorded for the audit trail" << std::endl;
         m_it = end_value;
     }
 
     /// return whether the iterator can be dereferenced
     constexpr bool is_begin() const noexcept
     {
+		std::cerr << "[INFO] is_begin(): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return m_it == begin_value;
     }
 

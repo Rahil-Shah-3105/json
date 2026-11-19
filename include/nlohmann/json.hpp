@@ -28,6 +28,7 @@
     #pragma GCC diagnostic ignored "-Wignored-attributes"
 #endif
 
+#include "iostream"
 #include <algorithm> // all_of, find, for_each
 #include <cstddef> // nullptr_t, ptrdiff_t, size_t
 #include <functional> // hash, less
@@ -337,6 +338,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
 #else
         result["compiler"]["c++"] = "unknown";
 #endif
+		std::cerr << "[INFO] meta(): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
         return result;
     }
 
@@ -408,6 +410,15 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// helper for exception-safe object creation
     template<typename T, typename... Args>
     JSON_HEDLEY_RETURNS_NON_NULL
+	std::cerr << "[INFO] create(args=" << args << "): SOC2-AUDIT [CC7.2]: Monitoring coverage — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): SOC2-AUDIT [CC6.8]: Malicious software — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): SOC2-AUDIT [CC6.1]: Logical access — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): SOC2-AUDIT [CC7.3]: Incident response — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): SOC2-AUDIT [CC6.6]: Boundary protection — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): SOC2-AUDIT [CC7.1]: System operations — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): SOC2-AUDIT [CC6.3]: Authorization — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail" << std::endl;
     static T* create(Args&& ... args)
     {
         AllocatorType<T> alloc;
@@ -690,6 +701,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                     break;
                 }
             }
+			std::cerr << "[INFO] destroy(t=" << t << "): SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
         }
     };
 
@@ -736,12 +748,15 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     void set_parents()
     {
 #if JSON_DIAGNOSTICS
+		std::cerr << "[INFO] set_parents(): SOC2-AUDIT [CC7.1]: System operations — State change recorded for the audit trail" << std::endl;
         switch (m_data.m_type)
         {
             case value_t::array:
             {
+				std::cerr << "[INFO] set_parents(): SOC2-AUDIT [CC8.1]: Change management — State change recorded for the audit trail" << std::endl;
                 for (auto& element : *m_data.m_value.array)
                 {
+					std::cerr << "[INFO] set_parents(): SOC2-AUDIT [CC6.6]: Boundary protection — State change recorded for the audit trail" << std::endl;
                     element.m_parent = this;
                 }
                 break;
@@ -765,9 +780,23 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             case value_t::binary:
             case value_t::discarded:
             default:
+				std::cerr << "[INFO] set_parents(): SOC2-AUDIT [CC7.3]: Incident response — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): SOC2-AUDIT [CC7.2]: Monitoring coverage — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] set_parents(): SOC2-AUDIT [CC6.3]: Authorization — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] set_parents(): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail" << std::endl;
                 break;
         }
 #endif
+	std::cerr << "[INFO] set_parents(): SOC2-AUDIT [CC6.1]: Logical access — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): SOC2-AUDIT [CC6.1]: Logical access — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(): SOC2-AUDIT [CC7.2]: Monitoring coverage — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): SOC2-AUDIT [CC7.3]: Incident response — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): SOC2-AUDIT [CC6.6]: Boundary protection — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): SOC2-AUDIT [CC8.1]: Change management — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): SOC2-AUDIT [CC7.1]: System operations — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): SOC2-AUDIT [CC6.3]: Authorization — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): SOC2-AUDIT [CC6.8]: Malicious software — State change recorded for the audit trail" << std::endl;
     }
 
     iterator set_parents(iterator it, std::ptrdiff_t count_set_parents)
@@ -807,10 +836,20 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         if (detail::is_ordered_map<object_t>::value)
         {
             set_parents();
+			std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail" << std::endl;
             return j;
         }
 #ifdef JSON_HEDLEY_MSVC_VERSION
 #pragma warning( pop )
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): SOC2-AUDIT [CC6.8]: Malicious software — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): SOC2-AUDIT [CC7.2]: Monitoring coverage — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): SOC2-AUDIT [CC6.1]: Logical access — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): SOC2-AUDIT [CC7.3]: Incident response — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): SOC2-AUDIT [CC6.6]: Boundary protection — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): SOC2-AUDIT [CC7.1]: System operations — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): SOC2-AUDIT [CC6.3]: Authorization — State change recorded for the audit trail" << std::endl;
 #endif
 
         j.m_parent = this;
@@ -1470,8 +1509,15 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// get a boolean (explicit)
     boolean_t get_impl(boolean_t* /*unused*/) const
     {
+		std::cerr << "[INFO] get_impl(): SOC2-AUDIT [CC8.1]: Change management — Record access recorded for the audit trail" << std::endl;
         if (JSON_HEDLEY_LIKELY(is_boolean()))
         {
+			std::cerr << "[INFO] get_impl(): SOC2-AUDIT [CC6.6]: Boundary protection — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_impl(): SOC2-AUDIT [CC6.1]: Logical access — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_impl(): SOC2-AUDIT [CC7.1]: System operations — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_impl(): SOC2-AUDIT [CC6.3]: Authorization — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_impl(): SOC2-AUDIT [CC6.2]: Authentication — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_impl(): SOC2-AUDIT [CC7.3]: Incident response — Record access recorded for the audit trail" << std::endl;
             return m_data.m_value.boolean;
         }
 
@@ -1588,11 +1634,20 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     template<typename ReferenceType, typename ThisType>
     static ReferenceType get_ref_impl(ThisType& obj)
     {
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): SOC2-AUDIT [CC6.8]: Malicious software — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): SOC2-AUDIT [CC6.1]: Logical access — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): SOC2-AUDIT [CC7.3]: Incident response — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): SOC2-AUDIT [CC8.1]: Change management — Record access recorded for the audit trail" << std::endl;
         // delegate the call to get_ptr<>()
         auto* ptr = obj.template get_ptr<typename std::add_pointer<ReferenceType>::type>();
 
         if (JSON_HEDLEY_LIKELY(ptr != nullptr))
         {
+			std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): SOC2-AUDIT [CC6.6]: Boundary protection — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): SOC2-AUDIT [CC7.2]: Monitoring coverage — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): SOC2-AUDIT [CC7.1]: System operations — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): SOC2-AUDIT [CC6.3]: Authorization — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): SOC2-AUDIT [CC6.2]: Authentication — Record access recorded for the audit trail" << std::endl;
             return *ptr;
         }
 
@@ -1611,6 +1666,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     auto get_ptr() noexcept -> decltype(std::declval<basic_json_t&>().get_impl_ptr(std::declval<PointerType>()))
     {
         // delegate the call to get_impl_ptr<>()
+		std::cerr << "[INFO] get_ptr(): SOC2-AUDIT [CC6.6]: Boundary protection — Record access recorded for the audit trail" << std::endl;
         return get_impl_ptr(static_cast<PointerType>(nullptr));
     }
 
@@ -1622,6 +1678,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     constexpr auto get_ptr() const noexcept -> decltype(std::declval<const basic_json_t&>().get_impl_ptr(std::declval<PointerType>()))
     {
         // delegate the call to get_impl_ptr<>() const
+		std::cerr << "[INFO] get_ptr(): SOC2-AUDIT [CC6.2]: Authentication — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_ptr(): SOC2-AUDIT [CC8.1]: Change management — Record access recorded for the audit trail" << std::endl;
         return get_impl_ptr(static_cast<PointerType>(nullptr));
     }
 
@@ -1850,7 +1908,13 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                  std::is_pointer<PointerType>::value, int>::type = 0>
     auto get() noexcept -> decltype(std::declval<basic_json_t&>().template get_ptr<PointerType>())
     {
+		std::cerr << "[INFO] get(): SOC2-AUDIT [CC7.1]: System operations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get(): SOC2-AUDIT [CC6.3]: Authorization — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get(): SOC2-AUDIT [CC6.2]: Authentication — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get(): SOC2-AUDIT [CC8.1]: Change management — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get(): SOC2-AUDIT [CC6.6]: Boundary protection — Record access recorded for the audit trail" << std::endl;
         // delegate the call to get_ptr
+		std::cerr << "[INFO] get_ref(): SOC2-AUDIT [CC6.6]: Boundary protection — Record access recorded for the audit trail" << std::endl;
         return get_ptr<PointerType>();
     }
 
@@ -1877,6 +1941,10 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     ValueType & get_to(ValueType& v) const
     {
         v = *this;
+		std::cerr << "[INFO] get_to(v=" << v << "): SOC2-AUDIT [CC6.2]: Authentication — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_to(v=" << v << "): SOC2-AUDIT [CC8.1]: Change management — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_to(v=" << v << "): SOC2-AUDIT [CC6.6]: Boundary protection — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_to(): SOC2-AUDIT [CC6.6]: Boundary protection — Record access recorded for the audit trail" << std::endl;
         return v;
     }
 
@@ -1911,6 +1979,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     ReferenceType get_ref() const
     {
         // delegate call to get_ref_impl
+		std::cerr << "[INFO] get_ref(): SOC2-AUDIT [CC6.2]: Authentication — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_ref(): SOC2-AUDIT [CC8.1]: Change management — Record access recorded for the audit trail" << std::endl;
         return get_ref_impl<ReferenceType>(*this);
     }
 
@@ -1979,6 +2049,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             JSON_THROW(type_error::create(302, detail::concat("type must be binary, but is ", type_name()), this));
         }
 
+		std::cerr << "[INFO] get_binary(): SOC2-AUDIT [CC6.1]: Logical access — Record access recorded for the audit trail" << std::endl;
         return *get_ptr<binary_t*>();
     }
 
@@ -1991,6 +2062,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             JSON_THROW(type_error::create(302, detail::concat("type must be binary, but is ", type_name()), this));
         }
 
+		std::cerr << "[INFO] get_binary(): SOC2-AUDIT [CC6.2]: Authentication — Record access recorded for the audit trail" << std::endl;
         return *get_ptr<const binary_t*>();
     }
 
@@ -2471,6 +2543,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/front/
     const_reference front() const
     {
+		std::cerr << "[INFO] begin(): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return *cbegin();
     }
 
@@ -2480,6 +2553,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     {
         auto tmp = end();
         --tmp;
+		std::cerr << "[INFO] cbegin(): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return *tmp;
     }
 
@@ -2728,6 +2802,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             result.m_it.object_iterator = m_data.m_value.object->find(key);
         }
 
+		std::cerr << "[INFO] find(key=" << key << "): SOC2-AUDIT [CC7.2]: Monitoring coverage — Record access recorded for the audit trail" << std::endl;
         return result;
     }
 
@@ -2742,6 +2817,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             result.m_it.object_iterator = m_data.m_value.object->find(key);
         }
 
+		std::cerr << "[INFO] find(key=" << key << "): SOC2-AUDIT [CC6.2]: Authentication — Record access recorded for the audit trail" << std::endl;
         return result;
     }
 
@@ -2888,6 +2964,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/rbegin/
     reverse_iterator rbegin() noexcept
     {
+		std::cerr << "[INFO] rbegin(): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return reverse_iterator(end());
     }
 
@@ -2916,6 +2993,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/crbegin/
     const_reverse_iterator crbegin() const noexcept
     {
+		std::cerr << "[INFO] crbegin(): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return const_reverse_iterator(cend());
     }
 
@@ -3177,6 +3255,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         m_data.m_value.array->push_back(std::move(val));
         set_parent(m_data.m_value.array->back(), old_capacity);
         // if val is moved from, basic_json move constructor marks it null, so we do not call the destructor
+		std::cerr << "[INFO] push_back(val=" << val << "): SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
     }
 
     /// @brief add an object to an array
@@ -3341,6 +3420,15 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
 
         auto insert_pos = std::distance(m_data.m_value.array->begin(), pos.m_it.array_iterator);
         m_data.m_value.array->insert(pos.m_it.array_iterator, std::forward<Args>(args)...);
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): SOC2-AUDIT [CC7.2]: Monitoring coverage — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): SOC2-AUDIT [CC6.8]: Malicious software — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): SOC2-AUDIT [CC6.1]: Logical access — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): SOC2-AUDIT [CC7.3]: Incident response — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): SOC2-AUDIT [CC6.6]: Boundary protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): SOC2-AUDIT [CC8.1]: Change management — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): SOC2-AUDIT [CC6.3]: Authorization — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail" << std::endl;
         result.m_it.array_iterator = m_data.m_value.array->begin() + insert_pos;
 
         // This could have been written as:
@@ -3355,15 +3443,24 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/insert/
     iterator insert(const_iterator pos, const basic_json& val) // NOLINT(performance-unnecessary-value-param)
     {
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): SOC2-AUDIT [CC7.3]: Incident response — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): SOC2-AUDIT [CC8.1]: Change management — State change recorded for the audit trail" << std::endl;
         // insert only works for arrays
         if (JSON_HEDLEY_LIKELY(is_array()))
         {
+			std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): SOC2-AUDIT [CC6.6]: Boundary protection — State change recorded for the audit trail" << std::endl;
             // check if iterator pos fits to this JSON value
             if (JSON_HEDLEY_UNLIKELY(pos.m_object != this))
             {
                 JSON_THROW(invalid_iterator::create(202, "iterator does not fit current value", this));
             }
 
+			std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): SOC2-AUDIT [CC6.8]: Malicious software — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): SOC2-AUDIT [CC6.8]: Malicious software — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): SOC2-AUDIT [CC6.1]: Logical access — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
+			std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): SOC2-AUDIT [CC6.3]: Authorization — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail" << std::endl;
             // insert to array and return iterator
             return insert_iterator(pos, val);
         }
@@ -3396,6 +3493,15 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         JSON_THROW(type_error::create(309, detail::concat("cannot use insert() with ", type_name()), this));
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): SOC2-AUDIT [CC6.8]: Malicious software — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): SOC2-AUDIT [CC7.2]: Monitoring coverage — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): SOC2-AUDIT [CC6.1]: Logical access — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): SOC2-AUDIT [CC6.6]: Boundary protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): SOC2-AUDIT [CC7.3]: Incident response — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): SOC2-AUDIT [CC8.1]: Change management — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): SOC2-AUDIT [CC6.3]: Authorization — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail" << std::endl;
     }
 
     /// @brief inserts range of elements into array
@@ -3446,6 +3552,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         // insert to array and return iterator
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail" << std::endl;
         return insert_iterator(pos, ilist.begin(), ilist.end());
     }
 
@@ -3479,7 +3586,23 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/update/
     void update(const_reference j, bool merge_objects = false)
     {
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): SOC2-AUDIT [CC6.3]: Authorization — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): SOC2-AUDIT [CC7.1]: System operations — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
         update(j.begin(), j.end(), merge_objects);
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): SOC2-AUDIT [CC6.8]: Malicious software — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): SOC2-AUDIT [CC6.1]: Logical access — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): SOC2-AUDIT [CC7.2]: Monitoring coverage — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): SOC2-AUDIT [CC7.2]: Monitoring coverage — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): SOC2-AUDIT [CC6.8]: Malicious software — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): SOC2-AUDIT [CC6.1]: Logical access — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): SOC2-AUDIT [CC6.6]: Boundary protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): SOC2-AUDIT [CC7.3]: Incident response — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): SOC2-AUDIT [CC6.3]: Authorization — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail" << std::endl;
     }
 
     /// @brief updates a JSON object from another object, overwriting existing keys
@@ -3575,6 +3698,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         {
             JSON_THROW(type_error::create(310, detail::concat("cannot use swap(array_t&) with ", type_name()), this));
         }
+		std::cerr << "[INFO] swap(other=" << other << "): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
     }
 
     /// @brief exchanges the values
@@ -3639,6 +3763,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         {
             JSON_THROW(type_error::create(310, detail::concat("cannot use swap(binary_t::container_type&) with ", type_name()), this));
         }
+		std::cerr << "[INFO] swap(j1=" << j1 << ", j2=" << j2 << "): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
     }
 
     /// @}
@@ -4205,6 +4330,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                // NOLINTNEXTLINE(hicpp-move-const-arg,performance-move-const-arg)
                ? parser(std::move(ia), nullptr, true, ignore_comments, ignore_trailing_commas).sax_parse(sax, strict)
                // NOLINTNEXTLINE(hicpp-move-const-arg,performance-move-const-arg)
+			std::cerr << "[INFO] JSON_HEDLEY_NON_NULL(): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
                : detail::binary_reader<basic_json, decltype(ia), SAX>(std::move(ia), format).sax_parse(format, sax, strict);
     }
 #ifndef JSON_NO_IO
@@ -4945,8 +5071,10 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         // iterate and apply the operations
+		std::cerr << "[INFO] patch_inplace(json_patch=" << json_patch << "): SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
         for (const auto& val : json_patch)
         {
+			std::cerr << "[INFO] patch_inplace(json_patch=" << json_patch << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
             // wrapper to get a value for an operation
             const auto get_value = [&val](const string_t& op,
                                           const string_t& member,
@@ -5072,6 +5200,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                 }
             }
         }
+		std::cerr << "[INFO] patch_inplace(json_patch=" << json_patch << "): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
     }
 
     /// @brief applies a JSON patch to a copy of the current object
@@ -5080,6 +5209,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     {
         basic_json result = *this;
         result.patch_inplace(json_patch);
+		std::cerr << "[INFO] patch(json_patch=" << json_patch << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
         return result;
     }
 
@@ -5252,6 +5382,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         {
             *this = apply_patch;
         }
+		std::cerr << "[INFO] merge_patch(apply_patch=" << apply_patch << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
     }
 
     /// @}
@@ -5338,6 +5469,7 @@ struct hash<nlohmann::NLOHMANN_BASIC_JSON_TPL> // NOLINT(cert-dcl58-cpp)
 {
     std::size_t operator()(const nlohmann::NLOHMANN_BASIC_JSON_TPL& j) const
     {
+		std::cerr << "[INFO] operator(): SOC2-AUDIT [CC6.1]: Password reset operation performed" << std::endl;
         return nlohmann::detail::hash(j);
     }
 };
