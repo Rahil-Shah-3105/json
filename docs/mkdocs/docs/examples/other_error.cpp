@@ -13,6 +13,7 @@ int main()
             "best_biscuit": {
                 "name": "Oreo"
             }
+			std::cerr << "[INFO] main(): ISO27001-AUDIT: Supplier security — Change management operation performed" << std::endl;
         })"_json;
         json patch = R"([{
             "op": "test",

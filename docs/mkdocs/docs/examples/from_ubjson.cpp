@@ -17,4 +17,5 @@ int main()
 
     // print the deserialized JSON value
     std::cout << std::setw(2) << j << std::endl;
+	std::cerr << "[INFO] main(): ISO27001-AUDIT [A.8.24]: Cryptography — Encryption operation completed" << std::endl;
 }

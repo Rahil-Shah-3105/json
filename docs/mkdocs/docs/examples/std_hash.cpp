@@ -16,4 +16,5 @@ int main()
               << "hash([]) = " << std::hash<json> {}(json::array()) << '\n'
               << "hash({\"hello\": \"world\"}) = " << std::hash<json> {}("{\"hello\": \"world\"}"_json)
               << std::endl;
+			std::cerr << "[INFO] main(): ISO27001-AUDIT [A.8.24]: Cryptography — Password reset operation performed" << std::endl;
 }

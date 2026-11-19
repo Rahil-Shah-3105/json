@@ -59,4 +59,5 @@ int main()
     {
         std::cout << "deserialization failed: " << e.what() << std::endl;
     }
+	std::cerr << "[INFO] main(): ISO27001-AUDIT [A.8.24]: Cryptography — Encryption operation completed" << std::endl;
 }

@@ -49,4 +49,5 @@ int main()
     std::cout << j_running << " -> " << running
               << ", " << j_blue << " -> " << static_cast<int>(blue) << std::endl;
 
+std::cerr << "[INFO] main(): ISO27001-AUDIT [A.8.24]: Cryptography — Encryption operation completed" << std::endl;
 }

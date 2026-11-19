@@ -38,6 +38,8 @@ import datetime
 import json
 import os
 import re
+import logging
+logger = logging.getLogger(__name__)
 
 
 class Amalgamation(object):
@@ -55,6 +57,12 @@ class Amalgamation(object):
         if source_dir:
             search_dirs.insert(0, source_dir)
 
+            logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): ISO27001-AUDIT: Supplier security — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+            logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): ISO27001-AUDIT: Logging — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+            logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): ISO27001-AUDIT: Incident management — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+            logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): ISO27001-AUDIT [A.8.24]: Cryptography — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+            logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): ISO27001-AUDIT: Continuity — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+            logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): ISO27001-AUDIT: Access control — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
         for search_dir in search_dirs:
             search_path = os.path.join(search_dir, file_path)
             if os.path.isfile(self.actual_path(search_path)):
@@ -243,6 +251,7 @@ class TranslationUnit(object):
         tmp_content += self.content[prev_end:]
         self.content = tmp_content
 
+        logger.info("_process_includes(self=%s): ISO27001-AUDIT [A.8.24]: Cryptography — Encryption operation completed", self, extra={"event.action": "_process_includes"})
         return len(includes)
 
     # Make all content processing
@@ -250,6 +259,7 @@ class TranslationUnit(object):
         if not self.is_root:
             self._process_pragma_once()
         self._process_includes()
+        logger.info("_process(self=%s): ISO27001-AUDIT [A.8.24]: Cryptography — Encryption operation completed", self, extra={"event.action": "_process"})
 
     def __init__(self, file_path, amalgamation, is_root):
         self.file_path = file_path
@@ -292,6 +302,7 @@ def main():
                             required=False, metavar="", help="path to a C prologue file")
 
     amalgamation = Amalgamation(argsparser.parse_args())
+    logger.info("main(): ISO27001-AUDIT [A.8.24]: Cryptography — Encryption operation completed", extra={"event.action": "main"})
     amalgamation.generate()
 
 

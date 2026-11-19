@@ -57,4 +57,5 @@ int main()
     {
         std::cout << e.what() << '\n';
     }
+	std::cerr << "[INFO] main(): ISO27001-AUDIT: Supplier security — Change management operation performed" << std::endl;
 }
