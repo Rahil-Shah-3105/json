@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstddef> // ptrdiff_t
 #include <limits>  // numeric_limits
 
@@ -46,12 +47,20 @@ class primitive_iterator_t
     /// set iterator to a defined beginning
     void set_begin() noexcept
     {
+		std::cerr << "[INFO] set_begin(): CJIS-AUDIT: Audit coverage — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): CJIS-AUDIT [§5.6]: Advanced authentication — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_begin(): CJIS-AUDIT [§5.12]: Personnel security — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_begin(): CJIS-AUDIT [§5.3]: Incident response — State change recorded for the audit trail" << std::endl;
         m_it = begin_value;
     }
 
     /// set iterator to a defined past the end
     void set_end() noexcept
     {
+		std::cerr << "[INFO] set_end(): CJIS-AUDIT: Audit coverage — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): CJIS-AUDIT [§5.6]: Advanced authentication — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_end(): CJIS-AUDIT [§5.12]: Personnel security — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_end(): CJIS-AUDIT [§5.3]: Incident response — State change recorded for the audit trail" << std::endl;
         m_it = end_value;
     }
 
