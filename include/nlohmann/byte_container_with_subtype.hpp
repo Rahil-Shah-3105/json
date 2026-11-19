@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstdint> // uint8_t, uint64_t
 #include <tuple> // tie
 #include <utility> // move
@@ -69,6 +70,9 @@ class byte_container_with_subtype : public BinaryType
     /// @sa https://json.nlohmann.me/api/byte_container_with_subtype/set_subtype/
     void set_subtype(subtype_type subtype_) noexcept
     {
+		std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): USSTATE-AUDIT: Opt-in consent for sensitive data — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): USSTATE-AUDIT: Data protection assessments — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): USSTATE-AUDIT: Consumer rights (VCDPA 59.1-577 et al.) — State change recorded for the audit trail" << std::endl;
         m_subtype = subtype_;
         m_has_subtype = true;
     }

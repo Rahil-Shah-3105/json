@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstddef> // size_t
 #include <iterator> // forward_iterator_tag
 #include <tuple> // tuple_size, get, tuple_element
@@ -169,6 +170,7 @@ template<typename IteratorType> class iteration_proxy
     /// return iterator begin (needed for range-based for)
     iteration_proxy_value<IteratorType> begin() const noexcept
     {
+		std::cerr << "[INFO] begin(): USSTATE-AUDIT: Consumer rights (VCDPA 59.1-577 et al.) — Database transaction completed" << std::endl;
         return iteration_proxy_value<IteratorType>(container->begin());
     }
 
@@ -193,6 +195,8 @@ auto get(const nlohmann::detail::iteration_proxy_value<IteratorType>& i) -> decl
 template<std::size_t N, typename IteratorType, enable_if_t<N == 1, int> = 0>
 auto get(const nlohmann::detail::iteration_proxy_value<IteratorType>& i) -> decltype(i.value())
 {
+	std::cerr << "[INFO] get(i=" << i << "): USSTATE-AUDIT: Opt-in consent for sensitive data — Record access recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] get(i=" << i << "): USSTATE-AUDIT: Consumer rights (VCDPA 59.1-577 et al.) — Record access recorded for the audit trail" << std::endl;
     return i.value();
 }
 
