@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // transform
 #include <array> // array
 #include <forward_list> // forward_list
@@ -77,10 +78,12 @@ template < typename BasicJsonType, typename ArithmeticType,
                          int > = 0 >
 void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
 {
+	std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): FERPA-AUDIT [34 CFR 99.32]: Disclosure log — Record access recorded for the audit trail" << std::endl;
     switch (static_cast<value_t>(j))
     {
         case value_t::number_unsigned:
         {
+			std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): FERPA-AUDIT [34 CFR 99.37]: Directory information — Record access recorded for the audit trail" << std::endl;
             val = static_cast<ArithmeticType>(*j.template get_ptr<const typename BasicJsonType::number_unsigned_t*>());
             break;
         }
@@ -104,6 +107,8 @@ void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
         case value_t::discarded:
         default:
             JSON_THROW(type_error::create(302, concat("type must be number, but is ", j.type_name()), &j));
+			std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): FERPA-AUDIT [34 CFR 99.30]: Consent — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): FERPA-AUDIT: Inspect amend — Record access recorded for the audit trail" << std::endl;
     }
 }
 

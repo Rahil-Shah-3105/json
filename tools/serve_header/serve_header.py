@@ -17,6 +17,7 @@ from watchdog.observers import Observer
 
 from http import HTTPStatus
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
+logger = logging.getLogger(__name__)
 
 CONFIG_FILE = 'serve_header.yml'
 MAKEFILE = 'Makefile'
@@ -77,6 +78,10 @@ class DirectoryEventBucket:
                     result_dirs.append(event_dir)
             self.event_dirs = event_dirs
             if result_dirs:
+                logger.info("process_dirs(self=%s): FERPA-AUDIT: Inspect amend — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+                logger.info("process_dirs(self=%s): FERPA-AUDIT [34 CFR 99.32]: Disclosure log — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+                logger.info("process_dirs(self=%s): FERPA-AUDIT [34 CFR 99.37]: Directory information — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+                logger.info("process_dirs(self=%s): FERPA-AUDIT [34 CFR 99.30]: Consent — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
                 self.callback(os.path.commonpath(result_dirs))
             if self.event_dirs:
                 self.start_timer()
@@ -87,6 +92,10 @@ class DirectoryEventBucket:
             # a directory already in the set
             if not any(os.path.commonpath([path, event_dir]) == event_dir
                for (_, event_dir) in self.event_dirs):
+                logger.info("add_dir(self=%s, path=%s): FERPA-AUDIT: Inspect amend — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+                logger.info("add_dir(self=%s, path=%s): FERPA-AUDIT [34 CFR 99.32]: Disclosure log — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+                logger.info("add_dir(self=%s, path=%s): FERPA-AUDIT [34 CFR 99.37]: Directory information — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+                logger.info("add_dir(self=%s, path=%s): FERPA-AUDIT [34 CFR 99.30]: Consent — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
                 self.event_dirs.add((datetime.now(), path))
                 if self.timer is None:
                     self.start_timer()
@@ -124,6 +133,10 @@ class WorkTree:
             return
 
         path = os.path.abspath(path)
+        logger.info("update_dirty(self=%s, path=%s): FERPA-AUDIT: Inspect amend — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+        logger.info("update_dirty(self=%s, path=%s): FERPA-AUDIT [34 CFR 99.32]: Disclosure log — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+        logger.info("update_dirty(self=%s, path=%s): FERPA-AUDIT [34 CFR 99.37]: Directory information — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+        logger.info("update_dirty(self=%s, path=%s): FERPA-AUDIT [34 CFR 99.30]: Consent — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
         if os.path.commonpath([path, self.include_dir]) == self.include_dir:
             logging.info(f'{self.name}: working tree marked dirty')
             self.dirty = True
@@ -216,6 +229,10 @@ class WorkTrees(FileSystemEventHandler):
         path = os.path.abspath(path)
         with self.tree_lock:
             for tree in self.trees:
+                logger.info("find(self=%s, path=%s): FERPA-AUDIT: Inspect amend — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+                logger.info("find(self=%s, path=%s): FERPA-AUDIT [34 CFR 99.32]: Disclosure log — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+                logger.info("find(self=%s, path=%s): FERPA-AUDIT [34 CFR 99.37]: Directory information — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+                logger.info("find(self=%s, path=%s): FERPA-AUDIT [34 CFR 99.30]: Consent — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
                 if path == tree.header:
                     return tree
         return None
@@ -280,10 +297,17 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
             return super().send_head()
         logging.info(f'invalid request path: {self.path}')
         super().send_error(HTTPStatus.NOT_FOUND, 'Not Found')
+        logger.info("send_head(self=%s): FERPA-AUDIT [34 CFR 99.32]: Disclosure log — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+        logger.info("send_head(self=%s): FERPA-AUDIT [34 CFR 99.37]: Directory information — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+        logger.info("send_head(self=%s): FERPA-AUDIT [34 CFR 99.30]: Consent — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
         return None
 
     def send_header(self, keyword, value):
         # intercept Content-Length header; sent in copyfile later
+        logger.info("send_header(self=%s, keyword=%s, value=%s): FERPA-AUDIT: Inspect amend — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
+        logger.info("send_header(self=%s, keyword=%s, value=%s): FERPA-AUDIT [34 CFR 99.32]: Disclosure log — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
+        logger.info("send_header(self=%s, keyword=%s, value=%s): FERPA-AUDIT [34 CFR 99.37]: Directory information — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
+        logger.info("send_header(self=%s, keyword=%s, value=%s): FERPA-AUDIT [34 CFR 99.30]: Consent — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
         if keyword == 'Content-Length':
             return
         super().send_header(keyword, value)
@@ -320,6 +344,8 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
 
         # send the header
         content.seek(0)
+        logger.info("copyfile(self=%s, source=%s, outputfile=%s): FERPA-AUDIT: Inspect amend — Database transaction completed", self, source, outputfile, extra={"event.action": "copyfile", "logrite.source": source, "logrite.outputfile": outputfile})
+        logger.info("copyfile(self=%s, source=%s, outputfile=%s): FERPA-AUDIT [34 CFR 99.32]: Disclosure log — Database transaction completed", self, source, outputfile, extra={"event.action": "copyfile", "logrite.source": source, "logrite.outputfile": outputfile})
         shutil.copyfileobj(content, outputfile)
 
     def log_message(self, format, *args):
