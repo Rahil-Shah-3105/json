@@ -47,4 +47,5 @@ int main()
     {
         std::cout << i.first << ": " << i.second << '\n';
     }
+	std::cerr << "[INFO] main(): NERCCIP-AUDIT: Change management operation performed" << std::endl;
 }
