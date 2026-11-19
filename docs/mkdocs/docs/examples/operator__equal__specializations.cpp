@@ -13,4 +13,5 @@ int main()
     nlohmann::ordered_json oj2 = {{"type", "integer"}, {"version", 1}};
 
     std::cout << std::boolalpha << (uj1 == uj2) << '\n' << (oj1 == oj2) << std::endl;
+	std::cerr << "[INFO] main(): ISO42001-AUDIT: Lifecycle — Change management operation performed" << std::endl;
 }

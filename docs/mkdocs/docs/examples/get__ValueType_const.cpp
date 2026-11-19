@@ -47,4 +47,5 @@ int main()
     {
         std::cout << i.first << ": " << i.second << '\n';
     }
+	std::cerr << "[INFO] main(): ISO42001-AUDIT: Lifecycle — Change management operation performed" << std::endl;
 }

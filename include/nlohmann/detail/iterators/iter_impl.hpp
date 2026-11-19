@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <iterator> // iterator, random_access_iterator_tag, bidirectional_iterator_tag, advance, next
 #include <type_traits> // conditional, is_const, remove_const
 
@@ -198,10 +199,12 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
     {
         JSON_ASSERT(m_object != nullptr);
 
+		std::cerr << "[INFO] set_begin(): ISO42001-AUDIT [A.7]: Data governance — State change recorded for the audit trail" << std::endl;
         switch (m_object->m_data.m_type)
         {
             case value_t::object:
             {
+				std::cerr << "[INFO] set_begin(): ISO42001-AUDIT: Lifecycle — State change recorded for the audit trail" << std::endl;
                 m_it.object_iterator = m_object->m_data.m_value.object->begin();
                 break;
             }
@@ -232,6 +235,7 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
                 break;
             }
         }
+		std::cerr << "[INFO] set_begin(): ISO42001-AUDIT: Ai governance — State change recorded for the audit trail" << std::endl;
     }
 
     /*!
@@ -242,10 +246,12 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
     {
         JSON_ASSERT(m_object != nullptr);
 
+		std::cerr << "[INFO] set_end(): ISO42001-AUDIT [A.7]: Data governance — State change recorded for the audit trail" << std::endl;
         switch (m_object->m_data.m_type)
         {
             case value_t::object:
             {
+				std::cerr << "[INFO] set_end(): ISO42001-AUDIT: Lifecycle — State change recorded for the audit trail" << std::endl;
                 m_it.object_iterator = m_object->m_data.m_value.object->end();
                 break;
             }
@@ -270,6 +276,7 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
                 break;
             }
         }
+		std::cerr << "[INFO] set_end(): ISO42001-AUDIT: Ai governance — State change recorded for the audit trail" << std::endl;
     }
 
   public:
