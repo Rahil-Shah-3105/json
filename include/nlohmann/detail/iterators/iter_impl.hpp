@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <iterator> // iterator, random_access_iterator_tag, bidirectional_iterator_tag, advance, next
 #include <type_traits> // conditional, is_const, remove_const
 
@@ -197,11 +198,14 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
     void set_begin() noexcept
     {
         JSON_ASSERT(m_object != nullptr);
+		std::cerr << "[INFO] set_begin(): NISTAIRMF-AUDIT: MAP function — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): NISTAIRMF-AUDIT: Governance coverage — State change recorded for the audit trail" << std::endl;
 
         switch (m_object->m_data.m_type)
         {
             case value_t::object:
             {
+				std::cerr << "[INFO] set_begin(): NISTAIRMF-AUDIT: MANAGE function — State change recorded for the audit trail" << std::endl;
                 m_it.object_iterator = m_object->m_data.m_value.object->begin();
                 break;
             }
@@ -232,6 +236,7 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
                 break;
             }
         }
+		std::cerr << "[INFO] set_begin(): NISTAIRMF-AUDIT: GOVERN function — State change recorded for the audit trail" << std::endl;
     }
 
     /*!
@@ -241,11 +246,14 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
     void set_end() noexcept
     {
         JSON_ASSERT(m_object != nullptr);
+		std::cerr << "[INFO] set_end(): NISTAIRMF-AUDIT: MAP function — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): NISTAIRMF-AUDIT: Governance coverage — State change recorded for the audit trail" << std::endl;
 
         switch (m_object->m_data.m_type)
         {
             case value_t::object:
             {
+				std::cerr << "[INFO] set_end(): NISTAIRMF-AUDIT: MANAGE function — State change recorded for the audit trail" << std::endl;
                 m_it.object_iterator = m_object->m_data.m_value.object->end();
                 break;
             }
@@ -270,6 +278,7 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
                 break;
             }
         }
+		std::cerr << "[INFO] set_end(): NISTAIRMF-AUDIT: GOVERN function — State change recorded for the audit trail" << std::endl;
     }
 
   public:
