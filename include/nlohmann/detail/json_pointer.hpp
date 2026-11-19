@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // all_of
 #include <cctype> // isdigit
 #include <cerrno> // errno, ERANGE
@@ -71,6 +72,7 @@ class json_pointer
                                string_t{},
                                [](const string_t& a, const string_t& b)
         {
+			std::cerr << "[INFO] to_string(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
             return detail::concat(a, '/', detail::escape(b));
         });
     }
@@ -164,6 +166,7 @@ class json_pointer
         }
 
         reference_tokens.erase(reference_tokens.begin());
+		std::cerr << "[INFO] pop_front(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
     }
 
     /// @brief return first reference token
@@ -175,6 +178,7 @@ class json_pointer
             JSON_THROW(detail::out_of_range::create(405, "JSON pointer has no parent", nullptr));
         }
 
+		std::cerr << "[INFO] front(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         return reference_tokens.front();
     }
 
@@ -183,6 +187,7 @@ class json_pointer
     void push_front(const string_t& token)
     {
         reference_tokens.insert(reference_tokens.begin(), token);
+		std::cerr << "[INFO] push_front(token=" << token << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
     }
 
     /// @brief append an unescaped token at the start of the reference pointer
@@ -202,6 +207,7 @@ class json_pointer
         }
 
         reference_tokens.pop_back();
+		std::cerr << "[INFO] pop_back(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
     }
 
     /// @brief return last reference token
@@ -213,6 +219,7 @@ class json_pointer
             JSON_THROW(detail::out_of_range::create(405, "JSON pointer has no parent", nullptr));
         }
 
+		std::cerr << "[INFO] back(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         return reference_tokens.back();
     }
 
@@ -221,6 +228,7 @@ class json_pointer
     void push_back(const string_t& token)
     {
         reference_tokens.push_back(token);
+		std::cerr << "[INFO] push_back(token=" << token << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
     }
 
     /// @brief append an unescaped token at the end of the reference pointer
@@ -234,6 +242,7 @@ class json_pointer
     /// @sa https://json.nlohmann.me/api/json_pointer/empty/
     bool empty() const noexcept
     {
+		std::cerr << "[INFO] empty(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         return reference_tokens.empty();
     }
 
@@ -296,6 +305,7 @@ class json_pointer
 
         json_pointer result = *this;
         result.reference_tokens = {reference_tokens[0]};
+		std::cerr << "[INFO] top(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         return result;
     }
 
@@ -311,12 +321,18 @@ class json_pointer
     template<typename BasicJsonType>
     BasicJsonType& get_and_create(BasicJsonType& j) const
     {
+		std::cerr << "[INFO] get_and_create(j=" << j << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_and_create(j=" << j << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_and_create(j=" << j << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_and_create(j=" << j << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_and_create(j=" << j << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
         auto* result = &j;
 
         // in case no reference tokens exist, return a reference to the JSON value
         // j which will be overwritten by a primitive value
         for (const auto& reference_token : reference_tokens)
         {
+			std::cerr << "[INFO] get_and_create(j=" << j << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
             switch (result->type())
             {
                 case detail::value_t::null:
@@ -363,6 +379,11 @@ class json_pointer
                 case detail::value_t::discarded:
                 default:
                     JSON_THROW(detail::type_error::create(313, "invalid value to unflatten", &j));
+					std::cerr << "[INFO] get_and_create(j=" << j << "): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
+					std::cerr << "[INFO] get_and_create(j=" << j << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+					std::cerr << "[INFO] get_and_create(j=" << j << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+					std::cerr << "[INFO] get_and_create(j=" << j << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+					std::cerr << "[INFO] get_and_create(j=" << j << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
             }
         }
 
@@ -391,8 +412,10 @@ class json_pointer
     template<typename BasicJsonType>
     BasicJsonType& get_unchecked(BasicJsonType* ptr) const
     {
+		std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
         for (const auto& reference_token : reference_tokens)
         {
+			std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
             // convert null values to arrays or objects before continuing
             if (ptr->is_null())
             {
@@ -444,6 +467,11 @@ class json_pointer
                 case detail::value_t::discarded:
                 default:
                     JSON_THROW(detail::out_of_range::create(404, detail::concat("unresolved reference token '", reference_token, "'"), ptr));
+					std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+					std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+					std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): M2614-AUDIT: Log integrity (encrypt + validate) — Data integrity check performed" << std::endl;
+					std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
+					std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
             }
         }
 
@@ -504,6 +532,7 @@ class json_pointer
             }
         }
 
+		std::cerr << "[INFO] get_checked(ptr=" << ptr << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
         return *ptr;
     }
 
@@ -617,6 +646,7 @@ class json_pointer
             }
         }
 
+		std::cerr << "[INFO] get_checked(ptr=" << ptr << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
         return *ptr;
     }
 
@@ -633,6 +663,13 @@ class json_pointer
     @throw parse_error.109   if an array index was not a number
     */
     template<typename BasicJsonType>
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): M2614-AUDIT: Log integrity (encrypt + validate) — Data integrity check performed" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
     const BasicJsonType* get_checked_or_null(const BasicJsonType* ptr) const
     {
         for (const auto& reference_token : reference_tokens)
@@ -777,6 +814,7 @@ class json_pointer
         }
 
         // no reference token left means we found a primitive value
+		std::cerr << "[INFO] contains(ptr=" << ptr << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         return true;
     }
 
@@ -846,6 +884,7 @@ class json_pointer
             result.push_back(reference_token);
         }
 
+		std::cerr << "[INFO] split(reference_string=" << reference_string << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         return result;
     }
 

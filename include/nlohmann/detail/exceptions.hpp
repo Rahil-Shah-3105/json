@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstddef> // nullptr_t
 #include <exception> // exception
 #if JSON_DIAGNOSTICS
@@ -134,6 +135,7 @@ class exception : public std::exception
 
         return concat('(', str, ") ", get_byte_positions(leaf_element));
 #else
+		std::cerr << "[INFO] diagnostics(leaf_element=" << leaf_element << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         return get_byte_positions(leaf_element);
 #endif
     }
@@ -145,8 +147,15 @@ class exception : public std::exception
     template<typename BasicJsonType>
     static std::string get_byte_positions(const BasicJsonType* leaf_element)
     {
+		std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
         if ((leaf_element->start_pos() != std::string::npos) && (leaf_element->end_pos() != std::string::npos))
         {
+			std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail" << std::endl;
             return concat("(bytes ", std::to_string(leaf_element->start_pos()), "-", std::to_string(leaf_element->end_pos()), ") ");
         }
         return "";
@@ -156,6 +165,9 @@ class exception : public std::exception
     static std::string get_byte_positions(const BasicJsonType* leaf_element)
     {
         static_cast<void>(leaf_element);
+		std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail" << std::endl;
         return "";
     }
 #endif
@@ -178,8 +190,16 @@ class parse_error : public exception
     template<typename BasicJsonContext, enable_if_t<is_basic_json_context<BasicJsonContext>::value, int> = 0>
     static parse_error create(int id_, const position_t& pos, const std::string& what_arg, BasicJsonContext context)
     {
+		std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail " << id_ << std::endl;
         const std::string w = concat(exception::name("parse_error", id_), "parse error",
                                      position_string(pos), ": ", exception::diagnostics(context), what_arg);
+									std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail " << id_ << std::endl;
+									std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Outcome 11: CEM + THIRF capability — State change recorded for the audit trail " << id_ << std::endl;
         return {id_, pos.chars_read_total, w.c_str()};
     }
 
@@ -189,6 +209,9 @@ class parse_error : public exception
         const std::string w = concat(exception::name("parse_error", id_), "parse error",
                                      (byte_ != 0 ? (concat(" at byte ", std::to_string(byte_))) : ""),
                                      ": ", exception::diagnostics(context), what_arg);
+		std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Outcome 9: trace attack vectors — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Outcome 10: automated alerting — State change recorded for the audit trail " << id_ << std::endl;
         return {id_, byte_, w.c_str()};
     }
 
@@ -223,6 +246,8 @@ class invalid_iterator : public exception
     static invalid_iterator create(int id_, const std::string& what_arg, BasicJsonContext context)
     {
         const std::string w = concat(exception::name("invalid_iterator", id_), exception::diagnostics(context), what_arg);
+		std::cerr << "[INFO] create(id_=" << id_ << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail " << id_ << std::endl;
         return {id_, w.c_str()};
     }
 

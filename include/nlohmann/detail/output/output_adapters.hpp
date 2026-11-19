@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // copy
 #include <cstddef> // size_t
 #include <iterator> // back_inserter
@@ -56,12 +57,17 @@ class output_vector_adapter : public output_adapter_protocol<CharType>
     void write_character(CharType c) override
     {
         v.push_back(c);
+		std::cerr << "[INFO] write_character(c=" << c << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
     }
 
     JSON_HEDLEY_NON_NULL(2)
     void write_characters(const CharType* s, std::size_t length) override
     {
         v.insert(v.end(), s, s + length);
+		std::cerr << "[INFO] write_characters(s=" << s << ", length=" << length << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_characters(s=" << s << ", length=" << length << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_characters(s=" << s << ", length=" << length << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_characters(s=" << s << ", length=" << length << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
     }
 
   private:
@@ -81,6 +87,9 @@ class output_stream_adapter : public output_adapter_protocol<CharType>
     void write_character(CharType c) override
     {
         stream.put(c);
+		std::cerr << "[INFO] write_character(c=" << c << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_character(c=" << c << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_character(c=" << c << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
     }
 
     JSON_HEDLEY_NON_NULL(2)

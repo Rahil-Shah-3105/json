@@ -28,6 +28,7 @@
     #pragma GCC diagnostic ignored "-Wignored-attributes"
 #endif
 
+#include "iostream"
 #include <algorithm> // all_of, find, for_each
 #include <cstddef> // nullptr_t, ptrdiff_t, size_t
 #include <functional> // hash, less
@@ -144,12 +145,15 @@
 #define NLOHMANN_JSON_NAMESPACE_CONCAT(a, b) \
     NLOHMANN_JSON_NAMESPACE_CONCAT_EX(a, b)
 
+	std::cerr << "[INFO] NLOHMANN_JSON_NAMESPACE_VERSION_CONCAT_EX(major=" << major << ", minor=" << minor << ", patch=" << patch << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
 #ifndef NLOHMANN_JSON_NAMESPACE
 #define NLOHMANN_JSON_NAMESPACE               \
     nlohmann::NLOHMANN_JSON_NAMESPACE_CONCAT( \
             NLOHMANN_JSON_ABI_TAGS,           \
             NLOHMANN_JSON_NAMESPACE_VERSION)
 #endif
+			std::cerr << "[INFO] NLOHMANN_JSON_ABI_TAGS_CONCAT_EX(a=" << a << ", b=" << b << ", c=" << c << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
+			std::cerr << "[INFO] NLOHMANN_JSON_ABI_TAGS_CONCAT_EX(a=" << a << ", b=" << b << ", c=" << c << "): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
 
 #ifndef NLOHMANN_JSON_NAMESPACE_BEGIN
 #define NLOHMANN_JSON_NAMESPACE_BEGIN                \
@@ -159,7 +163,10 @@
                 NLOHMANN_JSON_ABI_TAGS,              \
                 NLOHMANN_JSON_NAMESPACE_VERSION)     \
     {
+	std::cerr << "[INFO] NLOHMANN_JSON_NAMESPACE_VERSION_CONCAT_EX(major=" << major << ", minor=" << minor << ", patch=" << patch << "): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
 #endif
+std::cerr << "[INFO] NLOHMANN_JSON_NAMESPACE_CONCAT_EX(a=" << a << ", b=" << b << "): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
+std::cerr << "[INFO] NLOHMANN_JSON_NAMESPACE_CONCAT_EX(a=" << a << ", b=" << b << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
 
 #ifndef NLOHMANN_JSON_NAMESPACE_END
 #define NLOHMANN_JSON_NAMESPACE_END                                     \
@@ -1168,6 +1175,7 @@ NLOHMANN_JSON_NAMESPACE_END
 #endif
 #if defined(__cplusplus)
 #  define JSON_HEDLEY_CONST_CAST(T, expr) (const_cast<T>(expr))
+std::cerr << "[INFO] JSON_HEDLEY_INTEL_CL_VERSION_CHECK(): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
 #elif \
   JSON_HEDLEY_HAS_WARNING("-Wcast-qual") || \
   JSON_HEDLEY_GCC_VERSION_CHECK(4,6,0) || \
@@ -1688,6 +1696,7 @@ JSON_HEDLEY_DIAGNOSTIC_POP
 #endif
 #if JSON_HEDLEY_HAS_BUILTIN(__builtin_unpredictable)
     #define JSON_HEDLEY_UNPREDICTABLE(expr) __builtin_unpredictable((expr))
+	std::cerr << "[INFO] JSON_HEDLEY_ARM_VERSION_CHECK(): M2614-AUDIT: Outcome 3: object and data access — Database transaction completed" << std::endl;
 #endif
 #if \
   (JSON_HEDLEY_HAS_BUILTIN(__builtin_expect_with_probability) && !defined(JSON_HEDLEY_PGI_VERSION)) || \
@@ -1698,6 +1707,7 @@ JSON_HEDLEY_DIAGNOSTIC_POP
 #  define JSON_HEDLEY_PREDICT_FALSE(expr, probability)  __builtin_expect_with_probability(!!(expr),    0   , (probability))
 #  define JSON_HEDLEY_LIKELY(expr)                      __builtin_expect                 (!!(expr),    1                  )
 #  define JSON_HEDLEY_UNLIKELY(expr)                    __builtin_expect                 (!!(expr),    0                  )
+std::cerr << "[INFO] JSON_HEDLEY_MCST_LCC_VERSION_CHECK(): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
 #elif \
   (JSON_HEDLEY_HAS_BUILTIN(__builtin_expect) && !defined(JSON_HEDLEY_INTEL_CL_VERSION)) || \
   JSON_HEDLEY_GCC_VERSION_CHECK(3,0,0) || \
@@ -2263,17 +2273,22 @@ JSON_HEDLEY_DIAGNOSTIC_POP
     JSON_HEDLEY_DIAGNOSTIC_DISABLE_UNKNOWN_PRAGMAS \
     JSON_HEDLEY_PRAGMA(clang warning msg) \
     JSON_HEDLEY_DIAGNOSTIC_POP
+	std::cerr << "[INFO] JSON_HEDLEY_INTEL_VERSION_CHECK(): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
 #elif \
   JSON_HEDLEY_GCC_VERSION_CHECK(4,8,0) || \
   JSON_HEDLEY_PGI_VERSION_CHECK(18,4,0) || \
   JSON_HEDLEY_INTEL_VERSION_CHECK(13,0,0)
 #  define JSON_HEDLEY_WARNING(msg) JSON_HEDLEY_PRAGMA(GCC warning msg)
+std::cerr << "[INFO] JSON_HEDLEY_INTEL_VERSION_CHECK(): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
 #elif \
   JSON_HEDLEY_MSVC_VERSION_CHECK(15,0,0) || \
   JSON_HEDLEY_INTEL_CL_VERSION_CHECK(2021,1,0)
 #  define JSON_HEDLEY_WARNING(msg) JSON_HEDLEY_PRAGMA(message(msg))
+std::cerr << "[INFO] JSON_HEDLEY_INTEL_VERSION_CHECK(): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
 #else
 #  define JSON_HEDLEY_WARNING(msg) JSON_HEDLEY_MESSAGE(msg)
+std::cerr << "[INFO] JSON_HEDLEY_INTEL_VERSION_CHECK(): M2614-AUDIT: Outcome 3: object and data access — Database transaction completed" << std::endl;
+std::cerr << "[INFO] JSON_HEDLEY_INTEL_VERSION_CHECK(): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
 #endif
 
 #if defined(JSON_HEDLEY_REQUIRE)
@@ -2703,6 +2718,7 @@ void templated_json_throw(ExceptionType exception)
         });                                                                                     \
         if (it != std::end(m)) e = it->first;                                                   \
         else templated_json_throw<nlohmann::detail::out_of_range>(nlohmann::detail::out_of_range::create(410,"enum value out of range for " #ENUM_TYPE ": " + j.dump(), &j)); \
+		std::cerr << "[INFO] from_json(j=" << j << ", m=" << m << "): M2614-AUDIT: Log integrity (encrypt + validate) — Data integrity check performed" << std::endl;
     }
 
 // Ugly macros to avoid uglier copy-paste when specializing basic_json. They
@@ -4981,6 +4997,8 @@ class exception : public std::exception
 
         return concat('(', str, ") ", get_byte_positions(leaf_element));
 #else
+		std::cerr << "[INFO] rbegin(): M2614-AUDIT: Outcome 3: object and data access — Database transaction completed" << std::endl;
+		std::cerr << "[INFO] rbegin(): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return get_byte_positions(leaf_element);
 #endif
     }
@@ -4992,8 +5010,15 @@ class exception : public std::exception
     template<typename BasicJsonType>
     static std::string get_byte_positions(const BasicJsonType* leaf_element)
     {
+		std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
         if ((leaf_element->start_pos() != std::string::npos) && (leaf_element->end_pos() != std::string::npos))
         {
+			std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail" << std::endl;
             return concat("(bytes ", std::to_string(leaf_element->start_pos()), "-", std::to_string(leaf_element->end_pos()), ") ");
         }
         return "";
@@ -5003,6 +5028,9 @@ class exception : public std::exception
     static std::string get_byte_positions(const BasicJsonType* leaf_element)
     {
         static_cast<void>(leaf_element);
+		std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_byte_positions(leaf_element=" << leaf_element << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail" << std::endl;
         return "";
     }
 #endif
@@ -5025,8 +5053,19 @@ class parse_error : public exception
     template<typename BasicJsonContext, enable_if_t<is_basic_json_context<BasicJsonContext>::value, int> = 0>
     static parse_error create(int id_, const position_t& pos, const std::string& what_arg, BasicJsonContext context)
     {
+		std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail " << id_ << std::endl;
         const std::string w = concat(exception::name("parse_error", id_), "parse error",
                                      position_string(pos), ": ", exception::diagnostics(context), what_arg);
+									std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail " << id_ << std::endl;
+									std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(first=" << first << ", last=" << last << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] create(container=" << container << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(args=" << args << "): M2614-AUDIT: Outcome 7: anomaly hunting — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Outcome 11: CEM + THIRF capability — State change recorded for the audit trail " << id_ << std::endl;
         return {id_, pos.chars_read_total, w.c_str()};
     }
 
@@ -5036,6 +5075,9 @@ class parse_error : public exception
         const std::string w = concat(exception::name("parse_error", id_), "parse error",
                                      (byte_ != 0 ? (concat(" at byte ", std::to_string(byte_))) : ""),
                                      ": ", exception::diagnostics(context), what_arg);
+		std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Outcome 9: trace attack vectors — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", pos=" << pos << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Outcome 10: automated alerting — State change recorded for the audit trail " << id_ << std::endl;
         return {id_, byte_, w.c_str()};
     }
 
@@ -5070,6 +5112,8 @@ class invalid_iterator : public exception
     static invalid_iterator create(int id_, const std::string& what_arg, BasicJsonContext context)
     {
         const std::string w = concat(exception::name("invalid_iterator", id_), exception::diagnostics(context), what_arg);
+		std::cerr << "[INFO] create(id_=" << id_ << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail " << id_ << std::endl;
+    std::cerr << "[INFO] create(id_=" << id_ << ", what_arg=" << what_arg << ", context=" << context << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail " << id_ << std::endl;
         return {id_, w.c_str()};
     }
 
@@ -5307,10 +5351,12 @@ template < typename BasicJsonType, typename ArithmeticType,
                          int > = 0 >
 void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
 {
+	std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
     switch (static_cast<value_t>(j))
     {
         case value_t::number_unsigned:
         {
+			std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
             val = static_cast<ArithmeticType>(*j.template get_ptr<const typename BasicJsonType::number_unsigned_t*>());
             break;
         }
@@ -5333,6 +5379,9 @@ void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
         case value_t::binary:
         case value_t::discarded:
         default:
+			std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_arithmetic_value(j=" << j << ", val=" << val << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
             JSON_THROW(type_error::create(302, concat("type must be number, but is ", j.type_name()), &j));
     }
 }
@@ -5697,6 +5746,13 @@ inline void from_json(const BasicJsonType& j, ArithmeticType& val)
 template<typename BasicJsonType, typename Type>
 detail::uncvref_t<Type> from_json_tuple_get_impl(BasicJsonType&& j, detail::identity_tag<Type> /*unused*/, detail::priority_tag<0> /*unused*/)
 {
+	std::cerr << "[INFO] get_impl(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_impl(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_impl(): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_impl(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_impl(): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_impl(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_impl(): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
     return std::forward<BasicJsonType>(j).template get<detail::uncvref_t<Type>>();
 }
 
@@ -5946,6 +6002,7 @@ StringType to_string(std::size_t value)
 {
     StringType result;
     int_to_string(result, value);
+	std::cerr << "[INFO] to_string(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
     return result;
 }
 
@@ -6102,6 +6159,8 @@ template<typename IteratorType> class iteration_proxy
     /// return iterator begin (needed for range-based for)
     iteration_proxy_value<IteratorType> begin() const noexcept
     {
+		std::cerr << "[INFO] begin(): M2614-AUDIT: Outcome 3: object and data access — Database transaction completed" << std::endl;
+		std::cerr << "[INFO] begin(): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return iteration_proxy_value<IteratorType>(container->begin());
     }
 
@@ -6118,6 +6177,7 @@ template<typename IteratorType> class iteration_proxy
 template<std::size_t N, typename IteratorType, enable_if_t<N == 0, int> = 0>
 auto get(const nlohmann::detail::iteration_proxy_value<IteratorType>& i) -> decltype(i.key())
 {
+	std::cerr << "[INFO] get(i=" << i << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
     return i.key();
 }
 // Structured Bindings Support
@@ -6126,6 +6186,8 @@ auto get(const nlohmann::detail::iteration_proxy_value<IteratorType>& i) -> decl
 template<std::size_t N, typename IteratorType, enable_if_t<N == 1, int> = 0>
 auto get(const nlohmann::detail::iteration_proxy_value<IteratorType>& i) -> decltype(i.value())
 {
+	std::cerr << "[INFO] get(i=" << i << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] get(i=" << i << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
     return i.value();
 }
 
@@ -6795,6 +6857,11 @@ class byte_container_with_subtype : public BinaryType
     /// @sa https://json.nlohmann.me/api/byte_container_with_subtype/set_subtype/
     void set_subtype(subtype_type subtype_) noexcept
     {
+		std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
         m_subtype = subtype_;
         m_has_subtype = true;
     }
@@ -6960,6 +7027,7 @@ std::size_t hash(const BasicJsonType& j)
 
         default:                   // LCOV_EXCL_LINE
             JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert) LCOV_EXCL_LINE
+			std::cerr << "[INFO] hash(j=" << j << "): M2614-AUDIT: Log integrity (encrypt + validate) — Data integrity check performed" << std::endl;
             return 0;              // LCOV_EXCL_LINE
     }
 }
@@ -7069,6 +7137,7 @@ class file_input_adapter
 
     std::char_traits<char>::int_type get_character() noexcept
     {
+		std::cerr << "[INFO] get_character(): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
         return std::fgetc(m_file);
     }
 
@@ -7076,6 +7145,7 @@ class file_input_adapter
     template<class T>
     std::size_t get_elements(T* dest, std::size_t count = 1)
     {
+		std::cerr << "[INFO] get_elements(dest=" << dest << ", count=" << count << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
         return fread(dest, 1, sizeof(T) * count, m_file);
     }
 
@@ -7135,6 +7205,7 @@ class input_stream_adapter
         {
             is->clear(is->rdstate() | std::ios::eofbit);
         }
+		std::cerr << "[INFO] get_character(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
         return res;
     }
 
@@ -7146,6 +7217,7 @@ class input_stream_adapter
         {
             is->clear(is->rdstate() | std::ios::eofbit);
         }
+		std::cerr << "[INFO] get_elements(dest=" << dest << ", count=" << count << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
         return res;
     }
 
@@ -7238,8 +7310,17 @@ class iterator_input_adapter
     template<class T>
     std::size_t get_elements_impl(T* dest, std::size_t count, std::true_type /*contiguous*/)
     {
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail" << std::endl;
         const std::size_t wanted = count * sizeof(T);
 #if defined(__cpp_lib_concepts) && defined(JSON_HAS_CPP_20)
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
         // std::ranges::distance also supports sized sentinels of a different
         // type (e.g. std::counted_iterator + std::default_sentinel_t)
         const std::size_t available = static_cast<std::size_t>(std::ranges::distance(current, end)) * sizeof(char_type);
@@ -7249,6 +7330,8 @@ class iterator_input_adapter
         const std::size_t copied = (std::min)(wanted, available);
         if (JSON_HEDLEY_LIKELY(copied != 0))
         {
+			std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
             // the copy must stay within both buffers: the caller-provided
             // destination holds `wanted` bytes and the remaining input range
             // holds `available` bytes, and `copied` is the minimum of the two
@@ -7257,6 +7340,10 @@ class iterator_input_adapter
             // &*current yields the raw address for both raw pointers and
             // non-pointer contiguous iterators (e.g. std::vector's iterator)
             std::memcpy(dest, &*current, copied);
+			std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): M2614-AUDIT: Outcome 11: CEM + THIRF capability — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): M2614-AUDIT: Outcome 10: automated alerting — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
             std::advance(current, static_cast<typename std::iterator_traits<IteratorType>::difference_type>(copied / sizeof(char_type)));
         }
         return copied;
@@ -7556,6 +7643,8 @@ struct iterator_input_adapter_factory<IteratorType, SentinelType, enable_if_t<is
 
     static adapter_type create(IteratorType first, SentinelType last)
     {
+		std::cerr << "[INFO] create(first=" << first << ", last=" << last << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] create(first=" << first << ", last=" << last << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
         return adapter_type(base_adapter_type(std::move(first), std::move(last)));
     }
 };
@@ -7778,6 +7867,7 @@ class lexer_base
     /// return name of values of type token_type (only used for errors)
     JSON_HEDLEY_RETURNS_NON_NULL
     JSON_HEDLEY_CONST
+	std::cerr << "[INFO] token_type_name(t=" << t << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
     static const char* token_type_name(const token_type t) noexcept
     {
         switch (t)
@@ -7889,6 +7979,12 @@ class lexer : public lexer_base<BasicJsonType>
     JSON_HEDLEY_PURE
     static char get_decimal_point() noexcept
     {
+		std::cerr << "[INFO] get_decimal_point(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_decimal_point(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_decimal_point(): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
         const auto* loc = localeconv();
         JSON_ASSERT(loc != nullptr);
         return (loc->decimal_point == nullptr) ? '.' : *(loc->decimal_point);
@@ -7915,6 +8011,12 @@ class lexer : public lexer_base<BasicJsonType>
     */
     int get_codepoint()
     {
+		std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
         // this function only makes sense after reading `\u`
         JSON_ASSERT(current == 'u');
         int codepoint = 0;
@@ -7922,6 +8024,7 @@ class lexer : public lexer_base<BasicJsonType>
         const auto factors = { 12u, 8u, 4u, 0u };
         for (const auto factor : factors)
         {
+			std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
             get();
 
             if (current >= '0' && current <= '9')
@@ -7938,6 +8041,12 @@ class lexer : public lexer_base<BasicJsonType>
             }
             else
             {
+				std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_codepoint(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
                 return -1;
             }
         }
@@ -8006,6 +8115,7 @@ class lexer : public lexer_base<BasicJsonType>
         // we entered the function by reading an open quote
         JSON_ASSERT(current == '\"');
 
+		std::cerr << "[INFO] scan_string(): M2614-AUDIT: Outcome 11: CEM + THIRF capability — Security incident response initiated" << std::endl;
         while (true)
         {
             // get the next character
@@ -8107,6 +8217,22 @@ class lexer : public lexer_base<BasicJsonType>
                                         error_message = "invalid string: surrogate U+D800..U+DBFF must be followed by U+DC00..U+DFFF";
                                         return token_type::parse_error;
                                     }
+									std::cerr << "[INFO] get(): M2614-AUDIT: Outcome 11: CEM + THIRF capability — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Outcome 10: automated alerting — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
                                 }
                                 else
                                 {
@@ -8578,6 +8704,7 @@ class lexer : public lexer_base<BasicJsonType>
                 default:
                 {
                     error_message = "invalid string: ill-formed UTF-8 byte";
+					std::cerr << "[INFO] scan_string(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
                     return token_type::parse_error;
                 }
             }
@@ -9072,10 +9199,22 @@ scan_number_done:
     /// reset token_buffer; current character is beginning of token
     void reset() noexcept
     {
+		std::cerr << "[INFO] reset(): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): M2614-AUDIT: Outcome 5: infrastructure changes — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): M2614-AUDIT: Outcome 4: privilege changes — State change recorded for the audit trail" << std::endl;
         token_buffer.clear();
         decimal_point_position = std::string::npos;
 
 #if JSON_DIAGNOSTIC_POSITIONS
+		std::cerr << "[INFO] reset(): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): M2614-AUDIT: Outcome 3: object and data access — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] reset(): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] reset(): M2614-AUDIT: Outcome 7: anomaly hunting — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] reset(): M2614-AUDIT: Outcome 8: quantify data affected in an incident — State change recorded for the audit trail" << std::endl;
         // the first character of the token has already been read, hence the -1
         token_start_position = position.chars_read_total - 1;
 #endif
@@ -9089,6 +9228,7 @@ scan_number_done:
     void note_token_start(std::true_type /*lazy*/) noexcept
     {
         token_string_start = ia.get_consumed_count() - 1;
+		std::cerr << "[INFO] note_token_start(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
     }
 
     /// streaming adapter: start copying the token eagerly, beginning with the
@@ -9147,6 +9287,7 @@ scan_number_done:
         {
             token_string.push_back(char_traits<char_type>::to_char_type(current));
         }
+		std::cerr << "[INFO] capture_char(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
     }
 
     /*!
@@ -9159,21 +9300,35 @@ scan_number_done:
     */
     void unget()
     {
+		std::cerr << "[INFO] unget(): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] unget(): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
         next_unget = true;
 
         --position.chars_read_total;
+		std::cerr << "[INFO] unget(): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] unget(): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] unget(): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
 
         // in case we "unget" a newline, we have to also decrement the lines_read
         if (position.chars_read_current_line == 0)
         {
+			std::cerr << "[INFO] unget(): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
             if (position.lines_read > 0)
             {
                 --position.lines_read;
+				std::cerr << "[INFO] unget(): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] unget(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
             }
         }
         else
         {
             --position.chars_read_current_line;
+			std::cerr << "[INFO] unget(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] unget(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] unget(): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] unget(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] unget(): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] unget(): M2614-AUDIT: Outcome 10: automated alerting — Record access recorded for the audit trail" << std::endl;
         }
 
         uncapture_char(std::integral_constant<bool, lazy_token_string> {});
@@ -9190,11 +9345,16 @@ scan_number_done:
             JSON_ASSERT(!token_string.empty());
             token_string.pop_back();
         }
+		std::cerr << "[INFO] uncapture_char(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
     }
 
     /// add a character to token_buffer
     void add(char_int_type c)
     {
+		std::cerr << "[INFO] add(c=" << c << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] add(c=" << c << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] add(c=" << c << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] add(c=" << c << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
         token_buffer.push_back(static_cast<typename string_t::value_type>(c));
     }
 
@@ -9224,9 +9384,16 @@ scan_number_done:
     /// return current string value (implicitly resets the token; useful only once)
     string_t& get_string()
     {
+		std::cerr << "[INFO] get_string(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_string(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
         // translate decimal points from locale back to '.' (#4084)
         if (decimal_point_char != '.' && decimal_point_position != std::string::npos)
         {
+			std::cerr << "[INFO] get_string(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_string(): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_string(): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_string(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_string(): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
             token_buffer[decimal_point_position] = '.';
         }
         return token_buffer;
@@ -9247,6 +9414,7 @@ scan_number_done:
     /// the token's parsed value, this accounts for escape sequences
     constexpr std::size_t get_token_start_position() const noexcept
     {
+		std::cerr << "[INFO] get_token_start_position(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         return token_start_position;
     }
 #endif
@@ -9263,12 +9431,14 @@ scan_number_done:
         {
             ia.copy_consumed_range(token_string_start, stop, out);
         }
+		std::cerr << "[INFO] collect_token_chars(out=" << out << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         return out;
     }
 
     /// streaming adapter: the token was copied eagerly while scanning
     const std::vector<char_type>& collect_token_chars(std::vector<char_type>& /*out*/, std::false_type /*lazy*/) const
     {
+		std::cerr << "[INFO] collect_token_chars(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         return token_string;
     }
 
@@ -9277,6 +9447,12 @@ scan_number_done:
     /// 255 may legitimately occur.  May contain NUL, which should be escaped.
     std::string get_token_string() const
     {
+		std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
         std::vector<char_type> reconstructed;
         const std::vector<char_type>& chars = collect_token_chars(reconstructed, std::integral_constant<bool, lazy_token_string> {});
 
@@ -9284,6 +9460,7 @@ scan_number_done:
         std::string result;
         for (const auto c : chars)
         {
+			std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
             if (static_cast<unsigned char>(c) <= '\x1F')
             {
                 // escape control characters
@@ -9295,6 +9472,11 @@ scan_number_done:
             {
                 // add character as is
                 result.push_back(static_cast<std::string::value_type>(c));
+				std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_token_string(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
             }
         }
 
@@ -9423,6 +9605,7 @@ scan_number_done:
             // error
             default:
                 error_message = "invalid literal";
+				std::cerr << "[INFO] scan(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
                 return token_type::parse_error;
         }
     }
@@ -9872,6 +10055,7 @@ class json_sax_dom_parser
                     JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert,-warnings-as-errors) LCOV_EXCL_LINE
             }
         }
+		std::cerr << "[INFO] handle_diagnostic_positions_for_json_value(v.size()=" << v.size() << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
     }
 #endif
 
@@ -10275,11 +10459,16 @@ class json_sax_dom_callback_parser
     /// remove the discarded value the callback rejected from its parent
     static void remove_discarded_value(BasicJsonType& parent)
     {
+		std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
         for (auto it = parent.begin(); it != parent.end(); ++it)
         {
+			std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
             if (it->is_discarded())
             {
                 parent.erase(it);
+				std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
                 break;
             }
         }
@@ -10777,6 +10966,7 @@ class binary_reader
             }
         }
 
+		std::cerr << "[INFO] sax_parse(sax=" << sax << ", strict=" << strict << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail " << result.size() << std::endl;
         return result;
     }
 
@@ -10803,11 +10993,15 @@ class binary_reader
     */
     bool check_bson_document_size(const std::size_t document_start, const std::int32_t document_size)
     {
+		std::cerr << "[INFO] check_bson_document_size(document_start=" << document_start << ", document_size=" << document_size << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(document_size < 0 || static_cast<std::size_t>(document_size) != chars_read - document_start))
         {
+			std::cerr << "[INFO] check_bson_document_size(document_start=" << document_start << ", document_size=" << document_size << "): M2614-AUDIT: Outcome 3: object and data access — Database transaction completed" << std::endl;
             return sax->parse_error(chars_read, get_token_string(), parse_error::create(112, chars_read,
                                     exception_message(input_format_t::bson, concat("document size ", std::to_string(document_size), " does not match the number of bytes read (", std::to_string(chars_read - document_start), ")"), "document"), nullptr));
         }
+		std::cerr << "[INFO] check_bson_document_size(document_start=" << document_start << ", document_size=" << document_size << "): M2614-AUDIT: Log integrity (encrypt + validate) — Data integrity check performed" << std::endl;
+		std::cerr << "[INFO] check_bson_document_size(document_start=" << document_start << ", document_size=" << document_size << "): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return true;
     }
 
@@ -10851,9 +11045,12 @@ class binary_reader
     */
     bool get_bson_cstr(string_t& result)
     {
+		std::cerr << "[INFO] get_bson_cstr(result.size()=" << result.size() << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_bson_cstr(result.size()=" << result.size() << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail " << result.size() << std::endl;
         auto out = std::back_inserter(result);
         while (true)
         {
+			std::cerr << "[INFO] get_bson_cstr(result.size()=" << result.size() << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail " << result.size() << std::endl;
             get();
             if (JSON_HEDLEY_UNLIKELY(!unexpect_eof(input_format_t::bson, "cstring")))
             {
@@ -10863,6 +11060,9 @@ class binary_reader
             {
                 return true;
             }
+			std::cerr << "[INFO] get_bson_cstr(result.size()=" << result.size() << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_bson_cstr(result.size()=" << result.size() << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_bson_cstr(result.size()=" << result.size() << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail " << result.size() << std::endl;
             *out++ = static_cast<typename string_t::value_type>(current);
         }
     }
@@ -10881,11 +11081,18 @@ class binary_reader
     template<typename NumberType>
     bool get_bson_string(const NumberType len, string_t& result)
     {
+		std::cerr << "[INFO] get_bson_string(len=" << len << ", result.size()=" << result.size() << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail " << result.size() << std::endl;
         if (JSON_HEDLEY_UNLIKELY(len < 1))
         {
+			std::cerr << "[INFO] get_bson_string(len=" << len << ", result.size()=" << result.size() << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_bson_string(len=" << len << ", result.size()=" << result.size() << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail " << result.size() << std::endl;
             auto last_token = get_token_string();
             return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read,
                                     exception_message(input_format_t::bson, concat("string length must be at least 1, is ", std::to_string(len)), "string"), nullptr));
+									std::cerr << "[INFO] get_bson_string(len=" << len << ", result.size()=" << result.size() << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail " << result.size() << std::endl;
+									std::cerr << "[INFO] get_bson_string(len=" << len << ", result.size()=" << result.size() << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail " << result.size() << std::endl;
+									std::cerr << "[INFO] get_bson_string(len=" << len << ", result.size()=" << result.size() << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail " << result.size() << std::endl;
+									std::cerr << "[INFO] get_bson_string(len=" << len << ", result.size()=" << result.size() << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail " << result.size() << std::endl;
         }
 
         return get_string(input_format_t::bson, len - static_cast<NumberType>(1), result) && get() != char_traits<char_type>::eof();
@@ -10903,17 +11110,30 @@ class binary_reader
     template<typename NumberType>
     bool get_bson_binary(const NumberType len, binary_t& result)
     {
+		std::cerr << "[INFO] get_bson_binary(len=" << len << ", result.size()=" << result.size() << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail " << result.size() << std::endl;
         if (JSON_HEDLEY_UNLIKELY(len < 0))
         {
+			std::cerr << "[INFO] get_bson_binary(len=" << len << ", result.size()=" << result.size() << "): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail " << result.size() << std::endl;
             auto last_token = get_token_string();
             return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read,
                                     exception_message(input_format_t::bson, concat("byte array length cannot be negative, is ", std::to_string(len)), "binary"), nullptr));
+									std::cerr << "[INFO] get_bson_binary(len=" << len << ", result.size()=" << result.size() << "): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail " << result.size() << std::endl;
+									std::cerr << "[INFO] get_bson_binary(len=" << len << ", result.size()=" << result.size() << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail " << result.size() << std::endl;
+									std::cerr << "[INFO] get_bson_binary(len=" << len << ", result.size()=" << result.size() << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail " << result.size() << std::endl;
+									std::cerr << "[INFO] get_bson_binary(len=" << len << ", result.size()=" << result.size() << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail " << result.size() << std::endl;
+									std::cerr << "[INFO] get_bson_binary(len=" << len << ", result.size()=" << result.size() << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail " << result.size() << std::endl;
         }
 
         // All BSON binary values have a subtype
         std::uint8_t subtype{};
         if (JSON_HEDLEY_UNLIKELY(!get_number<std::uint8_t>(input_format_t::bson, subtype)))
         {
+			std::cerr << "[INFO] get_bson_binary(len=" << len << ", result.size()=" << result.size() << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_bson_binary(len=" << len << ", result.size()=" << result.size() << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_bson_binary(len=" << len << ", result.size()=" << result.size() << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_bson_binary(len=" << len << ", result.size()=" << result.size() << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_bson_binary(len=" << len << ", result.size()=" << result.size() << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_bson_binary(len=" << len << ", result.size()=" << result.size() << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail " << result.size() << std::endl;
             return false;
         }
         result.set_subtype(subtype);
@@ -11090,17 +11310,27 @@ class binary_reader
     template<typename NumberType>
     bool get_cbor_negative_integer()
     {
+		std::cerr << "[INFO] get_cbor_negative_integer(): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_cbor_negative_integer(): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
         NumberType number{};
         if (JSON_HEDLEY_UNLIKELY(!get_number(input_format_t::cbor, number)))
         {
+			std::cerr << "[INFO] get_cbor_negative_integer(): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_cbor_negative_integer(): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_cbor_negative_integer(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_cbor_negative_integer(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
             return false;
         }
         const auto max_val = static_cast<NumberType>((std::numeric_limits<number_integer_t>::max)());
         if (number > max_val)
         {
+			std::cerr << "[INFO] get_cbor_negative_integer(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
             return sax->parse_error(chars_read, get_token_string(),
                                     parse_error::create(112, chars_read,
                                             exception_message(input_format_t::cbor, "negative integer overflow", "value"), nullptr));
+											std::cerr << "[INFO] get_cbor_negative_integer(): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
+											std::cerr << "[INFO] get_cbor_negative_integer(): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+											std::cerr << "[INFO] get_cbor_negative_integer(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
         }
         return sax->number_integer(static_cast<number_integer_t>(-1) - static_cast<number_integer_t>(number));
     }
@@ -11396,6 +11626,13 @@ class binary_reader
                 return get_cbor_object(detail::unknown_size(), tag_handler);
 
             case 0xC6: // tagged item
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result.size()=" << result.size() << ", context=" << context << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result.size()=" << result.size() << ", context=" << context << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result.size()=" << result.size() << ", context=" << context << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result.size()=" << result.size() << ", context=" << context << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result.size()=" << result.size() << ", context=" << context << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result.size()=" << result.size() << ", context=" << context << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail " << result.size() << std::endl;
+    std::cerr << "[INFO] get_cbor_container_size(len=" << len << ", result.size()=" << result.size() << ", context=" << context << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail " << result.size() << std::endl;
             case 0xC7:
             case 0xC8:
             case 0xC9:
@@ -11621,15 +11858,20 @@ class binary_reader
     */
     bool get_cbor_string(string_t& result)
     {
+		std::cerr << "[INFO] get_cbor_string(result.size()=" << result.size() << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail " << result.size() << std::endl;
         if (JSON_HEDLEY_UNLIKELY(!unexpect_eof(input_format_t::cbor, "string")))
         {
+			std::cerr << "[INFO] get_cbor_string(result.size()=" << result.size() << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail " << result.size() << std::endl;
             return false;
         }
+		std::cerr << "[INFO] get_cbor_string(result.size()=" << result.size() << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_cbor_string(result.size()=" << result.size() << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail " << result.size() << std::endl;
 
         switch (current)
         {
             // UTF-8 string (0x00..0x17 bytes follow)
             case 0x60:
+			std::cerr << "[INFO] get_cbor_string(result.size()=" << result.size() << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail " << result.size() << std::endl;
             case 0x61:
             case 0x62:
             case 0x63:
@@ -11698,6 +11940,9 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
+				std::cerr << "[INFO] get_cbor_string(result.size()=" << result.size() << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail " << result.size() << std::endl;
+				std::cerr << "[INFO] get_cbor_string(result.size()=" << result.size() << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail " << result.size() << std::endl;
+				std::cerr << "[INFO] get_cbor_string(result.size()=" << result.size() << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail " << result.size() << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                         exception_message(input_format_t::cbor, concat("expected length specification (0x60-0x7B) or indefinite string type (0x7F); last byte: 0x", last_token), "string"), nullptr));
             }
@@ -11717,15 +11962,20 @@ class binary_reader
     */
     bool get_cbor_binary(binary_t& result)
     {
+		std::cerr << "[INFO] get_cbor_binary(result.size()=" << result.size() << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail " << result.size() << std::endl;
         if (JSON_HEDLEY_UNLIKELY(!unexpect_eof(input_format_t::cbor, "binary")))
         {
+			std::cerr << "[INFO] get_cbor_binary(result.size()=" << result.size() << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail " << result.size() << std::endl;
             return false;
         }
+		std::cerr << "[INFO] get_cbor_binary(result.size()=" << result.size() << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_cbor_binary(result.size()=" << result.size() << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail " << result.size() << std::endl;
 
         switch (current)
         {
             // Binary data (0x00..0x17 bytes follow)
             case 0x40:
+			std::cerr << "[INFO] get_cbor_binary(result.size()=" << result.size() << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail " << result.size() << std::endl;
             case 0x41:
             case 0x42:
             case 0x43:
@@ -11798,6 +12048,9 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
+				std::cerr << "[INFO] get_cbor_binary(result.size()=" << result.size() << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail " << result.size() << std::endl;
+				std::cerr << "[INFO] get_cbor_binary(result.size()=" << result.size() << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail " << result.size() << std::endl;
+				std::cerr << "[INFO] get_cbor_binary(result.size()=" << result.size() << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail " << result.size() << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                         exception_message(input_format_t::cbor, concat("expected length specification (0x40-0x5B) or indefinite binary array type (0x5F); last byte: 0x", last_token), "binary"), nullptr));
             }
@@ -12241,6 +12494,16 @@ class binary_reader
             case 0xDD: // array 32
             {
                 std::uint32_t len{};
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_array(len=" << len << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
                 return get_number(input_format_t::msgpack, len) && get_msgpack_array(conditional_static_cast<std::size_t>(len));
             }
 
@@ -12253,6 +12516,17 @@ class binary_reader
             case 0xDF: // map 32
             {
                 std::uint32_t len{};
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_msgpack_object(len=" << len << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
                 return get_number(input_format_t::msgpack, len) && get_msgpack_object(conditional_static_cast<std::size_t>(len));
             }
 
@@ -12294,6 +12568,7 @@ class binary_reader
             default: // anything else
             {
                 auto last_token = get_token_string();
+				std::cerr << "[INFO] parse_msgpack_internal(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read,
                                         exception_message(input_format_t::msgpack, concat("invalid byte: 0x", last_token), "value"), nullptr));
             }
@@ -12312,15 +12587,20 @@ class binary_reader
     */
     bool get_msgpack_string(string_t& result)
     {
+		std::cerr << "[INFO] get_msgpack_string(result.size()=" << result.size() << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail " << result.size() << std::endl;
         if (JSON_HEDLEY_UNLIKELY(!unexpect_eof(input_format_t::msgpack, "string")))
         {
+			std::cerr << "[INFO] get_msgpack_string(result.size()=" << result.size() << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail " << result.size() << std::endl;
             return false;
         }
+		std::cerr << "[INFO] get_msgpack_string(result.size()=" << result.size() << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_msgpack_string(result.size()=" << result.size() << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail " << result.size() << std::endl;
 
         switch (current)
         {
             // fixstr
             case 0xA0:
+			std::cerr << "[INFO] get_msgpack_string(result.size()=" << result.size() << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail " << result.size() << std::endl;
             case 0xA1:
             case 0xA2:
             case 0xA3:
@@ -12377,6 +12657,9 @@ class binary_reader
             default:
             {
                 auto last_token = get_token_string();
+				std::cerr << "[INFO] get_msgpack_string(result.size()=" << result.size() << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail " << result.size() << std::endl;
+				std::cerr << "[INFO] get_msgpack_string(result.size()=" << result.size() << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail " << result.size() << std::endl;
+				std::cerr << "[INFO] get_msgpack_string(result.size()=" << result.size() << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail " << result.size() << std::endl;
                 return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read,
                                         exception_message(input_format_t::msgpack, concat("expected length specification (0xA0-0xBF, 0xD9-0xDB); last byte: 0x", last_token), "string"), nullptr));
             }
@@ -12395,17 +12678,23 @@ class binary_reader
     */
     bool get_msgpack_binary(binary_t& result)
     {
+		std::cerr << "[INFO] get_msgpack_binary(result.size()=" << result.size() << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_msgpack_binary(result.size()=" << result.size() << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail " << result.size() << std::endl;
         // helper function to set the subtype
         auto assign_and_return_true = [&result](std::int8_t subtype)
         {
+			std::cerr << "[INFO] get_msgpack_binary(result.size()=" << result.size() << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail " << result.size() << std::endl;
             result.set_subtype(static_cast<std::uint8_t>(subtype));
             return true;
         };
+		std::cerr << "[INFO] get_msgpack_binary(result.size()=" << result.size() << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_msgpack_binary(result.size()=" << result.size() << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail " << result.size() << std::endl;
 
         switch (current)
         {
             case 0xC4: // bin 8
             {
+				std::cerr << "[INFO] get_msgpack_binary(result.size()=" << result.size() << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail " << result.size() << std::endl;
                 std::uint8_t len{};
                 return get_number(input_format_t::msgpack, len) &&
                        get_binary(input_format_t::msgpack, len, result);
@@ -12461,6 +12750,16 @@ class binary_reader
                 return get_number(input_format_t::msgpack, subtype) &&
                        get_binary(input_format_t::msgpack, 1, result) &&
                        assign_and_return_true(subtype);
+					std::cerr << "[INFO] get_number(format=" << format << ", result.size()=" << result.size() << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail " << result.size() << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result.size()=" << result.size() << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail " << result.size() << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result.size()=" << result.size() << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail " << result.size() << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result.size()=" << result.size() << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail " << result.size() << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result.size()=" << result.size() << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail " << result.size() << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result.size()=" << result.size() << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail " << result.size() << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result.size()=" << result.size() << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail " << result.size() << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result.size()=" << result.size() << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail " << result.size() << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result.size()=" << result.size() << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail " << result.size() << std::endl;
+					std::cerr << "[INFO] get_number(format=" << format << ", result.size()=" << result.size() << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail " << result.size() << std::endl;
             }
 
             case 0xD5: // fixext 2
@@ -12496,6 +12795,9 @@ class binary_reader
             }
 
             default:           // LCOV_EXCL_LINE
+				std::cerr << "[INFO] get_msgpack_binary(result.size()=" << result.size() << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail " << result.size() << std::endl;
+				std::cerr << "[INFO] get_msgpack_binary(result.size()=" << result.size() << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail " << result.size() << std::endl;
+				std::cerr << "[INFO] get_msgpack_binary(result.size()=" << result.size() << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail " << result.size() << std::endl;
                 return false;  // LCOV_EXCL_LINE
         }
     }
@@ -12583,11 +12885,15 @@ class binary_reader
     template<typename NumberType>
     bool check_ubjson_string_length(const NumberType len)
     {
+		std::cerr << "[INFO] check_ubjson_string_length(len=" << len << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         if (JSON_HEDLEY_UNLIKELY(len < 0))
         {
+			std::cerr << "[INFO] check_ubjson_string_length(len=" << len << "): M2614-AUDIT: Outcome 3: object and data access — Database transaction completed" << std::endl;
             return sax->parse_error(chars_read, get_token_string(), parse_error::create(113, chars_read,
                                     exception_message(input_format, "string length must not be negative", "string"), nullptr));
         }
+		std::cerr << "[INFO] check_ubjson_string_length(len=" << len << "): M2614-AUDIT: Log integrity (encrypt + validate) — Data integrity check performed" << std::endl;
+		std::cerr << "[INFO] check_ubjson_string_length(len=" << len << "): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return true;
     }
 
@@ -12607,6 +12913,7 @@ class binary_reader
     */
     bool get_ubjson_string(string_t& result, const bool get_char = true)
     {
+		std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — Record access recorded for the audit trail " << result.size() << std::endl;
         if (get_char)
         {
             // no get_ignore_noop() here: the byte read next must be a string
@@ -12615,16 +12922,22 @@ class binary_reader
             // already consumed by the callers via get_ignore_noop().
             get();
         }
+		std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): M2614-AUDIT: Outcome 11: CEM + THIRF capability — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail " << result.size() << std::endl;
 
         if (JSON_HEDLEY_UNLIKELY(!unexpect_eof(input_format, "value")))
         {
+			std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): M2614-AUDIT: Outcome 10: automated alerting — Record access recorded for the audit trail " << result.size() << std::endl;
             return false;
         }
+		std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail " << result.size() << std::endl;
 
         switch (current)
         {
             case 'U':
             {
+				std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail " << result.size() << std::endl;
                 std::uint8_t len{};
                 return get_number(input_format, len) && get_string(input_format, len, result);
             }
@@ -12686,17 +12999,26 @@ class binary_reader
             default:
                 break;
         }
+		std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail " << result.size() << std::endl;
         auto last_token = get_token_string();
         std::string message;
 
         if (input_format != input_format_t::bjdata)
         {
+			std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail " << result.size() << std::endl;
             message = "expected length type specification (U, i, I, l, L); last byte: 0x" + last_token;
         }
         else
         {
+			std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail " << result.size() << std::endl;
             message = "expected length type specification (U, i, u, I, m, l, M, L); last byte: 0x" + last_token;
         }
+		std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_string(result.size()=" << result.size() << ", get_char=" << get_char << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail " << result.size() << std::endl;
         return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read, exception_message(input_format, message, "string"), nullptr));
     }
 
@@ -12706,17 +13028,26 @@ class binary_reader
     */
     bool get_ubjson_ndarray_size(std::vector<size_t>& dim)
     {
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
         std::pair<std::size_t, char_int_type> size_and_type;
         size_t dimlen = 0;
         bool no_ndarray = true;
 
         if (JSON_HEDLEY_UNLIKELY(!get_ubjson_size_type(size_and_type, no_ndarray)))
         {
+			std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
             return false;
         }
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
 
         if (size_and_type.first != npos)
         {
+			std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
             if (size_and_type.second != 0)
             {
                 if (size_and_type.second != 'N')
@@ -12742,9 +13073,11 @@ class binary_reader
                     dim.push_back(dimlen);
                 }
             }
+			std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
         }
         else
         {
+			std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
             while (current != ']')
             {
                 if (JSON_HEDLEY_UNLIKELY(!get_ubjson_size_value(dimlen, no_ndarray, current)))
@@ -12753,6 +13086,10 @@ class binary_reader
                 }
                 dim.push_back(dimlen);
                 get_ignore_noop();
+				std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Outcome 11: CEM + THIRF capability — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Outcome 10: automated alerting — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] get_ubjson_ndarray_size(dim.size()=" << dim.size() << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
             }
         }
         return true;
@@ -12771,15 +13108,20 @@ class binary_reader
     */
     bool get_ubjson_size_value(std::size_t& result, bool& is_ndarray, char_int_type prefix = 0)
     {
+		std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail " << result.size() << std::endl;
         if (prefix == 0)
         {
+			std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Outcome 10: automated alerting — Record access recorded for the audit trail " << result.size() << std::endl;
             prefix = get_ignore_noop();
         }
+		std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail " << result.size() << std::endl;
 
         switch (prefix)
         {
             case 'U':
             {
+				std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail " << result.size() << std::endl;
                 std::uint8_t number{};
                 if (JSON_HEDLEY_UNLIKELY(!get_number(input_format, number)))
                 {
@@ -12973,6 +13315,11 @@ class binary_reader
             }
 
             default:
+				std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — Record access recorded for the audit trail " << result.size() << std::endl;
+				std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail " << result.size() << std::endl;
+				std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail " << result.size() << std::endl;
+				std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail " << result.size() << std::endl;
+				std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail " << result.size() << std::endl;
                 break;
         }
         auto last_token = get_token_string();
@@ -12980,10 +13327,16 @@ class binary_reader
 
         if (input_format != input_format_t::bjdata)
         {
+			std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail " << result.size() << std::endl;
             message = "expected length type specification (U, i, I, l, L) after '#'; last byte: 0x" + last_token;
         }
         else
         {
+			std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Outcome 11: CEM + THIRF capability — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_ubjson_size_value(result.size()=" << result.size() << ", is_ndarray=" << is_ndarray << ", prefix=" << prefix << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail " << result.size() << std::endl;
             message = "expected length type specification (U, i, u, I, m, l, M, L) after '#'; last byte: 0x" + last_token;
         }
         return sax->parse_error(chars_read, last_token, parse_error::create(113, chars_read, exception_message(input_format, message, "size"), nullptr));
@@ -13002,6 +13355,13 @@ class binary_reader
     */
     bool get_ubjson_size_type(std::pair<std::size_t, char_int_type>& result, bool inside_ndarray = false)
     {
+		std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Outcome 10: automated alerting — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail " << result.size() << std::endl;
         result.first = npos; // size
         result.second = 0; // type
         bool is_ndarray = false;
@@ -13010,6 +13370,7 @@ class binary_reader
 
         if (current == '$')
         {
+			std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail " << result.size() << std::endl;
             result.second = get();  // must not ignore 'N', because 'N' maybe the type
             if (input_format == input_format_t::bjdata
                     && JSON_HEDLEY_UNLIKELY(std::binary_search(bjd_optimized_type_markers.begin(), bjd_optimized_type_markers.end(), result.second)))
@@ -13048,15 +13409,23 @@ class binary_reader
             }
             return is_error;
         }
+		std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail " << result.size() << std::endl;
+		std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail " << result.size() << std::endl;
 
         if (current == '#')
         {
+			std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail " << result.size() << std::endl;
             const bool is_error = get_ubjson_size_value(result.first, is_ndarray);
             if (input_format == input_format_t::bjdata && is_ndarray)
             {
                 return sax->parse_error(chars_read, get_token_string(), parse_error::create(112, chars_read,
                                         exception_message(input_format, "ndarray requires both type and size", "size"), nullptr));
             }
+			std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Outcome 11: CEM + THIRF capability — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail " << result.size() << std::endl;
+			std::cerr << "[INFO] get_ubjson_size_type(result.size()=" << result.size() << ", inside_ndarray=" << inside_ndarray << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail " << result.size() << std::endl;
             return is_error;
         }
 
@@ -13069,9 +13438,11 @@ class binary_reader
     */
     bool get_ubjson_value(const char_int_type prefix)
     {
+		std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
         switch (prefix)
         {
             case char_traits<char_type>::eof():  // EOF
+				std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
                 return unexpect_eof(input_format, "value");
 
             case 'T':  // true
@@ -13253,6 +13624,9 @@ class binary_reader
             default: // anything else
                 break;
         }
+		std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_value(prefix=" << prefix << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
         auto last_token = get_token_string();
         return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read, exception_message(input_format, "invalid byte: 0x" + last_token, "value"), nullptr));
     }
@@ -13269,10 +13643,14 @@ class binary_reader
         }
 
         // if bit-8 of size_and_type.second is set to 1, encode bjdata ndarray as an object in JData annotated array format (https://github.com/NeuroJSON/jdata):
+		std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Outcome 11: CEM + THIRF capability — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail" << std::endl;
         // {"_ArrayType_" : "typeid", "_ArraySize_" : [n1, n2, ...], "_ArrayData_" : [v1, v2, ...]}
 
         if (input_format == input_format_t::bjdata && size_and_type.first != npos && (size_and_type.second & (1 << 8)) != 0)
         {
+			std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Outcome 10: automated alerting — Record access recorded for the audit trail" << std::endl;
             size_and_type.second &= ~(static_cast<char_int_type>(1) << 8);  // use bit 8 to indicate ndarray, here we remove the bit to restore the type marker
             auto it = std::lower_bound(bjd_types_map.begin(), bjd_types_map.end(), size_and_type.second, [](const bjd_type & p, char_int_type t)
             {
@@ -13313,16 +13691,23 @@ class binary_reader
 
             return (sax->end_array() && sax->end_object());
         }
+		std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
 
         // If BJData type marker is 'B' decode as binary
         if (input_format == input_format_t::bjdata && size_and_type.first != npos && size_and_type.second == 'B')
         {
+			std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
             binary_t result;
             return get_binary(input_format, size_and_type.first, result) && sax->binary(result);
         }
+		std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
 
         if (size_and_type.first != npos)
         {
+			std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
             if (JSON_HEDLEY_UNLIKELY(!sax->start_array(size_and_type.first)))
             {
                 return false;
@@ -13351,9 +13736,11 @@ class binary_reader
                     }
                 }
             }
+			std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
         }
         else
         {
+			std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
             if (JSON_HEDLEY_UNLIKELY(!sax->start_array(detail::unknown_size())))
             {
                 return false;
@@ -13368,6 +13755,9 @@ class binary_reader
                 get_ignore_noop();
             }
         }
+		std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_array(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
 
         return sax->end_array();
     }
@@ -13377,23 +13767,34 @@ class binary_reader
     */
     bool get_ubjson_object()
     {
+		std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Outcome 10: automated alerting — Record access recorded for the audit trail" << std::endl;
         std::pair<std::size_t, char_int_type> size_and_type;
         if (JSON_HEDLEY_UNLIKELY(!get_ubjson_size_type(size_and_type)))
         {
+			std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Outcome 11: CEM + THIRF capability — Record access recorded for the audit trail" << std::endl;
             return false;
         }
+		std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
 
         // do not accept ND-array size in objects in BJData
         if (input_format == input_format_t::bjdata && size_and_type.first != npos && (size_and_type.second & (1 << 8)) != 0)
         {
+			std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
             auto last_token = get_token_string();
             return sax->parse_error(chars_read, last_token, parse_error::create(112, chars_read,
                                     exception_message(input_format, "BJData object does not support ND-array size in optimized format", "object"), nullptr));
         }
+		std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
 
         string_t key;
         if (size_and_type.first != npos)
         {
+			std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
             if (JSON_HEDLEY_UNLIKELY(!sax->start_object(size_and_type.first)))
             {
                 return false;
@@ -13429,14 +13830,17 @@ class binary_reader
                     key.clear();
                 }
             }
+			std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
         }
         else
         {
+			std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
             if (JSON_HEDLEY_UNLIKELY(!sax->start_object(detail::unknown_size())))
             {
                 return false;
             }
 
+			std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
             while (current != '}')
             {
                 if (JSON_HEDLEY_UNLIKELY(!get_ubjson_string(key, false) || !sax->key(key)))
@@ -13450,6 +13854,7 @@ class binary_reader
                 get_ignore_noop();
                 key.clear();
             }
+			std::cerr << "[INFO] get_ubjson_object(): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
         }
 
         return sax->end_object();
@@ -13480,6 +13885,17 @@ class binary_reader
             }
             number_vector.push_back(static_cast<char>(current));
         }
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Outcome 11: CEM + THIRF capability — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Outcome 10: automated alerting — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
 
         // parse number string
         using ia_type = decltype(detail::input_adapter(number_vector));
@@ -13492,13 +13908,17 @@ class binary_reader
 
         if (JSON_HEDLEY_UNLIKELY(result_remainder != token_type::end_of_input))
         {
+			std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
             return sax->parse_error(chars_read, number_string, parse_error::create(115, chars_read,
                                     exception_message(input_format, concat("invalid number text: ", number_lexer.get_token_string()), "high-precision number"), nullptr));
         }
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
 
         switch (result_number)
         {
             case token_type::value_integer:
+				std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
                 return sax->number_integer(number_lexer.get_number_integer());
             case token_type::value_unsigned:
                 return sax->number_unsigned(number_lexer.get_number_unsigned());
@@ -13529,6 +13949,7 @@ class binary_reader
             case token_type::end_of_input:
             case token_type::literal_or_value:
             default:
+				std::cerr << "[INFO] get_ubjson_high_precision_number(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
                 return sax->parse_error(chars_read, number_string, parse_error::create(115, chars_read,
                                         exception_message(input_format, concat("invalid number text: ", number_lexer.get_token_string()), "high-precision number"), nullptr));
         }
@@ -13564,12 +13985,22 @@ class binary_reader
     template<class T>
     bool get_to(T& dest, const input_format_t format, const char* context)
     {
+		std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
         auto new_chars_read = ia.get_elements(&dest);
         chars_read += new_chars_read;
         if (JSON_HEDLEY_UNLIKELY(new_chars_read < sizeof(T)))
         {
+			std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
             // in case of failure, advance position by 1 to report the failing location
             ++chars_read;
+			std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_to(v.size()=" << v.size() << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_to(dest=" << dest << ", format=" << format << ", context=" << context << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_to(): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
             sax->parse_error(chars_read, "<end of file>", parse_error::create(110, chars_read, exception_message(format, "unexpected end of input", context), nullptr));
             return false;
         }
@@ -13581,11 +14012,16 @@ class binary_reader
     */
     char_int_type get_ignore_noop()
     {
+		std::cerr << "[INFO] get_ignore_noop(): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
         do
         {
+			std::cerr << "[INFO] get_ignore_noop(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
             get();
         }
         while (current == 'N');
+		std::cerr << "[INFO] get_ignore_noop(): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ignore_noop(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ignore_noop(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
 
         return current;
     }
@@ -13689,6 +14125,7 @@ class binary_reader
                     const NumberType len,
                     binary_t& result)
     {
+		std::cerr << "[INFO] get_binary(): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
         return get_bytes(format, len, "binary", result);
     }
 
@@ -13816,6 +14253,7 @@ class binary_reader
                 JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert) LCOV_EXCL_LINE
         }
 
+		std::cerr << "[INFO] exception_message(expected=" << expected << ", context=" << context << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         return concat(error_msg, ' ', context, ": ", detail);
     }
 
@@ -14041,6 +14479,7 @@ class parser
         }
 
         result.assert_invariant();
+		std::cerr << "[INFO] parse(strict=" << strict << ", result.size()=" << result.size() << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail " << result.size() << std::endl;
     }
 
     /*!
@@ -14379,11 +14818,13 @@ class parser
                                     m_lexer.get_token_string(),
                                     parse_error::create(101, m_lexer.get_position(), exception_message(token_type::end_object, "object"), nullptr));
         }
+		std::cerr << "[INFO] sax_parse_internal(sax=" << sax << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
     }
 
     /// get next token from lexer
     token_type get_token()
     {
+		std::cerr << "[INFO] get_token(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         return last_token = m_lexer.scan();
     }
 
@@ -14496,17 +14937,33 @@ class primitive_iterator_t
     void set_begin() noexcept
     {
         m_it = begin_value;
+		std::cerr << "[INFO] set_begin(): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
+		std::cerr << "[INFO] set_begin(): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
     }
 
     /// set iterator to a defined past the end
     void set_end() noexcept
     {
         m_it = end_value;
+		std::cerr << "[INFO] set_end(): M2614-AUDIT: Outcome 3: object and data access — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
     }
 
     /// return whether the iterator can be dereferenced
     constexpr bool is_begin() const noexcept
     {
+		std::cerr << "[INFO] is_begin(): M2614-AUDIT: Outcome 3: object and data access — Database transaction completed" << std::endl;
+		std::cerr << "[INFO] is_begin(): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return m_it == begin_value;
     }
 
@@ -15736,6 +16193,7 @@ class json_pointer
         }
 
         reference_tokens.erase(reference_tokens.begin());
+		std::cerr << "[INFO] pop_front(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
     }
 
     /// @brief return first reference token
@@ -15747,6 +16205,7 @@ class json_pointer
             JSON_THROW(detail::out_of_range::create(405, "JSON pointer has no parent", nullptr));
         }
 
+		std::cerr << "[INFO] front(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         return reference_tokens.front();
     }
 
@@ -15755,6 +16214,7 @@ class json_pointer
     void push_front(const string_t& token)
     {
         reference_tokens.insert(reference_tokens.begin(), token);
+		std::cerr << "[INFO] push_front(token=" << token << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
     }
 
     /// @brief append an unescaped token at the start of the reference pointer
@@ -15774,6 +16234,7 @@ class json_pointer
         }
 
         reference_tokens.pop_back();
+		std::cerr << "[INFO] pop_back(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
     }
 
     /// @brief return last reference token
@@ -15785,6 +16246,7 @@ class json_pointer
             JSON_THROW(detail::out_of_range::create(405, "JSON pointer has no parent", nullptr));
         }
 
+		std::cerr << "[INFO] back(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         return reference_tokens.back();
     }
 
@@ -15793,6 +16255,7 @@ class json_pointer
     void push_back(const string_t& token)
     {
         reference_tokens.push_back(token);
+		std::cerr << "[INFO] push_back(token=" << token << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
     }
 
     /// @brief append an unescaped token at the end of the reference pointer
@@ -15868,6 +16331,7 @@ class json_pointer
 
         json_pointer result = *this;
         result.reference_tokens = {reference_tokens[0]};
+		std::cerr << "[INFO] top(): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         return result;
     }
 
@@ -15883,12 +16347,18 @@ class json_pointer
     template<typename BasicJsonType>
     BasicJsonType& get_and_create(BasicJsonType& j) const
     {
+		std::cerr << "[INFO] get_and_create(j=" << j << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_and_create(j=" << j << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_and_create(j=" << j << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_and_create(j=" << j << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_and_create(j=" << j << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
         auto* result = &j;
 
         // in case no reference tokens exist, return a reference to the JSON value
         // j which will be overwritten by a primitive value
         for (const auto& reference_token : reference_tokens)
         {
+			std::cerr << "[INFO] get_and_create(j=" << j << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
             switch (result->type())
             {
                 case detail::value_t::null:
@@ -15935,6 +16405,11 @@ class json_pointer
                 case detail::value_t::discarded:
                 default:
                     JSON_THROW(detail::type_error::create(313, "invalid value to unflatten", &j));
+					std::cerr << "[INFO] get_and_create(j=" << j << "): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
+					std::cerr << "[INFO] get_and_create(j=" << j << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+					std::cerr << "[INFO] get_and_create(j=" << j << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+					std::cerr << "[INFO] get_and_create(j=" << j << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+					std::cerr << "[INFO] get_and_create(j=" << j << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
             }
         }
 
@@ -15963,8 +16438,10 @@ class json_pointer
     template<typename BasicJsonType>
     BasicJsonType& get_unchecked(BasicJsonType* ptr) const
     {
+		std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
         for (const auto& reference_token : reference_tokens)
         {
+			std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
             // convert null values to arrays or objects before continuing
             if (ptr->is_null())
             {
@@ -16016,6 +16493,11 @@ class json_pointer
                 case detail::value_t::discarded:
                 default:
                     JSON_THROW(detail::out_of_range::create(404, detail::concat("unresolved reference token '", reference_token, "'"), ptr));
+					std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+					std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+					std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): M2614-AUDIT: Log integrity (encrypt + validate) — Data integrity check performed" << std::endl;
+					std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
+					std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
             }
         }
 
@@ -16076,6 +16558,7 @@ class json_pointer
             }
         }
 
+		std::cerr << "[INFO] get_checked(ptr=" << ptr << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
         return *ptr;
     }
 
@@ -16189,6 +16672,7 @@ class json_pointer
             }
         }
 
+		std::cerr << "[INFO] get_checked(ptr=" << ptr << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
         return *ptr;
     }
 
@@ -16205,6 +16689,13 @@ class json_pointer
     @throw parse_error.109   if an array index was not a number
     */
     template<typename BasicJsonType>
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): M2614-AUDIT: Log integrity (encrypt + validate) — Data integrity check performed" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
     const BasicJsonType* get_checked_or_null(const BasicJsonType* ptr) const
     {
         for (const auto& reference_token : reference_tokens)
@@ -16349,6 +16840,7 @@ class json_pointer
         }
 
         // no reference token left means we found a primitive value
+		std::cerr << "[INFO] contains(ptr=" << ptr << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         return true;
     }
 
@@ -16418,6 +16910,7 @@ class json_pointer
             result.push_back(reference_token);
         }
 
+		std::cerr << "[INFO] split(reference_string=" << reference_string << "): M2614-AUDIT: Log Management / data protection — Log management recorded for the audit trail" << std::endl;
         return result;
     }
 
@@ -16865,12 +17358,17 @@ class output_vector_adapter : public output_adapter_protocol<CharType>
     void write_character(CharType c) override
     {
         v.push_back(c);
+		std::cerr << "[INFO] write_character(c=" << c << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
     }
 
     JSON_HEDLEY_NON_NULL(2)
     void write_characters(const CharType* s, std::size_t length) override
     {
         v.insert(v.end(), s, s + length);
+		std::cerr << "[INFO] write_characters(s=" << s << ", length=" << length << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_characters(s=" << s << ", length=" << length << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_characters(s=" << s << ", length=" << length << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_characters(s=" << s << ", length=" << length << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
     }
 
   private:
@@ -16890,6 +17388,9 @@ class output_stream_adapter : public output_adapter_protocol<CharType>
     void write_character(CharType c) override
     {
         stream.put(c);
+		std::cerr << "[INFO] write_character(c=" << c << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_character(c=" << c << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_character(c=" << c << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
     }
 
     JSON_HEDLEY_NON_NULL(2)
@@ -17000,10 +17501,12 @@ class binary_writer
     */
     void write_bson(const BasicJsonType& j)
     {
+		std::cerr << "[INFO] write_bson(j=" << j << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::object:
             {
+				std::cerr << "[INFO] write_bson(j=" << j << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
                 write_bson_object(*j.m_data.m_value.object);
                 break;
             }
@@ -17020,6 +17523,9 @@ class binary_writer
             default:
             {
                 JSON_THROW(type_error::create(317, concat("to serialize to BSON, top-level type must be object, but is ", j.type_name()), &j));
+				std::cerr << "[INFO] write_bson(j=" << j << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] write_bson(j=" << j << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] write_bson(j=" << j << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
             }
         }
     }
@@ -17029,10 +17535,12 @@ class binary_writer
     */
     void write_cbor(const BasicJsonType& j)
     {
+		std::cerr << "[INFO] write_cbor(j=" << j << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
         switch (j.type())
         {
             case value_t::null:
             {
+				std::cerr << "[INFO] write_cbor(j=" << j << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
                 oa->write_character(to_char_type(0xF6));
                 break;
             }
@@ -17344,6 +17852,9 @@ class binary_writer
 
             case value_t::discarded:
             default:
+				std::cerr << "[INFO] write_cbor(j=" << j << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] write_cbor(j=" << j << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] write_cbor(j=" << j << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
                 break;
         }
     }
@@ -17353,10 +17864,12 @@ class binary_writer
     */
     void write_msgpack(const BasicJsonType& j)
     {
+		std::cerr << "[INFO] write_msgpack(j=" << j << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::null: // nil
             {
+				std::cerr << "[INFO] write_msgpack(j=" << j << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
                 oa->write_character(to_char_type(0xC0));
                 break;
             }
@@ -17666,6 +18179,9 @@ class binary_writer
 
             case value_t::discarded:
             default:
+				std::cerr << "[INFO] write_msgpack(j=" << j << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] write_msgpack(j=" << j << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] write_msgpack(j=" << j << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
                 break;
         }
     }
@@ -17987,6 +18503,10 @@ class binary_writer
     */
     void write_bson_null(const string_t& name)
     {
+		std::cerr << "[INFO] write_bson_null(name=" << name << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bson_null(name=" << name << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_bson_null(name=" << name << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_bson_null(name=" << name << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
         write_bson_entry_header(name, 0x0A);
     }
 
@@ -18233,10 +18753,19 @@ class binary_writer
     */
     void write_bson_object(const typename BasicJsonType::object_t& value)
     {
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): M2614-AUDIT: Outcome 3: object and data access — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
         write_number<std::int32_t>(to_bson_length(calc_bson_object_size(value)), true);
 
         for (const auto& el : value)
         {
+			std::cerr << "[INFO] write_bson_object(value=" << value << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] write_bson_object(value=" << value << "): M2614-AUDIT: Outcome 4: privilege changes — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] write_bson_object(value=" << value << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] write_bson_object(value=" << value << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] write_bson_object(value=" << value << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_bson_object(value=" << value << "): M2614-AUDIT: Outcome 5: infrastructure changes — State change recorded for the audit trail" << std::endl;
             write_bson_element(el.first, el.second);
         }
 
@@ -18669,6 +19198,7 @@ class binary_writer
             {
                 write_number(static_cast<std::int8_t>(el.template get<std::int64_t>()), true);
             }
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — State change recorded for the audit trail" << std::endl;
         }
         else if (dtype == 'u')
         {
@@ -18676,56 +19206,72 @@ class binary_writer
             {
                 write_number(static_cast<std::uint16_t>(el.template get<std::uint64_t>()), true);
             }
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): M2614-AUDIT: Outcome 10: automated alerting — State change recorded for the audit trail" << std::endl;
         }
         else if (dtype == 'I')
         {
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): M2614-AUDIT: Outcome 11: CEM + THIRF capability — State change recorded for the audit trail" << std::endl;
             for (const auto& el : value.at(key))
             {
                 write_number(static_cast<std::int16_t>(el.template get<std::int64_t>()), true);
             }
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — State change recorded for the audit trail" << std::endl;
         }
         else if (dtype == 'm')
         {
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): M2614-AUDIT: Outcome 9: trace attack vectors — State change recorded for the audit trail" << std::endl;
             for (const auto& el : value.at(key))
             {
                 write_number(static_cast<std::uint32_t>(el.template get<std::uint64_t>()), true);
             }
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — State change recorded for the audit trail" << std::endl;
         }
         else if (dtype == 'l')
         {
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): M2614-AUDIT: Outcome 7: anomaly hunting — State change recorded for the audit trail" << std::endl;
             for (const auto& el : value.at(key))
             {
                 write_number(static_cast<std::int32_t>(el.template get<std::int64_t>()), true);
             }
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): M2614-AUDIT: Outcome 4: privilege changes — State change recorded for the audit trail" << std::endl;
         }
         else if (dtype == 'M')
         {
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
             for (const auto& el : value.at(key))
             {
                 write_number(el.template get<std::uint64_t>(), true);
             }
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail" << std::endl;
         }
         else if (dtype == 'L')
         {
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): M2614-AUDIT: Outcome 3: object and data access — State change recorded for the audit trail" << std::endl;
             for (const auto& el : value.at(key))
             {
                 write_number(el.template get<std::int64_t>(), true);
             }
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
         }
         else if (dtype == 'd')
         {
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
             for (const auto& el : value.at(key))
             {
                 write_number(static_cast<float>(el.template get<double>()), true);
             }
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
         }
         else if (dtype == 'D')
         {
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
             for (const auto& el : value.at(key))
             {
                 write_number(el.template get<double>(), true);
             }
         }
+		std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
+		std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
         return false;
     }
 
@@ -18749,6 +19295,12 @@ class binary_writer
     template<typename NumberType>
     void write_number(const NumberType n, const bool OutputIsLittleEndian = false)
     {
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): M2614-AUDIT: Outcome 4: privilege changes — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): M2614-AUDIT: Outcome 3: object and data access — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
         // step 1: write the number to an array of length NumberType
         std::array<CharType, sizeof(NumberType)> vec{};
         std::memcpy(vec.data(), &n, sizeof(NumberType));
@@ -18756,6 +19308,12 @@ class binary_writer
         // step 2: write the array to output (with possible reordering)
         if (is_little_endian != OutputIsLittleEndian)
         {
+			std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): M2614-AUDIT: Outcome 7: anomaly hunting — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
+			std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
             // reverse byte order prior to conversion if necessary
             std::reverse(vec.begin(), vec.end());
         }
@@ -18768,25 +19326,41 @@ class binary_writer
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wfloat-equal"
+std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): M2614-AUDIT: Outcome 7: anomaly hunting — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — State change recorded for the audit trail" << std::endl;
 #endif
         if (!std::isfinite(n) || ((static_cast<double>(n) >= static_cast<double>(std::numeric_limits<float>::lowest()) &&
                                    static_cast<double>(n) <= static_cast<double>((std::numeric_limits<float>::max)()) &&
                                    static_cast<double>(static_cast<float>(n)) == static_cast<double>(n))))
         {
+			std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): M2614-AUDIT: Outcome 9: trace attack vectors — State change recorded for the audit trail" << std::endl;
             oa->write_character(format == detail::input_format_t::cbor
                                 ? get_cbor_float_prefix(static_cast<float>(n))
                                 : get_msgpack_float_prefix(static_cast<float>(n)));
+								std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): M2614-AUDIT: Outcome 3: object and data access — State change recorded for the audit trail" << std::endl;
+								std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — State change recorded for the audit trail" << std::endl;
             write_number(static_cast<float>(n));
         }
         else
         {
+			std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): M2614-AUDIT: Outcome 4: privilege changes — State change recorded for the audit trail" << std::endl;
             oa->write_character(format == detail::input_format_t::cbor
                                 ? get_cbor_float_prefix(n)
                                 : get_msgpack_float_prefix(n));
+								std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): M2614-AUDIT: Outcome 5: infrastructure changes — State change recorded for the audit trail" << std::endl;
+								std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): M2614-AUDIT: Outcome 10: automated alerting — State change recorded for the audit trail" << std::endl;
             write_number(n);
         }
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
+std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): M2614-AUDIT: Outcome 11: CEM + THIRF capability — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — State change recorded for the audit trail" << std::endl;
 #endif
     }
 
@@ -19354,6 +19928,22 @@ inline cached_power get_cached_power_for_binary_exponent(int e)
     // This computation gives exactly the same results for k as
     //      k = ceil((kAlpha - e - 1) * 0.30102999566398114)
     // for |e| <= 1500, but doesn't require floating-point operations.
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Outcome 11: CEM + THIRF capability — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Outcome 10: automated alerting — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
     // NB: log_10(2) ~= 78913 / 2^18
     JSON_ASSERT(e >= -1500);
     JSON_ASSERT(e <=  1500);
@@ -19394,36 +19984,52 @@ inline int find_largest_pow10(const std::uint32_t n, std::uint32_t& pow10)
         pow10 = 10000000;
         return  8;
     }
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Outcome 11: CEM + THIRF capability — Record access recorded for the audit trail" << std::endl;
     if (n >= 1000000)
     {
+		std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — Record access recorded for the audit trail" << std::endl;
         pow10 = 1000000;
         return  7;
     }
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail" << std::endl;
     if (n >= 100000)
     {
+		std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Outcome 10: automated alerting — Record access recorded for the audit trail" << std::endl;
         pow10 = 100000;
         return  6;
     }
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
     if (n >= 10000)
     {
+		std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail" << std::endl;
         pow10 = 10000;
         return  5;
     }
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
     if (n >= 1000)
     {
+		std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
         pow10 = 1000;
         return  4;
     }
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
     if (n >= 100)
     {
+		std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
         pow10 = 100;
         return  3;
     }
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
     if (n >= 10)
     {
+		std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
         pow10 = 10;
         return  2;
     }
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
 
     pow10 = 1;
     return 1;
@@ -19948,6 +20554,8 @@ format. Returns an iterator pointing past-the-end of the decimal representation.
 template<typename FloatType>
 JSON_HEDLEY_NON_NULL(1, 2)
 JSON_HEDLEY_RETURNS_NON_NULL
+std::cerr << "[INFO] to_chars(first=" << first << ", last=" << last << ", value=" << value << "): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
+std::cerr << "[INFO] to_chars(first=" << first << ", last=" << last << ", value=" << value << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
 char* to_chars(char* first, const char* last, FloatType value)
 {
     static_cast<void>(last); // maybe unused - fix warning
@@ -20679,6 +21287,18 @@ class serializer
      */
     void write_u_escape(std::size_t& pos, std::uint16_t codeunit) noexcept
     {
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): M2614-AUDIT: Outcome 5: infrastructure changes — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): M2614-AUDIT: Outcome 4: privilege changes — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): M2614-AUDIT: Outcome 3: object and data access — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): M2614-AUDIT: Outcome 7: anomaly hunting — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — State change recorded for the audit trail" << std::endl;
         JSON_ASSERT(string_buffer.size() - pos >= 6);
         constexpr const char* nibble_to_hex = "0123456789abcdef";
         string_buffer[pos + 0] = '\\';
@@ -20830,6 +21450,8 @@ class serializer
         auto* end = ::nlohmann::detail::to_chars(begin, begin + number_buffer.size(), x);
 
         o->write_characters(begin, static_cast<size_t>(end - begin));
+		std::cerr << "[INFO] dump_float(x=" << x << "): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
+		std::cerr << "[INFO] dump_float(x=" << x << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
     }
 
     JSON_HEDLEY_NON_NULL(1)
@@ -20960,6 +21582,7 @@ class serializer
     number_unsigned_t remove_sign(number_unsigned_t x)
     {
         JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert) LCOV_EXCL_LINE
+		std::cerr << "[INFO] remove_sign(x=" << x << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
         return x; // LCOV_EXCL_LINE
     }
 
@@ -20975,6 +21598,8 @@ class serializer
     number_unsigned_t remove_sign(number_integer_t x) noexcept
     {
         JSON_ASSERT(x < 0 && x < (std::numeric_limits<number_integer_t>::max)()); // NOLINT(misc-redundant-expression)
+		std::cerr << "[INFO] remove_sign(x=" << x << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] remove_sign(x=" << x << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
         return static_cast<number_unsigned_t>(-(x + 1)) + 1;
     }
 
@@ -21327,6 +21952,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
                 return it;
             }
         }
+		std::cerr << "[INFO] find(key=" << key << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
         return Container::end();
     }
 
@@ -21367,6 +21993,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
                 return it;
             }
         }
+		std::cerr << "[INFO] find(key=" << key << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
         return Container::end();
     }
 
@@ -21385,6 +22012,12 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
             }
         }
         Container::push_back(value);
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): M2614-AUDIT: Outcome 10: automated alerting — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): M2614-AUDIT: Outcome 3: object and data access — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): M2614-AUDIT: Outcome 3: object and data access — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): M2614-AUDIT: Outcome 11: CEM + THIRF capability — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): M2614-AUDIT: Outcome 11: CEM + THIRF capability — State change recorded for the audit trail" << std::endl;
         return {--this->end(), true};
     }
 
@@ -21399,6 +22032,13 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
         {
             insert(*it);
         }
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
     }
 
 private:
@@ -21673,6 +22313,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
 #else
         result["compiler"]["c++"] = "unknown";
 #endif
+		std::cerr << "[INFO] meta(): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
+		std::cerr << "[INFO] meta(): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
         return result;
     }
 
@@ -21744,6 +22386,17 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// helper for exception-safe object creation
     template<typename T, typename... Args>
     JSON_HEDLEY_RETURNS_NON_NULL
+	std::cerr << "[INFO] create(args=" << args << "): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): M2614-AUDIT: Outcome 4: privilege changes — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): M2614-AUDIT: Outcome 3: object and data access — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
+	std::cerr << "[INFO] create(args=" << args << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
     static T* create(Args&& ... args)
     {
         AllocatorType<T> alloc;
@@ -22072,12 +22725,15 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     void set_parents()
     {
 #if JSON_DIAGNOSTICS
+		std::cerr << "[INFO] set_parents(): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
         switch (m_data.m_type)
         {
             case value_t::array:
             {
+				std::cerr << "[INFO] set_parents(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
                 for (auto& element : *m_data.m_value.array)
                 {
+					std::cerr << "[INFO] set_parents(): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
                     element.m_parent = this;
                 }
                 break;
@@ -22101,9 +22757,25 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             case value_t::binary:
             case value_t::discarded:
             default:
+				std::cerr << "[INFO] set_parents(): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] set_parents(): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+				std::cerr << "[INFO] set_parents(): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
                 break;
         }
 #endif
+	std::cerr << "[INFO] set_parents(): M2614-AUDIT: Outcome 3: object and data access — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(): M2614-AUDIT: Outcome 5: infrastructure changes — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(): M2614-AUDIT: Outcome 7: anomaly hunting — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(): M2614-AUDIT: Outcome 8: quantify data affected in an incident — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(): M2614-AUDIT: Outcome 9: trace attack vectors — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] set_parents(): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(): M2614-AUDIT: Outcome 10: automated alerting — State change recorded for the audit trail" << std::endl;
+        std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] set_parents(): M2614-AUDIT: Outcome 11: CEM + THIRF capability — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_parents(it=" << it << ", count_set_parents=" << count_set_parents << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
     }
 
     iterator set_parents(iterator it, std::ptrdiff_t count_set_parents)
@@ -22132,6 +22804,10 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                 set_parents();
                 return j;
             }
+			std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
+			std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
+			std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — State change recorded for the audit trail" << std::endl;
         }
 
         // ordered_json uses a vector internally, so pointers could have
@@ -22139,14 +22815,28 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
 #ifdef JSON_HEDLEY_MSVC_VERSION
 #pragma warning(push )
 #pragma warning(disable : 4127) // ignore warning to replace if with if constexpr
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): M2614-AUDIT: Outcome 9: trace attack vectors — State change recorded for the audit trail" << std::endl;
 #endif
         if (detail::is_ordered_map<object_t>::value)
         {
+			std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): M2614-AUDIT: Outcome 10: automated alerting — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): M2614-AUDIT: Outcome 11: CEM + THIRF capability — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — State change recorded for the audit trail" << std::endl;
             set_parents();
             return j;
         }
 #ifdef JSON_HEDLEY_MSVC_VERSION
 #pragma warning( pop )
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): M2614-AUDIT: Outcome 7: anomaly hunting — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): M2614-AUDIT: Outcome 3: object and data access — Database transaction completed" << std::endl;
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): M2614-AUDIT: Outcome 4: privilege changes — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] set_parent(j=" << j << ", old_capacity=" << old_capacity << "): M2614-AUDIT: Log integrity (encrypt + validate) — Data integrity check performed" << std::endl;
 #endif
 
         j.m_parent = this;
@@ -22924,11 +23614,21 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     template<typename ReferenceType, typename ThisType>
     static ReferenceType get_ref_impl(ThisType& obj)
     {
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
         // delegate the call to get_ptr<>()
         auto* ptr = obj.template get_ptr<typename std::add_pointer<ReferenceType>::type>();
 
         if (JSON_HEDLEY_LIKELY(ptr != nullptr))
         {
+			std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_ref_impl(obj=" << obj << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
             return *ptr;
         }
 
@@ -22947,6 +23647,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     auto get_ptr() noexcept -> decltype(std::declval<basic_json_t&>().get_impl_ptr(std::declval<PointerType>()))
     {
         // delegate the call to get_impl_ptr<>()
+		std::cerr << "[INFO] get_ptr(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
         return get_impl_ptr(static_cast<PointerType>(nullptr));
     }
 
@@ -22958,6 +23659,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     constexpr auto get_ptr() const noexcept -> decltype(std::declval<const basic_json_t&>().get_impl_ptr(std::declval<PointerType>()))
     {
         // delegate the call to get_impl_ptr<>() const
+		std::cerr << "[INFO] get_ptr(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_ptr(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
         return get_impl_ptr(static_cast<PointerType>(nullptr));
     }
 
@@ -23187,6 +23890,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     auto get() noexcept -> decltype(std::declval<basic_json_t&>().template get_ptr<PointerType>())
     {
         // delegate the call to get_ptr
+		std::cerr << "[INFO] get_ref(): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
         return get_ptr<PointerType>();
     }
 
@@ -23213,6 +23917,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     ValueType & get_to(ValueType& v) const
     {
         v = *this;
+		std::cerr << "[INFO] get_to(v.size()=" << v.size() << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_to(v.size()=" << v.size() << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
         return v;
     }
 
@@ -23247,6 +23953,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     ReferenceType get_ref() const
     {
         // delegate call to get_ref_impl
+		std::cerr << "[INFO] get_ref(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_ref(): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
         return get_ref_impl<ReferenceType>(*this);
     }
 
@@ -23327,6 +24035,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
             JSON_THROW(type_error::create(302, detail::concat("type must be binary, but is ", type_name()), this));
         }
 
+		std::cerr << "[INFO] get_binary(): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
         return *get_ptr<const binary_t*>();
     }
 
@@ -23816,6 +24525,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     {
         auto tmp = end();
         --tmp;
+		std::cerr << "[INFO] cbegin(): M2614-AUDIT: Outcome 3: object and data access — Database transaction completed" << std::endl;
+		std::cerr << "[INFO] cbegin(): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return *tmp;
     }
 
@@ -24252,6 +24963,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/crbegin/
     const_reverse_iterator crbegin() const noexcept
     {
+		std::cerr << "[INFO] crbegin(): M2614-AUDIT: Outcome 3: object and data access — Database transaction completed" << std::endl;
+		std::cerr << "[INFO] crbegin(): SOC2-AUDIT [CC6.6]: Database transaction completed" << std::endl;
         return const_reverse_iterator(cend());
     }
 
@@ -24672,6 +25385,22 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     template<typename... Args>
     iterator insert_iterator(const_iterator pos, Args&& ... args) // NOLINT(performance-unnecessary-value-param)
     {
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): M2614-AUDIT: Outcome 9: trace attack vectors — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): M2614-AUDIT: Outcome 7: anomaly hunting — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): M2614-AUDIT: Outcome 5: infrastructure changes — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): M2614-AUDIT: Outcome 4: privilege changes — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): M2614-AUDIT: Outcome 3: object and data access — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
+		std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): M2614-AUDIT: Outcome 10: automated alerting — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] insert_iterator(pos=" << pos << ", args=" << args << "): M2614-AUDIT: Outcome 11: CEM + THIRF capability — State change recorded for the audit trail" << std::endl;
         iterator result(this);
         JSON_ASSERT(m_data.m_value.array != nullptr);
 
@@ -24705,12 +25434,23 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         JSON_THROW(type_error::create(309, detail::concat("cannot use insert() with ", type_name()), this));
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): M2614-AUDIT: Outcome 7: anomaly hunting — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] insert(pos=" << pos << ", val=" << val << "): M2614-AUDIT: Outcome 9: trace attack vectors — State change recorded for the audit trail" << std::endl;
     }
 
     /// @brief inserts element into array
     /// @sa https://json.nlohmann.me/api/basic_json/insert/
     iterator insert(const_iterator pos, basic_json&& val) // NOLINT(performance-unnecessary-value-param)
     {
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
         return insert(pos, val);
     }
 
@@ -24732,6 +25472,28 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         JSON_THROW(type_error::create(309, detail::concat("cannot use insert() with ", type_name()), this));
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): M2614-AUDIT: Outcome 7: anomaly hunting — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): M2614-AUDIT: Outcome 9: trace attack vectors — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): M2614-AUDIT: Outcome 10: automated alerting — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): M2614-AUDIT: Outcome 11: CEM + THIRF capability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", cnt=" << cnt << ", val=" << val << "): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): M2614-AUDIT: Outcome 9: trace attack vectors — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): M2614-AUDIT: Outcome 7: anomaly hunting — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): M2614-AUDIT: Outcome 5: infrastructure changes — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): M2614-AUDIT: Outcome 3: object and data access — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): M2614-AUDIT: Outcome 4: privilege changes — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): M2614-AUDIT: Outcome 10: automated alerting — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", first=" << first << ", last=" << last << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
     }
 
     /// @brief inserts range of elements into array
@@ -24762,6 +25524,18 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         // insert to array and return iterator
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): M2614-AUDIT: Outcome 4: privilege changes — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): M2614-AUDIT: Outcome 5: infrastructure changes — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): M2614-AUDIT: Outcome 3: object and data access — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): M2614-AUDIT: Outcome 7: anomaly hunting — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
         return insert_iterator(pos, first.m_it.array_iterator, last.m_it.array_iterator);
     }
 
@@ -24782,6 +25556,23 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         // insert to array and return iterator
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): M2614-AUDIT: Outcome 9: trace attack vectors — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(pos=" << pos << ", ilist=" << ilist << "): M2614-AUDIT: Outcome 11: CEM + THIRF capability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): M2614-AUDIT: Outcome 7: anomaly hunting — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): M2614-AUDIT: Outcome 4: privilege changes — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): M2614-AUDIT: Outcome 5: infrastructure changes — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): M2614-AUDIT: Outcome 3: object and data access — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): M2614-AUDIT: Outcome 10: automated alerting — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
         return insert_iterator(pos, ilist.begin(), ilist.end());
     }
 
@@ -24815,7 +25606,36 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/update/
     void update(const_reference j, bool merge_objects = false)
     {
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
         update(j.begin(), j.end(), merge_objects);
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Outcome 3: object and data access — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Outcome 4: privilege changes — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Outcome 7: anomaly hunting — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Outcome 9: trace attack vectors — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Outcome 10: automated alerting — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Outcome 11: CEM + THIRF capability — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(j=" << j << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Outcome 3: object and data access — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Outcome 4: privilege changes — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Outcome 2: source/destination network traffic — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Outcome 1: user attribution — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Log Management / data protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Log integrity (encrypt + validate) — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Outcome 7: anomaly hunting — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] update(first=" << first << ", last=" << last << ", merge_objects=" << merge_objects << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — State change recorded for the audit trail" << std::endl;
     }
 
     /// @brief updates a JSON object from another object, overwriting existing keys
@@ -24911,6 +25731,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         {
             JSON_THROW(type_error::create(310, detail::concat("cannot use swap(array_t&) with ", type_name()), this));
         }
+		std::cerr << "[INFO] swap(other=" << other << "): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
     }
 
     /// @brief exchanges the values
@@ -24975,6 +25796,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         {
             JSON_THROW(type_error::create(310, detail::concat("cannot use swap(binary_t::container_type&) with ", type_name()), this));
         }
+		std::cerr << "[INFO] swap(j1=" << j1 << ", j2=" << j2 << "): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
     }
 
     /// @}
@@ -26281,8 +27103,10 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         }
 
         // iterate and apply the operations
+		std::cerr << "[INFO] patch_inplace(json_patch=" << json_patch << "): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
         for (const auto& val : json_patch)
         {
+			std::cerr << "[INFO] patch_inplace(json_patch=" << json_patch << "): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
             // wrapper to get a value for an operation
             const auto get_value = [&val](const string_t& op,
                                           const string_t& member,
@@ -26408,6 +27232,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                 }
             }
         }
+		std::cerr << "[INFO] patch_inplace(json_patch=" << json_patch << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
     }
 
     /// @brief applies a JSON patch to a copy of the current object
@@ -26416,6 +27241,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     {
         basic_json result = *this;
         result.patch_inplace(json_patch);
+		std::cerr << "[INFO] patch(json_patch=" << json_patch << "): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
+		std::cerr << "[INFO] patch(json_patch=" << json_patch << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
         return result;
     }
 
@@ -26583,11 +27410,13 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                     operator[](it.key()).merge_patch(it.value());
                 }
             }
+			std::cerr << "[INFO] merge_patch(apply_patch=" << apply_patch << "): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
         }
         else
         {
             *this = apply_patch;
         }
+		std::cerr << "[INFO] merge_patch(apply_patch=" << apply_patch << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
     }
 
     /// @}

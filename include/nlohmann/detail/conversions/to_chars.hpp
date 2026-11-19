@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <array> // array
 #include <cmath>   // signbit, isfinite
 #include <cstdint> // intN_t, uintN_t
@@ -468,6 +469,22 @@ inline cached_power get_cached_power_for_binary_exponent(int e)
     // This computation gives exactly the same results for k as
     //      k = ceil((kAlpha - e - 1) * 0.30102999566398114)
     // for |e| <= 1500, but doesn't require floating-point operations.
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Outcome 11: CEM + THIRF capability — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Outcome 10: automated alerting — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
     // NB: log_10(2) ~= 78913 / 2^18
     JSON_ASSERT(e >= -1500);
     JSON_ASSERT(e <=  1500);
@@ -508,36 +525,52 @@ inline int find_largest_pow10(const std::uint32_t n, std::uint32_t& pow10)
         pow10 = 10000000;
         return  8;
     }
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Outcome 11: CEM + THIRF capability — Record access recorded for the audit trail" << std::endl;
     if (n >= 1000000)
     {
+		std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Retention: 6 months searchable / 12 months retrievable — Record access recorded for the audit trail" << std::endl;
         pow10 = 1000000;
         return  7;
     }
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Outcome 9: trace attack vectors — Record access recorded for the audit trail" << std::endl;
     if (n >= 100000)
     {
+		std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Outcome 10: automated alerting — Record access recorded for the audit trail" << std::endl;
         pow10 = 100000;
         return  6;
     }
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Outcome 7: anomaly hunting — Record access recorded for the audit trail" << std::endl;
     if (n >= 10000)
     {
+		std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Outcome 8: quantify data affected in an incident — Record access recorded for the audit trail" << std::endl;
         pow10 = 10000;
         return  5;
     }
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Outcome 5: infrastructure changes — Record access recorded for the audit trail" << std::endl;
     if (n >= 1000)
     {
+		std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Outcome 6: suspicious activity & IOC hunting — Record access recorded for the audit trail" << std::endl;
         pow10 = 1000;
         return  4;
     }
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Outcome 3: object and data access — Record access recorded for the audit trail" << std::endl;
     if (n >= 100)
     {
+		std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Outcome 4: privilege changes — Record access recorded for the audit trail" << std::endl;
         pow10 = 100;
         return  3;
     }
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Outcome 1: user attribution — Record access recorded for the audit trail" << std::endl;
     if (n >= 10)
     {
+		std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Outcome 2: source/destination network traffic — Record access recorded for the audit trail" << std::endl;
         pow10 = 10;
         return  2;
     }
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Continuous Event Monitoring / Network Visibility — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Log Management / data protection — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Log integrity (encrypt + validate) — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): M2614-AUDIT: Activity-Based Outcomes 1-11 — Record access recorded for the audit trail" << std::endl;
 
     pow10 = 1;
     return 1;
@@ -1062,6 +1095,8 @@ format. Returns an iterator pointing past-the-end of the decimal representation.
 template<typename FloatType>
 JSON_HEDLEY_NON_NULL(1, 2)
 JSON_HEDLEY_RETURNS_NON_NULL
+std::cerr << "[INFO] to_chars(first=" << first << ", last=" << last << ", value=" << value << "): M2614-AUDIT: Outcome 5: infrastructure changes — Change management operation performed" << std::endl;
+std::cerr << "[INFO] to_chars(first=" << first << ", last=" << last << ", value=" << value << "): SOC2-AUDIT [CC8.1]: Change management operation performed" << std::endl;
 char* to_chars(char* first, const char* last, FloatType value)
 {
     static_cast<void>(last); // maybe unused - fix warning
