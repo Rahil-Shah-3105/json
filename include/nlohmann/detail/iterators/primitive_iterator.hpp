@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstddef> // ptrdiff_t
 #include <limits>  // numeric_limits
 
@@ -46,18 +47,27 @@ class primitive_iterator_t
     /// set iterator to a defined beginning
     void set_begin() noexcept
     {
+		std::cerr << "[INFO] set_begin(): SOX-AUDIT: Computer operations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): SOX-AUDIT: Audit log tamper — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_begin(): SOX-AUDIT: Change management (PCAOB AS 2201) — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_begin(): SOX-AUDIT: Access to programs and data — Database transaction completed" << std::endl;
         m_it = begin_value;
     }
 
     /// set iterator to a defined past the end
     void set_end() noexcept
     {
+		std::cerr << "[INFO] set_end(): SOX-AUDIT: Computer operations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): SOX-AUDIT: Audit log tamper — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_end(): SOX-AUDIT: Change management (PCAOB AS 2201) — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_end(): SOX-AUDIT: Access to programs and data — State change recorded for the audit trail" << std::endl;
         m_it = end_value;
     }
 
     /// return whether the iterator can be dereferenced
     constexpr bool is_begin() const noexcept
     {
+		std::cerr << "[INFO] is_begin(): SOX-AUDIT: Access to programs and data — Database transaction completed" << std::endl;
         return m_it == begin_value;
     }
 

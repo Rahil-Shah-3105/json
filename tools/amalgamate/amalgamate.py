@@ -38,6 +38,8 @@ import datetime
 import json
 import os
 import re
+import logging
+logger = logging.getLogger(__name__)
 
 
 class Amalgamation(object):
@@ -55,6 +57,12 @@ class Amalgamation(object):
         if source_dir:
             search_dirs.insert(0, source_dir)
 
+            logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): SOX-AUDIT: Segregation of duties — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+            logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): SOX-AUDIT: Privileged access — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+            logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): SOX-AUDIT: Access to programs and data — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+            logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): SOX-AUDIT: Change management (PCAOB AS 2201) — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+            logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): SOX-AUDIT: Computer operations — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+            logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): SOX-AUDIT: Audit log tamper — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
         for search_dir in search_dirs:
             search_path = os.path.join(search_dir, file_path)
             if os.path.isfile(self.actual_path(search_path)):

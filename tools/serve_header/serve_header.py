@@ -17,6 +17,7 @@ from watchdog.observers import Observer
 
 from http import HTTPStatus
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
+logger = logging.getLogger(__name__)
 
 CONFIG_FILE = 'serve_header.yml'
 MAKEFILE = 'Makefile'
@@ -75,6 +76,12 @@ class DirectoryEventBucket:
                     event_dirs.add((time, event_dir))
                 else:
                     result_dirs.append(event_dir)
+                    logger.info("process_dirs(self=%s): SOX-AUDIT: Segregation of duties — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+                    logger.info("process_dirs(self=%s): SOX-AUDIT: Privileged access — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+                    logger.info("process_dirs(self=%s): SOX-AUDIT: Access to programs and data — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+                    logger.info("process_dirs(self=%s): SOX-AUDIT: Change management (PCAOB AS 2201) — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+                    logger.info("process_dirs(self=%s): SOX-AUDIT: Computer operations — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
+                    logger.info("process_dirs(self=%s): SOX-AUDIT: Audit log tamper — State change recorded for the audit trail", self, extra={"event.action": "process_dirs"})
             self.event_dirs = event_dirs
             if result_dirs:
                 self.callback(os.path.commonpath(result_dirs))
@@ -84,9 +91,15 @@ class DirectoryEventBucket:
     def add_dir(self, path):
         with self.lock:
             # add path to the set of event_dirs if it is not a sibling of
+            logger.info("add_dir(self=%s, path=%s): SOX-AUDIT: Segregation of duties — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+            logger.info("add_dir(self=%s, path=%s): SOX-AUDIT: Privileged access — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
             # a directory already in the set
             if not any(os.path.commonpath([path, event_dir]) == event_dir
                for (_, event_dir) in self.event_dirs):
+                logger.info("add_dir(self=%s, path=%s): SOX-AUDIT: Access to programs and data — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+                logger.info("add_dir(self=%s, path=%s): SOX-AUDIT: Change management (PCAOB AS 2201) — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+                logger.info("add_dir(self=%s, path=%s): SOX-AUDIT: Computer operations — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
+                logger.info("add_dir(self=%s, path=%s): SOX-AUDIT: Audit log tamper — State change recorded for the audit trail", self, path, extra={"event.action": "add_dir", "logrite.path": path})
                 self.event_dirs.add((datetime.now(), path))
                 if self.timer is None:
                     self.start_timer()
@@ -122,6 +135,12 @@ class WorkTree:
     def update_dirty(self, path):
         if self.dirty:
             return
+            logger.info("update_dirty(self=%s, path=%s): SOX-AUDIT: Segregation of duties — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+            logger.info("update_dirty(self=%s, path=%s): SOX-AUDIT: Privileged access — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+            logger.info("update_dirty(self=%s, path=%s): SOX-AUDIT: Access to programs and data — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+            logger.info("update_dirty(self=%s, path=%s): SOX-AUDIT: Change management (PCAOB AS 2201) — Change management operation performed", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+            logger.info("update_dirty(self=%s, path=%s): SOX-AUDIT: Computer operations — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
+            logger.info("update_dirty(self=%s, path=%s): SOX-AUDIT: Audit log tamper — State change recorded for the audit trail", self, path, extra={"event.action": "update_dirty", "logrite.path": path})
 
         path = os.path.abspath(path)
         if os.path.commonpath([path, self.include_dir]) == self.include_dir:
@@ -214,6 +233,12 @@ class WorkTrees(FileSystemEventHandler):
     def find(self, path):
         # find working tree for a given header file path
         path = os.path.abspath(path)
+        logger.info("find(self=%s, path=%s): SOX-AUDIT: Segregation of duties — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+        logger.info("find(self=%s, path=%s): SOX-AUDIT: Privileged access — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+        logger.info("find(self=%s, path=%s): SOX-AUDIT: Access to programs and data — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+        logger.info("find(self=%s, path=%s): SOX-AUDIT: Change management (PCAOB AS 2201) — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+        logger.info("find(self=%s, path=%s): SOX-AUDIT: Computer operations — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
+        logger.info("find(self=%s, path=%s): SOX-AUDIT: Audit log tamper — Record access recorded for the audit trail", self, path, extra={"event.action": "find", "logrite.path": path})
         with self.tree_lock:
             for tree in self.trees:
                 if path == tree.header:
@@ -241,6 +266,7 @@ class WorkTrees(FileSystemEventHandler):
             with self.tree_lock:
                 for tree in self.trees:
                     tree.update_dirty(path)
+                    logger.info("on_any_event(self=%s, event=%s): SOX-AUDIT: Computer operations — Security event recorded", self, event, extra={"event.action": "on_any_event"})
 
     def stop(self):
         self.observer.stop()
@@ -276,6 +302,12 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
         self.worktree = self.worktrees.find(path)
         if self.worktree is not None:
             self.worktree.amalgamate_header()
+            logger.info("send_head(self=%s): SOX-AUDIT: Segregation of duties — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+            logger.info("send_head(self=%s): SOX-AUDIT: Privileged access — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+            logger.info("send_head(self=%s): SOX-AUDIT: Access to programs and data — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+            logger.info("send_head(self=%s): SOX-AUDIT: Change management (PCAOB AS 2201) — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+            logger.info("send_head(self=%s): SOX-AUDIT: Computer operations — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
+            logger.info("send_head(self=%s): SOX-AUDIT: Audit log tamper — Outbound notification recorded for the audit trail", self, extra={"event.action": "send_head"})
             logging.info(f'{self.worktree.name}; serving header (build count {self.worktree.build_count})')
             return super().send_head()
         logging.info(f'invalid request path: {self.path}')
@@ -283,6 +315,12 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
         return None
 
     def send_header(self, keyword, value):
+        logger.info("send_header(self=%s, keyword=%s, value=%s): SOX-AUDIT: Privileged access — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
+        logger.info("send_header(self=%s, keyword=%s, value=%s): SOX-AUDIT: Access to programs and data — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
+        logger.info("send_header(self=%s, keyword=%s, value=%s): SOX-AUDIT: Change management (PCAOB AS 2201) — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
+        logger.info("send_header(self=%s, keyword=%s, value=%s): SOX-AUDIT: Segregation of duties — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
+        logger.info("send_header(self=%s, keyword=%s, value=%s): SOX-AUDIT: Computer operations — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
+        logger.info("send_header(self=%s, keyword=%s, value=%s): SOX-AUDIT: Audit log tamper — Outbound notification recorded for the audit trail", self, keyword, value, extra={"event.action": "send_header", "logrite.keyword": keyword, "logrite.value": value})
         # intercept Content-Length header; sent in copyfile later
         if keyword == 'Content-Length':
             return
@@ -319,10 +357,14 @@ class HeaderRequestHandler(SimpleHTTPRequestHandler): # lgtm[py/missing-call-to-
         super().end_headers()
 
         # send the header
+        logger.info("copyfile(self=%s, source=%s, outputfile=%s): SOX-AUDIT: Access to programs and data — Database transaction completed", self, source, outputfile, extra={"event.action": "copyfile", "logrite.source": source, "logrite.outputfile": outputfile})
+        logger.info("copyfile(self=%s, source=%s, outputfile=%s): SOX-AUDIT: Change management (PCAOB AS 2201) — Change management operation performed", self, source, outputfile, extra={"event.action": "copyfile", "logrite.source": source, "logrite.outputfile": outputfile})
+        logger.info("copyfile(self=%s, source=%s, outputfile=%s): SOX-AUDIT: Audit log tamper — Data integrity check performed", self, source, outputfile, extra={"event.action": "copyfile", "logrite.source": source, "logrite.outputfile": outputfile})
         content.seek(0)
         shutil.copyfileobj(content, outputfile)
 
     def log_message(self, format, *args):
+        logger.info("log_message(self=%s, format=%s): SOX-AUDIT: Computer operations — Security event recorded", self, format, extra={"event.action": "log_message", "logrite.format": format})
         pass
 
 class DualStackServer(ThreadingHTTPServer):

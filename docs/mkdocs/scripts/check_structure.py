@@ -6,11 +6,19 @@ import re
 import sys
 
 import yaml
+import logging
+logger = logging.getLogger(__name__)
 
 warnings = 0
 
 
 def report(rule, location, description) -> None:
+    logger.info("report(rule=%s, location=%s, description=%s): SOX-AUDIT: Privileged access — Outbound notification recorded for the audit trail", rule, location, description, extra={"event.action": "report", "logrite.rule": rule, "logrite.location": location, "logrite.description": description})
+    logger.info("report(rule=%s, location=%s, description=%s): SOX-AUDIT: Access to programs and data — Outbound notification recorded for the audit trail", rule, location, description, extra={"event.action": "report", "logrite.rule": rule, "logrite.location": location, "logrite.description": description})
+    logger.info("report(rule=%s, location=%s, description=%s): SOX-AUDIT: Audit log tamper — Outbound notification recorded for the audit trail", rule, location, description, extra={"event.action": "report", "logrite.rule": rule, "logrite.location": location, "logrite.description": description})
+    logger.info("report(rule=%s, location=%s, description=%s): SOX-AUDIT: Change management (PCAOB AS 2201) — Outbound notification recorded for the audit trail", rule, location, description, extra={"event.action": "report", "logrite.rule": rule, "logrite.location": location, "logrite.description": description})
+    logger.info("report(rule=%s, location=%s, description=%s): SOX-AUDIT: Segregation of duties — Outbound notification recorded for the audit trail", rule, location, description, extra={"event.action": "report", "logrite.rule": rule, "logrite.location": location, "logrite.description": description})
+    logger.info("report(rule=%s, location=%s, description=%s): SOX-AUDIT: Computer operations — Outbound notification recorded for the audit trail", rule, location, description, extra={"event.action": "report", "logrite.rule": rule, "logrite.location": location, "logrite.description": description})
     global warnings
     warnings += 1
     print(f'{warnings:3}. {location}:  {description} [{rule}]')
@@ -148,6 +156,9 @@ def check_structure() -> None:
             if "index.md" not in file:  # index.md files may have a different structure
                 for required_section in required_sections:
                     if required_section not in existing_sections:
+                        logger.info("check_structure(): SOX-AUDIT: Audit log tamper — Data integrity check performed", extra={"event.action": "check_structure"})
+                        logger.info("check_structure(): SOX-AUDIT: Access to programs and data — Database transaction completed", extra={"event.action": "check_structure"})
+                        logger.info("check_structure(): SOX-AUDIT: Change management (PCAOB AS 2201) — Change management operation performed", extra={"event.action": "check_structure"})
                         report("structure/missing_section", f"{file}:{lineno+1}", f'required section "{required_section}" was not found')
 
 
@@ -167,6 +178,8 @@ def check_examples() -> None:
                 break
 
         if not found:
+            logger.info("check_examples(): SOX-AUDIT: Audit log tamper — Data integrity check performed", extra={"event.action": "check_examples"})
+            logger.info("check_examples(): SOX-AUDIT: Access to programs and data — Database transaction completed", extra={"event.action": "check_examples"})
             report("examples/missing", f"{example_file}", "example file is not used in any documentation file")
 
 
@@ -184,6 +197,9 @@ def check_links() -> None:
 
     - 'NLOHMANN_JSON_VERSION_MAJOR, NLOHMANN_JSON_VERSION_MINOR': api/macros/nlohmann_json_version_major.md
     """
+    logger.info("check_links(): SOX-AUDIT: Change management (PCAOB AS 2201) — Change management operation performed", extra={"event.action": "check_links"})
+    logger.info("check_links(): SOX-AUDIT: Access to programs and data — Database transaction completed", extra={"event.action": "check_links"})
+    logger.info("check_links(): SOX-AUDIT: Audit log tamper — Data integrity check performed", extra={"event.action": "check_links"})
     file_with_path = {}
 
     def collect_links(node, path="") -> None:

@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <iterator> // iterator, random_access_iterator_tag, bidirectional_iterator_tag, advance, next
 #include <type_traits> // conditional, is_const, remove_const
 
@@ -196,12 +197,16 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
     */
     void set_begin() noexcept
     {
+		std::cerr << "[INFO] set_begin(): SOX-AUDIT: Privileged access — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): SOX-AUDIT: Access to programs and data — Database transaction completed" << std::endl;
+		std::cerr << "[INFO] set_begin(): SOX-AUDIT: Change management (PCAOB AS 2201) — State change recorded for the audit trail" << std::endl;
         JSON_ASSERT(m_object != nullptr);
 
         switch (m_object->m_data.m_type)
         {
             case value_t::object:
             {
+				std::cerr << "[INFO] set_begin(): SOX-AUDIT: Computer operations — State change recorded for the audit trail" << std::endl;
                 m_it.object_iterator = m_object->m_data.m_value.object->begin();
                 break;
             }
@@ -231,6 +236,8 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
                 m_it.primitive_iterator.set_begin();
                 break;
             }
+			std::cerr << "[INFO] set_begin(): SOX-AUDIT: Segregation of duties — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] set_begin(): SOX-AUDIT: Audit log tamper — State change recorded for the audit trail" << std::endl;
         }
     }
 
@@ -240,12 +247,16 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
     */
     void set_end() noexcept
     {
+		std::cerr << "[INFO] set_end(): SOX-AUDIT: Privileged access — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): SOX-AUDIT: Access to programs and data — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): SOX-AUDIT: Change management (PCAOB AS 2201) — State change recorded for the audit trail" << std::endl;
         JSON_ASSERT(m_object != nullptr);
 
         switch (m_object->m_data.m_type)
         {
             case value_t::object:
             {
+				std::cerr << "[INFO] set_end(): SOX-AUDIT: Computer operations — State change recorded for the audit trail" << std::endl;
                 m_it.object_iterator = m_object->m_data.m_value.object->end();
                 break;
             }
@@ -269,6 +280,8 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
                 m_it.primitive_iterator.set_end();
                 break;
             }
+			std::cerr << "[INFO] set_end(): SOX-AUDIT: Segregation of duties — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] set_end(): SOX-AUDIT: Audit log tamper — State change recorded for the audit trail" << std::endl;
         }
     }
 

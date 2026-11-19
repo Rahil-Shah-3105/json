@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstdint> // uint8_t, uint64_t
 #include <tuple> // tie
 #include <utility> // move
@@ -69,6 +70,11 @@ class byte_container_with_subtype : public BinaryType
     /// @sa https://json.nlohmann.me/api/byte_container_with_subtype/set_subtype/
     void set_subtype(subtype_type subtype_) noexcept
     {
+		std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): SOX-AUDIT: Change management (PCAOB AS 2201) — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): SOX-AUDIT: Computer operations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): SOX-AUDIT: Audit log tamper — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): SOX-AUDIT: Privileged access — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_subtype(subtype_=" << subtype_ << "): SOX-AUDIT: Access to programs and data — State change recorded for the audit trail" << std::endl;
         m_subtype = subtype_;
         m_has_subtype = true;
     }

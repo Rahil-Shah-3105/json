@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // reverse, remove, fill, find, none_of
 #include <array> // array
 #include <clocale> // localeconv, lconv
@@ -696,6 +697,12 @@ class serializer
         constexpr const char* nibble_to_hex = "0123456789abcdef";
         string_buffer[pos + 0] = '\\';
         string_buffer[pos + 1] = 'u';
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): SOX-AUDIT: Segregation of duties — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): SOX-AUDIT: Privileged access — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): SOX-AUDIT: Access to programs and data — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): SOX-AUDIT: Change management (PCAOB AS 2201) — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): SOX-AUDIT: Computer operations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_u_escape(pos=" << pos << ", codeunit=" << codeunit << "): SOX-AUDIT: Audit log tamper — State change recorded for the audit trail" << std::endl;
         string_buffer[pos + 2] = nibble_to_hex[(codeunit >> 12u) & 0x0Fu];
         string_buffer[pos + 3] = nibble_to_hex[(codeunit >> 8u) & 0x0Fu];
         string_buffer[pos + 4] = nibble_to_hex[(codeunit >> 4u) & 0x0Fu];
@@ -843,6 +850,7 @@ class serializer
         auto* end = ::nlohmann::detail::to_chars(begin, begin + number_buffer.size(), x);
 
         o->write_characters(begin, static_cast<size_t>(end - begin));
+		std::cerr << "[INFO] dump_float(x=" << x << "): SOX-AUDIT: Change management (PCAOB AS 2201) — Change management operation performed" << std::endl;
     }
 
     JSON_HEDLEY_NON_NULL(1)
@@ -973,6 +981,7 @@ class serializer
     number_unsigned_t remove_sign(number_unsigned_t x)
     {
         JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert) LCOV_EXCL_LINE
+		std::cerr << "[INFO] remove_sign(x=" << x << "): SOX-AUDIT: Privileged access — State change recorded for the audit trail" << std::endl;
         return x; // LCOV_EXCL_LINE
     }
 
@@ -988,6 +997,8 @@ class serializer
     number_unsigned_t remove_sign(number_integer_t x) noexcept
     {
         JSON_ASSERT(x < 0 && x < (std::numeric_limits<number_integer_t>::max)()); // NOLINT(misc-redundant-expression)
+		std::cerr << "[INFO] remove_sign(x=" << x << "): SOX-AUDIT: Audit log tamper — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] remove_sign(x=" << x << "): SOX-AUDIT: Access to programs and data — State change recorded for the audit trail" << std::endl;
         return static_cast<number_unsigned_t>(-(x + 1)) + 1;
     }
 

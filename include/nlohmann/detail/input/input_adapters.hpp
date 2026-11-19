@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <array> // array
 #include <cstddef> // size_t
 #include <cstring> // strlen
@@ -132,6 +133,7 @@ class input_stream_adapter
         {
             is->clear(is->rdstate() | std::ios::eofbit);
         }
+		std::cerr << "[INFO] get_character(): SOX-AUDIT: Audit log tamper — Record access recorded for the audit trail" << std::endl;
         return res;
     }
 
@@ -143,6 +145,7 @@ class input_stream_adapter
         {
             is->clear(is->rdstate() | std::ios::eofbit);
         }
+		std::cerr << "[INFO] get_elements(dest=" << dest << ", count=" << count << "): SOX-AUDIT: Audit log tamper — Record access recorded for the audit trail" << std::endl;
         return res;
     }
 
@@ -242,10 +245,14 @@ class iterator_input_adapter
         const std::size_t available = static_cast<std::size_t>(std::ranges::distance(current, end)) * sizeof(char_type);
 #else
         const std::size_t available = static_cast<std::size_t>(std::distance(current, end)) * sizeof(char_type);
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): SOX-AUDIT: Segregation of duties — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): SOX-AUDIT: Privileged access — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): SOX-AUDIT: Change management (PCAOB AS 2201) — Record access recorded for the audit trail" << std::endl;
 #endif
         const std::size_t copied = (std::min)(wanted, available);
         if (JSON_HEDLEY_LIKELY(copied != 0))
         {
+			std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): SOX-AUDIT: Access to programs and data — Record access recorded for the audit trail" << std::endl;
             // the copy must stay within both buffers: the caller-provided
             // destination holds `wanted` bytes and the remaining input range
             // holds `available` bytes, and `copied` is the minimum of the two
@@ -256,6 +263,8 @@ class iterator_input_adapter
             std::memcpy(dest, &*current, copied);
             std::advance(current, static_cast<typename std::iterator_traits<IteratorType>::difference_type>(copied / sizeof(char_type)));
         }
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): SOX-AUDIT: Computer operations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): SOX-AUDIT: Audit log tamper — Record access recorded for the audit trail" << std::endl;
         return copied;
     }
 
@@ -494,6 +503,8 @@ struct iterator_input_adapter_factory
 
     static adapter_type create(IteratorType first, SentinelType last)
     {
+		std::cerr << "[INFO] create(container=" << container << "): SOX-AUDIT: Access to programs and data — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] create(first=" << first << ", last=" << last << "): SOX-AUDIT: Access to programs and data — State change recorded for the audit trail" << std::endl;
         return adapter_type(std::move(first), std::move(last));
     }
 };
@@ -553,6 +564,8 @@ struct iterator_input_adapter_factory<IteratorType, SentinelType, enable_if_t<is
 
     static adapter_type create(IteratorType first, SentinelType last)
     {
+		std::cerr << "[INFO] create(first=" << first << ", last=" << last << "): SOX-AUDIT: Audit log tamper — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] create(first=" << first << ", last=" << last << "): SOX-AUDIT: Change management (PCAOB AS 2201) — State change recorded for the audit trail" << std::endl;
         return adapter_type(base_adapter_type(std::move(first), std::move(last)));
     }
 };
@@ -591,6 +604,8 @@ struct container_input_adapter_factory< ContainerType,
 
            static adapter_type create(ContainerType&& container)
 {
+	std::cerr << "[INFO] create(container=" << container << "): SOX-AUDIT: Audit log tamper — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] create(container=" << container << "): SOX-AUDIT: Change management (PCAOB AS 2201) — State change recorded for the audit trail" << std::endl;
     return input_adapter(begin(std::forward<ContainerType>(container)), end(std::forward<ContainerType>(container)));
 }
        };
