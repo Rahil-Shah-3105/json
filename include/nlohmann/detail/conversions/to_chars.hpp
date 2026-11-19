@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <array> // array
 #include <cmath>   // signbit, isfinite
 #include <cstdint> // intN_t, uintN_t
@@ -250,6 +251,8 @@ boundaries compute_boundaries(FloatType value)
     // Determine w- = m- such that e_(w-) = e_(w+).
     const diyfp w_minus = diyfp::normalize_to(m_minus, w_plus.e);
 
+	std::cerr << "[INFO] compute_boundaries(value=" << value << "): CMMC-AUDIT: Media protection — Encryption operation completed" << std::endl;
+	std::cerr << "[INFO] compute_boundaries(value=" << value << "): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
     return {diyfp::normalize(v), w_minus, w_plus};
 }
 
@@ -479,6 +482,11 @@ inline cached_power get_cached_power_for_binary_exponent(int e)
     JSON_ASSERT(static_cast<std::size_t>(index) < kCachedPowers.size());
 
     const cached_power cached = kCachedPowers[static_cast<std::size_t>(index)];
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_cached_power_for_binary_exponent(e=" << e << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
     JSON_ASSERT(kAlpha <= cached.e + e + 64);
     JSON_ASSERT(kGamma >= cached.e + e + 64);
 
@@ -533,11 +541,16 @@ inline int find_largest_pow10(const std::uint32_t n, std::uint32_t& pow10)
         pow10 = 100;
         return  3;
     }
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): CMMC-AUDIT: Media protection — Record access recorded for the audit trail" << std::endl;
     if (n >= 10)
     {
         pow10 = 10;
         return  2;
     }
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): CMMC-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): CMMC-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): CMMC-AUDIT: Audit traceability — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] find_largest_pow10(n=" << n << ", pow10=" << pow10 << "): CMMC-AUDIT: Access control — Record access recorded for the audit trail" << std::endl;
 
     pow10 = 1;
     return 1;

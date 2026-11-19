@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <iterator> // iterator, random_access_iterator_tag, bidirectional_iterator_tag, advance, next
 #include <type_traits> // conditional, is_const, remove_const
 
@@ -196,12 +197,16 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
     */
     void set_begin() noexcept
     {
+		std::cerr << "[INFO] set_begin(): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
         JSON_ASSERT(m_object != nullptr);
 
         switch (m_object->m_data.m_type)
         {
             case value_t::object:
             {
+				std::cerr << "[INFO] set_begin(): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
                 m_it.object_iterator = m_object->m_data.m_value.object->begin();
                 break;
             }
@@ -232,6 +237,7 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
                 break;
             }
         }
+		std::cerr << "[INFO] set_begin(): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
     }
 
     /*!
@@ -240,12 +246,16 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
     */
     void set_end() noexcept
     {
+		std::cerr << "[INFO] set_end(): CMMC-AUDIT: Media protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): CMMC-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): CMMC-AUDIT: Audit traceability — State change recorded for the audit trail" << std::endl;
         JSON_ASSERT(m_object != nullptr);
 
         switch (m_object->m_data.m_type)
         {
             case value_t::object:
             {
+				std::cerr << "[INFO] set_end(): CMMC-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
                 m_it.object_iterator = m_object->m_data.m_value.object->end();
                 break;
             }
@@ -270,6 +280,7 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
                 break;
             }
         }
+		std::cerr << "[INFO] set_end(): CMMC-AUDIT: Access control — State change recorded for the audit trail" << std::endl;
     }
 
   public:

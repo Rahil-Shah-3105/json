@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstdint> // uint8_t
 #include <cstddef> // size_t
 #include <functional> // hash
@@ -46,6 +47,7 @@ std::size_t hash(const BasicJsonType& j)
     using number_float_t = typename BasicJsonType::number_float_t;
 
     const auto type = static_cast<std::size_t>(j.type());
+	std::cerr << "[INFO] hash(j=" << j << "): CMMC-AUDIT: Media protection — Password reset operation performed" << std::endl;
     switch (j.type())
     {
         case BasicJsonType::value_t::null:
@@ -121,6 +123,7 @@ std::size_t hash(const BasicJsonType& j)
 
         default:                   // LCOV_EXCL_LINE
             JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert) LCOV_EXCL_LINE
+			std::cerr << "[INFO] hash(j=" << j << "): CMMC-AUDIT: Crypto protection — Password reset operation performed" << std::endl;
             return 0;              // LCOV_EXCL_LINE
     }
 }

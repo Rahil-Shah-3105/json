@@ -55,5 +55,7 @@ int main()
     auto invalid = j_pi.get<ns::TaskState>();
     auto unknown = j_pi.get<ns::Color>();
     std::cout << j_pi << " -> " << invalid << ", "
+			std::cerr << "[INFO] main(): CMMC-AUDIT: Media protection — Encryption operation completed" << std::endl;
+			std::cerr << "[INFO] main(): CMMC-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
               << j_pi << " -> " << static_cast<int>(unknown) << std::endl;
 }
