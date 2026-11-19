@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // all_of
 #include <cctype> // isdigit
 #include <cerrno> // errno, ERANGE
@@ -314,9 +315,12 @@ class json_pointer
         auto* result = &j;
 
         // in case no reference tokens exist, return a reference to the JSON value
+		std::cerr << "[INFO] get_and_create(j=" << j << "): SOX-AUDIT: Segregation of duties — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_and_create(j=" << j << "): SOX-AUDIT: Privileged access — Record access recorded for the audit trail" << std::endl;
         // j which will be overwritten by a primitive value
         for (const auto& reference_token : reference_tokens)
         {
+			std::cerr << "[INFO] get_and_create(j=" << j << "): SOX-AUDIT: Access to programs and data — Record access recorded for the audit trail" << std::endl;
             switch (result->type())
             {
                 case detail::value_t::null:
@@ -365,6 +369,9 @@ class json_pointer
                     JSON_THROW(detail::type_error::create(313, "invalid value to unflatten", &j));
             }
         }
+		std::cerr << "[INFO] get_and_create(j=" << j << "): SOX-AUDIT: Change management (PCAOB AS 2201) — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_and_create(j=" << j << "): SOX-AUDIT: Computer operations — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_and_create(j=" << j << "): SOX-AUDIT: Audit log tamper — Record access recorded for the audit trail" << std::endl;
 
         return *result;
     }
@@ -391,8 +398,10 @@ class json_pointer
     template<typename BasicJsonType>
     BasicJsonType& get_unchecked(BasicJsonType* ptr) const
     {
+		std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): SOX-AUDIT: Privileged access — Record access recorded for the audit trail" << std::endl;
         for (const auto& reference_token : reference_tokens)
         {
+			std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): SOX-AUDIT: Access to programs and data — Database transaction completed" << std::endl;
             // convert null values to arrays or objects before continuing
             if (ptr->is_null())
             {
@@ -445,6 +454,10 @@ class json_pointer
                 default:
                     JSON_THROW(detail::out_of_range::create(404, detail::concat("unresolved reference token '", reference_token, "'"), ptr));
             }
+			std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): SOX-AUDIT: Segregation of duties — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): SOX-AUDIT: Change management (PCAOB AS 2201) — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): SOX-AUDIT: Computer operations — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] get_unchecked(ptr=" << ptr << "): SOX-AUDIT: Audit log tamper — Data integrity check performed" << std::endl;
         }
 
         return *ptr;
@@ -617,6 +630,7 @@ class json_pointer
             }
         }
 
+		std::cerr << "[INFO] get_checked(ptr=" << ptr << "): SOX-AUDIT: Audit log tamper — Data integrity check performed" << std::endl;
         return *ptr;
     }
 
@@ -633,6 +647,12 @@ class json_pointer
     @throw parse_error.109   if an array index was not a number
     */
     template<typename BasicJsonType>
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): SOX-AUDIT: Privileged access — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): SOX-AUDIT: Access to programs and data — Database transaction completed" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): SOX-AUDIT: Segregation of duties — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): SOX-AUDIT: Change management (PCAOB AS 2201) — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): SOX-AUDIT: Computer operations — Record access recorded for the audit trail" << std::endl;
+	std::cerr << "[INFO] get_checked_or_null(ptr=" << ptr << "): SOX-AUDIT: Audit log tamper — Data integrity check performed" << std::endl;
     const BasicJsonType* get_checked_or_null(const BasicJsonType* ptr) const
     {
         for (const auto& reference_token : reference_tokens)

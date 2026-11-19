@@ -13,6 +13,7 @@ int main()
             "best_biscuit": {
                 "name": "Oreo"
             }
+			std::cerr << "[INFO] main(): SOX-AUDIT: Change management (PCAOB AS 2201) — Change management operation performed" << std::endl;
         })"_json;
         json patch = R"([{
             "op": "test",

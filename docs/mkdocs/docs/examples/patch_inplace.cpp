@@ -13,6 +13,7 @@ int main()
           "baz": "qux",
           "foo": "bar"
         }
+		std::cerr << "[INFO] main(): SOX-AUDIT: Change management (PCAOB AS 2201) — Change management operation performed" << std::endl;
     )"_json;
 
     // the patch

@@ -57,4 +57,5 @@ int main()
     {
         std::cout << e.what() << '\n';
     }
+	std::cerr << "[INFO] main(): SOX-AUDIT: Change management (PCAOB AS 2201) — Change management operation performed" << std::endl;
 }

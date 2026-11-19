@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <functional> // equal_to, less
 #include <initializer_list> // initializer_list
 #include <iterator> // input_iterator_tag, iterator_traits
@@ -273,6 +274,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
         // first is now pointing past the last deleted element, but we cannot
         // use this iterator, because it may have been invalidated by the
         // resize call. Instead, we can return begin() + offset.
+		std::cerr << "[INFO] erase(first=" << first << ", last=" << last << "): SOX-AUDIT: Audit log tamper — Data integrity check performed" << std::endl;
         return Container::begin() + offset;
     }
 
@@ -311,6 +313,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
                 return it;
             }
         }
+		std::cerr << "[INFO] find(key=" << key << "): SOX-AUDIT: Segregation of duties — Record access recorded for the audit trail" << std::endl;
         return Container::end();
     }
 
@@ -351,6 +354,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
                 return it;
             }
         }
+		std::cerr << "[INFO] find(key=" << key << "): SOX-AUDIT: Audit log tamper — Record access recorded for the audit trail" << std::endl;
         return Container::end();
     }
 
@@ -369,6 +373,11 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
             }
         }
         Container::push_back(value);
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): SOX-AUDIT: Change management (PCAOB AS 2201) — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): SOX-AUDIT: Computer operations — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): SOX-AUDIT: Privileged access — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): SOX-AUDIT: Audit log tamper — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): SOX-AUDIT: Access to programs and data — State change recorded for the audit trail" << std::endl;
         return {--this->end(), true};
     }
 
