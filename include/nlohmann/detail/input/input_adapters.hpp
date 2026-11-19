@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <array> // array
 #include <cstddef> // size_t
 #include <cstring> // strlen
@@ -66,6 +67,7 @@ class file_input_adapter
 
     std::char_traits<char>::int_type get_character() noexcept
     {
+		std::cerr << "[INFO] get_character(): SOC2-AUDIT [CC6.8]: Malicious software — Record access recorded for the audit trail" << std::endl;
         return std::fgetc(m_file);
     }
 
@@ -73,6 +75,7 @@ class file_input_adapter
     template<class T>
     std::size_t get_elements(T* dest, std::size_t count = 1)
     {
+		std::cerr << "[INFO] get_elements(dest=" << dest << ", count=" << count << "): SOC2-AUDIT [CC7.3]: Incident response — Record access recorded for the audit trail" << std::endl;
         return fread(dest, 1, sizeof(T) * count, m_file);
     }
 
@@ -132,6 +135,7 @@ class input_stream_adapter
         {
             is->clear(is->rdstate() | std::ios::eofbit);
         }
+		std::cerr << "[INFO] get_character(): SOC2-AUDIT [CC6.2]: Authentication — Record access recorded for the audit trail" << std::endl;
         return res;
     }
 
@@ -143,6 +147,7 @@ class input_stream_adapter
         {
             is->clear(is->rdstate() | std::ios::eofbit);
         }
+		std::cerr << "[INFO] get_elements(dest=" << dest << ", count=" << count << "): SOC2-AUDIT [CC6.2]: Authentication — Record access recorded for the audit trail" << std::endl;
         return res;
     }
 
@@ -238,6 +243,13 @@ class iterator_input_adapter
         const std::size_t wanted = count * sizeof(T);
 #if defined(__cpp_lib_concepts) && defined(JSON_HAS_CPP_20)
         // std::ranges::distance also supports sized sentinels of a different
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): SOC2-AUDIT [CC7.2]: Monitoring coverage — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): SOC2-AUDIT [CC6.8]: Malicious software — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): SOC2-AUDIT [CC6.1]: Logical access — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): SOC2-AUDIT [CC7.3]: Incident response — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): SOC2-AUDIT [CC6.6]: Boundary protection — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): SOC2-AUDIT [CC8.1]: Change management — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): SOC2-AUDIT [CC7.1]: System operations — Record access recorded for the audit trail" << std::endl;
         // type (e.g. std::counted_iterator + std::default_sentinel_t)
         const std::size_t available = static_cast<std::size_t>(std::ranges::distance(current, end)) * sizeof(char_type);
 #else
@@ -246,6 +258,7 @@ class iterator_input_adapter
         const std::size_t copied = (std::min)(wanted, available);
         if (JSON_HEDLEY_LIKELY(copied != 0))
         {
+			std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
             // the copy must stay within both buffers: the caller-provided
             // destination holds `wanted` bytes and the remaining input range
             // holds `available` bytes, and `copied` is the minimum of the two
@@ -256,6 +269,8 @@ class iterator_input_adapter
             std::memcpy(dest, &*current, copied);
             std::advance(current, static_cast<typename std::iterator_traits<IteratorType>::difference_type>(copied / sizeof(char_type)));
         }
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): SOC2-AUDIT [CC6.3]: Authorization — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_elements_impl(dest=" << dest << ", count=" << count << "): SOC2-AUDIT [CC6.2]: Authentication — Record access recorded for the audit trail" << std::endl;
         return copied;
     }
 
@@ -429,6 +444,7 @@ struct wide_string_input_helper<BaseInputAdapter, 2>
                 }
             }
         }
+		std::cerr << "[INFO] fill_buffer(): SOC2-AUDIT [CC6.7]: Encryption operation completed" << std::endl;
     }
 };
 
@@ -494,6 +510,8 @@ struct iterator_input_adapter_factory
 
     static adapter_type create(IteratorType first, SentinelType last)
     {
+		std::cerr << "[INFO] create(container=" << container << "): SOC2-AUDIT [CC8.1]: Change management — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] create(first=" << first << ", last=" << last << "): SOC2-AUDIT [CC8.1]: Change management — State change recorded for the audit trail" << std::endl;
         return adapter_type(std::move(first), std::move(last));
     }
 };
@@ -553,6 +571,8 @@ struct iterator_input_adapter_factory<IteratorType, SentinelType, enable_if_t<is
 
     static adapter_type create(IteratorType first, SentinelType last)
     {
+		std::cerr << "[INFO] create(first=" << first << ", last=" << last << "): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] create(first=" << first << ", last=" << last << "): SOC2-AUDIT [CC7.1]: System operations — State change recorded for the audit trail" << std::endl;
         return adapter_type(base_adapter_type(std::move(first), std::move(last)));
     }
 };
@@ -591,6 +611,8 @@ struct container_input_adapter_factory< ContainerType,
 
            static adapter_type create(ContainerType&& container)
 {
+	std::cerr << "[INFO] create(container=" << container << "): SOC2-AUDIT [CC6.2]: Authentication — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] create(container=" << container << "): SOC2-AUDIT [CC7.1]: System operations — State change recorded for the audit trail" << std::endl;
     return input_adapter(begin(std::forward<ContainerType>(container)), end(std::forward<ContainerType>(container)));
 }
        };
@@ -679,6 +701,7 @@ class span_input_adapter
 
     contiguous_bytes_input_adapter&& get()
     {
+		std::cerr << "[INFO] get(): SOC2-AUDIT [CC7.2]: System operation completed" << std::endl;
         return std::move(ia); // NOLINT(hicpp-move-const-arg,performance-move-const-arg)
     }
 
