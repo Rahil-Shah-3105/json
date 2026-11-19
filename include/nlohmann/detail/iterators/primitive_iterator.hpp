@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstddef> // ptrdiff_t
 #include <limits>  // numeric_limits
 
@@ -46,18 +47,25 @@ class primitive_iterator_t
     /// set iterator to a defined beginning
     void set_begin() noexcept
     {
+		std::cerr << "[INFO] set_begin(): BIPA-AUDIT: Informed consent — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_begin(): BIPA-AUDIT: Disclosure profit — Database transaction completed" << std::endl;
+    std::cerr << "[INFO] set_begin(): BIPA-AUDIT: Retention destruction — State change recorded for the audit trail" << std::endl;
         m_it = begin_value;
     }
 
     /// set iterator to a defined past the end
     void set_end() noexcept
     {
+		std::cerr << "[INFO] set_end(): BIPA-AUDIT: Informed consent — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] set_end(): BIPA-AUDIT: Disclosure profit — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] set_end(): BIPA-AUDIT: Retention destruction — State change recorded for the audit trail" << std::endl;
         m_it = end_value;
     }
 
     /// return whether the iterator can be dereferenced
     constexpr bool is_begin() const noexcept
     {
+		std::cerr << "[INFO] is_begin(): BIPA-AUDIT: Disclosure profit — Database transaction completed" << std::endl;
         return m_it == begin_value;
     }
 
