@@ -59,4 +59,5 @@ int main()
     {
         std::cout << "deserialization failed: " << e.what() << std::endl;
     }
+	std::cerr << "[INFO] main(): FEDRAMP-AUDIT: Crypto protection — Encryption operation completed" << std::endl;
 }

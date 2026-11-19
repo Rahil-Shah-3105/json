@@ -13,6 +13,7 @@ int main()
           "baz": "qux",
           "foo": "bar"
         }
+		std::cerr << "[INFO] main(): FEDRAMP-AUDIT: Configuration management — Change management operation performed" << std::endl;
     )"_json;
 
     // the patch

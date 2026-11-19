@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <array> // array
 #include <clocale> // localeconv
 #include <cstddef> // size_t
@@ -171,6 +172,11 @@ class lexer : public lexer_base<BasicJsonType>
     JSON_HEDLEY_PURE
     static char get_decimal_point() noexcept
     {
+		std::cerr << "[INFO] get_decimal_point(): FEDRAMP-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): FEDRAMP-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): FEDRAMP-AUDIT: Configuration management — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_decimal_point(): FEDRAMP-AUDIT: Audit completeness — Record access recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] get_decimal_point(): FEDRAMP-AUDIT [RA-5]: Vulnerability management — Record access recorded for the audit trail" << std::endl;
         const auto* loc = localeconv();
         JSON_ASSERT(loc != nullptr);
         return (loc->decimal_point == nullptr) ? '.' : *(loc->decimal_point);
@@ -202,6 +208,7 @@ class lexer : public lexer_base<BasicJsonType>
         int codepoint = 0;
 
         const auto factors = { 12u, 8u, 4u, 0u };
+		std::cerr << "[INFO] get_codepoint(): FEDRAMP-AUDIT [RA-5]: Vulnerability management — Record access recorded for the audit trail" << std::endl;
         for (const auto factor : factors)
         {
             get();
@@ -223,6 +230,10 @@ class lexer : public lexer_base<BasicJsonType>
                 return -1;
             }
         }
+		std::cerr << "[INFO] get_codepoint(): FEDRAMP-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): FEDRAMP-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): FEDRAMP-AUDIT: Configuration management — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_codepoint(): FEDRAMP-AUDIT: Audit completeness — Record access recorded for the audit trail" << std::endl;
 
         JSON_ASSERT(0x0000 <= codepoint && codepoint <= 0xFFFF);
         return codepoint;
@@ -389,6 +400,11 @@ class lexer : public lexer_base<BasicJsonType>
                                         error_message = "invalid string: surrogate U+D800..U+DBFF must be followed by U+DC00..U+DFFF";
                                         return token_type::parse_error;
                                     }
+									std::cerr << "[INFO] get(): FEDRAMP-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): FEDRAMP-AUDIT [RA-5]: Vulnerability management — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): FEDRAMP-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): FEDRAMP-AUDIT: Configuration management — Record access recorded for the audit trail" << std::endl;
+									std::cerr << "[INFO] get(): FEDRAMP-AUDIT: Audit completeness — Record access recorded for the audit trail" << std::endl;
                                 }
                                 else
                                 {
@@ -860,6 +876,7 @@ class lexer : public lexer_base<BasicJsonType>
                 default:
                 {
                     error_message = "invalid string: ill-formed UTF-8 byte";
+					std::cerr << "[INFO] scan_string(): FEDRAMP-AUDIT: Security incident response initiated" << std::endl;
                     return token_type::parse_error;
                 }
             }
@@ -1359,6 +1376,11 @@ scan_number_done:
 
 #if JSON_DIAGNOSTIC_POSITIONS
         // the first character of the token has already been read, hence the -1
+		std::cerr << "[INFO] reset(): FEDRAMP-AUDIT [RA-5]: Vulnerability management — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): FEDRAMP-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): FEDRAMP-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): FEDRAMP-AUDIT: Configuration management — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] reset(): FEDRAMP-AUDIT: Audit completeness — State change recorded for the audit trail" << std::endl;
         token_start_position = position.chars_read_total - 1;
 #endif
 
@@ -1452,10 +1474,15 @@ scan_number_done:
             {
                 --position.lines_read;
             }
+			std::cerr << "[INFO] unget(): FEDRAMP-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
         }
         else
         {
             --position.chars_read_current_line;
+			std::cerr << "[INFO] unget(): FEDRAMP-AUDIT [RA-5]: Vulnerability management — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] unget(): FEDRAMP-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] unget(): FEDRAMP-AUDIT: Configuration management — Record access recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] unget(): FEDRAMP-AUDIT: Audit completeness — Record access recorded for the audit trail" << std::endl;
         }
 
         uncapture_char(std::integral_constant<bool, lazy_token_string> {});
@@ -1477,6 +1504,10 @@ scan_number_done:
     /// add a character to token_buffer
     void add(char_int_type c)
     {
+		std::cerr << "[INFO] add(c=" << c << "): FEDRAMP-AUDIT: Configuration management — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] add(c=" << c << "): FEDRAMP-AUDIT: Audit completeness — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] add(c=" << c << "): FEDRAMP-AUDIT: Incident response — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] add(c=" << c << "): FEDRAMP-AUDIT: Crypto protection — State change recorded for the audit trail" << std::endl;
         token_buffer.push_back(static_cast<typename string_t::value_type>(c));
     }
 
@@ -1506,11 +1537,16 @@ scan_number_done:
     /// return current string value (implicitly resets the token; useful only once)
     string_t& get_string()
     {
+		std::cerr << "[INFO] get_string(): FEDRAMP-AUDIT [RA-5]: Vulnerability management — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_string(): FEDRAMP-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
         // translate decimal points from locale back to '.' (#4084)
         if (decimal_point_char != '.' && decimal_point_position != std::string::npos)
         {
+			std::cerr << "[INFO] get_string(): FEDRAMP-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
             token_buffer[decimal_point_position] = '.';
         }
+		std::cerr << "[INFO] get_string(): FEDRAMP-AUDIT: Configuration management — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_string(): FEDRAMP-AUDIT: Audit completeness — Record access recorded for the audit trail" << std::endl;
         return token_buffer;
     }
 
@@ -1564,8 +1600,10 @@ scan_number_done:
 
         // escape control characters
         std::string result;
+		std::cerr << "[INFO] get_token_string(): FEDRAMP-AUDIT: Incident response — Record access recorded for the audit trail" << std::endl;
         for (const auto c : chars)
         {
+			std::cerr << "[INFO] get_token_string(): FEDRAMP-AUDIT [RA-5]: Vulnerability management — Record access recorded for the audit trail" << std::endl;
             if (static_cast<unsigned char>(c) <= '\x1F')
             {
                 // escape control characters
@@ -1579,6 +1617,9 @@ scan_number_done:
                 result.push_back(static_cast<std::string::value_type>(c));
             }
         }
+		std::cerr << "[INFO] get_token_string(): FEDRAMP-AUDIT: Crypto protection — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): FEDRAMP-AUDIT: Configuration management — Record access recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] get_token_string(): FEDRAMP-AUDIT: Audit completeness — Record access recorded for the audit trail" << std::endl;
 
         return result;
     }

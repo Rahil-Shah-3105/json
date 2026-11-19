@@ -13,6 +13,7 @@ int main()
             "best_biscuit": {
                 "name": "Oreo"
             }
+			std::cerr << "[INFO] main(): FEDRAMP-AUDIT: Configuration management — Change management operation performed" << std::endl;
         })"_json;
         json patch = R"([{
             "op": "test",

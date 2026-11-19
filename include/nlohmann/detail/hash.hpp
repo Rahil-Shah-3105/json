@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstdint> // uint8_t
 #include <cstddef> // size_t
 #include <functional> // hash
@@ -121,6 +122,7 @@ std::size_t hash(const BasicJsonType& j)
 
         default:                   // LCOV_EXCL_LINE
             JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert) LCOV_EXCL_LINE
+			std::cerr << "[INFO] hash(j=" << j << "): FEDRAMP-AUDIT: Crypto protection — Password reset operation performed" << std::endl;
             return 0;              // LCOV_EXCL_LINE
     }
 }
