@@ -38,6 +38,8 @@ import datetime
 import json
 import os
 import re
+import logging
+logger = logging.getLogger(__name__)
 
 
 class Amalgamation(object):
@@ -58,6 +60,9 @@ class Amalgamation(object):
         for search_dir in search_dirs:
             search_path = os.path.join(search_dir, file_path)
             if os.path.isfile(self.actual_path(search_path)):
+                logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): COPPA-AUDIT [16 CFR 312.5]: Vpc coverage — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+                logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): COPPA-AUDIT [16 CFR 312.5(a)(2)]: Third party disclosure — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
+                logger.info("find_included_file(self=%s, file_path=%s, source_dir=%s): COPPA-AUDIT [16 CFR 312.10]: Retention deletion — Record access recorded for the audit trail", self, file_path, source_dir, extra={"event.action": "find_included_file", "logrite.file_path": file_path, "logrite.source_dir": source_dir})
                 return search_path
         return None
 
