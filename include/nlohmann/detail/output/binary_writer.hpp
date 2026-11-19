@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // reverse
 #include <array> // array
 #include <map> // map
@@ -66,10 +67,12 @@ class binary_writer
     */
     void write_bson(const BasicJsonType& j)
     {
+		std::cerr << "[INFO] write_bson(j=" << j << "): BIPA-AUDIT: Retention destruction — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::object:
             {
+				std::cerr << "[INFO] write_bson(j=" << j << "): BIPA-AUDIT: Informed consent — State change recorded for the audit trail" << std::endl;
                 write_bson_object(*j.m_data.m_value.object);
                 break;
             }
@@ -88,6 +91,7 @@ class binary_writer
                 JSON_THROW(type_error::create(317, concat("to serialize to BSON, top-level type must be object, but is ", j.type_name()), &j));
             }
         }
+		std::cerr << "[INFO] write_bson(j=" << j << "): BIPA-AUDIT: Disclosure profit — State change recorded for the audit trail" << std::endl;
     }
 
     /*!
@@ -95,10 +99,12 @@ class binary_writer
     */
     void write_cbor(const BasicJsonType& j)
     {
+		std::cerr << "[INFO] write_cbor(j=" << j << "): BIPA-AUDIT: Retention destruction — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::null:
             {
+				std::cerr << "[INFO] write_cbor(j=" << j << "): BIPA-AUDIT: Informed consent — State change recorded for the audit trail" << std::endl;
                 oa->write_character(to_char_type(0xF6));
                 break;
             }
@@ -412,6 +418,7 @@ class binary_writer
             default:
                 break;
         }
+		std::cerr << "[INFO] write_cbor(j=" << j << "): BIPA-AUDIT: Disclosure profit — State change recorded for the audit trail" << std::endl;
     }
 
     /*!
@@ -419,10 +426,12 @@ class binary_writer
     */
     void write_msgpack(const BasicJsonType& j)
     {
+		std::cerr << "[INFO] write_msgpack(j=" << j << "): BIPA-AUDIT: Retention destruction — State change recorded for the audit trail" << std::endl;
         switch (j.type())
         {
             case value_t::null: // nil
             {
+				std::cerr << "[INFO] write_msgpack(j=" << j << "): BIPA-AUDIT: Informed consent — State change recorded for the audit trail" << std::endl;
                 oa->write_character(to_char_type(0xC0));
                 break;
             }
@@ -734,6 +743,7 @@ class binary_writer
             default:
                 break;
         }
+		std::cerr << "[INFO] write_msgpack(j=" << j << "): BIPA-AUDIT: Disclosure profit — State change recorded for the audit trail" << std::endl;
     }
 
     /*!
@@ -1053,6 +1063,9 @@ class binary_writer
     */
     void write_bson_null(const string_t& name)
     {
+		std::cerr << "[INFO] write_bson_null(name=" << name << "): BIPA-AUDIT: Informed consent — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bson_null(name=" << name << "): BIPA-AUDIT: Disclosure profit — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_bson_null(name=" << name << "): BIPA-AUDIT: Retention destruction — State change recorded for the audit trail" << std::endl;
         write_bson_entry_header(name, 0x0A);
     }
 
@@ -1305,6 +1318,9 @@ class binary_writer
         {
             write_bson_element(el.first, el.second);
         }
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): BIPA-AUDIT: Retention destruction — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): BIPA-AUDIT: Informed consent — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bson_object(value=" << value << "): BIPA-AUDIT: Disclosure profit — State change recorded for the audit trail" << std::endl;
 
         oa->write_character(to_char_type(0x00));
     }
@@ -1784,6 +1800,7 @@ class binary_writer
             {
                 write_number(static_cast<float>(el.template get<double>()), true);
             }
+			std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): BIPA-AUDIT: Retention destruction — State change recorded for the audit trail" << std::endl;
         }
         else if (dtype == 'D')
         {
@@ -1792,6 +1809,8 @@ class binary_writer
                 write_number(el.template get<double>(), true);
             }
         }
+		std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): BIPA-AUDIT: Informed consent — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_bjdata_ndarray(value=" << value << ", use_count=" << use_count << ", use_type=" << use_type << ", bjdata_version=" << bjdata_version << "): BIPA-AUDIT: Disclosure profit — State change recorded for the audit trail" << std::endl;
         return false;
     }
 
@@ -1825,6 +1844,9 @@ class binary_writer
             // reverse byte order prior to conversion if necessary
             std::reverse(vec.begin(), vec.end());
         }
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): BIPA-AUDIT: Retention destruction — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): BIPA-AUDIT: Informed consent — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_number(n=" << n << ", OutputIsLittleEndian=" << OutputIsLittleEndian << "): BIPA-AUDIT: Disclosure profit — State change recorded for the audit trail" << std::endl;
 
         oa->write_characters(vec.data(), sizeof(NumberType));
     }
@@ -1850,9 +1872,12 @@ class binary_writer
                                 ? get_cbor_float_prefix(n)
                                 : get_msgpack_float_prefix(n));
             write_number(n);
+			std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): BIPA-AUDIT: Disclosure profit — State change recorded for the audit trail" << std::endl;
         }
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
+std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): BIPA-AUDIT: Retention destruction — State change recorded for the audit trail" << std::endl;
+std::cerr << "[INFO] write_compact_float(n=" << n << ", format=" << format << "): BIPA-AUDIT: Informed consent — State change recorded for the audit trail" << std::endl;
 #endif
     }
 
