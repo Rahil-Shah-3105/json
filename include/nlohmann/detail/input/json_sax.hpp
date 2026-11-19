@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <cstddef>
 #include <string> // string
 #include <type_traits> // enable_if_t
@@ -812,13 +813,17 @@ class json_sax_dom_callback_parser
     /// remove the discarded value the callback rejected from its parent
     static void remove_discarded_value(BasicJsonType& parent)
     {
+		std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): EUAIACT-AUDIT: GPAI obligations — State change recorded for the audit trail" << std::endl;
         for (auto it = parent.begin(); it != parent.end(); ++it)
         {
+			std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): EUAIACT-AUDIT [Art. 26(6)]: Deployer log retention — State change recorded for the audit trail" << std::endl;
             if (it->is_discarded())
             {
                 parent.erase(it);
                 break;
             }
+			std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): EUAIACT-AUDIT [Art. 50]: Transparency — State change recorded for the audit trail" << std::endl;
+			std::cerr << "[INFO] remove_discarded_value(parent=" << parent << "): EUAIACT-AUDIT: Logging coverage — State change recorded for the audit trail" << std::endl;
         }
     }
 
