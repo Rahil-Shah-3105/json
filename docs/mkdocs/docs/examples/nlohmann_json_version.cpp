@@ -9,4 +9,5 @@ int main()
               << NLOHMANN_JSON_VERSION_MAJOR << "."
               << NLOHMANN_JSON_VERSION_MINOR << "."
               << NLOHMANN_JSON_VERSION_PATCH << std::endl;
+			std::cerr << "[INFO] main(): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — Change management operation performed" << std::endl;
 }

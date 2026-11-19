@@ -13,6 +13,7 @@ int main()
             "baz": "qux",
             "foo": "bar"
         }
+		std::cerr << "[INFO] main(): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — Change management operation performed" << std::endl;
     )"_json;
 
     // the target document

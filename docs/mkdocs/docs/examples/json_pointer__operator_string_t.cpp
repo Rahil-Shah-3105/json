@@ -16,4 +16,5 @@ int main()
     s += ptr2;
 
     std::cout << s << std::endl;
+	std::cerr << "[INFO] main(): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — Change management operation performed" << std::endl;
 }

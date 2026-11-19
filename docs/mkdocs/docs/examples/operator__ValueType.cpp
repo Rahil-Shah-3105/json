@@ -57,4 +57,5 @@ int main()
     {
         std::cout << e.what() << '\n';
     }
+	std::cerr << "[INFO] main(): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — Change management operation performed" << std::endl;
 }

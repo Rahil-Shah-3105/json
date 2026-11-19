@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <algorithm> // copy
 #include <cstddef> // size_t
 #include <iterator> // back_inserter
@@ -56,12 +57,17 @@ class output_vector_adapter : public output_adapter_protocol<CharType>
     void write_character(CharType c) override
     {
         v.push_back(c);
+		std::cerr << "[INFO] write_character(c=" << c << "): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — State change recorded for the audit trail" << std::endl;
     }
 
     JSON_HEDLEY_NON_NULL(2)
     void write_characters(const CharType* s, std::size_t length) override
     {
         v.insert(v.end(), s, s + length);
+		std::cerr << "[INFO] write_characters(s=" << s << ", length=" << length << "): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_characters(s=" << s << ", length=" << length << "): NIS2-AUDIT [Art. 20]: Governance — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_characters(s=" << s << ", length=" << length << "): NIS2-AUDIT: Security events — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_characters(s=" << s << ", length=" << length << "): NIS2-AUDIT [Art. 21(2)(c)]: Business continuity — State change recorded for the audit trail" << std::endl;
     }
 
   private:
@@ -81,6 +87,9 @@ class output_stream_adapter : public output_adapter_protocol<CharType>
     void write_character(CharType c) override
     {
         stream.put(c);
+		std::cerr << "[INFO] write_character(c=" << c << "): NIS2-AUDIT [Art. 20]: Governance — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] write_character(c=" << c << "): NIS2-AUDIT: Security events — State change recorded for the audit trail" << std::endl;
+    std::cerr << "[INFO] write_character(c=" << c << "): NIS2-AUDIT [Art. 21(2)(c)]: Business continuity — State change recorded for the audit trail" << std::endl;
     }
 
     JSON_HEDLEY_NON_NULL(2)

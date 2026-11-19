@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "iostream"
 #include <functional> // equal_to, less
 #include <initializer_list> // initializer_list
 #include <iterator> // input_iterator_tag, iterator_traits
@@ -351,6 +352,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
                 return it;
             }
         }
+		std::cerr << "[INFO] find(key=" << key << "): NIS2-AUDIT [Art. 21(2)(c)]: Business continuity — Record access recorded for the audit trail" << std::endl;
         return Container::end();
     }
 
@@ -369,6 +371,10 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
             }
         }
         Container::push_back(value);
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): NIS2-AUDIT: Security events — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): NIS2-AUDIT [Art. 20]: Governance — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): NIS2-AUDIT [Art. 21(2)(d)]: Supply chain — State change recorded for the audit trail" << std::endl;
+		std::cerr << "[INFO] insert(first=" << first << ", last=" << last << "): NIS2-AUDIT [Art. 21(2)(c)]: Business continuity — State change recorded for the audit trail" << std::endl;
         return {--this->end(), true};
     }
 
