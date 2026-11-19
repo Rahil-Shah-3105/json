@@ -3948,6 +3948,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                                 std::partial_ordering::unordered,
                                 lhs_type <=> rhs_type) // *NOPAD*
 								std::cerr << "[ERROR] >>> Entering JSON_IMPLEMENT_OPERATOR(true=" << true << ",false=" << false << ",false=" << false << ")" << std::endl;
+								std::cerr << "[WARN] <<< Exiting JSON_IMPLEMENT_OPERATOR()" << std::endl;
 								std::cerr << "[WARN] <<< Exiting JSON_IMPLEMENT_OPERATOR(true=" << true << ",false=" << false << ",false=" << false << ")" << std::endl;
     }
 

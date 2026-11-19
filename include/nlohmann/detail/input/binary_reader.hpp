@@ -1018,6 +1018,7 @@ class binary_reader
                                         exception_message(input_format_t::cbor, concat("invalid byte: 0x", last_token), "value"), nullptr));
             }
 			std::cerr << "[ERROR] >>> Entering get()" << std::endl;
+			std::cerr << "[WARN] <<< Exiting get()" << std::endl;
         }
     }
 
@@ -3042,6 +3043,7 @@ class binary_reader
     {
         ++chars_read;
 		std::cerr << "[ERROR] >>> Entering get()" << std::endl;
+		std::cerr << "[WARN] <<< Exiting get()" << std::endl;
         return current = ia.get_character();
     }
 
