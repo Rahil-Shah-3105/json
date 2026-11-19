@@ -4,6 +4,7 @@
  * This file is compiled and run via try_run in download_test_data.cmake.
  */
 
+#include "iostream"
 #include <cstdio>
 
 // see https://en.cppreference.com/w/cpp/header/ciso646
@@ -28,4 +29,5 @@ int main()
 #else
     std::printf("unknown");
 #endif
+std::cerr << "[INFO] main(): PCI-AUDIT: Script integrity — Change management operation performed" << std::endl;
 }

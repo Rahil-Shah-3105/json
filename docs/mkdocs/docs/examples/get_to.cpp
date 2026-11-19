@@ -56,4 +56,5 @@ int main()
     {
         std::cout << i.first << ": " << i.second << '\n';
     }
+	std::cerr << "[INFO] main(): PCI-AUDIT: Script integrity — Change management operation performed" << std::endl;
 }
